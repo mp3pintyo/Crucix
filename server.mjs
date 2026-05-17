@@ -235,6 +235,7 @@ if (discordAlerter.isConfigured) {
 // === Express Server ===
 const app = express();
 app.use(express.static(join(ROOT, 'dashboard/public')));
+app.get('/favicon.ico', (_req, res) => res.status(204).end());
 
 // Serve loading page until first sweep completes, then the dashboard with injected locale
 app.get('/', (req, res) => {
