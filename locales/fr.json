@@ -53,6 +53,7 @@
     "newsTicker": "Fil d'Actualités",
     "sweepDelta": "Changements",
     "macroMarkets": "Macro + Marchés",
+    "internetOutages": "Pannes Internet",
     "healthAlerts": "Alertes Santé",
     "riskGauges": "Indicateurs de Risque",
     "crossSourceSignals": "Signaux Multi-Sources",
@@ -70,6 +71,7 @@
     "maritimeWatch": "Surveillance Maritime",
     "nuclearSites": "Sites Nucléaires",
     "conflictEvents": "Événements Conflits",
+    "internetOutages": "Pannes Internet",
     "healthWatch": "Surveillance Santé",
     "worldNews": "Actualités Mondiales",
     "osintFeed": "Flux OSINT",
@@ -90,6 +92,7 @@
   "map": {
     "worldNews": "Actualités",
     "healthAlert": "Alerte Santé",
+    "internetOutage": "Panne Internet",
     "chokepoint": "Point Stratégique",
     "nuclearSite": "Site Nucléaire",
     "osintEvent": "Événement OSINT",
@@ -122,6 +125,15 @@
     "llmNotConfigured": "LLM NON CONFIGURÉ",
     "llmHelp": "Définir LLM_PROVIDER + identifiants dans .env pour activer les idées de trade IA",
     "disclosure": "À TITRE INFORMATIF UNIQUEMENT. Ceci ne constitue pas un conseil financier, une recommandation d'achat ou de vente de titre, ni une sollicitation quelconque. Toutes les observations basées sur les signaux sont dérivées de données OSINT publiques et ne doivent pas être utilisées pour prendre des décisions d'investissement. Consultez un conseiller financier agréé avant tout investissement. Les performances passées ne garantissent pas les résultats futurs."
+  },
+  "ioda": {
+    "countries": "Pays",
+    "events": "Événements",
+    "active": "ACTIF",
+    "score": "Score",
+    "topDatasource": "Source principale",
+    "lastStart": "Dernier début",
+    "noData": "Aucune panne Internet IODA récente au niveau pays"
   },
   "regions": {
     "world": "Monde",

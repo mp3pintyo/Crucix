@@ -93,6 +93,78 @@ function geoTagText(text) {
   return null;
 }
 
+const iodaCountryGeo = {
+  US: [39, -98, 'United States'],
+  'United States': [39, -98, 'United States'],
+  GB: [54, -2, 'United Kingdom'],
+  UK: [54, -2, 'United Kingdom'],
+  'United Kingdom': [54, -2, 'United Kingdom'],
+  RU: [56, 38, 'Russia'],
+  Russia: [56, 38, 'Russia'],
+  UA: [49, 32, 'Ukraine'],
+  Ukraine: [49, 32, 'Ukraine'],
+  IR: [32, 53, 'Iran'],
+  Iran: [32, 53, 'Iran'],
+  AF: [33, 65, 'Afghanistan'],
+  Afghanistan: [33, 65, 'Afghanistan'],
+  IN: [20, 78, 'India'],
+  India: [20, 78, 'India'],
+  MM: [20, 96, 'Myanmar'],
+  Myanmar: [20, 96, 'Myanmar'],
+  ET: [9, 38, 'Ethiopia'],
+  Ethiopia: [9, 38, 'Ethiopia'],
+  SD: [13, 30, 'Sudan'],
+  Sudan: [13, 30, 'Sudan'],
+  PK: [30, 70, 'Pakistan'],
+  Pakistan: [30, 70, 'Pakistan'],
+  IQ: [33, 44, 'Iraq'],
+  Iraq: [33, 44, 'Iraq'],
+  SY: [35, 38, 'Syria'],
+  Syria: [35, 38, 'Syria'],
+  YE: [15, 48, 'Yemen'],
+  Yemen: [15, 48, 'Yemen'],
+  TR: [39, 35, 'Turkey'],
+  Turkey: [39, 35, 'Turkey'],
+  CN: [35, 105, 'China'],
+  China: [35, 105, 'China'],
+  BR: [-14, -51, 'Brazil'],
+  Brazil: [-14, -51, 'Brazil'],
+  CU: [22, -80, 'Cuba'],
+  Cuba: [22, -80, 'Cuba'],
+  VE: [7, -66, 'Venezuela'],
+  Venezuela: [7, -66, 'Venezuela'],
+  ZA: [-30, 25, 'South Africa'],
+  'South Africa': [-30, 25, 'South Africa'],
+  NG: [10, 8, 'Nigeria'],
+  Nigeria: [10, 8, 'Nigeria'],
+  KE: [-1, 38, 'Kenya'],
+  Kenya: [-1, 38, 'Kenya'],
+  BD: [24, 90, 'Bangladesh'],
+  Bangladesh: [24, 90, 'Bangladesh'],
+  ID: [-2, 118, 'Indonesia'],
+  Indonesia: [-2, 118, 'Indonesia'],
+  TH: [15, 100, 'Thailand'],
+  Thailand: [15, 100, 'Thailand'],
+  PH: [13, 122, 'Philippines'],
+  Philippines: [13, 122, 'Philippines'],
+  KR: [36, 128, 'South Korea'],
+  'South Korea': [36, 128, 'South Korea'],
+  KP: [40, 127, 'North Korea'],
+  'North Korea': [40, 127, 'North Korea'],
+  JP: [36, 138, 'Japan'],
+  Japan: [36, 138, 'Japan'],
+  FR: [46, 2, 'France'],
+  France: [46, 2, 'France'],
+  DE: [51, 10, 'Germany'],
+  Germany: [51, 10, 'Germany'],
+};
+
+function geoTagIodaCountry(country, countryCode) {
+  const exact = (countryCode && iodaCountryGeo[countryCode]) || (country && iodaCountryGeo[country]);
+  if (exact) return { lat: exact[0], lon: exact[1], region: exact[2] };
+  return geoTagText(country || countryCode || '');
+}
+
 const whoGeoKeywords = {
   'Democratic Republic of the Congo': [-2.88, 23.66],
   'DR Congo': [-2.88, 23.66],
@@ -523,7 +595,52 @@ export async function synthesize(data) {
     hc: h.highConfidence || 0,
     fires: (h.highIntensity || []).slice(0, 8).map(f => ({ lat: f.lat, lon: f.lon, frp: f.frp || 0 }))
   }));
-  const tSignals = data.sources.FIRMS?.signals || [];
+  const iodaData = data.sources.IODA || {};
+  const iodaCountries = (iodaData.outages?.affectedCountries || [])
+    .map(country => {
+      const geo = geoTagIodaCountry(country.country, country.countryCode);
+      return {
+        country: country.country,
+        countryCode: country.countryCode,
+        eventCount: country.eventCount || 0,
+        activeCount: country.activeCount || 0,
+        overallScore: country.overallScore || 0,
+        topDatasource: country.topDatasource || 'overall',
+        lastStart: country.lastStart || null,
+        lat: geo?.lat ?? null,
+        lon: geo?.lon ?? null,
+        region: geo?.region || country.country || 'Global',
+        markerSize: Math.max(0.2, Math.min(0.42, 0.2 + (country.activeCount || 0) * 0.04 + Math.min((country.overallScore || 0) / 8000, 0.16))),
+      };
+    })
+    .filter(country => country.lat != null && country.lon != null)
+    .sort((a, b) => {
+      if (b.activeCount !== a.activeCount) return b.activeCount - a.activeCount;
+      if (b.overallScore !== a.overallScore) return b.overallScore - a.overallScore;
+      return b.eventCount - a.eventCount;
+    })
+    .slice(0, 15);
+  const ioda = {
+    totalEvents: iodaData.outages?.totalEvents || 0,
+    activeEvents: iodaData.outages?.activeEvents || 0,
+    countries: iodaCountries,
+    recentEvents: (iodaData.outages?.recentEvents || []).slice(0, 12).map(event => ({
+      country: event.country,
+      countryCode: event.countryCode,
+      start: event.startIso || null,
+      end: event.endIso || null,
+      active: Boolean(event.active),
+      datasource: event.datasource || 'overall',
+      method: event.method || 'unknown',
+      score: event.score || 0,
+      durationSeconds: event.durationSeconds || 0,
+    })),
+    signals: (iodaData.signals || []).map(signal => signal.signal || signal).filter(Boolean),
+  };
+  const tSignals = [
+    ...(data.sources.FIRMS?.signals || []),
+    ...ioda.signals,
+  ];
   const chokepoints = Object.values(data.sources.Maritime?.chokepoints || {}).map(c => ({
     label: c.label || c.name, note: c.note || '', lat: c.lat || 0, lon: c.lon || 0
   }));
@@ -775,6 +892,7 @@ export async function synthesize(data) {
       ...(data.sources.OpenSky?.error ? { error: data.sources.OpenSky.error } : {}),
     },
     sdr: { total: sdrNet.totalReceivers || 0, online: sdrNet.online || 0, zones: sdrZones },
+    ioda,
     tg: { posts: tgData.totalPosts || 0, urgent: tgUrgent, topPosts: tgTop },
     who, supplementalHealth, fred, energy, metals, bls, treasury, gscpi, defense, noaa, epa, acled, gdelt, space, health, news,
     markets, // Live Yahoo Finance market data
