@@ -53,6 +53,7 @@
     "newsTicker": "Élő hírsáv",
     "sweepDelta": "Lekérdezési delta",
     "macroMarkets": "Makró + piacok",
+    "internetOutages": "Internetkimaradások",
     "healthAlerts": "Egészségügyi riasztások",
     "riskGauges": "Kockázati mutatók",
     "crossSourceSignals": "Többforrású jelzések",
@@ -70,6 +71,7 @@
     "maritimeWatch": "Tengeri figyelés",
     "nuclearSites": "Nukleáris helyszínek",
     "conflictEvents": "Konfliktusesemények",
+    "internetOutages": "Internetkimaradások",
     "healthWatch": "Egészségügyi figyelés",
     "worldNews": "Világhírek",
     "osintFeed": "OSINT csatorna",
@@ -90,6 +92,7 @@
   "map": {
     "worldNews": "Világhírek",
     "healthAlert": "Egészségügyi riasztás",
+    "internetOutage": "Internetkimaradás",
     "chokepoint": "Szűk keresztmetszet",
     "nuclearSite": "Nukleáris helyszín",
     "osintEvent": "OSINT-esemény",
@@ -122,6 +125,15 @@
     "llmNotConfigured": "LLM NINCS BEÁLLÍTVA",
     "llmHelp": "Állítsd be a .env fájlban az LLM_PROVIDER és a hitelesítési adatokat az MI-alapú ötletekhez",
     "disclosure": "KIZÁRÓLAG TÁJÉKOZTATÁSI CÉLRA. Ez nem pénzügyi tanácsadás, nem vételi vagy eladási ajánlás, és nem minősül felhívásnak. Minden jelzésalapú megállapítás nyilvánosan elérhető OSINT-adatokból származik, ezért befektetési döntés alapjául önmagában nem szolgálhat. Befektetés előtt konzultálj engedéllyel rendelkező pénzügyi tanácsadóval. A múltbeli teljesítmény nem jelent garanciát a jövőbeli eredményekre."
+  },
+  "ioda": {
+    "countries": "Országok",
+    "events": "Események",
+    "active": "AKTÍV",
+    "score": "Pontszám",
+    "topDatasource": "Fő adatforrás",
+    "lastStart": "Utolsó kezdés",
+    "noData": "Nincs friss IODA országos internetkimaradás"
   },
   "regions": {
     "world": "Világ",

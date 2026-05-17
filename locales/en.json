@@ -53,6 +53,7 @@
     "newsTicker": "Live News Ticker",
     "sweepDelta": "Sweep Delta",
     "macroMarkets": "Macro + Markets",
+    "internetOutages": "Internet Outages",
     "healthAlerts": "Health Alerts",
     "riskGauges": "Risk Gauges",
     "crossSourceSignals": "Cross-Source Signals",
@@ -70,6 +71,7 @@
     "maritimeWatch": "Maritime Watch",
     "nuclearSites": "Nuclear Sites",
     "conflictEvents": "Conflict Events",
+    "internetOutages": "Internet Outages",
     "healthWatch": "Health Watch",
     "worldNews": "World News",
     "osintFeed": "OSINT Feed",
@@ -90,6 +92,7 @@
   "map": {
     "worldNews": "World News",
     "healthAlert": "Health Alert",
+    "internetOutage": "Internet Outage",
     "chokepoint": "Chokepoint",
     "nuclearSite": "Nuclear Site",
     "osintEvent": "OSINT Event",
@@ -122,6 +125,15 @@
     "llmNotConfigured": "LLM NOT CONFIGURED",
     "llmHelp": "Set LLM_PROVIDER + credentials in .env to enable AI-powered trade ideas",
     "disclosure": "FOR INFORMATIONAL PURPOSES ONLY. This is not financial advice, a recommendation to buy or sell any security, or a solicitation of any kind. All signal-based observations are derived from publicly available OSINT data and should not be relied upon for investment decisions. Consult a licensed financial advisor before making any investment. Past performance does not guarantee future results."
+  },
+  "ioda": {
+    "countries": "Countries",
+    "events": "Events",
+    "active": "ACTIVE",
+    "score": "Score",
+    "topDatasource": "Top datasource",
+    "lastStart": "Last start",
+    "noData": "No recent IODA country outages"
   },
   "regions": {
     "world": "World",

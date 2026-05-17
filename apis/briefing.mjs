@@ -46,6 +46,7 @@ import { briefing as yfinance } from './sources/yfinance.mjs';
 // === Tier 6: Cyber & Infrastructure ===
 import { briefing as cisaKev } from './sources/cisa-kev.mjs';
 import { briefing as cloudflareRadar } from './sources/cloudflare-radar.mjs';
+import { briefing as ioda } from './sources/ioda.mjs';
 
 const SOURCE_TIMEOUT_MS = 30_000; // 30s max per individual source
 
@@ -67,7 +68,6 @@ export async function runSource(name, fn, ...args) {
 }
 
 export async function fullBriefing() {
-  console.error('[Crucix] Starting intelligence sweep — 29 sources...');
   const start = Date.now();
 
   const allPromises = [
@@ -111,7 +111,10 @@ export async function fullBriefing() {
     // Tier 6: Cyber & Infrastructure
     runSource('CISA-KEV', cisaKev),
     runSource('Cloudflare-Radar', cloudflareRadar),
+    runSource('IODA', ioda),
   ];
+
+  console.error(`[Crucix] Starting intelligence sweep — ${allPromises.length} sources...`);
 
   // Each runSource has its own 30s timeout, so allSettled will resolve
   // within ~30s even if APIs hang. Global timeout is a safety net.
