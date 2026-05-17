@@ -65,7 +65,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .perf-pill:hover{border-color:var(--accent2);color:var(--text);background:rgba(68,204,255,0.08)}
 
 /* GRID */
-.grid{display:grid;grid-template-columns:240px 1fr 340px;gap:10px;margin-top:10px;min-height:calc(100vh - 100px)}
+.grid{display:grid;grid-template-columns:240px 1fr 340px;gap:10px;margin-top:10px;min-height:calc(100vh - 100px);align-items:start}
 .col{display:flex;flex-direction:column;gap:10px}
 .g-panel{border:1px solid var(--border);background:var(--glass);backdrop-filter:blur(16px);padding:12px;position:relative;overflow:hidden}
 .g-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(100,240,200,0.15),transparent);pointer-events:none}
@@ -98,8 +98,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .econ-row .eval{font-family:var(--mono);font-weight:600}
 
 /* CENTER: MAP */
+.map-stack{display:flex;flex-direction:column;gap:10px}
+.map-stack.hidden{display:none}
 .map-region-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--border);background:var(--panel);backdrop-filter:blur(20px)}
-.map-container{flex:1;min-height:560px;border:1px solid var(--border);background:radial-gradient(ellipse at center,rgba(4,12,20,1),rgba(2,4,8,1));position:relative;overflow:hidden}
+.map-container{height:clamp(420px,56vh,680px);min-height:420px;max-height:680px;flex:0 0 auto;border:1px solid var(--border);background:radial-gradient(ellipse at center,rgba(4,12,20,1),rgba(2,4,8,1));position:relative;overflow:hidden}
 #globeViz{width:100%;height:100%;cursor:grab}
 #globeViz:active{cursor:grabbing}
 #globeViz canvas{outline:none}
@@ -145,6 +147,44 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .glossary-line + .glossary-line{margin-top:5px}
 .glossary-label{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim);margin-right:6px}
 .glossary-foot{padding:10px 16px 14px;border-top:1px solid rgba(255,255,255,0.06);font-family:var(--mono);font-size:9px;line-height:1.5;color:rgba(106,138,130,0.8)}
+.settings-overlay{position:fixed;inset:0;z-index:1250;background:rgba(2,6,10,0.78);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity 0.25s ease}
+.settings-overlay.show{opacity:1;pointer-events:auto}
+.settings-panel{position:absolute;inset:18px;display:flex;flex-direction:column;border:1px solid rgba(68,204,255,0.2);background:rgba(5,12,19,0.97);box-shadow:0 18px 48px rgba(0,0,0,0.45)}
+.settings-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.settings-kicker{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:5px}
+.settings-title{font-size:18px;font-weight:600;line-height:1.15}
+.settings-sub{font-size:11px;line-height:1.45;color:var(--dim);margin-top:6px}
+.settings-close{border:1px solid var(--border);background:rgba(255,255,255,0.03);color:var(--dim);width:30px;height:30px;font-size:18px;cursor:pointer;flex-shrink:0}
+.settings-body{overflow:auto;padding:14px 16px 16px;display:flex;flex-direction:column;gap:14px}
+.settings-fixed{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.settings-fixed-card{padding:12px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02)}
+.settings-fixed-label{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase}
+.settings-fixed-copy{font-size:11px;line-height:1.4;color:var(--dim);margin-top:6px}
+.settings-switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.settings-switch input{appearance:none;width:36px;height:20px;border-radius:999px;border:1px solid rgba(100,240,200,0.22);background:rgba(255,255,255,0.05);position:relative;transition:all 0.2s}
+.settings-switch input::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--dim);transition:transform 0.2s,background 0.2s}
+.settings-switch input:checked{background:rgba(100,240,200,0.18);border-color:rgba(100,240,200,0.4)}
+.settings-switch input:checked::after{transform:translateX(16px);background:var(--accent)}
+.settings-actions{display:flex;justify-content:flex-end}
+.settings-reset{padding:6px 12px;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;border:1px solid rgba(255,184,76,0.3);color:var(--warn);background:rgba(255,184,76,0.08);cursor:pointer}
+.settings-board{display:grid;grid-template-columns:minmax(220px,1fr) minmax(420px,1.6fr) minmax(220px,1fr);gap:12px;align-items:start}
+.settings-zone-card,.settings-center-card{border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);min-height:240px}
+.settings-zone-head,.settings-center-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.05)}
+.settings-zone-head strong,.settings-center-head strong{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim)}
+.settings-zone-sub{font-family:var(--mono);font-size:9px;color:rgba(106,138,130,0.85);letter-spacing:0.06em;text-transform:uppercase}
+.settings-center-preview{padding:12px;border-bottom:1px solid rgba(255,255,255,0.05);background:linear-gradient(180deg,rgba(68,204,255,0.06),rgba(68,204,255,0.02))}
+.settings-map-preview{display:flex;align-items:center;justify-content:center;height:112px;border:1px dashed rgba(68,204,255,0.24);font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);background:radial-gradient(circle at 50% 40%,rgba(68,204,255,0.08),rgba(255,255,255,0.01))}
+.settings-map-preview.off{opacity:0.45;color:var(--dim);border-color:rgba(255,255,255,0.12)}
+.settings-center-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:12px}
+.settings-zone-body{display:flex;flex-direction:column;gap:8px;padding:12px;min-height:176px}
+.settings-zone-body.drag-over{outline:1px dashed rgba(100,240,200,0.35);outline-offset:-4px;background:rgba(100,240,200,0.03)}
+.settings-zone-empty{padding:14px 10px;border:1px dashed rgba(255,255,255,0.08);font-family:var(--mono);font-size:10px;color:var(--dim);text-align:center;letter-spacing:0.06em;text-transform:uppercase}
+.settings-module{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:10px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.03);cursor:grab}
+.settings-module.dragging{opacity:0.45}
+.settings-module.is-hidden{opacity:0.6}
+.settings-module-main{min-width:0}
+.settings-module-title{font-size:12px;font-weight:600;color:var(--text)}
+.settings-module-meta{font-family:var(--mono);font-size:9px;letter-spacing:0.06em;text-transform:uppercase;color:var(--dim);margin-top:4px}
 .map-loading{position:absolute;inset:0;z-index:12;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(2,6,10,0.78),rgba(2,6,10,0.9));backdrop-filter:blur(10px)}
 .map-loading.show{display:flex}
 .map-loading-card{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 18px;border:1px solid rgba(68,204,255,0.18);background:rgba(6,14,22,0.88);box-shadow:0 12px 32px rgba(0,0,0,0.35)}
@@ -154,14 +194,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .news-icon{fill:rgba(129,212,250,0.8);filter:drop-shadow(0 0 3px rgba(129,212,250,0.4));transition:fill .2s}
 .news-icon:hover{fill:rgba(129,212,250,1)}
 
-/* LOWER GRID — flex layout for responsive panel sizing */
-.lower{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;align-items:flex-start}
+/* LOWER GRID */
+.lower{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px;align-items:start}
+.lower-col{display:flex;flex-direction:column;gap:10px;min-width:0}
 .lower .g-panel{min-width:0;box-sizing:border-box}
-.lower .lp-ticker{flex:1.2 1 240px;max-width:380px}
+.lower .lp-ticker{max-width:none}
 .right-delta .delta-list{max-height:200px}
-.lower .lp-macro{flex:2.5 1 360px}
-.lower .lp-ideas{flex:1.5 1 300px}
-.lower-wide{width:100%}
+.lower .lp-macro,.lower .lp-ideas,.lower .lp-osint{max-width:none}
 .metrics-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
 .mc{padding:10px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02)}
 .mc .ml{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.08em;color:var(--dim)}
@@ -288,10 +327,13 @@ body.low-perf .ticker-wrap::-webkit-scrollbar-thumb{background:rgba(100,240,200,
   .map-hint{font-size:8px;right:8px}
   .map-legend{left:8px;right:8px;bottom:8px;gap:4px}
   .leg-item{font-size:8px}
-  .lower .lp-ticker,.lower .lp-osint,.lower .lp-macro,.lower .lp-ideas{flex:1 1 100%;max-width:none}
+  .lower{grid-template-columns:1fr}
   .metrics-row{grid-template-columns:repeat(2,1fr)}
   .src-grid{grid-template-columns:repeat(2,1fr)}
   .glossary-panel{top:auto;right:0;left:0;bottom:0;width:100%;max-height:min(72vh,720px);border-left:none;border-right:none;border-bottom:none}
+  .settings-panel{inset:auto 0 0 0;max-height:min(86vh,920px);border-left:none;border-right:none;border-bottom:none}
+  .settings-board{grid-template-columns:1fr}
+  .settings-center-grid{grid-template-columns:1fr}
 }
 
 /* CONFLICT LAYER */
@@ -337,20 +379,22 @@ body.low-perf .ticker-wrap::-webkit-scrollbar-thumb{background:rgba(100,240,200,
   <div class="grid">
     <div class="col" id="leftRail"></div>
     <div class="col" id="centerCol">
-      <div class="map-region-bar" id="mapRegionBar"></div>
-      <div class="map-container" id="mapContainer">
-        <div id="globeViz"></div>
-        <svg id="flatMapSvg" style="display:none;width:100%;height:100%;position:absolute;top:0;left:0;cursor:grab"></svg>
-        <div class="map-loading" id="mapLoading"><div class="map-loading-card"><div class="map-loading-ring"></div><div class="map-loading-text" id="mapLoadingText">Initializing 3D Globe</div></div></div>
-        <div class="map-legend" id="mapLegend"></div>
-        <div class="map-hint" id="mapHint">SCROLL TO ZOOM · DRAG TO PAN</div>
-        <div class="map-controls">
-          <button class="map-ctrl-btn" onclick="mapZoom(1.5)" title="Zoom in">+</button>
-          <button class="map-ctrl-btn" onclick="mapZoom(0.67)" title="Zoom out">&minus;</button>
-          <button class="map-ctrl-btn map-toggle" id="flightToggle" onclick="toggleFlights()" title="Toggle flight routes">&#9992;</button>
+      <div class="map-stack" id="mapStack">
+        <div class="map-region-bar" id="mapRegionBar"></div>
+        <div class="map-container" id="mapContainer">
+          <div id="globeViz"></div>
+          <svg id="flatMapSvg" style="display:none;width:100%;height:100%;position:absolute;top:0;left:0;cursor:grab"></svg>
+          <div class="map-loading" id="mapLoading"><div class="map-loading-card"><div class="map-loading-ring"></div><div class="map-loading-text" id="mapLoadingText">Initializing 3D Globe</div></div></div>
+          <div class="map-legend" id="mapLegend"></div>
+          <div class="map-hint" id="mapHint">SCROLL TO ZOOM · DRAG TO PAN</div>
+          <div class="map-controls">
+            <button class="map-ctrl-btn" onclick="mapZoom(1.5)" title="Zoom in">+</button>
+            <button class="map-ctrl-btn" onclick="mapZoom(0.67)" title="Zoom out">&minus;</button>
+            <button class="map-ctrl-btn map-toggle" id="flightToggle" onclick="toggleFlights()" title="Toggle flight routes">&#9992;</button>
+          </div>
+          <button class="proj-toggle" id="projToggle" onclick="toggleMapMode()">GLOBE MODE</button>
+          <div class="map-popup" id="mapPopup"><button class="pp-close" onclick="closePopup()">&times;</button><div class="pp-head"></div><div class="pp-text"></div><div class="pp-meta"></div></div>
         </div>
-        <button class="proj-toggle" id="projToggle" onclick="toggleMapMode()">GLOBE MODE</button>
-        <div class="map-popup" id="mapPopup"><button class="pp-close" onclick="closePopup()">&times;</button><div class="pp-head"></div><div class="pp-text"></div><div class="pp-meta"></div></div>
       </div>
       <div class="lower" id="lowerGrid"></div>
     </div>
@@ -369,6 +413,25 @@ body.low-perf .ticker-wrap::-webkit-scrollbar-thumb{background:rgba(100,240,200,
     </div>
     <div class="glossary-body" id="glossaryBody"></div>
     <div class="glossary-foot">Treat these as interpretation guides, not conclusions. Stronger judgments should come from corroboration across multiple layers, not from a single signal viewed in isolation.</div>
+  </div>
+</div>
+<div class="settings-overlay" id="settingsOverlay" onclick="if(event.target===this) closeSettings()">
+  <div class="settings-panel">
+    <div class="settings-head">
+      <div>
+        <div class="settings-kicker">Dashboard Settings</div>
+        <div class="settings-title">Panel Layout</div>
+        <div class="settings-sub">Drag modules between the left rail, right rail, and the three center lanes under the map. Hidden modules stay in the layout but do not render.</div>
+      </div>
+      <button class="settings-close" onclick="closeSettings()" aria-label="Close settings">&times;</button>
+    </div>
+    <div class="settings-body">
+      <div class="settings-fixed" id="settingsFixed"></div>
+      <div class="settings-actions">
+        <button class="settings-reset" onclick="resetDashboardLayout()">Reset Layout</button>
+      </div>
+      <div class="settings-board" id="settingsBoard"></div>
+    </div>
   </div>
 </div>
 <script>
@@ -397,6 +460,152 @@ let lowPerfMode = localStorage.getItem('crucix_low_perf') === 'true';
 let isFlat = shouldStartFlat();
 let currentRegion = 'world';
 let flatSvg, flatProjection, flatPath, flatG, flatZoom, flatW, flatH;
+const dashboardZones = ['left','center1','center2','center3','right'];
+const dashboardDefaultZones = {
+  left:['sensorGrid','nuclearWatch','riskGauges','spaceWatch'],
+  center1:['newsTicker'],
+  center2:['macroMarkets'],
+  center3:['tradeIdeas'],
+  right:['crossSourceSignals','osintStream','signalCore','internetOutages','healthAlerts','supplementalHealth','sweepDelta']
+};
+const dashboardPanelIds = Object.values(dashboardDefaultZones).flat();
+const dashboardFixedModuleIds = ['map','mapRegions'];
+const DASHBOARD_LAYOUT_STORAGE_KEY = 'crucix_dashboard_layout_v2';
+
+function createDefaultDashboardLayout(){
+  return {
+    zones: Object.fromEntries(dashboardZones.map(zone => [zone, [...(dashboardDefaultZones[zone] || [])]])),
+    visibility: Object.fromEntries(dashboardPanelIds.map(id => [id, true])),
+    fixed: { map: true, mapRegions: true }
+  };
+}
+
+function normalizeDashboardLayout(raw){
+  const base = createDefaultDashboardLayout();
+  const seen = new Set();
+  const zones = {};
+  for(const zone of dashboardZones){
+    const incoming = Array.isArray(raw?.zones?.[zone]) ? raw.zones[zone] : [];
+    zones[zone] = incoming.filter(id => {
+      if(!dashboardPanelIds.includes(id) || seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    });
+  }
+  for(const zone of dashboardZones){
+    for(const id of dashboardDefaultZones[zone] || []){
+      if(seen.has(id)) continue;
+      zones[zone].push(id);
+      seen.add(id);
+    }
+  }
+
+  const visibility = { ...base.visibility };
+  for(const id of dashboardPanelIds){
+    if(typeof raw?.visibility?.[id] === 'boolean') visibility[id] = raw.visibility[id];
+  }
+
+  const fixed = { ...base.fixed };
+  for(const id of dashboardFixedModuleIds){
+    if(typeof raw?.fixed?.[id] === 'boolean') fixed[id] = raw.fixed[id];
+  }
+
+  return { zones, visibility, fixed };
+}
+
+function loadDashboardLayout(){
+  try {
+    return normalizeDashboardLayout(JSON.parse(localStorage.getItem(DASHBOARD_LAYOUT_STORAGE_KEY) || 'null'));
+  } catch {
+    return createDefaultDashboardLayout();
+  }
+}
+
+function saveDashboardLayout(){
+  try {
+    localStorage.setItem(DASHBOARD_LAYOUT_STORAGE_KEY, JSON.stringify(dashboardLayout));
+  } catch {}
+}
+
+function isPanelVisible(panelId){
+  return dashboardLayout.visibility[panelId] !== false;
+}
+
+function isFixedModuleVisible(id){
+  return dashboardLayout.fixed[id] !== false;
+}
+
+function getZonePanelIds(zone, includeHidden=false){
+  const ids = dashboardLayout.zones[zone] || [];
+  return includeHidden ? ids : ids.filter(isPanelVisible);
+}
+
+function getPanelLabel(panelId){
+  switch(panelId){
+    case 'sensorGrid': return t('panels.sensorGrid','Sensor Grid');
+    case 'nuclearWatch': return t('panels.nuclearWatch','Nuclear Watch');
+    case 'riskGauges': return t('panels.riskGauges','Risk Gauges');
+    case 'spaceWatch': return t('panels.spaceWatch','Space Watch');
+    case 'newsTicker': return t('panels.newsTicker','Live News Ticker');
+    case 'macroMarkets': return t('panels.macroMarkets','Macro + Markets');
+    case 'tradeIdeas': return t('panels.tradeIdeas','Leverageable Ideas');
+    case 'crossSourceSignals': return t('panels.crossSourceSignals','Cross-Source Signals');
+    case 'osintStream': return t('panels.osintStream','OSINT Stream');
+    case 'signalCore': return t('panels.signalCore','Signal Core');
+    case 'internetOutages': return t('panels.internetOutages','Internet Outages');
+    case 'healthAlerts': return t('panels.healthAlerts','Health Alerts');
+    case 'supplementalHealth': return 'Supplemental Health';
+    case 'sweepDelta': return t('panels.sweepDelta','Sweep Delta');
+    default: return panelId;
+  }
+}
+
+function getPanelPlacementLabel(zone){
+  switch(zone){
+    case 'left': return 'Left rail';
+    case 'right': return 'Right rail';
+    case 'center1': return 'Center lane 1';
+    case 'center2': return 'Center lane 2';
+    case 'center3': return 'Center lane 3';
+    default: return zone;
+  }
+}
+
+function movePanelToZone(panelId, targetZone, beforeId=null){
+  if(!dashboardPanelIds.includes(panelId) || !dashboardZones.includes(targetZone)) return;
+  for(const zone of dashboardZones){
+    dashboardLayout.zones[zone] = (dashboardLayout.zones[zone] || []).filter(id => id !== panelId);
+  }
+  const nextZoneIds = [...(dashboardLayout.zones[targetZone] || [])];
+  const beforeIndex = beforeId ? nextZoneIds.indexOf(beforeId) : -1;
+  if(beforeIndex >= 0) nextZoneIds.splice(beforeIndex, 0, panelId);
+  else nextZoneIds.push(panelId);
+  dashboardLayout.zones[targetZone] = nextZoneIds;
+  saveDashboardLayout();
+}
+
+function setPanelVisibility(panelId, visible){
+  if(!dashboardPanelIds.includes(panelId)) return;
+  dashboardLayout.visibility[panelId] = visible;
+  saveDashboardLayout();
+}
+
+function setFixedModuleVisibility(moduleId, visible){
+  if(!dashboardFixedModuleIds.includes(moduleId)) return;
+  dashboardLayout.fixed[moduleId] = visible;
+  if(moduleId === 'map' && !visible) dashboardLayout.fixed.mapRegions = false;
+  if(moduleId === 'map' && visible && dashboardLayout.fixed.mapRegions == null) dashboardLayout.fixed.mapRegions = true;
+  saveDashboardLayout();
+}
+
+function resetDashboardLayout(){
+  dashboardLayout = createDefaultDashboardLayout();
+  saveDashboardLayout();
+  rerenderDashboard(true);
+  renderSettingsBoard();
+}
+
+let dashboardLayout = loadDashboardLayout();
 const signalGuideItems = [
   {
     term:'No Callsign',
@@ -555,9 +764,36 @@ function togglePerfMode(){
   if(lowPerfMode && isMobileLayout() && !isFlat){
     toggleMapMode();
   } else {
-    renderLower();
-    renderRight();
+    rerenderDashboard(true);
   }
+}
+
+function renderMapVisibility(){
+  const mapStack = document.getElementById('mapStack');
+  const mapRegionBar = document.getElementById('mapRegionBar');
+  const showMap = isFixedModuleVisible('map');
+  if(mapStack) mapStack.classList.toggle('hidden', !showMap);
+  if(mapRegionBar && (!showMap || !isFixedModuleVisible('mapRegions'))){
+    mapRegionBar.innerHTML = '';
+    mapRegionBar.style.display = 'none';
+  }
+  if(!showMap){
+    closePopup();
+    return;
+  }
+  requestAnimationFrame(() => {
+    if(!globeInitialized && !flatSvg) initMap();
+    else refreshMapViewport(true);
+  });
+}
+
+function rerenderDashboard(forceMapRefresh=false){
+  renderTopbar();
+  renderMapVisibility();
+  renderLeftRail();
+  renderLower();
+  renderRight();
+  if(forceMapRefresh && isFixedModuleVisible('map')) requestAnimationFrame(() => refreshMapViewport(true));
 }
 
 // === TOPBAR ===
@@ -570,7 +806,7 @@ function getRegionControlsMarkup(){
 function renderRegionControls(){
   const mapRegionBar = document.getElementById('mapRegionBar');
   if(!mapRegionBar) return;
-  if(isMobileLayout()){
+  if(isMobileLayout() || !isFixedModuleVisible('map') || !isFixedModuleVisible('mapRegions')){
     mapRegionBar.innerHTML = '';
     mapRegionBar.style.display = 'none';
     return;
@@ -581,6 +817,7 @@ function renderRegionControls(){
 
 function renderTopbar(){
   const mobile = isMobileLayout();
+  const showRegionControls = isFixedModuleVisible('map') && isFixedModuleVisible('mapRegions');
   const ts = new Date(D.meta.timestamp);
   const d = ts.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}).toUpperCase();
   const timeStr = ts.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
@@ -589,21 +826,22 @@ function renderTopbar(){
       <span class="brand">CRUCIX MONITOR</span>
       <span class="regime-chip"><span class="blink"></span>WARTIME STAGFLATION RISK</span>
     </div>
-    ${mobile ? `<div class="top-center">${getRegionControlsMarkup()}</div>` : ''}
+    ${mobile && showRegionControls ? `<div class="top-center">${getRegionControlsMarkup()}</div>` : ''}
     <div class="top-right">
       <button class="meta-pill perf-pill" onclick="togglePerfMode()" title="Reduce visual effects and start mobile in flat mode">${t('dashboard.visuals','VISUALS')} <span class="v" id="perfStatus">${lowPerfMode?t('dashboard.visualsLite','LITE'):t('dashboard.visualsFull','FULL')}</span></button>
       <span class="meta-pill">${t('dashboard.sweep','SWEEP')} <span class="v">${(D.meta.totalDurationMs/1000).toFixed(1)}s</span></span>
       <span class="meta-pill">${d} <span class="v">${timeStr}</span></span>
       <span class="meta-pill">${t('dashboard.sources','SOURCES')} <span class="v">${D.meta.sourcesOk}/${D.meta.sourcesQueried}</span></span>
       ${D.delta?.summary ? `<span class="meta-pill">${t('dashboard.delta','DELTA')} <span class="v">${D.delta.summary.direction==='risk-off'?'&#x25B2; '+t('dashboard.riskOff','RISK-OFF'):D.delta.summary.direction==='risk-on'?'&#x25BC; '+t('dashboard.riskOn','RISK-ON'):'&#x25C6; '+t('dashboard.mixed','MIXED')}</span></span>` : ''}
+      <button class="guide-btn" onclick="openSettings()">${t('dashboard.settings','Settings')}</button>
       <button class="guide-btn" onclick="openGlossary()">${t('dashboard.guideBtn','What Signals Mean')}</button>
       <span class="alert-badge">${t('dashboard.highAlert','HIGH ALERT')}</span>
     </div>`;
   renderRegionControls();
 }
 
-// === LEFT RAIL ===
-function renderLeftRail(){
+// === DASHBOARD PANELS ===
+function buildSensorGridPanel(){
   const totalAir=D.air.reduce((s,a)=>s+a.total,0);
   const totalThermal=D.thermal.reduce((s,t)=>s+t.det,0);
   const totalNight=D.thermal.reduce((s,t)=>s+t.night,0);
@@ -625,47 +863,254 @@ function renderLeftRail(){
     {name:t('layers.osintFeed','OSINT Feed'),count:D.tg.posts,dot:'incident',sub:`${D.tg.urgent.length} ${t('badges.urgent','urgent').toLowerCase()}`},
     {name:t('layers.spaceActivity','Satellites'),count:D.space?.militarySats||0,dot:'space',sub:`${D.space?.totalNewObjects||0} ${t('space.newLast30d','new (30d)')}`}
   ];
+  return `<div class="g-panel">
+    <div class="sec-head"><h3>${t('panels.sensorGrid','Sensor Grid')}</h3><span class="badge">${t('badges.live','LIVE')}</span></div>
+    ${layers.map(l=>`<div class="layer-item"><div class="layer-left"><div class="ldot ${l.dot}"></div><div><div class="layer-name">${l.name}</div><div class="layer-sub">${l.sub}</div></div></div><div class="layer-count">${l.count}</div></div>`).join('')}
+  </div>`;
+}
+
+function buildNuclearWatchPanel(){
   const allNormal=D.nuke.every(s=>!s.anom);
   const nukeHtml=D.nuke.map(s=>`<div class="site-row"><span>${s.site}</span><span class="site-val">${s.n>0?(s.cpm?.toFixed(1)||'--')+' CPM':'No data'}</span></div>`).join('');
+  return `<div class="g-panel">
+    <div class="sec-head"><h3>${t('panels.nuclearWatch','Nuclear Watch')}</h3><span class="badge">${t('badges.radiation','RADIATION')}</span></div>
+    <div class="nuke-ok">${allNormal?'&#9679; '+t('nuclear.allSitesNormal','ALL SITES NORMAL'):'&#9888; '+t('nuclear.anomalyDetected','ANOMALY DETECTED')}</div>
+    ${nukeHtml}
+  </div>`;
+}
+
+function buildRiskGaugesPanel(){
   const vix=D.fred.find(f=>f.id==='VIXCLS');
   const hy=D.fred.find(f=>f.id==='BAMLH0A0HYM2');
   const usd=D.fred.find(f=>f.id==='DTWEXBGS');
   const m2=D.fred.find(f=>f.id==='M2SL');
   const mort=D.fred.find(f=>f.id==='MORTGAGE30US');
   const claims=D.fred.find(f=>f.id==='ICSA');
+  return `<div class="g-panel">
+    <div class="sec-head"><h3>${t('panels.riskGauges','Risk Gauges')}</h3><span class="badge">${t('badges.stress','STRESS')}</span></div>
+    <div class="econ-row"><span class="elabel">${t('metrics.vix','VIX')} (Fear)</span><span class="eval" style="color:${vix?.value>20?'var(--warn)':'var(--accent)'}">${vix?.value||'--'}</span></div>
+    <div class="econ-row"><span class="elabel">${t('metrics.hySpread','HY Spread')}</span><span class="eval">${hy?.value||'--'}</span></div>
+    <div class="econ-row"><span class="elabel">${t('metrics.usdIndex','USD Index')}</span><span class="eval">${usd?.value?.toFixed(1)||'--'}</span></div>
+    <div class="econ-row"><span class="elabel">${t('metrics.joblessClaims','Jobless Claims')}</span><span class="eval">${claims?.value?.toLocaleString()||'--'}</span></div>
+    <div class="econ-row"><span class="elabel">${t('metrics.mortgage30y','30Y Mortgage')}</span><span class="eval">${mort?.value||'--'}%</span></div>
+    <div class="econ-row"><span class="elabel">${t('metrics.m2Supply','M2 Supply')}</span><span class="eval">$${(m2?.value/1000)?.toFixed(1)||'--'}T</span></div>
+    <div class="econ-row"><span class="elabel">${t('metrics.natDebt','Nat. Debt')}</span><span class="eval">$${(parseFloat(D.treasury.totalDebt)/1e12).toFixed(2)}T</span></div>
+  </div>`;
+}
 
-  document.getElementById('leftRail').innerHTML=`
-    <div class="g-panel">
-      <div class="sec-head"><h3>${t('panels.sensorGrid','Sensor Grid')}</h3><span class="badge">${t('badges.live','LIVE')}</span></div>
-      ${layers.map(l=>`<div class="layer-item"><div class="layer-left"><div class="ldot ${l.dot}"></div><div><div class="layer-name">${l.name}</div><div class="layer-sub">${l.sub}</div></div></div><div class="layer-count">${l.count}</div></div>`).join('')}
+function buildSpaceWatchPanel(){
+  return `<div class="g-panel">
+    <div class="sec-head"><h3>${t('panels.spaceWatch','Space Watch')}</h3><span class="badge">${t('badges.orbital','CELESTRAK')}</span></div>
+    ${D.space ? `
+      <div class="econ-row"><span class="elabel">New Objects (30d)</span><span class="eval" style="color:var(--accent2)">${D.space.totalNewObjects||0}</span></div>
+      <div class="econ-row"><span class="elabel">Military Sats</span><span class="eval">${D.space.militarySats||0}</span></div>
+      <div class="econ-row"><span class="elabel">Starlink</span><span class="eval">${D.space.constellations?.starlink||0}</span></div>
+      <div class="econ-row"><span class="elabel">OneWeb</span><span class="eval">${D.space.constellations?.oneweb||0}</span></div>
+      ${D.space.iss ? `<div class="econ-row"><span class="elabel">ISS</span><span class="eval" style="color:var(--accent)">ALT ${((D.space.iss.apogee+D.space.iss.perigee)/2).toFixed(0)} km</span></div>` : ''}
+      ${Object.entries(D.space.militaryByCountry||{}).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([c,n])=>`<div class="econ-row"><span class="elabel" style="padding-left:8px">${c}</span><span class="eval" style="font-size:10px">${n} mil sats</span></div>`).join('')}
+      ${(D.space.signals||[]).length ? `<div style="margin-top:6px;padding:6px 8px;border:1px solid rgba(68,204,255,0.2);background:rgba(68,204,255,0.04);font-family:var(--mono);font-size:9px;color:var(--accent2);line-height:1.5">${D.space.signals.slice(0,2).join('<br>')}</div>` : ''}
+    ` : '<div style="font-family:var(--mono);font-size:10px;color:var(--dim)">NO SPACE DATA</div>'}
+  </div>`;
+}
+
+function buildNewsTickerPanel(){
+  const feed = (D.newsFeed || []).slice(0, 20);
+  const srcClass = s => {
+    if (!s) return 'other';
+    const sl = s.toLowerCase();
+    if (sl.includes('dw africa') || sl.includes('africa news') || sl.includes('nyt africa') || sl.includes('rfi')) return 'af';
+    if (sl.includes('mercopress')) return 'sa';
+    if (sl.includes('indian express') || sl.includes('the hindu')) return 'ind';
+    if (sl.includes('sbs')) return 'anz';
+    if (sl.includes('bbc')) return 'bbc';
+    if (sl.includes('jazeera') || sl.includes('alj')) return 'alj';
+    if (sl.includes('gdelt')) return 'gdelt';
+    if (sl.includes('telegram')) return 'tg';
+    if (sl.includes('npr')) return 'us';
+    if (sl.includes('dw') || sl.includes('deutsche')) return 'dw';
+    if (sl.includes('france') || sl.includes('euronews')) return 'eu';
+    if (sl.includes('nyt') || sl.includes('times')) return 'nyt';
+    return 'other';
+  };
+  const tickerCards = feed.map(n => {
+    const sc = srcClass(n.source);
+    const age = n.timestamp ? getAge(n.timestamp) : '';
+    const urlAttr = n.url ? ` data-url="${String(n.url).replace(/&/g,'&amp;').replace(/"/g,'&quot;')}"` : '';
+    return `<div class="tk-card ${n.urgent?'urgent':''} ${n.url?'clickable':''}"${urlAttr}><span class="tk-src ${sc}">${(n.source||'NEWS').substring(0,12)}</span><span class="tk-time">${age}</span><div class="tk-head">${cleanText(n.headline||'')}</div>${n.url?'<span class="tk-link">&#8599;</span>':''}</div>`;
+  }).join('');
+  const tickerDuration = Math.max(20, feed.length * 2.5);
+  return `<div class="g-panel lp-ticker" style="display:flex;flex-direction:column">
+    <div class="sec-head"><h3>${t('panels.newsTicker','Live News Ticker')}</h3><span class="badge">${feed.length} ${t('badges.items','ITEMS')}</span></div>
+    <div class="ticker-wrap" style="--ticker-duration:${tickerDuration}s">
+      <div class="ticker-track">${tickerCards}${lowPerfMode ? '' : tickerCards}</div>
     </div>
-    <div class="g-panel">
-      <div class="sec-head"><h3>${t('panels.nuclearWatch','Nuclear Watch')}</h3><span class="badge">${t('badges.radiation','RADIATION')}</span></div>
-      <div class="nuke-ok">${allNormal?'&#9679; '+t('nuclear.allSitesNormal','ALL SITES NORMAL'):'&#9888; '+t('nuclear.anomalyDetected','ANOMALY DETECTED')}</div>
-      ${nukeHtml}
-    </div>
-    <div class="g-panel">
-      <div class="sec-head"><h3>${t('panels.riskGauges','Risk Gauges')}</h3><span class="badge">${t('badges.stress','STRESS')}</span></div>
-      <div class="econ-row"><span class="elabel">${t('metrics.vix','VIX')} (Fear)</span><span class="eval" style="color:${vix?.value>20?'var(--warn)':'var(--accent)'}">${vix?.value||'--'}</span></div>
-      <div class="econ-row"><span class="elabel">${t('metrics.hySpread','HY Spread')}</span><span class="eval">${hy?.value||'--'}</span></div>
-      <div class="econ-row"><span class="elabel">${t('metrics.usdIndex','USD Index')}</span><span class="eval">${usd?.value?.toFixed(1)||'--'}</span></div>
-      <div class="econ-row"><span class="elabel">${t('metrics.joblessClaims','Jobless Claims')}</span><span class="eval">${claims?.value?.toLocaleString()||'--'}</span></div>
-      <div class="econ-row"><span class="elabel">${t('metrics.mortgage30y','30Y Mortgage')}</span><span class="eval">${mort?.value||'--'}%</span></div>
-      <div class="econ-row"><span class="elabel">${t('metrics.m2Supply','M2 Supply')}</span><span class="eval">$${(m2?.value/1000)?.toFixed(1)||'--'}T</span></div>
-      <div class="econ-row"><span class="elabel">${t('metrics.natDebt','Nat. Debt')}</span><span class="eval">$${(parseFloat(D.treasury.totalDebt)/1e12).toFixed(2)}T</span></div>
-    </div>
-    <div class="g-panel">
-      <div class="sec-head"><h3>${t('panels.spaceWatch','Space Watch')}</h3><span class="badge">${t('badges.orbital','CELESTRAK')}</span></div>
-      ${D.space ? `
-        <div class="econ-row"><span class="elabel">New Objects (30d)</span><span class="eval" style="color:var(--accent2)">${D.space.totalNewObjects||0}</span></div>
-        <div class="econ-row"><span class="elabel">Military Sats</span><span class="eval">${D.space.militarySats||0}</span></div>
-        <div class="econ-row"><span class="elabel">Starlink</span><span class="eval">${D.space.constellations?.starlink||0}</span></div>
-        <div class="econ-row"><span class="elabel">OneWeb</span><span class="eval">${D.space.constellations?.oneweb||0}</span></div>
-        ${D.space.iss ? `<div class="econ-row"><span class="elabel">ISS</span><span class="eval" style="color:var(--accent)">ALT ${((D.space.iss.apogee+D.space.iss.perigee)/2).toFixed(0)} km</span></div>` : ''}
-        ${Object.entries(D.space.militaryByCountry||{}).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([c,n])=>`<div class="econ-row"><span class="elabel" style="padding-left:8px">${c}</span><span class="eval" style="font-size:10px">${n} mil sats</span></div>`).join('')}
-        ${(D.space.signals||[]).length ? `<div style="margin-top:6px;padding:6px 8px;border:1px solid rgba(68,204,255,0.2);background:rgba(68,204,255,0.04);font-family:var(--mono);font-size:9px;color:var(--accent2);line-height:1.5">${D.space.signals.slice(0,2).join('<br>')}</div>` : ''}
-      ` : '<div style="font-family:var(--mono);font-size:10px;color:var(--dim)">NO SPACE DATA</div>'}
-    </div>`;
+  </div>`;
+}
+
+function buildMacroMarketsPanel(){
+  const spread=D.fred.find(f=>f.id==='T10Y2Y');
+  const ff=D.fred.find(f=>f.id==='DFF');
+  const ue=D.bls.find(b=>b.id==='LNS14000000');
+  const cpi=D.bls.find(b=>b.id==='CUUR0000SA0');
+  const gscpi=D.gscpi;
+  const mkt=D.markets||{};
+  const metals=D.metals||{};
+  const wtiH = D.energy.wtiRecent||[];
+  const wtiMax=Math.max(...wtiH),wtiMin=Math.min(...wtiH);
+  const sparkHtml=wtiH.map(v=>{
+    const pct=wtiMax===wtiMin?50:((v-wtiMin)/(wtiMax-wtiMin))*100;
+    return `<div class="spark-bar" style="height:${Math.max(pct,8)}%"></div>`;
+  }).join('');
+  const mktCard = (q) => {
+    if(!q||q.error) return '';
+    const clr = q.changePct>=0?'var(--accent)':'var(--warn)';
+    const arrow = q.changePct>=0?'&#9650;':'&#9660;';
+    const isCrypto = q.symbol.includes('BTC') || q.symbol.includes('ETH');
+    const isIndex = q.symbol.startsWith('^');
+    const price = isCrypto ? `$${q.price.toLocaleString()}` : isIndex ? q.price.toLocaleString(undefined, {maximumFractionDigits: 2}) : `$${q.price}`;
+    return `<div class="mc"><div class="ml">${q.name||q.symbol}</div><span class="mv" style="color:${clr}">${price}</span><span class="ms" style="color:${clr}">${arrow} ${q.changePct>=0?'+':''}${q.changePct}%</span></div>`;
+  };
+  const vixLive = mkt.vix;
+  const vixFred = D.fred.find(f=>f.id==='VIXCLS');
+  const vixVal = vixLive?.value || vixFred?.value;
+  const vixChg = vixLive?.changePct != null ? `${vixLive.changePct>=0?'+':''}${vixLive.changePct}%` : '';
+  const fmtMarketPrice = (price) => price != null ? `$${price.toLocaleString(undefined,{maximumFractionDigits:2})}` : '--';
+  const dayMove = (pct) => pct != null ? `${pct>=0?'+':''}${pct}% today` : '';
+  const metrics=[
+    {l:'WTI Crude',v:`$${D.energy.wti}`,s:'$/bbl',p:70},
+    {l:'Brent',v:`$${D.energy.brent}`,s:'$/bbl',p:75},
+    {l:'Nat Gas',v:`$${D.energy.natgas||'--'}`,s:'$/MMBtu',p:30},
+    {l:'Gold',v:fmtMarketPrice(metals.gold),s:dayMove(metals.goldChangePct)||'COMEX proxy',p:58},
+    {l:'Silver',v:fmtMarketPrice(metals.silver),s:dayMove(metals.silverChangePct)||'COMEX proxy',p:54},
+    {l:'VIX',v:vixVal?vixVal.toFixed(1):'--',s:vixChg||'volatility index',p:vixVal?Math.min(vixVal*2.5,100):30},
+    {l:'Fed Funds',v:ff?`${ff.value}%`:'--',s:ff?.date||'',p:36},
+    {l:'GSCPI',v:gscpi?gscpi.value.toFixed(2):'--',s:gscpi?.interpretation||'',p:49},
+    {l:'CPI MoM',v:cpi?`+${cpi.momChangePct?.toFixed(2)}%`:'--',s:cpi?.date||'',p:37},
+    {l:'Unemployment',v:ue?`${ue.value}%`:'--',s:ue?`${ue.momChange>0?'+':''}${ue.momChange} vs prior`:'',p:44},
+  ];
+  metrics[0] = {...metrics[0], spark: D.energy.wtiRecent, sparkUp: false};
+  metrics[3] = {...metrics[3], spark: metals.goldRecent, sparkUp: (metals.goldChangePct ?? 0) >= 0};
+  metrics[4] = {...metrics[4], spark: metals.silverRecent, sparkUp: (metals.silverChangePct ?? 0) >= 0};
+  const indexCards = (mkt.indexes||[]).map(mktCard).join('');
+  const cryptoCards = (mkt.crypto||[]).map(mktCard).join('');
+  const hasMarkets = indexCards || cryptoCards;
+  return `<div class="g-panel lp-macro">
+    <div class="sec-head"><h3>${t('panels.macroMarkets','Macro + Markets')}</h3><span class="badge">${mkt.timestamp?t('badges.live','LIVE'):t('badges.delayed','DELAYED')}</span></div>
+    ${hasMarkets?`<div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">INDEXES</div><div class="metrics-row">${indexCards}</div></div><div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">CRYPTO</div><div class="metrics-row">${cryptoCards}</div></div>`:''}
+    <div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">ENERGY + METALS + MACRO</div><div class="metrics-row">${metrics.map(m=>{const sparkSvg = m.spark ? mkSparkSvg(m.spark, m.sparkUp) : ''; return `<div class="mc"><div class="ml">${m.l}</div><span class="mv">${m.v}${sparkSvg}</span><span class="ms">${m.s}</span><div class="mbar"><span style="width:${m.p}%"></span></div></div>`;}).join('')}</div></div>
+    <div style="margin-top:6px"><div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:4px">WTI 5-DAY</div><div class="spark">${sparkHtml}</div></div>
+  </div>`;
+}
+
+function buildTradeIdeasPanel(){
+  const hasIdeas = D.ideas && D.ideas.length > 0;
+  const ideasHtml = hasIdeas ? (D.ideas||[]).map(idea=>`<div class="idea-card"><span class="idea-type ${(idea.type||'').toLowerCase()}">${(idea.type||'').toUpperCase()}</span>${idea.ticker ? `<span class="idea-horizon">${idea.ticker}</span>` : ''}${idea.horizon ? `<span class="idea-horizon">${idea.horizon}</span>` : ''}<span class="idea-conf">${idea.confidence} confidence</span><div class="idea-title">${idea.title}</div><div class="idea-text">${idea.text||idea.rationale||''}</div>${idea.risk ? `<div class="idea-text" style="color:var(--warn);margin-top:3px">Risk: ${idea.risk}</div>` : ''}</div>`).join('') : `<div style="padding:20px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:11px"><div style="font-size:24px;margin-bottom:8px;opacity:0.3">&#9888;</div><div>LLM NOT CONFIGURED</div><div style="font-size:9px;margin-top:6px;opacity:0.6">Set LLM_PROVIDER + credentials in .env to enable AI-powered trade ideas</div></div>`;
+  return `<div class="g-panel lp-ideas"><div class="sec-head"><h3>${t('panels.tradeIdeas','Leverageable Ideas')}</h3>${D.ideasSource==='llm'?'<span class="ideas-src llm">'+t('ideas.aiEnhanced','AI ENHANCED')+'</span>':D.ideasSource==='disabled'?'<span class="ideas-src static">'+t('ideas.llmOff','LLM OFF')+'</span>':'<span class="ideas-src static">'+t('ideas.pending','PENDING')+'</span>'}</div>${ideasHtml}<div class="disclosure">FOR INFORMATIONAL PURPOSES ONLY. This is not financial advice, a recommendation to buy or sell any security, or a solicitation of any kind. All signal-based observations are derived from publicly available OSINT data and should not be relied upon for investment decisions. Consult a licensed financial advisor before making any investment. Past performance does not guarantee future results.</div></div>`;
+}
+
+function buildCrossSourceSignalsPanel(){
+  const signals=D.tSignals.slice(0,6).map((s,i)=>`<div class="signal-row"><strong>Signal ${i+1}</strong><p>${s}</p></div>`).join('');
+  return `<div class="g-panel right-signals"><div class="sec-head"><h3>${t('panels.crossSourceSignals','Cross-Source Signals')}</h3><span class="badge">${t('badges.worldview','WORLDVIEW')}</span></div>${signals}</div>`;
+}
+
+function buildSignalCorePanel(){
+  const signalMetrics=[
+    {l:'Incident Tempo',v:D.tg.urgent.length,p:70},
+    {l:'Air Theaters',v:D.air.length,p:60},
+    {l:'Thermal Spikes',v:D.thermal.reduce((s,t)=>s+t.hc,0),p:80},
+    {l:'SDR Nodes',v:D.sdr.total,p:92},
+    {l:'Internet Outages',v:D.ioda?.activeEvents||0,p:Math.min(100,((D.ioda?.countries?.length||0)*12)+((D.ioda?.activeEvents||0)*10))},
+    {l:'Chokepoints',v:D.chokepoints.length,p:50},
+    {l:'WHO Alerts',v:D.who.length,p:40},
+    {l:'Supp Health',v:(D.supplementalHealth||[]).length,p:36}
+  ];
+  return `<div class="g-panel right-core"><div class="sec-head"><h3>${t('panels.signalCore','Signal Core')}</h3><span class="badge">${t('badges.hotMetrics','HOT METRICS')}</span></div>${signalMetrics.map(s=>`<div class="sm"><span class="sml">${s.l}</span><div class="smb"><span style="width:${s.p}%"></span></div><span class="smv">${s.v}</span></div>`).join('')}</div>`;
+}
+
+function buildInternetOutagesPanel(){
+  const iodaCountries=(D.ioda?.countries||[]).slice(0,8);
+  const iodaRows=iodaCountries.map((country,i)=>{
+    const stateColor=country.activeCount>0?'var(--warn)':country.overallScore>2500?'#ffb74d':'var(--accent2)';
+    const stateLabel=country.activeCount>0?t('ioda.active','ACTIVE'):'RECENT';
+    return `<div class="signal-row"><strong>#${i+1} <span style="color:${stateColor}">${stateLabel}</span> ${country.countryCode?`· ${country.countryCode}`:''}</strong><p>${cleanText(country.country||'')}</p><div style="display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px"><span>${t('ioda.events','Events')}: ${country.eventCount}</span><span>${t('ioda.score','Score')}: ${Math.round(country.overallScore)}</span></div><div style="margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--dim)">${t('ioda.topDatasource','Top datasource')}: ${cleanText(country.topDatasource||'overall')} ${country.lastStart?`· ${t('ioda.lastStart','Last start')}: ${getAge(country.lastStart)}`:''}</div></div>`;
+  }).join('') || `<div style="padding:12px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:10px">${t('ioda.noData','No recent IODA country outages')}</div>`;
+  return `<div class="g-panel right-ioda"><div class="sec-head"><h3>${t('panels.internetOutages','Internet Outages')}</h3><span class="badge">IODA ${D.ioda?.activeEvents||0} ${t('ioda.active','ACTIVE')}</span></div>${(D.ioda?.countries?.length||0)?`<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;font-family:var(--mono);font-size:10px"><span style="color:var(--dim)">${t('ioda.countries','Countries')}: <span style="color:var(--accent2)">${D.ioda?.countries?.length||0}</span></span><span style="color:var(--dim)">${t('ioda.events','Events')}: <span style="color:var(--accent)">${D.ioda?.totalEvents||0}</span></span></div>`:''}${iodaRows}</div>`;
+}
+
+function buildHealthAlertsPanel(){
+  const whoRows=(D.who||[]).slice(0,10).map((w,i)=>{
+    const sev=(w.severity||'monitor').toUpperCase();
+    const sevColor=w.severity==='critical'?'var(--warn)':w.severity==='high'?'#ffb74d':w.severity==='elevated'?'#b2ff59':'var(--dim)';
+    const link=safeExternalUrl(w.url);
+    return `<div class="signal-row"><strong>#${i+1} <span style="color:${sevColor}">${sev}</span> ${w.region?`· ${w.region}`:''}</strong><p>${cleanText(w.title||'')}</p><div style="display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px"><span>${getAge(w.date)}</span><span>score ${w.score||0}</span>${link?`<a href="${link}" target="_blank" rel="noopener noreferrer" style="color:var(--accent2);text-decoration:none">WHO</a>`:''}</div>${(w.emergencyEvent||w.whoRegionCode)?`<div style="margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--dim)">${cleanText([w.emergencyEvent,w.whoRegionCode].filter(Boolean).join(' · '))}</div>`:''}</div>`;
+  }).join('') || `<div style="padding:12px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:10px">No active WHO alerts</div>`;
+  return `<div class="g-panel right-health"><div class="sec-head"><h3>${t('panels.healthAlerts','Health Alerts')}</h3><span class="badge">WHO TOP ${Math.min((D.who||[]).length,10)}</span></div>${whoRows}</div>`;
+}
+
+function buildSupplementalHealthPanel(){
+  const supplementalRows=(D.supplementalHealth||[]).slice(0,10).map((w,i)=>{
+    const sev=(w.severity||'monitor').toUpperCase();
+    const sevColor=w.severity==='critical'?'var(--warn)':w.severity==='high'?'#ffb74d':w.severity==='elevated'?'#b2ff59':'var(--dim)';
+    const link=safeExternalUrl(w.url);
+    return `<div class="signal-row"><strong>#${i+1} <span style="color:${sevColor}">${sev}</span> ${w.region?`· ${w.region}`:''}</strong><p>${cleanText(w.title||'')}</p><div style="display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px"><span>${getAge(w.date)}</span><span>score ${w.score||0}</span>${link?`<a href="${link}" target="_blank" rel="noopener noreferrer" style="color:var(--accent2);text-decoration:none">OPEN</a>`:''}</div>${w.source?`<div style="margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--dim)">${cleanText(w.source)}</div>`:''}</div>`;
+  }).join('') || `<div style="padding:12px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:10px">No supplemental health alerts</div>`;
+  return `<div class="g-panel right-health-supp"><div class="sec-head"><h3>Supplemental Health</h3><span class="badge">RELIEFWEB/HDX ${Math.min((D.supplementalHealth||[]).length,10)}</span></div>${supplementalRows}</div>`;
+}
+
+function buildSweepDeltaPanel(){
+  const delta = D.delta || {};
+  const ds = delta.summary || {};
+  const hasDelta = ds.totalChanges > 0;
+  const dirEmoji = {'risk-off':'&#9650;','risk-on':'&#9660;','mixed':'&#9670;'}[ds.direction]||'&#9670;';
+  const dirClass = {'risk-off':'up','risk-on':'down','mixed':''}[ds.direction]||'';
+  const escalated = (delta.signals?.escalated || []).slice(0,6);
+  const deescalated = (delta.signals?.deescalated || []).slice(0,4);
+  const newSigs = (delta.signals?.new || []).slice(0,4);
+  const deltaRows = [];
+  for(const s of newSigs) deltaRows.push(`<div class="delta-row new"><span class="delta-badge new">NEW</span><span class="delta-label">${s.reason||s.label||s.key}</span></div>`);
+  for(const s of escalated){
+    const sev = s.severity==='critical'?'style="color:var(--warn);font-weight:600"':s.severity==='high'?'style="color:#ffab40"':'';
+    const val = s.pctChange!==undefined?`${s.pctChange>0?'+':''}${s.pctChange}%`:`${s.change>0?'+':''}${s.change}`;
+    deltaRows.push(`<div class="delta-row"><span class="delta-badge up">&#9650;</span><span class="delta-label" ${sev}>${s.label}</span><span class="delta-val">${s.from}→${s.to} (${val})</span></div>`);
+  }
+  for(const s of deescalated){
+    const val = s.pctChange!==undefined?`${s.pctChange}%`:`${s.change}`;
+    deltaRows.push(`<div class="delta-row"><span class="delta-badge down">&#9660;</span><span class="delta-label">${s.label||s.key}</span><span class="delta-val">${s.from}→${s.to} (${val})</span></div>`);
+  }
+  const deltaHtml = hasDelta ? deltaRows.join('') : `<div style="padding:12px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:10px">${t('delta.noChanges','No changes since last sweep')}</div>`;
+  return `<div class="g-panel right-delta"><div class="sec-head"><h3>${t('panels.sweepDelta','Sweep Delta')}</h3><span class="badge ${dirClass}">${dirEmoji} ${ds.direction?t('delta.'+ds.direction,ds.direction.toUpperCase()):t('delta.baseline','BASELINE')}</span></div>${hasDelta?`<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;font-family:var(--mono);font-size:10px"><span style="color:var(--dim)">${t('delta.changes','Changes')}: <span style="color:var(--accent)">${ds.totalChanges}</span></span><span style="color:var(--dim)">${t('delta.critical','Critical')}: <span style="color:${ds.criticalChanges>0?'var(--warn)':'var(--dim)'}">${ds.criticalChanges||0}</span></span>${ds.signalBreakdown?`<span style="color:var(--dim)">${t('delta.new','New')}: <span style="color:#4dd0e1">${ds.signalBreakdown.new}</span> &#8593;${ds.signalBreakdown.escalated} &#8595;${ds.signalBreakdown.deescalated}</span>`:''}</div>`:''}<div class="delta-list">${deltaHtml}</div></div>`;
+}
+
+function buildPanelHtml(panelId, zone){
+  switch(panelId){
+    case 'sensorGrid': return buildSensorGridPanel();
+    case 'nuclearWatch': return buildNuclearWatchPanel();
+    case 'riskGauges': return buildRiskGaugesPanel();
+    case 'spaceWatch': return buildSpaceWatchPanel();
+    case 'newsTicker': return buildNewsTickerPanel();
+    case 'macroMarkets': return buildMacroMarketsPanel();
+    case 'tradeIdeas': return buildTradeIdeasPanel();
+    case 'crossSourceSignals': return buildCrossSourceSignalsPanel();
+    case 'osintStream': return buildOsintPanel(zone.startsWith('center') ? 'lp-osint' : 'right-osint', zone.startsWith('center') ? 240 : 260);
+    case 'signalCore': return buildSignalCorePanel();
+    case 'internetOutages': return buildInternetOutagesPanel();
+    case 'healthAlerts': return buildHealthAlertsPanel();
+    case 'supplementalHealth': return buildSupplementalHealthPanel();
+    case 'sweepDelta': return buildSweepDeltaPanel();
+    default: return '';
+  }
+}
+
+function renderLeftRail(){
+  document.getElementById('leftRail').innerHTML = getZonePanelIds('left').map(panelId => buildPanelHtml(panelId, 'left')).join('');
+}
+
+function renderLower(){
+  document.getElementById('lowerGrid').innerHTML = ['center1','center2','center3'].map(zone => `<div class="lower-col" data-zone="${zone}">${getZonePanelIds(zone).map(panelId => buildPanelHtml(panelId, zone)).join('')}</div>`).join('');
+}
+
+function renderRight(){
+  document.getElementById('rightRail').innerHTML = getZonePanelIds('right').map(panelId => buildPanelHtml(panelId, 'right')).join('');
 }
 
 // === MAP ===
@@ -1713,6 +2158,178 @@ function buildOsintPanel(panelClass='', maxHeight=260){
     </div>`;
 }
 
+  let settingsEventsBound = false;
+  let draggedPanelId = null;
+
+  function renderSettingsBoard(){
+    const fixedEl = document.getElementById('settingsFixed');
+    const boardEl = document.getElementById('settingsBoard');
+    if(!fixedEl || !boardEl) return;
+
+    fixedEl.innerHTML = [
+      {
+        id: 'map',
+        title: 'Map module',
+        copy: 'Keeps the map stack visible above the three center lanes.'
+      },
+      {
+        id: 'mapRegions',
+        title: 'Map region filters',
+        copy: 'Shows the region selector above the map and in the mobile topbar.'
+      }
+    ].map(item => `
+      <div class="settings-fixed-card">
+        <label class="settings-fixed-label">
+          <span>${item.title}</span>
+          <span class="settings-switch"><input type="checkbox" data-fixed-id="${item.id}" ${isFixedModuleVisible(item.id) ? 'checked' : ''}></span>
+        </label>
+        <div class="settings-fixed-copy">${item.copy}</div>
+      </div>
+    `).join('');
+
+    const renderZoneModules = zone => {
+      const panelIds = getZonePanelIds(zone, true);
+      if(!panelIds.length) return `<div class="settings-zone-empty">Drop modules here</div>`;
+      return panelIds.map(panelId => `
+        <div class="settings-module ${isPanelVisible(panelId) ? '' : 'is-hidden'}" draggable="true" data-panel-id="${panelId}">
+          <div class="settings-module-main">
+            <div class="settings-module-title">${getPanelLabel(panelId)}</div>
+            <div class="settings-module-meta">${getPanelPlacementLabel(zone)}</div>
+          </div>
+          <label class="settings-switch">
+            <input type="checkbox" data-panel-id="${panelId}" ${isPanelVisible(panelId) ? 'checked' : ''}>
+          </label>
+        </div>
+      `).join('');
+    };
+
+    boardEl.innerHTML = `
+      <div class="settings-zone-card">
+        <div class="settings-zone-head"><strong>Left Rail</strong><span class="settings-zone-sub">Top to bottom</span></div>
+        <div class="settings-zone-body" data-zone="left">${renderZoneModules('left')}</div>
+      </div>
+      <div class="settings-center-card">
+        <div class="settings-center-head"><strong>Center Column</strong><span class="settings-zone-sub">Map fixed on top, 3 lanes below</span></div>
+        <div class="settings-center-preview">
+          <div class="settings-map-preview ${isFixedModuleVisible('map') ? '' : 'off'}">${isFixedModuleVisible('map') ? 'Map Stack' : 'Map Hidden'}</div>
+        </div>
+        <div class="settings-center-grid">
+          <div class="settings-zone-card">
+            <div class="settings-zone-head"><strong>Lane 1</strong><span class="settings-zone-sub">Below map</span></div>
+            <div class="settings-zone-body" data-zone="center1">${renderZoneModules('center1')}</div>
+          </div>
+          <div class="settings-zone-card">
+            <div class="settings-zone-head"><strong>Lane 2</strong><span class="settings-zone-sub">Below map</span></div>
+            <div class="settings-zone-body" data-zone="center2">${renderZoneModules('center2')}</div>
+          </div>
+          <div class="settings-zone-card">
+            <div class="settings-zone-head"><strong>Lane 3</strong><span class="settings-zone-sub">Below map</span></div>
+            <div class="settings-zone-body" data-zone="center3">${renderZoneModules('center3')}</div>
+          </div>
+        </div>
+      </div>
+      <div class="settings-zone-card">
+        <div class="settings-zone-head"><strong>Right Rail</strong><span class="settings-zone-sub">Top to bottom</span></div>
+        <div class="settings-zone-body" data-zone="right">${renderZoneModules('right')}</div>
+      </div>
+    `;
+  }
+
+  function clearSettingsDragState(){
+    document.querySelectorAll('.settings-zone-body.drag-over').forEach(el => el.classList.remove('drag-over'));
+    document.querySelectorAll('.settings-module.dragging').forEach(el => el.classList.remove('dragging'));
+  }
+
+  function getDragAfterElement(container, clientY){
+    const cards = [...container.querySelectorAll('.settings-module:not(.dragging)')];
+    let closest = null;
+    let closestOffset = Number.NEGATIVE_INFINITY;
+    for(const card of cards){
+      const box = card.getBoundingClientRect();
+      const offset = clientY - box.top - box.height / 2;
+      if(offset < 0 && offset > closestOffset){
+        closestOffset = offset;
+        closest = card;
+      }
+    }
+    return closest;
+  }
+
+  function bindSettingsEvents(){
+    if(settingsEventsBound) return;
+    settingsEventsBound = true;
+    const overlay = document.getElementById('settingsOverlay');
+    if(!overlay) return;
+
+    overlay.addEventListener('change', event => {
+      const panelToggle = event.target.closest('input[data-panel-id]');
+      if(panelToggle){
+        setPanelVisibility(panelToggle.dataset.panelId, panelToggle.checked);
+        rerenderDashboard(true);
+        renderSettingsBoard();
+        return;
+      }
+      const fixedToggle = event.target.closest('input[data-fixed-id]');
+      if(fixedToggle){
+        setFixedModuleVisibility(fixedToggle.dataset.fixedId, fixedToggle.checked);
+        rerenderDashboard(true);
+        renderSettingsBoard();
+      }
+    });
+
+    overlay.addEventListener('dragstart', event => {
+      const card = event.target.closest('.settings-module');
+      if(!card) return;
+      draggedPanelId = card.dataset.panelId;
+      card.classList.add('dragging');
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', draggedPanelId);
+    });
+
+    overlay.addEventListener('dragend', () => {
+      draggedPanelId = null;
+      clearSettingsDragState();
+    });
+
+    overlay.addEventListener('dragover', event => {
+      const zoneBody = event.target.closest('.settings-zone-body');
+      if(!zoneBody || !draggedPanelId) return;
+      event.preventDefault();
+      clearSettingsDragState();
+      zoneBody.classList.add('drag-over');
+    });
+
+    overlay.addEventListener('drop', event => {
+      const zoneBody = event.target.closest('.settings-zone-body');
+      if(!zoneBody || !draggedPanelId) return;
+      event.preventDefault();
+      const beforeCard = getDragAfterElement(zoneBody, event.clientY);
+      movePanelToZone(draggedPanelId, zoneBody.dataset.zone, beforeCard?.dataset.panelId || null);
+      rerenderDashboard(true);
+      renderSettingsBoard();
+      clearSettingsDragState();
+      draggedPanelId = null;
+    });
+  }
+
+  function openSettings(){
+    const overlay = document.getElementById('settingsOverlay');
+    if(!overlay) return;
+    renderSettingsBoard();
+    bindSettingsEvents();
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSettings(){
+    const overlay = document.getElementById('settingsOverlay');
+    if(!overlay) return;
+    overlay.classList.remove('show');
+    document.body.style.overflow = document.getElementById('glossaryOverlay')?.classList.contains('show') ? 'hidden' : '';
+    clearSettingsDragState();
+    draggedPanelId = null;
+  }
+
 function renderGlossary(){
   const body = document.getElementById('glossaryBody');
   if(!body) return;
@@ -1741,7 +2358,7 @@ function closeGlossary(){
   const overlay = document.getElementById('glossaryOverlay');
   if(!overlay) return;
   overlay.classList.remove('show');
-  document.body.style.overflow = '';
+  document.body.style.overflow = document.getElementById('settingsOverlay')?.classList.contains('show') ? 'hidden' : '';
 }
 
 function refreshMapViewport(forceGlobeReflow=false){
@@ -1778,18 +2395,16 @@ function syncResponsiveLayout(force=false){
   const mobileNow = isMobileLayout();
   if(force || lastResponsiveMobile === null || mobileNow !== lastResponsiveMobile){
     lastResponsiveMobile = mobileNow;
-    renderTopbar();
-    renderLeftRail();
-    renderLower();
-    renderRight();
+    rerenderDashboard(force);
   }
-  refreshMapViewport(force && !isFlat);
+  if(isFixedModuleVisible('map')) refreshMapViewport(force && !isFlat);
 }
 
 // === REINIT (for live updates without boot sequence) ===
 function reinit(){
-  renderTopbar();renderLeftRail();renderLower();renderRight();
+  rerenderDashboard(true);
   plotMarkers();
+  if(document.getElementById('settingsOverlay')?.classList.contains('show')) renderSettingsBoard();
 }
 
 // === SSE: Live Updates from Server ===
@@ -1827,9 +2442,9 @@ function connectSSE(){
 // === INIT ===
 let booted = false;
 function init(){
-  renderTopbar();renderLeftRail();renderLower();renderRight();
+  rerenderDashboard(true);
   renderGlossary();
-  initMap();
+  bindSettingsEvents();
   if (!booted) { runBoot(); booted = true; }
   // Close popup on click outside markers
   document.getElementById('mapContainer').addEventListener('click',e=>{
