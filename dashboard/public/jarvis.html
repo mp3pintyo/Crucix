@@ -1104,11 +1104,11 @@ function renderLeftRail(){
   document.getElementById('leftRail').innerHTML = getZonePanelIds('left').map(panelId => buildPanelHtml(panelId, 'left')).join('');
 }
 
-function renderLowerLegacy(){
+function renderLower(){
   document.getElementById('lowerGrid').innerHTML = ['center1','center2','center3'].map(zone => `<div class="lower-col" data-zone="${zone}">${getZonePanelIds(zone).map(panelId => buildPanelHtml(panelId, zone)).join('')}</div>`).join('');
 }
 
-function renderRightLegacy(){
+function renderRight(){
   document.getElementById('rightRail').innerHTML = getZonePanelIds('right').map(panelId => buildPanelHtml(panelId, 'right')).join('');
 }
 
@@ -1792,8 +1792,8 @@ function mkSparkSvg(values, isGood){
   return `<svg class="spark-svg" viewBox="0 0 ${w} ${h}"><polyline class="spark-line ${cls}" points="${pts.join(' ')}"/><circle class="${cls} spark-dot" cx="${last.split(',')[0]}" cy="${last.split(',')[1]}" r="2" fill="${isGood?'var(--accent)':'var(--danger)'}"/></svg>`;
 }
 
-// === LOWER GRID ===
-function renderLower(){
+// === LOWER GRID (hardcoded fallback — not called by rerenderDashboard) ===
+function _renderLowerHardcoded(){
   const mobile = isMobileLayout();
   const spread=D.fred.find(f=>f.id==='T10Y2Y');
   const ff=D.fred.find(f=>f.id==='DFF');
@@ -1947,8 +1947,8 @@ function renderLower(){
   document.getElementById('lowerGrid').innerHTML=`${tickerPanel}${osintPanel}${macroPanel}${ideasPanel}`;
 }
 
-// === RIGHT RAIL ===
-function renderRight(){
+// === RIGHT RAIL (hardcoded fallback — not called by rerenderDashboard) ===
+function _renderRightHardcoded(){
   const mobile = isMobileLayout();
   // CROSS-SOURCE SIGNALS — moved from lower grid to right rail
   const signals=D.tSignals.slice(0,6).map((s,i)=>`<div class="signal-row"><strong>Signal ${i+1}</strong><p>${s}</p></div>`).join('');
