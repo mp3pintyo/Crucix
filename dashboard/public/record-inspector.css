@@ -101,3 +101,4 @@
 /* Keyboard hints are noise on touch-only devices and cost the bottom sheet a line. */
 @media(hover:none) and (pointer:coarse){.ri-keys{display:none}}
 @media(prefers-reduced-motion:reduce){#record-inspector{animation:none}}
+.ri-pivots{list-style:none;margin:0 0 10px;padding:0;font-size:11px}.ri-pivots li{margin:0 0 4px}.ri-pivot-value{font-family:var(--mono);color:var(--dim);word-break:break-all}

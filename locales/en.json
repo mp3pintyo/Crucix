@@ -856,6 +856,7 @@
     "lastSuccess": "Last successful update",
     "details": "Event details",
     "facts": "Facts",
+    "pivots": "Look up elsewhere",
     "location": "Location",
     "sourceLabel": "Source",
     "yes": "Yes",

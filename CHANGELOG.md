@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.14.0 — Pivot-linkek: „Keresés máshol” a rekordböngészőben / Pivot links: "Look up elsewhere" in the record inspector](docs/releases/v2.14.0.md) — 2026-10-08
+
 - [2.13.6 — CI-javítás: a v2.13.5 egyik oldal-tesztje / CI fix: a page test of v2.13.5](docs/releases/v2.13.6.md) — 2026-10-07
 
 - [2.13.5 — Az üres dashboard javítása (SSE-megszakadás) és a Codex-modell követése / Fixing the empty dashboard (SSE cut) and following the Codex model](docs/releases/v2.13.5.md) — 2026-10-07

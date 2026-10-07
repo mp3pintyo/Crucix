@@ -70,11 +70,13 @@
       +(where||coords?`<dt>${tx('inspector.location','Location')}</dt><dd>${[where,coords].filter(Boolean).join(' · ')}</dd>`:'');
     const facts=(Array.isArray(rec.facts)?rec.facts:[]).filter(fact=>text(fact?.label)).slice(0,8)
       .map(fact=>`<dt>${tx('inspector.fact.'+fact.label,fact.label)}</dt><dd>${typeof fact.value==='boolean'?(fact.value?tx('inspector.yes','Yes'):tx('inspector.no','No')):esc(fact.value)}</dd>`).join('');
+    // Pivot links (pivots.js, optional): entities found in the record with a few public lookup pages each; nothing is fetched until a click.
+    const pivots=window.CrucixPivots&&typeof window.CrucixPivots.pivotsFor==='function'?window.CrucixPivots.pivotsFor(rec).map(entity=>`<li><span class="ri-pivot-value">${esc(entity.value)}</span> ${entity.links.map(item=>link(item.url,esc(item.name))).join(' · ')}</li>`).join(''):'';
     const original=safeUrl(rec.url)?`<p>${link(rec.url,tx('liveSources.original','Original source'),'ri-original')}</p>`:'';
     const details=text(rec.eventId)?`<button type="button" class="ri-details" data-ri-action="details" data-event-id="${esc(rec.eventId)}">${tx('inspector.details','Event details')}</button>`:'';
     return `<section class="ri-detail${outdated?' ri-outdated':''}"><h3 class="ri-detail-title">${glyph(tx,level)}<span>${esc(rec.title)}</span></h3>${outdated?`<span class="ri-badge">${tx('inspector.outdated','No longer current')}</span>`:''}`
       +`${text(rec.summary)?`<p class="ri-summary">${esc(rec.summary)}</p>`:''}${info?`<dl class="ri-meta">${info}</dl>`:''}`
-      +`${facts?`<h4>${tx('inspector.facts','Facts')}</h4><dl class="ri-facts">${facts}</dl>`:''}${original}${details}</section>`;
+      +`${facts?`<h4>${tx('inspector.facts','Facts')}</h4><dl class="ri-facts">${facts}</dl>`:''}${pivots?`<h4>${tx('inspector.pivots','Look up elsewhere')}</h4><ul class="ri-pivots">${pivots}</ul>`:''}${original}${details}</section>`;
   }
   // Waiting (no source yet, e.g. opened from the hash before data), a reason, or filters + list.
   function body(view,source,tx,now,id){
