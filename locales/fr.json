@@ -1162,5 +1162,11 @@
     "citations": "Sources",
     "cite": "Ouvrir la donnée {n} : {title}",
     "paletteAction": "Synthèse du risque pays"
+  },
+  "ticker": {
+    "tier": "Niveau de source",
+    "tierHelp": "1 organisme officiel ou agence, 2 grand média, 3 source spécialisée ou régionale, 4 agrégateur ou blog. Un niveau classe une source ; il ne dit pas qu'un titre est vrai.",
+    "state": "Média détenu ou financé par un État",
+    "language": "Langue du titre (non traduit)"
   }
 }

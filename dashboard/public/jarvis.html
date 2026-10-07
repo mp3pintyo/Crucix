@@ -333,6 +333,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .tk-src.anz{color:#80cbc4;border-color:rgba(128,203,196,0.3)}
 .tk-src.us{color:#90caf9;border-color:rgba(144,202,249,0.3)}
 .tk-src.other{color:#b0bec5;border-color:rgba(176,190,197,0.2)}
+.tk-tag{font-family:var(--mono);font-size:8px;letter-spacing:0.06em;padding:1px 4px;border:1px solid rgba(176,190,197,0.25);color:var(--dim);display:inline-block;margin-right:4px}
+.tk-tag.t1{color:#64f0c8;border-color:rgba(100,240,200,0.35)}
+.tk-tag.t2{color:#90caf9;border-color:rgba(144,202,249,0.3)}
+.tk-tag.t4{color:#ffb74d;border-color:rgba(255,183,77,0.3)}
+.tk-tag.st{color:#ff8a65;border-color:rgba(255,138,101,0.35)}
 .tk-head{font-size:11px;line-height:1.35;color:#c8d8d2;margin-top:3px}
 .tk-time{font-family:var(--mono);font-size:8px;color:var(--dim);margin-top:2px}
 
@@ -1080,6 +1085,14 @@ function buildSpaceWatchPanel(){
   </div>`;
 }
 
+function tickerTags(n){
+  let out='';
+  if(Number.isInteger(n.tier)&&n.tier>=1&&n.tier<=4)out+='<span class="tk-tag t'+n.tier+'" title="'+esc(t('ticker.tier','Source tier')+' '+n.tier+'/4. '+t('ticker.tierHelp',''))+'">T'+n.tier+'</span>';
+  if(typeof n.lang==='string'&&/^[a-z]{2}$/.test(n.lang))out+='<span class="tk-tag" title="'+esc(t('ticker.language','Headline language'))+'">'+n.lang.toUpperCase()+'</span>';
+  if(n.state===true)out+='<span class="tk-tag st" title="'+esc(t('ticker.state','State-owned or state-funded outlet'))+'">STATE</span>';
+  return out;
+}
+
 function buildNewsTickerPanel(){
   const feed = (D.newsFeed || []).slice(0, 20);
   const srcClass = s => {
@@ -1104,7 +1117,7 @@ function buildNewsTickerPanel(){
     const age = n.timestamp ? getAge(n.timestamp) : '';
     const urlAttr = n.url ? ` data-url="${String(n.url).replace(/&/g,'&amp;').replace(/"/g,'&quot;')}"` : '';
     const event=findEvent(n);const eventAttr=event?` data-event-id="${event.id}" role="button" tabindex="0"`:'';
-    return `<div class="tk-card ${n.urgent?'urgent':''} ${n.url||event?'clickable':''}"${urlAttr}${eventAttr}><span class="tk-src ${sc}">${esc((n.source||'NEWS').substring(0,12))}</span><span class="tk-time">${age}</span><div class="tk-head">${cleanText(n.headline||'')}</div>${event?'<span class="tk-link">&#9432;</span>':n.url?'<span class="tk-link">&#8599;</span>':''}</div>`;
+    return `<div class="tk-card ${n.urgent?'urgent':''} ${n.url||event?'clickable':''}"${urlAttr}${eventAttr}><span class="tk-src ${sc}">${esc((n.source||'NEWS').substring(0,12))}</span>${tickerTags(n)}<span class="tk-time">${age}</span><div class="tk-head">${cleanText(n.headline||'')}</div>${event?'<span class="tk-link">&#9432;</span>':n.url?'<span class="tk-link">&#8599;</span>':''}</div>`;
   }).join('');
   const tickerDuration = Math.max(20, feed.length * 2.5);
   return `<div class="g-panel lp-ticker" style="display:flex;flex-direction:column">

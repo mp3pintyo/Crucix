@@ -12,6 +12,8 @@ import { pathToFileURL } from 'node:url';
 import { openBrowser } from '../lib/open-browser.mjs';
 import { inlineJson } from '../lib/html.mjs';
 import { safeFetch } from '../apis/utils/fetch.mjs';
+import { parseFeed } from '../apis/utils/rss.mjs';
+import { NEWS_FEEDS, feedBySource, HUNGARIAN_SOURCES, OFFICIAL_SOURCES } from '../apis/utils/news-feeds.mjs';
 import config from '../crucix.config.mjs';
 import { createLLMProvider } from '../lib/llm/index.mjs';
 import { generateRuleBasedIdeas, resolveIdeas } from '../lib/llm/rule-ideas.mjs';
@@ -339,22 +341,16 @@ export function loadOpenSkyFallback(currentTimestamp, runsDir = config.runsDir |
 }
 
 // === RSS Fetching ===
-async function fetchRSS(url, source) {
+async function fetchRSS(url, source, meta = {}) {
   try {
     const response = await safeFetch(url, { timeout: 8000, retries: 0, format: 'text', maxBytes: 2 * 1024 * 1024 });
     if (response.error) throw new Error(response.error);
-    const xml = response.rawText;
     const items = [];
-    const itemRegex = /<item>([\s\S]*?)<\/item>/g;
-    let match;
-    while ((match = itemRegex.exec(xml)) !== null) {
-      const block = match[1];
-      const title = (block.match(/<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>/)?.[1] || '').trim();
-      const link = sanitizeExternalUrl((block.match(/<link>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/link>/)?.[1] || '').trim());
-      const pubDate = block.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] || '';
-      if (title && title !== source) items.push({ title, date: pubDate, source, url: link || undefined });
+    for (const item of parseFeed(response.rawText)) {
+      const link = sanitizeExternalUrl(item.link);
+      if (item.title !== source) items.push({ title: item.title, date: item.date, source, url: link || undefined, ...(meta.tier ? { tier: meta.tier } : {}), ...(meta.lang && meta.lang !== 'en' ? { lang: meta.lang } : {}), ...(meta.state ? { state: true } : {}) });
     }
-    return items;
+    return items.slice(0, MAX_PER_FEED);
   } catch (e) {
     console.log(`RSS fetch failed (${source}):`, e.message);
     return [];
@@ -362,39 +358,17 @@ async function fetchRSS(url, source) {
 }
 
 const REGIONAL_NEWS_SOURCES = ['MercoPress', 'Indian Express', 'The Hindu', 'SBS Australia'];
+// Newest headlines taken from one feed (some feeds list 300) and the size of the selection that reaches the dashboard.
+const MAX_PER_FEED = 15;
+const NEWS_LIMIT = 60;
+const PER_SOURCE_LIMIT = 5;
 
+// `customFeeds` takes [url, source] pairs (tests, local overrides); the default is the tiered registry.
 export async function fetchAllNews(customFeeds) {
-  const feeds = customFeeds || [
-    // Global
-    ['https://feeds.bbci.co.uk/news/world/rss.xml', 'BBC'],
-    ['https://rss.nytimes.com/services/xml/rss/nyt/World.xml', 'NYT'],
-    ['https://www.aljazeera.com/xml/rss/all.xml', 'Al Jazeera'],
-    // USA
-    ['https://feeds.npr.org/1001/rss.xml', 'NPR'],
-    ['https://feeds.bbci.co.uk/news/technology/rss.xml', 'BBC Tech'],
-    ['https://feeds.bbci.co.uk/news/science_and_environment/rss.xml', 'BBC Science'],
-    ['https://rss.nytimes.com/services/xml/rss/nyt/Americas.xml', 'NYT Americas'],
-    // Europe
-    ['https://rss.dw.com/rdf/rss-en-all', 'DW'],
-    ['https://www.france24.com/en/rss', 'France 24'],
-    ['https://www.euronews.com/rss?format=mrss', 'Euronews'],
-    // Africa & Cameroon region
-    ['https://rss.dw.com/rdf/rss-en-africa', 'DW Africa'],
-    ['https://www.rfi.fr/en/rss', 'RFI'],
-    ['https://www.africanews.com/feed/rss', 'Africa News'],
-    ['https://rss.nytimes.com/services/xml/rss/nyt/Africa.xml', 'NYT Africa'],
-    // Asia-Pacific
-    ['https://rss.nytimes.com/services/xml/rss/nyt/AsiaPacific.xml', 'NYT Asia'],
-    ['https://www.sbs.com.au/news/topic/australia/feed', 'SBS Australia'],
-    // India
-    ['https://indianexpress.com/section/india/feed/', 'Indian Express'],
-    ['https://www.thehindu.com/news/national/feeder/default.rss', 'The Hindu'],
-    // South America
-    ['https://en.mercopress.com/rss/latin-america', 'MercoPress'],
-  ];
+  const feeds = customFeeds ? customFeeds.map(([url, source]) => ({ ...feedBySource(source), url, source })) : NEWS_FEEDS;
 
   const results = await Promise.allSettled(
-    feeds.map(([url, source]) => fetchRSS(url, source))
+    feeds.map(feed => fetchRSS(feed.url, feed.source, feed))
   );
 
   const allNews = results
@@ -414,6 +388,9 @@ export async function fetchAllNews(customFeeds) {
         source: item.source,
         date: item.date,
         url: item.url,
+        ...(item.tier ? { tier: item.tier } : {}),
+        ...(item.lang ? { lang: item.lang } : {}),
+        ...(item.state ? { state: true } : {}),
         ...(geo ? { lat: geo.lat, lon: geo.lon, region: geo.region, locationMethod: 'headline-keyword', locationPrecision: 'approximate' }
           : { region: 'Global', locationMethod: 'unknown' }),
       });
@@ -433,12 +410,22 @@ export async function fetchAllNews(customFeeds) {
     selectedKeys.add(key);
   };
 
-  // Reserve a little space so newly-added regional feeds are not crowded out by larger globals.
+  // Reserve a little space so regional, Hungarian and official feeds are not crowded out by larger globals.
   for (const source of REGIONAL_NEWS_SOURCES) {
     filtered.filter(item => item.source === source).slice(0, 2).forEach(pushUnique);
   }
-  filtered.forEach(pushUnique);
-  return selected.slice(0, 50);
+  for (const source of [...HUNGARIAN_SOURCES, ...OFFICIAL_SOURCES]) {
+    filtered.filter(item => item.source === source).slice(0, 1).forEach(pushUnique);
+  }
+  // After the reserved slots no feed may hold more than PER_SOURCE_LIMIT of the selection, so one busy feed cannot fill it.
+  const counts = new Map();
+  for (const item of selected) counts.set(item.source, (counts.get(item.source) || 0) + 1);
+  for (const item of filtered) {
+    if ((counts.get(item.source) || 0) >= PER_SOURCE_LIMIT || selectedKeys.has(keyFor(item))) continue;
+    pushUnique(item);
+    counts.set(item.source, (counts.get(item.source) || 0) + 1);
+  }
+  return selected.slice(0, NEWS_LIMIT);
 }
 
 // === Leverageable Ideas from Signals ===
@@ -811,6 +798,7 @@ export function buildNewsFeed(rssNews, gdeltData, tgUrgent, tgTop) {
     feed.push({
       headline: n.title, source: n.source, type: 'rss',
       timestamp: sourceTimestamp(n.date), publishedAt: sourceTimestamp(n.date), region: n.region, urgent: false, url: sanitizeExternalUrl(n.url),
+      ...(n.tier ? { tier: n.tier } : {}), ...(n.lang ? { lang: n.lang } : {}), ...(n.state ? { state: true } : {}),
       lat: n.lat, lon: n.lon, locationMethod: n.locationMethod || 'unknown', locationPrecision: n.locationPrecision || 'unknown'
     });
   }

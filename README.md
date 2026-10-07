@@ -209,7 +209,7 @@ A self-contained Jarvis-style HUD with:
 - **Live market data** — indexes, crypto, energy, commodities via Yahoo Finance (no API key needed)
 - **Risk gauges** — VIX, high-yield spread, supply chain pressure index
 - **OSINT feed** — English-language posts from 17 Telegram intelligence channels (expandable)
-- **News ticker** — merged RSS + GDELT headlines + Telegram posts, auto-scrolling
+- **News ticker** — merged RSS + GDELT headlines + Telegram posts, auto-scrolling. 52 RSS feeds carry a source tier (T1 official or wire … T4 aggregator, a ranking of the source, not of the headline), a language tag and a state-funded tag; seven Hungarian outlets are included (v2.18)
 - **Sweep delta** — live panel showing what changed since last sweep (new signals, escalations, de-escalations with severity)
 - **Cross-source signals** — correlated intelligence across satellite, economic, conflict, and social domains
 - **Nuclear watch** — recent (72 h) radiation readings from Safecast, shown with their age, plus EPA RadNet when reachable

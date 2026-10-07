@@ -1162,5 +1162,11 @@
     "citations": "Források",
     "cite": "A(z) {n}. rekord megnyitása: {title}",
     "paletteAction": "Országkockázati összefoglaló"
+  },
+  "ticker": {
+    "tier": "Forrásszint",
+    "tierHelp": "1 hivatalos szerv vagy hírügynökség, 2 nagy hírforrás, 3 szakmai vagy regionális forrás, 4 összegyűjtő vagy blog. A szint a forrást rangsorolja, nem azt mondja, hogy a cím igaz.",
+    "state": "Állami tulajdonú vagy állami finanszírozású forrás",
+    "language": "A cím nyelve (nem fordítjuk)"
   }
 }

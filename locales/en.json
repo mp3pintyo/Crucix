@@ -1162,5 +1162,11 @@
     "citations": "Sources",
     "cite": "Open record {n}: {title}",
     "paletteAction": "Country risk briefing"
+  },
+  "ticker": {
+    "tier": "Source tier",
+    "tierHelp": "1 official body or wire, 2 major outlet, 3 specialist or regional source, 4 aggregator or blog. A tier ranks a source; it does not say a headline is true.",
+    "state": "State-owned or state-funded outlet",
+    "language": "Headline language (not translated)"
   }
 }
