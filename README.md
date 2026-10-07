@@ -161,6 +161,10 @@ The **Current public data** panel grows from nine to 19 keyless sources: IMF Por
 
 The **Cyber and internet** lens gains two keyless sources found by analysing the [awesome-osint-arsenal](https://github.com/rawfilejson/awesome-osint-arsenal) catalogue: **ThreatFox** (abuse.ch, CC0: new indicators of compromise per malware family over 24 hours; single indicators are never listed) and **Have I Been Pwned** (CC BY 4.0: breaches added in the last 30 days, rated by size; sensitive, fabricated, spam-list and retired breaches are left out). Both are in the [Tier 7 table](#tier-7-current-public-data-19) below and described, with limits and the measurements behind the ratings, in the [release notes](docs/releases/v2.15.0.md). The Feodo Tracker was measured too and left out: it lists five servers, one online, last active in March 2026.
 
+### Threat actor groups on the country sheet (v2.16)
+
+The country sheet gains a **Threat actor groups** section from the keyless [MISP Galaxy](https://www.misp-galaxy.org/threat-actor/) catalogue (CC0): how many known adversary groups the MISP community attributes to the country, and the best-known twelve with their aliases. It is context only (no part of the risk score, no alert), always shown with the caveat that attribution is a suspicion, and described, with its limits, in the [release notes](docs/releases/v2.16.0.md).
+
 ### Dashboard structure (v2.12)
 
 - **Domain lenses.** A bar under the alert strip offers **All** and eight domains (security and conflict, natural hazards and weather, space, cyber and internet, markets and economy, energy and supply chain, sanctions and regulation, health and environment) that together cover all 52 source adapters. A lens narrows the live panel, the source-health panel, the changes panel and its chip, the record browser's source list and the live record markers on both maps. News, OSINT and delta signals have no domain and only show under **All**; the older map layers keep their own switches. The choice is kept per browser (in memory only when storage is blocked).

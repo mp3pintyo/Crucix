@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.16.0 — Fenyegetésszereplő-csoportok az országlapon (MISP Galaxy) / Threat actor groups on the country sheet (MISP Galaxy)](docs/releases/v2.16.0.md) — 2026-10-08
+
 - [2.15.0 — Két új kiberforrás: ThreatFox és Have I Been Pwned / Two new cyber sources: ThreatFox and Have I Been Pwned](docs/releases/v2.15.0.md) — 2026-10-08
 
 - [2.14.0 — Pivot-linkek: „Keresés máshol” a rekordböngészőben / Pivot links: "Look up elsewhere" in the record inspector](docs/releases/v2.14.0.md) — 2026-10-08

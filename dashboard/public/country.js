@@ -22,6 +22,8 @@
     convergence:'Convergence',convergenceOn:'{count} event types at high or above within 24 hours: {kinds}.',convergenceOff:'No convergence: fewer than 3 event types at high or above within 24 hours.',
     forecast:'Conflict forecast (VIEWS)',forecastNone:'No VIEWS forecast for this country.',month:'Month',probability:'Chance of ≥ 25 battle deaths',fatalities:'Expected battle deaths',monthUsed:'used in the score',run:'Run {run}',
     baseline:'Baseline risk (INFORM)',baselineNone:'No INFORM baseline for this country.',baselineValue:'INFORM Risk {score} of 10',release:'Release {release}, published {published}',license:'Licence: {license}',
+    actors:'Threat actor groups',actorsNone:'No threat actor group is attributed to this country in the MISP galaxy.',actorsCount:'{count} groups in the MISP galaxy; the {shown} with the most known aliases are shown.',
+    actorsNote:'Attribution is the MISP community’s suspicion, not a proven finding, and many groups have no country at all.',aliases:'also known as {names}',
     events:'Recent records',eventsNone:'No recorded event linked to this country.',located:'Located',mentioned:'Mentioned',untitled:'Title unavailable',
     linked:'Linked countries',linkedNone:'No country shares records with this one in the last 7 days.',linkedCount:'{count} shared records',briefing:'Briefing for this country',
     paletteOpen:'Open country: {name}',paletteHint:'Risk score {score}',paletteHintNone:'Country sheet'};
@@ -96,6 +98,16 @@
     else body=`<p class="cs-value">${esc(say('baselineValue',{score:number(value.score,1)}))}</p>${text(value.release,80)?`<p class="cs-cite">${esc(say('release',{release:text(value.release,80),published:text(value.published,40)||'—'}))}</p>`:''}<p class="cs-cite">${esc(text(value.attribution,400))}</p>${text(value.license,300)?`<p class="cs-cite">${esc(say('license',{license:text(value.license,300)}))}</p>`:''}`;
     return `<section class="cs-sec" aria-labelledby="cs-baseline"><h3 id="cs-baseline">${esc(say('baseline'))}</h3>${body}</section>`;
   }
+  function actors(value){
+    let body;
+    const groups=isObject(value)&&Array.isArray(value.groups)?value.groups.slice(0,12).filter(isObject).filter(group=>text(group.name,60)):[];
+    if(!groups.length)body=`<p class="cs-calm">${esc(say('actorsNone'))}</p>`;
+    else{
+      const items=groups.map(group=>{const names=(Array.isArray(group.aliases)?group.aliases:[]).slice(0,4).map(alias=>text(alias,40)).filter(Boolean);return `<li><strong>${esc(text(group.name,60))}</strong>${names.length?` <span class="cs-cite">${esc(say('aliases',{names:names.join(', ')}))}</span>`:''}</li>`;}).join('');
+      body=`<p class="cs-cite">${esc(say('actorsCount',{count:finite(value.count)?value.count:groups.length,shown:groups.length}))}</p><ul class="cs-actors">${items}</ul><p class="cs-cite">${esc(say('actorsNote'))}</p><p class="cs-cite">${esc(text(value.attribution,400))}</p>${text(value.license,300)?`<p class="cs-cite">${esc(say('license',{license:text(value.license,300)}))}</p>`:''}`;
+    }
+    return `<section class="cs-sec" aria-labelledby="cs-actors"><h3 id="cs-actors">${esc(say('actors'))}</h3>${body}</section>`;
+  }
   const glyphOf=level=>{const R=window.CrucixRecords;return R&&R.GLYPH&&R.GLYPH[level]||'';};
   function events(list){
     const rows=(Array.isArray(list)?list:[]).filter(isObject).slice(0,20).map(item=>{
@@ -122,7 +134,7 @@
       ?`<div class="cs-head"><p class="cs-score" data-band="${score>=70?'high':score>=40?'elevated':score>=10?'watch':'low'}"><span class="cs-label">${esc(say('score'))}</span> <strong>${esc(say('outOf',{score}))}</strong></p><span class="cs-bar" aria-hidden="true"><span class="cs-fill" style="width:${score}%"></span></span><dl class="cs-facts"><div><dt>${esc(say('change'))}</dt><dd>${esc(changeText(data.change24h))}</dd></div><div><dt>${esc(say('coverage'))}</dt><dd>${esc(percent(data.coverage))}</dd></div></dl>${at!==null?`<p class="cs-cite">${esc(say('updated',{time:clock(at),version:Number.isSafeInteger(data.version)?data.version:'?'}))}</p>`:''}</div>`
       :`<p class="cs-calm cs-noscore">${esc(say('noScore'))}</p>`;
     const brief=`<p class="cs-actions"><button type="button" class="cs-brief" data-country-briefing="${data.iso3}" aria-haspopup="dialog">${esc(say('briefing'))}</button></p>`;
-    return head+(scored?components(data.components):'')+trend(data.series)+(scored?convergence(data.convergence):'')+forecast(data.forecast)+baseline(data.baseline)+events(data.events)+linked(data.linked)+brief;
+    return head+(scored?components(data.components):'')+trend(data.series)+(scored?convergence(data.convergence):'')+forecast(data.forecast)+baseline(data.baseline)+actors(data.actors)+events(data.events)+linked(data.linked)+brief;
   }
 
   // ===== The dialog =====
