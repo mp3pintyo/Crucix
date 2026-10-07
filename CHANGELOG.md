@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.16.1 — CI-javítás: rögzített forrásszám a paletta-tesztben / CI fix: a pinned source count in the palette test](docs/releases/v2.16.1.md) — 2026-10-08
+
 - [2.16.0 — Fenyegetésszereplő-csoportok az országlapon (MISP Galaxy) / Threat actor groups on the country sheet (MISP Galaxy)](docs/releases/v2.16.0.md) — 2026-10-08
 
 - [2.15.0 — Két új kiberforrás: ThreatFox és Have I Been Pwned / Two new cyber sources: ThreatFox and Have I Been Pwned](docs/releases/v2.15.0.md) — 2026-10-08
