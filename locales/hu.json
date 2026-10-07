@@ -915,7 +915,13 @@
       "probabilityPct": "Piaci valószínűség (%)",
       "volume": "Kereskedett forgalom (Mana, játékpénz)",
       "closesAt": "A piac lezárul",
-      "platform": "Platform"
+      "platform": "Platform",
+      "family": "Kártevőcsalád",
+      "iocCount": "Indikátorok (24 óra)",
+      "c2Count": "Ebből irányító (C2) szerver",
+      "domain": "Tartomány",
+      "pwnCount": "Érintett fiókok",
+      "breachDate": "Az adatlopás napja"
     }
   },
   "lenses": {

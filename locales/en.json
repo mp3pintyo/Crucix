@@ -915,7 +915,13 @@
       "probabilityPct": "Market probability (%)",
       "volume": "Traded volume (Mana, play money)",
       "closesAt": "Market closes",
-      "platform": "Platform"
+      "platform": "Platform",
+      "family": "Malware family",
+      "iocCount": "Indicators (24 h)",
+      "c2Count": "Of which command-and-control",
+      "domain": "Domain",
+      "pwnCount": "Accounts exposed",
+      "breachDate": "Breach date"
     }
   },
   "lenses": {

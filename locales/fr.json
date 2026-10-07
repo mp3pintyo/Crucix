@@ -915,7 +915,13 @@
       "probabilityPct": "Probabilité du marché (%)",
       "volume": "Volume échangé (Mana, monnaie fictive)",
       "closesAt": "Clôture du marché",
-      "platform": "Plateforme"
+      "platform": "Plateforme",
+      "family": "Famille de logiciel malveillant",
+      "iocCount": "Indicateurs (24 h)",
+      "c2Count": "Dont serveurs de commande (C2)",
+      "domain": "Domaine",
+      "pwnCount": "Comptes exposés",
+      "breachDate": "Date de la fuite"
     }
   },
   "lenses": {

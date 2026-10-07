@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.15.0 — Két új kiberforrás: ThreatFox és Have I Been Pwned / Two new cyber sources: ThreatFox and Have I Been Pwned](docs/releases/v2.15.0.md) — 2026-10-08
+
 - [2.14.0 — Pivot-linkek: „Keresés máshol” a rekordböngészőben / Pivot links: "Look up elsewhere" in the record inspector](docs/releases/v2.14.0.md) — 2026-10-08
 
 - [2.13.6 — CI-javítás: a v2.13.5 egyik oldal-tesztje / CI fix: a page test of v2.13.5](docs/releases/v2.13.6.md) — 2026-10-07
