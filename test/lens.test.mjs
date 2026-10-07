@@ -162,16 +162,18 @@ const sections = html => html.split('<section class="live-group"').slice(1);
 const groupOf = section => section.match(/data-live-domain="([^"]+)"/)?.[1];
 const cardsIn = html => [...html.matchAll(/data-live-source="([^"]+)"/g)].map(match => match[1]);
 
-test('the live panel groups the 21 cards by domain: every card reachable, its attributes and records button unchanged', () => {
+// The number of live sources follows the registry: a new source needs no edit here.
+const N = Object.keys(POLICIES).length;
+test('the live panel groups every card by domain: every card reachable, its attributes and records button unchanged', () => {
   const { window } = realm({ files: PANEL_FILES, storage: memory() }), api = window.CrucixLiveSources;
   const sources = nineteen({ GDACS: { observations: [{ ...liveRow('GDACS').observations[0], severity: 'Orange' }] } });
   const html = api.renderPanel(sources, t, [], now), groups = sections(html);
   const expected = DOMAIN_IDS.filter(id => Object.keys(POLICIES).some(name => domainOfSource(name) === id));
   assert.ok(groups.length <= 8 && groups.length === expected.length, `${groups.length} groups`);
   assert.deepEqual(groups.map(groupOf), expected, 'groups in the domain order, only those with sources');
-  assert.deepEqual(cardsIn(html).sort(), Object.keys(POLICIES).sort(), 'all 21 cards are in the DOM');
-  assert.equal(html.match(/<article class="live-source" data-live-source="[^"]+" data-live-state="ok">/g).length, 21);
-  assert.equal(html.match(/<button type="button" class="live-open" data-open-records="[^"]+" aria-controls="record-inspector">/g).length, 21);
+  assert.deepEqual(cardsIn(html).sort(), Object.keys(POLICIES).sort(), 'all cards are in the DOM');
+  assert.equal(html.match(/<article class="live-source" data-live-source="[^"]+" data-live-state="ok">/g).length, N);
+  assert.equal(html.match(/<button type="button" class="live-open" data-open-records="[^"]+" aria-controls="record-inspector">/g).length, N);
   for (const section of groups) {
     const domain = groupOf(section), head = section.match(/<button type="button" class="live-group-head"[^>]*>/)?.[0] ?? '';
     assert.match(head, new RegExp(`data-live-group="${domain}" aria-expanded="(true|false)" aria-controls="live-group-${domain}"`), domain);
@@ -185,7 +187,7 @@ test('the live panel groups the 21 cards by domain: every card reachable, its at
   const hazards = groups.find(section => groupOf(section) === 'hazards');
   assert.ok(hazards.includes('data-attention="true"')); assert.match(hazards, /<span class="lg-worst sev-high"><i aria-hidden="true">▲<\/i> High<\/span>/, 'worst level: glyph and text');
   assert.ok(hazards.includes('7 records'), 'hazards record count'); assert.ok(hazards.includes('Needs attention'));
-  assert.match(html, /<span class="badge">21\/21<\/span>/, 'the badge still counts every source');
+  assert.match(html, new RegExp(`<span class="badge">${N}\/${N}<\/span>`), 'the badge still counts every source');
 });
 
 test('the group expansion survives a re-render and the 30 s outerHTML refresh (the state lives in CrucixLens)', () => {
@@ -248,14 +250,14 @@ test('a domain lens shows only its own group, open and not collapsible; a lens w
   const empty = api.renderPanel(nineteen(), t, [], now);
   assert.deepEqual(cardsIn(empty), []); assert.ok(empty.includes('No live source belongs to this domain'));
   window.CrucixLens.set('all');
-  assert.equal(cardsIn(api.renderPanel(nineteen(), t, [], now)).length, 21);
+  assert.equal(cardsIn(api.renderPanel(nineteen(), t, [], now)).length, N);
 });
 
 test('the live panel badge counts the cards it shows: current / shown under a domain lens, like the source-health badge', () => {
   const storage = memory(), { window } = realm({ files: PANEL_FILES, storage }), api = window.CrucixLiveSources;
   const sources = nineteen({ GDACS: { status: 'error' }, ECB: { status: 'error' }, 'IMF-PortWatch': { observedAt: '2020-01-01T00:00:00Z' } });
   const badge = html => html.match(/<span class="badge">([^<]*)<\/span>/)[1];
-  assert.equal(badge(api.renderPanel(sources, t, [], now)), '18/21', 'all: every card');
+  assert.equal(badge(api.renderPanel(sources, t, [], now)), `${N - 3}/${N}`, 'all: every card');
   for (const lens of DOMAIN_IDS) {
     window.CrucixLens.set(lens);
     const html = api.renderPanel(sources, t, [], now), cards = Object.keys(POLICIES).filter(name => domainOfSource(name) === lens);
@@ -263,15 +265,15 @@ test('the live panel badge counts the cards it shows: current / shown under a do
     assert.equal(badge(html), `${ok}/${cards.length}`, lens);
     assert.equal(cardsIn(html).length, cards.length, lens + ': the badge counts the cards on screen');
   }
-  assert.equal(badge((window.CrucixLens.set('all'), api.renderPanel(sources, t, [], now))), '18/21');
+  assert.equal(badge((window.CrucixLens.set('all'), api.renderPanel(sources, t, [], now))), `${N - 3}/${N}`);
   const flat = realm({ files: ['record-core.js', 'live-sources.js'] }).window.CrucixLiveSources;
-  assert.equal(badge(flat.renderPanel(sources, t, [], now)), '18/21', 'without the lens modules every card counts');
+  assert.equal(badge(flat.renderPanel(sources, t, [], now)), `${N - 3}/${N}`, 'without the lens modules every card counts');
 });
 
 test('without domains.js or lens-core.js the panel keeps the flat card list', () => {
   for (const files of [['record-core.js', 'live-sources.js'], ['record-core.js', 'domains.js', 'live-sources.js']]) {
     const html = realm({ files }).window.CrucixLiveSources.renderPanel(nineteen(), t, [], now);
-    assert.equal(cardsIn(html).length, 21); assert.ok(!html.includes('live-group'), files.join());
+    assert.equal(cardsIn(html).length, N); assert.ok(!html.includes('live-group'), files.join());
     assert.deepEqual(cardsIn(html), Object.keys(POLICIES), 'policy order');
   }
 });

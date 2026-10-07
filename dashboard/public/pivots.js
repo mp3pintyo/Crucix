@@ -11,6 +11,8 @@
     eth:[['Etherscan','https://etherscan.io/address/{v}'],['Blockchair','https://blockchair.com/ethereum/address/{v}']],
     btc:[['Blockchair','https://blockchair.com/bitcoin/address/{v}'],['WalletExplorer','https://www.walletexplorer.com/address/{v}']],
     lei:[['GLEIF','https://search.gleif.org/#/record/{v}']],
+    company:[['GLEIF','https://api.gleif.org/api/v1/lei-records?filter%5Bfulltext%5D={v}&page%5Bsize%5D=5'],['OpenCorporates','https://opencorporates.com/companies?q={v}']],
+    cik:[['SEC EDGAR','https://www.sec.gov/edgar/browse/?CIK={v}']],
   };
   const MAX_TEXT=2000,MAX_ENTITIES=6;
   const CVE=/\bCVE-\d{4}-\d{4,7}\b/gi,IPV4=/(?:^|[^\d.])((?:\d{1,3}\.){3}\d{1,3})(?![\d.]*\d)/g,ETH=/\b0x[0-9a-fA-F]{40}\b/g;
@@ -26,8 +28,8 @@
   const looksBtc=value=>/\d/.test(value)&&/[a-zA-Z]/.test(value);
   const add=(found,type,value)=>{if(found.length<MAX_ENTITIES&&!found.some(e=>e.type===type&&e.value===value))found.push({type,value});};
 
-  // Entities of a record: free text (title, summary, fact values) is scanned for CVEs, public IPv4 addresses and crypto addresses; a domain or a
-  // LEI counts only when a fact is labelled so (a bare word in a title is never taken for one).
+  // Entities of a record: free text (title, summary, fact values) is scanned for CVEs, public IPv4 addresses and crypto addresses; a domain, a
+  // LEI, a company name or an SEC CIK counts only when a fact is labelled so (a bare word in a title is never taken for one).
   function entitiesOf(record){
     const found=[];
     if(!record||typeof record!=='object')return found;
@@ -44,6 +46,8 @@
       if(!value)continue;
       if(['domain','host','hostname','ioc domain'].includes(label)&&DOMAIN.test(value))add(found,'domain',value.toLowerCase());
       else if(label==='lei'&&LEI.test(value.toUpperCase()))add(found,'lei',value.toUpperCase());
+      else if(label==='company'&&value.length<=120&&/[A-Za-z]{2}/.test(value))add(found,'company',value);
+      else if(label==='cik'&&/^\d{1,10}$/.test(value))add(found,'cik',value);
     }
     return found;
   }

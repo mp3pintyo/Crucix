@@ -49,3 +49,12 @@ test('the page and the service worker load pivots.js before the inspector', () =
   assert.ok(html.indexOf('<script src="pivots.js">') > 0 && html.indexOf('<script src="pivots.js">') < html.indexOf('<script src="record-inspector.js">'));
   assert.ok(read('sw.js').includes("'/pivots.js'"));
 });
+
+test('a company name and an SEC CIK pivot to company registers, only when a fact is labelled so', () => {
+  const { CrucixPivots: P } = load();
+  assert.deepEqual(plain(P.entitiesOf({ title: 'Boston Scientific discloses an incident', summary: 'CIK 885725' })), []);
+  const out = plain(P.pivotsFor({ title: 'x', facts: [fact('company', 'Boston Scientific & Co'), fact('cik', '885725'), fact('cik', 'abc')] }));
+  assert.deepEqual(out.map(entity => entity.type), ['company', 'cik']);
+  assert.equal(out[0].links[1].url, 'https://opencorporates.com/companies?q=Boston%20Scientific%20%26%20Co');
+  assert.equal(out[1].links[0].url, 'https://www.sec.gov/edgar/browse/?CIK=885725');
+});

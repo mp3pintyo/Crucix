@@ -921,7 +921,11 @@
       "c2Count": "Ebből irányító (C2) szerver",
       "domain": "Tartomány",
       "pwnCount": "Érintett fiókok",
-      "breachDate": "Az adatlopás napja"
+      "breachDate": "Az adatlopás napja",
+      "company": "Vállalat",
+      "ticker": "Tőzsdei jel",
+      "formType": "Nyomtatvány",
+      "cik": "SEC CIK"
     }
   },
   "lenses": {

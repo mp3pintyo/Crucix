@@ -71,6 +71,7 @@ import { briefing as predictionMarkets } from './sources/prediction-markets.mjs'
 import { briefing as viewsForecast } from './sources/views.mjs';
 import { briefing as threatfox } from './sources/threatfox.mjs';
 import { briefing as mispGalaxy } from './sources/misp-galaxy.mjs';
+import { briefing as sec8k } from './sources/sec-8k.mjs';
 import { briefing as hibp } from './sources/hibp.mjs';
 import { briefing as informRisk } from './sources/inform.mjs';
 import config from '../crucix.config.mjs';
@@ -179,6 +180,7 @@ export async function fullBriefing() {
     runSource('Prediction-Markets', predictionMarkets, { queries: config.publicSources.marketQueries }),
     runSource('ThreatFox', threatfox),
     runSource('HIBP', hibp),
+    runSource('SEC-8K', sec8k),
     // Conflict forecast and country risk baseline for the intelligence layer's country risk (plain sources, no live row).
     runSource('VIEWS-Forecast', viewsForecast),
     runSource('INFORM-Risk', informRisk),

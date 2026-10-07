@@ -921,7 +921,11 @@
       "c2Count": "Of which command-and-control",
       "domain": "Domain",
       "pwnCount": "Accounts exposed",
-      "breachDate": "Breach date"
+      "breachDate": "Breach date",
+      "company": "Company",
+      "ticker": "Ticker",
+      "formType": "Form",
+      "cik": "SEC CIK"
     }
   },
   "lenses": {

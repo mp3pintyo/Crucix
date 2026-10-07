@@ -18,6 +18,7 @@ export const POLICIES = Object.freeze({
   'Prediction-Markets': { maxAgeMs: 12*HOUR, observationMaxAgeMs: 12*HOUR },
   ThreatFox: { maxAgeMs: 6*HOUR, observationMaxAgeMs: 24*HOUR },
   HIBP: { maxAgeMs: 336*HOUR, observationMaxAgeMs: 720*HOUR },
+  'SEC-8K': { maxAgeMs: 2160*HOUR, observationMaxAgeMs: 2160*HOUR },
 });
 
 // Never use collection time as a replacement for a missing provider date.

@@ -161,6 +161,10 @@ The **Current public data** panel grows from nine to 19 keyless sources: IMF Por
 
 The **Cyber and internet** lens gains two keyless sources found by analysing the [awesome-osint-arsenal](https://github.com/rawfilejson/awesome-osint-arsenal) catalogue: **ThreatFox** (abuse.ch, CC0: new indicators of compromise per malware family over 24 hours; single indicators are never listed) and **Have I Been Pwned** (CC BY 4.0: breaches added in the last 30 days, rated by size; sensitive, fabricated, spam-list and retired breaches are left out). Both are in the [Tier 7 table](#tier-7-current-public-data-19) below and described, with limits and the measurements behind the ratings, in the [release notes](docs/releases/v2.15.0.md). The Feodo Tracker was measured too and left out: it lists five servers, one online, last active in March 2026.
 
+### Cyber incidents disclosed to the SEC (v2.17)
+
+The **Cyber and internet** lens gains **SEC EDGAR 8-K Item 1.05**: US listed companies that told the SEC they suffered a material cybersecurity incident, with a link to the filing. The record inspector's "Look up elsewhere" block now also offers company registers (GLEIF, OpenCorporates) and the SEC filing list for a company name or CIK. The measurements, the choice of search phrases and why a GLEIF on-demand lookup was not built are in the [release notes](docs/releases/v2.17.0.md).
+
 ### Threat actor groups on the country sheet (v2.16)
 
 The country sheet gains a **Threat actor groups** section from the keyless [MISP Galaxy](https://www.misp-galaxy.org/threat-actor/) catalogue (CC0): how many known adversary groups the MISP community attributes to the country, and the best-known twelve with their aliases. It is context only (no part of the risk score, no alert), always shown with the caveat that attribution is a suspicion, and described, with its limits, in the [release notes](docs/releases/v2.16.0.md).
@@ -527,6 +531,7 @@ Added in v2.11 (ten more keyless feeds; every request is bounded to 10 s and 2 M
 | Prediction markets (Manifold) | Play-money markets whose question matches the watched words, most traded first, up to 20 | `api.manifold.markets/v0/search-markets` | None | Last bet 12h, market not closed; 30 min cache | Manifold terms: personal, non-commercial use |
 | ThreatFox (abuse.ch) | New indicators of compromise of the last 24 h per malware family, top 10; moderate from 100 | `threatfox.abuse.ch/export/json/recent/` | None | Feed 6h; row 24h; 10 min cache | CC0 |
 | Have I Been Pwned | Breaches added in the last 30 days (not sensitive, fabricated, spam or retired); moderate from 1 million accounts, high from 10 million | `haveibeenpwned.com/api/v3/breaches` | None | Feed 14 days; row 30 days; 1h cache | CC BY 4.0 |
+| SEC EDGAR 8-K Item 1.05 | Form 8-K filings of the last 90 days that report a material cybersecurity incident (company, form, filing day, link; every row high) | `efts.sec.gov/LATEST/search-index` (two phrases, spaced a second apart) | None (optional `SEC_USER_AGENT`) | Feed 90 days; row 90 days; 1h cache | Public domain |
 
 Alert rules can watch the new metrics `<chokepoint>_transits` (PortWatch 7-day mean, transits a day; `hormuz_transits`, `suez_transits` and the other six default chokepoints), `hu_power_price` (EUR/MWh), `grid_frequency_hz` and `mil_aircraft_total` (military aircraft worldwide, airborne, position within 2 minutes); a metric is empty while its source is stale or failing. The HU day-ahead price runs high (median about 194 EUR/MWh over 2026-09-19..10-02; price rows are rated only from 300 and 400 EUR/MWh), so give a `hu_power_price` threshold rule its own level.
 

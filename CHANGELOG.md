@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.17.0 — SEC 8-K Item 1.05: közzétett kiberincidensek, és cégkeresési pivot-linkek / SEC 8-K Item 1.05: disclosed cyber incidents, and company-register pivot links](docs/releases/v2.17.0.md) — 2026-10-08
+
 - [2.16.1 — CI-javítás: rögzített forrásszám a paletta-tesztben / CI fix: a pinned source count in the palette test](docs/releases/v2.16.1.md) — 2026-10-08
 
 - [2.16.0 — Fenyegetésszereplő-csoportok az országlapon (MISP Galaxy) / Threat actor groups on the country sheet (MISP Galaxy)](docs/releases/v2.16.0.md) — 2026-10-08

@@ -921,7 +921,11 @@
       "c2Count": "Dont serveurs de commande (C2)",
       "domain": "Domaine",
       "pwnCount": "Comptes exposés",
-      "breachDate": "Date de la fuite"
+      "breachDate": "Date de la fuite",
+      "company": "Société",
+      "ticker": "Symbole boursier",
+      "formType": "Formulaire",
+      "cik": "CIK SEC"
     }
   },
   "lenses": {
