@@ -22,6 +22,7 @@ import { KeywordStore } from './lib/intelligence/keywords.mjs';
 import { installRiskRoutes } from './lib/intelligence/risk-routes.mjs';
 import { createBriefingService } from './lib/llm/briefing.mjs';
 import { renderOfflineShell } from './lib/offline-shell.mjs';
+import { createDailyBasemap } from './lib/basemap.mjs';
 import { broadcastEvent, writeToClient } from './lib/sse.mjs';
 import config from './crucix.config.mjs';
 import { getLocale, currentLanguage, getSupportedLocales } from './lib/i18n.mjs';
@@ -330,6 +331,19 @@ app.get('/', (req, res) => {
 app.get('/api/data', (req, res) => {
   if (!currentData) return res.status(503).json({ error: 'No data yet — first sweep in progress' });
   res.json(freshLiveSnapshot(currentData));
+});
+
+// API: the daily globe basemap (NASA GIBS VIIRS true colour of yesterday, cached; see lib/basemap.mjs)
+const dailyBasemap = createDailyBasemap();
+app.get('/api/basemap/daily.jpg', async (req, res) => {
+  if (Object.keys(req.query ?? {}).length) return res.status(400).json({ error: 'Unknown query parameter', code: 'INVALID_QUERY' });
+  try {
+    const image = await dailyBasemap.get();
+    res.set({ 'Content-Type': 'image/jpeg', 'Cache-Control': 'public, max-age=3600', 'X-Basemap-Date': image.day, 'X-Basemap-Stale': image.stale ? '1' : '0' });
+    res.send(image.buffer);
+  } catch {
+    res.status(503).json({ error: 'Daily basemap unavailable' });
+  }
 });
 
 installIntelligenceRoutes(app, { getSnapshot: () => freshLiveSnapshot(currentData), history, language: currentLanguage });

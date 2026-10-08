@@ -24,7 +24,7 @@ const ROW_LIMIT = 25;
 const ELEVATED_CPM = 100;
 
 // Key nuclear sites to monitor. The dashboard pairs this list with its map markers by index.
-const NUCLEAR_SITES = {
+export const NUCLEAR_SITES = {
   zaporizhzhia: { lat: 47.51, lon: 34.58, label: 'Zaporizhzhia NPP (Ukraine)', radius: 100 },
   chernobyl: { lat: 51.39, lon: 30.1, label: 'Chernobyl Exclusion Zone', radius: 50 },
   bushehr: { lat: 28.83, lon: 50.89, label: 'Bushehr NPP (Iran)', radius: 100 },

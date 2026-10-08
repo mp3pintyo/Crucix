@@ -22,6 +22,7 @@ export const POLICIES = Object.freeze({
   'WMO-SWIC': { maxAgeMs: 3*HOUR, observationMaxAgeMs: 24*HOUR },
   'UNHCR-Arrivals': { maxAgeMs: 504*HOUR, observationMaxAgeMs: 1440*HOUR },
   'SEC-8K': { maxAgeMs: 2160*HOUR, observationMaxAgeMs: 2160*HOUR },
+  'Open-Meteo-Wind': { maxAgeMs: 3*HOUR, observationMaxAgeMs: 3*HOUR },
   'ADSB-Orbits': { maxAgeMs: 25*60000, observationMaxAgeMs: 25*60000 },
   'NOAA-NHC': { maxAgeMs: 8*HOUR, observationMaxAgeMs: 12*HOUR },
   'Launch-Library': { maxAgeMs: 12*HOUR, observationMaxAgeMs: 720*HOUR },

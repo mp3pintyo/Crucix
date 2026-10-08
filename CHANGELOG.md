@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.29.0 — Szél az atomlétesítményeknél és napi műholdkép a földgömbön / Wind at the nuclear sites and a daily satellite image on the globe](docs/releases/v2.29.0.md) — 2026-10-08
+
 - [2.28.0 — Körpályán repülő katonai gépek: új forrás az adsb.lol nyomvonalaiból / Military aircraft flying orbits: a new source from adsb.lol position traces](docs/releases/v2.28.0.md) — 2026-10-08
 
 - [2.27.0 — Ciklonok előrejelzett pályája és kúpja, valamint az űrindítások: két új élő forrás / Cyclone forecast tracks and cones, and orbital launches: two new live sources](docs/releases/v2.27.0.md) — 2026-10-08

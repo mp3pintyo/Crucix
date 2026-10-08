@@ -128,7 +128,9 @@
     "datacenters": "Data centres",
     "dams": "Dams",
     "cyclones": "Cyclone forecast tracks and cones",
-    "launches": "Orbital launches"
+    "launches": "Orbital launches",
+    "basemapDay": "Daily satellite image: NASA GIBS, VIIRS true colour (yesterday). Click for night lights",
+    "basemapNight": "Night lights. Click for the daily satellite image (NASA GIBS)"
   },
   "ideas": {
     "confidence": "Confidence",
@@ -230,7 +232,9 @@
   "nuclear": {
     "allSitesNormal": "ALL SITES NORMAL",
     "anomalyDetected": "ANOMALY DETECTED",
-    "noData": "No data"
+    "noData": "No data",
+    "windToward": "Wind blows toward",
+    "windNote": "Modelled current 10 m wind, not a dispersion forecast"
   },
   "seismic": {
     "noRecentQuakes": "NO SIGNIFICANT QUAKES",
@@ -959,7 +963,11 @@
       "provider": "Launch provider",
       "pad": "Launch pad",
       "launchStatus": "Launch status",
-      "operators": "Operator countries"
+      "operators": "Operator countries",
+      "windMs": "Wind speed (m/s)",
+      "windFromDeg": "Wind from (°)",
+      "windToward": "Blowing toward",
+      "windGustMs": "Gusts (m/s)"
     },
     "nearby": "Nearby infrastructure",
     "nearbyNote": "Distance to the nearest point of the line between a pipeline’s end points, or to the base. Mapped military areas, data centres and dams are searched within 200 km (inside an area: 0). The record’s own position may be approximate.",

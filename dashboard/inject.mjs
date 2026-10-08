@@ -519,10 +519,16 @@ export async function synthesize(data, options = {}) {
   const chokepoints = Object.values(data.sources.Maritime?.chokepoints || {}).map(c => ({
     label: c.label || c.name, note: c.note || '', lat: c.lat || 0, lon: c.lon || 0
   }));
-  const nuke = (data.sources.Safecast?.sites || []).map(s => ({
-    site: s.site, anom: s.anomaly || false, cpm: s.avgCPM, n: s.recentReadings || 0,
-    status: s.status, last: s.lastReading ?? null
-  }));
+  // Modelled current wind at each site (Open-Meteo-Wind), matched by the site's label; absent when that source did not answer fresh.
+  const windAt = new Map(data.sources['Open-Meteo-Wind']?.status === 'ok' ? (data.sources['Open-Meteo-Wind'].observations || []).map(o => [o.place, o]) : []);
+  const nuke = (data.sources.Safecast?.sites || []).map(s => {
+    const w = windAt.get(s.site);
+    return {
+      site: s.site, anom: s.anomaly || false, cpm: s.avgCPM, n: s.recentReadings || 0,
+      status: s.status, last: s.lastReading ?? null,
+      ...(w ? { wind: { ms: w.windMs, from: w.windFromDeg, toward: w.windTowardDeg, dir: w.windToward, at: w.observedAt } } : {})
+    };
+  });
   const nukeSignals = (data.sources.Safecast?.signals || []).filter(s => s);
   const sdrData = data.sources.KiwiSDR || {};
   const sdrNet = sdrData.network || {};

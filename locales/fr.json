@@ -128,7 +128,9 @@
     "datacenters": "Centres de données",
     "dams": "Barrages",
     "cyclones": "Trajectoires et cônes de prévision des cyclones",
-    "launches": "Lancements orbitaux"
+    "launches": "Lancements orbitaux",
+    "basemapDay": "Image satellite du jour : NASA GIBS, VIIRS couleurs vraies (hier). Cliquez pour les lumières de nuit",
+    "basemapNight": "Lumières de nuit. Cliquez pour l’image satellite du jour (NASA GIBS)"
   },
   "ideas": {
     "confidence": "Confiance",
@@ -230,7 +232,9 @@
   "nuclear": {
     "allSitesNormal": "TOUS LES SITES NORMAUX",
     "anomalyDetected": "ANOMALIE DÉTECTÉE",
-    "noData": "Pas de données"
+    "noData": "Pas de données",
+    "windToward": "Le vent souffle vers",
+    "windNote": "Vent modélisé à 10 m, pas une prévision de dispersion"
   },
   "seismic": {
     "noRecentQuakes": "PAS DE SÉISME SIGNIFICATIF",
@@ -959,7 +963,11 @@
       "provider": "Fournisseur de lancement",
       "pad": "Pas de tir",
       "launchStatus": "État du lancement",
-      "operators": "Pays des exploitants"
+      "operators": "Pays des exploitants",
+      "windMs": "Vitesse du vent (m/s)",
+      "windFromDeg": "Vent venant de (°)",
+      "windToward": "Souffle vers",
+      "windGustMs": "Rafales (m/s)"
     },
     "nearby": "Infrastructures à proximité",
     "nearbyNote": "Distance au point le plus proche de la ligne entre les extrémités d’un pipeline, ou à la base. Les zones militaires, centres de données et barrages cartographiés sont cherchés dans un rayon de 200 km (dans une zone : 0). La position du relevé peut être approximative.",

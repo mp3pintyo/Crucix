@@ -4,7 +4,7 @@
   const domain=(id,sources)=>Object.freeze({id,sources:Object.freeze(sources)});
   const DOMAINS=Object.freeze([
     domain('security',['GDELT','ACLED','ReliefWeb','ADSB-Military','ADSB-Orbits','ADS-B','OpenSky','Maritime','Telegram','Bluesky','Reddit','KiwiSDR','VIEWS-Forecast','INFORM-Risk','Travel-Advisories','GPSJam','UNHCR-Arrivals']),
-    domain('hazards',['USGS','EMSC','GDACS','Copernicus-EMS','NASA-EONET','FIRMS','Meteoalarm','MET-Norway','Aviation-SIGMET','NOAA','WMO-SWIC','NOAA-NHC']),
+    domain('hazards',['USGS','EMSC','GDACS','Copernicus-EMS','NASA-EONET','FIRMS','Meteoalarm','MET-Norway','Aviation-SIGMET','NOAA','WMO-SWIC','NOAA-NHC','Open-Meteo-Wind']),
     domain('space',['NOAA-SWPC','Space','Launch-Library']),
     domain('cyber',['CISA-KEV','FIRST-EPSS','OONI','IODA','Cloudflare-Radar','RIPEstat','ThreatFox','HIBP','SEC-8K','MISP-Galaxy']),
     domain('economy',['FRED','Treasury','BLS','ECB','YFinance','USAspending','Prediction-Markets','Patents']),

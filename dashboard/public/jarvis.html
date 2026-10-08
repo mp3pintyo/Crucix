@@ -454,6 +454,7 @@ body.low-perf .ticker-wrap::-webkit-scrollbar-thumb{background:rgba(100,240,200,
             <button class="map-ctrl-btn" onclick="mapZoom(1.5)" title="Zoom in">+</button>
             <button class="map-ctrl-btn" onclick="mapZoom(0.67)" title="Zoom out">&minus;</button>
             <button class="map-ctrl-btn map-toggle" id="flightToggle" onclick="toggleFlights()" title="Toggle flight routes">&#9992;</button>
+            <button class="map-ctrl-btn map-toggle off" id="basemapToggle" onclick="toggleBasemap()" title="Daily satellite image on the globe" aria-pressed="false">&#9788;</button>
           </div>
           <button class="proj-toggle" id="projToggle" onclick="toggleMapMode()">GLOBE MODE</button>
           <div class="map-popup" id="mapPopup"><button class="pp-close" onclick="closePopup()">&times;</button><div class="pp-head"></div><div class="pp-text"></div><div class="pp-meta"></div></div>
@@ -1052,7 +1053,8 @@ function buildSensorGridPanel(){
 function buildNuclearWatchPanel(){
   const live=D.nuke.filter(s=>s.n>0);
   const allNormal=live.length>0&&live.every(s=>!s.anom);
-  const nukeHtml=D.nuke.map(s=>`<div class="site-row"><span>${esc(s.site)}</span><span class="site-val">${s.n>0?(s.cpm?.toFixed(1)||'--')+' CPM'+(s.last?' · '+esc(getAge(s.last)):''):'No data'}</span></div>`).join('');
+  const windText=s=>s.wind&&Number.isFinite(s.wind.ms)?' · <span title="'+esc(t('nuclear.windNote','Modelled current 10 m wind, not a dispersion forecast'))+'">&#10148; '+esc(s.wind.dir||'')+' '+s.wind.ms.toFixed(1)+' m/s</span>':'';
+  const nukeHtml=D.nuke.map(s=>`<div class="site-row"><span>${esc(s.site)}</span><span class="site-val">${s.n>0?(s.cpm?.toFixed(1)||'--')+' CPM'+(s.last?' · '+esc(getAge(s.last)):''):'No data'}${windText(s)}</span></div>`).join('');
   return `<div class="g-panel">
     <div class="sec-head"><h3>${t('panels.nuclearWatch','Nuclear Watch')}</h3><span class="badge">${t('badges.radiation','RADIATION')}</span></div>
     <div class="nuke-ok">${!live.length?t('status.noNuclear','No radiation readings in this snapshot'):allNormal?'&#9679; '+t('nuclear.allSitesNormal','ALL SITES NORMAL'):'&#9888; '+t('nuclear.anomalyDetected','ANOMALY DETECTED')}</div>
@@ -1470,6 +1472,7 @@ function initGlobe(){
   }
 
   globeInitialized = true;
+  applyBasemap();
 }
 
 // === STATIC INFRASTRUCTURE (pipelines, bases; infrastructure.js) ===
@@ -1619,7 +1622,7 @@ function plotMarkers(){
       lat:c.lat, lng:c.lon, size:0.3, alt:0.012,
       color: n.anom ? 'rgba(255,95,99,0.9)' : 'rgba(255,224,130,0.8)', type:'nuke', priority:2,
       popHead:n.site, popMeta:'Radiation Monitoring',
-      popText:`Status: ${n.anom?'ANOMALY':'Normal'}<br>Avg CPM: ${n.cpm?.toFixed(1)||'No data'}<br>Readings: ${n.n}`
+      popText:`Status: ${n.anom?'ANOMALY':'Normal'}<br>Avg CPM: ${n.cpm?.toFixed(1)||'No data'}<br>Readings: ${n.n}`+(n.wind&&Number.isFinite(n.wind.ms)?`<br>${esc(t('nuclear.windToward','Wind blows toward'))}: ${esc(n.wind.dir||'')} · ${n.wind.ms.toFixed(1)} m/s`:'')
     });
   });
 
@@ -1928,6 +1931,26 @@ function closePopup(){document.getElementById('mapPopup').classList.remove('show
 // === MAP CONTROLS ===
 function toggleFlights(){setMapLayer('air',!mapLayers.air);}
 
+// === GLOBE BASEMAP: night lights (default, bundled) or the daily NASA GIBS VIIRS true-colour image (yesterday, cached by the server) ===
+const BASEMAP_KEY='crucix_basemap';
+let basemap=readPreference(BASEMAP_KEY)==='day'?'day':'night';
+function updateBasemapButton(){
+  const button=document.getElementById('basemapToggle');if(!button)return;
+  button.classList.toggle('off',basemap!=='day');button.setAttribute('aria-pressed',String(basemap==='day'));
+  button.title=basemap==='day'?t('map.basemapDay','Daily satellite image: NASA GIBS, VIIRS true colour (yesterday). Click for night lights'):t('map.basemapNight','Night lights. Click for the daily satellite image (NASA GIBS)');
+}
+function applyBasemap(){
+  updateBasemapButton();
+  if(!globe)return;
+  if(basemap!=='day'){globe.globeImageUrl('vendor/earth-night-2.33.0.jpg');return}
+  const probe=new Image();
+  probe.onload=()=>{if(globe&&basemap==='day')globe.globeImageUrl('/api/basemap/daily.jpg')};
+  probe.onerror=()=>{basemap='night';writePreference(BASEMAP_KEY,'night');updateBasemapButton();if(globe)globe.globeImageUrl('vendor/earth-night-2.33.0.jpg')};
+  probe.src='/api/basemap/daily.jpg';
+}
+function toggleBasemap(){basemap=basemap==='day'?'night':'day';writePreference(BASEMAP_KEY,basemap);applyBasemap();}
+updateBasemapButton();
+
 // === FLAT/GLOBE TOGGLE ===
 const flatRegionBounds = {
   world:[[-180,-60],[180,80]], americas:[[-130,10],[-60,55]], europe:[[-12,34],[45,72]],
@@ -2064,7 +2087,7 @@ function plotFlatMarkers(){
   // Nuclear
   flatMarkerType='nuke';
   const nukeCoords=[{lat:47.5,lon:34.6},{lat:51.4,lon:30.1},{lat:28.8,lon:50.9},{lat:39.8,lon:125.8},{lat:37.4,lon:141},{lat:31.0,lon:35.1}];
-  D.nuke.forEach((n,i)=>{const c=nukeCoords[i];if(!c)return;addPt(c.lat,c.lon,4,'rgba(255,224,130,0.7)','rgba(255,224,130,0.3)',ev=>showPopup(ev,n.site,`CPM: ${n.cpm?.toFixed(1)||'--'}`,'Radiation'),2)});
+  D.nuke.forEach((n,i)=>{const c=nukeCoords[i];if(!c)return;addPt(c.lat,c.lon,4,'rgba(255,224,130,0.7)','rgba(255,224,130,0.3)',ev=>showPopup(ev,n.site,`CPM: ${n.cpm?.toFixed(1)||'--'}`+(n.wind&&Number.isFinite(n.wind.ms)?`<br>${esc(t('nuclear.windToward','Wind blows toward'))}: ${esc(n.wind.dir||'')} · ${n.wind.ms.toFixed(1)} m/s`:''),'Radiation'),2)});
   // SDR
   flatMarkerType='sdr';
   D.sdr.zones.forEach(z=>z.receivers.forEach(r=>{addPt(r.lat,r.lon,2.5,'rgba(68,204,255,0.5)','rgba(68,204,255,0.2)',ev=>showPopup(ev,'SDR',`${r.name}<br>${z.region}`,'KiwiSDR'),3)}));

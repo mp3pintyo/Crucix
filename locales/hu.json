@@ -128,7 +128,9 @@
     "datacenters": "Adatközpontok",
     "dams": "Gátak",
     "cyclones": "Ciklonok előrejelzett pályája és kúpja",
-    "launches": "Pályára állító indítások"
+    "launches": "Pályára állító indítások",
+    "basemapDay": "Napi műholdkép: NASA GIBS, VIIRS valós színes (tegnapi). Kattintásra éjszakai fények",
+    "basemapNight": "Éjszakai fények. Kattintásra a napi műholdkép (NASA GIBS)"
   },
   "ideas": {
     "confidence": "Bizonyosság",
@@ -230,7 +232,9 @@
   "nuclear": {
     "allSitesNormal": "MINDEN HELYSZÍN NORMÁL",
     "anomalyDetected": "ANOMÁLIA ÉSZLELVE",
-    "noData": "Nincs adat"
+    "noData": "Nincs adat",
+    "windToward": "A szél fúj ebbe az irányba",
+    "windNote": "Modellezett aktuális 10 m-es szél, nem terjedési előrejelzés"
   },
   "seismic": {
     "noRecentQuakes": "NINCS JELENTŐS FÖLDRENGÉS",
@@ -959,7 +963,11 @@
       "provider": "Indító szolgáltató",
       "pad": "Indítóállás",
       "launchStatus": "Indítás állapota",
-      "operators": "Üzemeltető országok"
+      "operators": "Üzemeltető országok",
+      "windMs": "Szélsebesség (m/s)",
+      "windFromDeg": "Szél iránya, honnan (°)",
+      "windToward": "Merre fúj",
+      "windGustMs": "Széllökések (m/s)"
     },
     "nearby": "Közeli infrastruktúra",
     "nearbyNote": "Vezetéknél a végpontok közötti vonal legközelebbi pontjáig, bázisnál a pontig mért távolság. A feltérképezett katonai területeket, adatközpontokat és gátakat 200 km-en belül keressük (területen belül: 0). A rekord saját helye lehet közelítő.",
