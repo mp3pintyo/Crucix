@@ -1143,7 +1143,15 @@
     "spikesHelp": "Az elmúlt két órában a szokásosnál jóval több címben szereplő szavak: legalább 4 cím, legalább 2 forrásból, és a szokásos szám több mint háromszorosa.",
     "spikesNotReady": "Alapvonal gyűjtése: a szükséges 24 óra címből eddig {hours} van meg.",
     "spikesNone": "Egyik kifejezés sem tűnik ki a szokásos számából.",
-    "spikeRow": "{count} cím, általában {baseline} · {sources} forrás"
+    "spikeRow": "{count} cím, általában {baseline} · {sources} forrás",
+    "thermalTitle": "Hőanomália-eszkaláció",
+    "thermalHelp": "A 10 MW feletti műholdas hőérzékelések (NASA FIRMS, régiónként a legerősebb 300) 20 km-en belül csoportosítva, összevetve ugyanazon 0,5°-os cella saját előző napjaival. Hő, nem ok: figyelemfelhívás.",
+    "thermalNotReady": "Alapvonal gyűjtése: kb. 5 napnyi észlelésből {days} nap telt el.",
+    "thermalNone": "Egy hőcsoport sem tér el a cellája szokásos aktivitásától.",
+    "thermalSpike": "Kiugrás",
+    "thermalPersistent": "Tartós",
+    "thermalElevated": "Emelkedett",
+    "thermalRow": "{count} észlelés, {frp} MW, szokásosan napi {usual} · {hours} órája ég"
   },
   "country": {
     "title": "Országlap",

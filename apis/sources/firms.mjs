@@ -57,6 +57,12 @@ const HOTSPOTS = {
   southAsia: { west: 60, south: 5, east: 98, north: 37, label: 'South Asia' },
 };
 
+// FIRMS acquisition date (YYYY-MM-DD) and time (HHMM, UTC) as epoch ms; NaN when unreadable.
+export function firmsTime(date, time) {
+  const t = String(time ?? '').padStart(4, '0');
+  return /^\d{4}-\d{2}-\d{2}$/.test(String(date)) && /^\d{4}$/.test(t) ? Date.parse(`${date}T${t.slice(0, 2)}:${t.slice(2)}:00Z`) : NaN;
+}
+
 // Analyze fire detections for potential military/strike activity
 function analyzeFires(fires, regionLabel) {
   if (!Array.isArray(fires) || fires.length === 0) {
@@ -92,6 +98,9 @@ function analyzeFires(fires, regionLabel) {
     nominalConfidence: nomConf.length,
     nightDetections: nightFires.length,
     highIntensity,
+    // Every detection above 10 MW (strongest 300) for the thermal baseline of the intelligence layer: [lat, lon, FRP, epoch ms]. Not part of the dashboard payload.
+    detections: fires.filter(f => parseFloat(f.frp) > 10).map(f => [Math.round(parseFloat(f.latitude) * 1000) / 1000, Math.round(parseFloat(f.longitude) * 1000) / 1000, Math.round(parseFloat(f.frp) * 10) / 10, firmsTime(f.acq_date, f.acq_time)])
+      .filter(d => d.every(Number.isFinite)).sort((a, b) => b[2] - a[2]).slice(0, 300),
     avgFRP: fires.reduce((sum, f) => sum + (parseFloat(f.frp) || 0), 0) / fires.length,
   };
 }

@@ -1143,7 +1143,15 @@
     "spikesHelp": "Words in far more headlines than usual in the last two hours: at least 4 headlines from at least 2 sources and more than 3 times the usual count.",
     "spikesNotReady": "Collecting a baseline: {hours} of the 24 hours of headlines needed.",
     "spikesNone": "No term stands out against its usual count.",
-    "spikeRow": "{count} headlines, usually {baseline} · {sources} sources"
+    "spikeRow": "{count} headlines, usually {baseline} · {sources} sources",
+    "thermalTitle": "Thermal escalation",
+    "thermalHelp": "Satellite heat detections above 10 MW (NASA FIRMS, strongest 300 per region) grouped within 20 km and compared with the same 0.5° cell’s own previous days. Heat, not a cause: a prompt to look.",
+    "thermalNotReady": "Collecting a baseline: {days} of about 5 days of detections needed.",
+    "thermalNone": "No heat cluster stands out against its cell’s usual activity.",
+    "thermalSpike": "Spike",
+    "thermalPersistent": "Persistent",
+    "thermalElevated": "Elevated",
+    "thermalRow": "{count} detections, {frp} MW, usually {usual} a day · burning {hours} h"
   },
   "country": {
     "title": "Country sheet",

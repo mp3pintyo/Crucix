@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.35.0 — Hőanomália-eszkaláció (FIRMS) / Thermal escalation (FIRMS)](docs/releases/v2.35.0.md) — 2026-10-08
+
 - [2.34.0 — Amerikai repülőtéri késések (FAA) és szabályozói közlemények / U.S. airport delays (FAA) and regulator announcements](docs/releases/v2.34.0.md) — 2026-10-08
 
 - [2.33.0 — Jegybanki kamatok, ECB stresszindex és CFTC-pozíciók / Central bank rates, the ECB stress index and CFTC positioning](docs/releases/v2.33.0.md) — 2026-10-08

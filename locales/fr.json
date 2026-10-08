@@ -1143,7 +1143,15 @@
     "spikesHelp": "Mots présents dans bien plus de titres que d’habitude ces deux dernières heures : au moins 4 titres de 2 sources au moins et plus de 3 fois le nombre habituel.",
     "spikesNotReady": "Collecte d’une base : {hours} des 24 heures de titres nécessaires.",
     "spikesNone": "Aucun terme ne se détache de son nombre habituel.",
-    "spikeRow": "{count} titres, habituellement {baseline} · {sources} sources"
+    "spikeRow": "{count} titres, habituellement {baseline} · {sources} sources",
+    "thermalTitle": "Escalade thermique",
+    "thermalHelp": "Détections de chaleur par satellite au-dessus de 10 MW (NASA FIRMS, les 300 plus fortes par région), regroupées à moins de 20 km et comparées aux jours précédents de la même cellule de 0,5°. De la chaleur, pas une cause : une invitation à regarder.",
+    "thermalNotReady": "Collecte de la référence : {days} jours sur environ 5 de détections nécessaires.",
+    "thermalNone": "Aucun foyer de chaleur ne se détache de l’activité habituelle de sa cellule.",
+    "thermalSpike": "Pic",
+    "thermalPersistent": "Persistant",
+    "thermalElevated": "Élevé",
+    "thermalRow": "{count} détections, {frp} MW, habituellement {usual} par jour · brûle depuis {hours} h"
   },
   "country": {
     "title": "Fiche pays",

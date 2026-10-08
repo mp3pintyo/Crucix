@@ -592,6 +592,18 @@ function loadMapLayers(){
   return Object.fromEntries(mapLayerRegistry.map(layer=>[layer.id,typeof raw?.[layer.id]==='boolean'?raw[layer.id]:layer.off!==true]));
 }
 function isMarkerTypeVisible(type){const layer=mapLayerRegistry.find(layer=>layer.types.includes(type));return !layer||mapLayers[layer.id]!==false}
+// Escalation status of the FIRMS heat cluster a detection lies in (D.risk.thermal, within about 20 km), for the marker colour: the strongest status wins.
+const THERMAL_TONES={spike:{rank:0,color:'#ff2d55',halo:'rgba(255,45,85,0.3)',key:'risk.thermalSpike',label:'Spike'},persistent:{rank:1,color:'#ff9500',halo:'rgba(255,149,0,0.3)',key:'risk.thermalPersistent',label:'Persistent'},elevated:{rank:2,color:'#ffd60a',halo:'rgba(255,214,10,0.3)',key:'risk.thermalElevated',label:'Elevated'}};
+function thermalTone(lat,lon){
+  const items=D.risk&&D.risk.thermal&&Array.isArray(D.risk.thermal.items)?D.risk.thermal.items:[];
+  let best=null;
+  for(const c of items){
+    const tone=c&&THERMAL_TONES[c.status];
+    if(!tone||typeof c.lat!=='number'||typeof c.lon!=='number'||Math.abs(c.lat-lat)>0.25||Math.abs(c.lon-lon)>0.35)continue;
+    if(!best||tone.rank<best.rank)best=tone;
+  }
+  return best;
+}
 function hasCoordinates(lat,lon){return typeof lat==='number'&&typeof lon==='number'&&Number.isFinite(lat)&&Number.isFinite(lon)&&Math.abs(lat)<=90&&Math.abs(lon)<=180}
 function setMapLayer(id,visible){
   if(!mapLayerRegistry.some(layer=>layer.id===id))return;
@@ -1600,14 +1612,15 @@ function plotMarkers(){
     labels.push({type:'air', lat:c.lat, lng:c.lon+2, text:a.region.replace(' Region','')+' '+a.total, size:0.35, color:'rgba(106,138,130,0.8)'});
   });
 
-  // === Thermal/fire (red) ===
+  // === Thermal/fire (red; spike / persistent / elevated clusters recoloured) ===
   D.thermal.forEach(t=>{
     t.fires.forEach(f=>{
+      const tone=thermalTone(f.lat,f.lon);
       points.push({
         lat:f.lat, lng:f.lon, size:0.12+Math.min(f.frp/200,0.3), alt:0.008,
-        color:'rgba(255,95,99,0.7)', type:'thermal', priority:3,
+        color:tone?tone.color:'rgba(255,95,99,0.7)', type:'thermal', priority:3,
         popHead:'Thermal Detection', popMeta:'FIRMS Satellite',
-        popText:`Region: ${t.region}<br>FRP: ${f.frp.toFixed(1)} MW<br>Total: ${t.det.toLocaleString()}<br>Night: ${t.night.toLocaleString()}`+(f.site?`<br>${esc(t('infra.onSite','On or beside a mapped military area'))}: ${esc(f.site)}`:'')
+        popText:`Region: ${t.region}<br>FRP: ${f.frp.toFixed(1)} MW<br>Total: ${t.det.toLocaleString()}<br>Night: ${t.night.toLocaleString()}`+(tone?`<br>${esc(t('risk.thermalTitle','Thermal escalation'))}: ${esc(t(tone.key,tone.label))}`:'')+(f.site?`<br>${esc(t('infra.onSite','On or beside a mapped military area'))}: ${esc(f.site)}`:'')
       });
     });
   });
@@ -2100,8 +2113,9 @@ function plotFlatMarkers(){
   // Thermal
   flatMarkerType='thermal';
   D.thermal.forEach(t=>t.fires.forEach(f=>{
-    addPt(f.lat,f.lon,2+Math.min(f.frp/50,5),'rgba(255,95,99,0.6)','rgba(255,95,99,0.2)',
-      ev=>showPopup(ev,'Thermal',`${t.region}<br>FRP: ${f.frp.toFixed(1)} MW`+(f.site?`<br>${esc(t('infra.onSite','On or beside a mapped military area'))}: ${esc(f.site)}`:''),'FIRMS'),3);
+    const tone=thermalTone(f.lat,f.lon);
+    addPt(f.lat,f.lon,2+Math.min(f.frp/50,5),tone?tone.color:'rgba(255,95,99,0.6)',tone?tone.halo:'rgba(255,95,99,0.2)',
+      ev=>showPopup(ev,'Thermal',`${t.region}<br>FRP: ${f.frp.toFixed(1)} MW`+(tone?`<br>${esc(t('risk.thermalTitle','Thermal escalation'))}: ${esc(t(tone.key,tone.label))}`:'')+(f.site?`<br>${esc(t('infra.onSite','On or beside a mapped military area'))}: ${esc(f.site)}`:''),'FIRMS'),3);
   }));
   // Chokepoints
   flatMarkerType='maritime';
