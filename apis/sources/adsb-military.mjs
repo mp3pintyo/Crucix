@@ -242,6 +242,18 @@ export function parseAdsbMilitary(milPayload, squawkPayloads = [], { now = Date.
   return out;
 }
 
+// One request for the military list when two sources of a sweep read it at the same time (the provider refuses a fourth request of a burst):
+// the answer of the last 20 seconds is handed to every caller. A failed answer is not kept.
+let SHARED = null;
+export function sharedMilitaryList(get, url = MIL_URL, now = Date.now()) {
+  if (SHARED && SHARED.url === url && now - SHARED.at < 20000) return SHARED.promise;
+  const promise = get(url).then(reply => { if (!isObject(reply) || reply.error) SHARED = null; return reply; });
+  SHARED = { url, at: now, promise };
+  return promise;
+}
+export function resetSharedMilitaryList() { SHARED = null; }
+export { theaterList, inside, census, typeOf, feedTime, clean, stamp, MAP_PAGE };
+
 // options: theaters, previous (the count memory), fetcher, timeout; pause (ms before each request after the first three) and budget (ms) are test seams.
 export async function briefing(options = {}) {
   const now = Number.isFinite(options.now) ? options.now : Date.now();
@@ -254,7 +266,8 @@ export async function briefing(options = {}) {
   const get = async url => { try { return await fetcher(url, request); } catch { return { error: 'network error' }; } };
   const settings = { now, theaters: options.theaters, previous: options.previous ?? MEMORY };
   // The military list first, alone: if the provider is going to refuse a request of the burst, it must not be this one.
-  const mil = await get(MIL_URL);
+  // In a real sweep ADSB-Orbits reads the same list: both share one request (see sharedMilitaryList).
+  const mil = await (options.shared ?? !options.fetcher ? sharedMilitaryList(get, MIL_URL) : get(MIL_URL));
   // Without a usable military list (an error, another shape, no provider time, a stalled feed: empty or nothing current in it) there is no result
   // to add emergency rows to: ask no further (no three requests, no pause).
   if (!isObject(mil) || mil.error || !Array.isArray(mil.ac) || feedTime(mil.now) === null || !census(mil.ac).unique.size) return parseAdsbMilitary(mil, [], settings);

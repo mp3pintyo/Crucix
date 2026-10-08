@@ -800,7 +800,8 @@
     "method_centroid": "Position moyenne des zones touchées (agrégat, pas un point unique)",
     "method_member-point": "Point du service national émetteur (pas la zone touchée)",
     "kind_displacement": "Déplacements",
-    "kind_launch": "Lancement"
+    "kind_launch": "Lancement",
+    "method_orbit-centre": "Centre moyen des orbites détectées (agrégat, pas la position d’un aéronef)"
   },
   "pwa": {
     "menu": "Installer / hors ligne",
@@ -957,7 +958,8 @@
       "orbit": "Orbite",
       "provider": "Fournisseur de lancement",
       "pad": "Pas de tir",
-      "launchStatus": "État du lancement"
+      "launchStatus": "État du lancement",
+      "operators": "Pays des exploitants"
     },
     "nearby": "Infrastructures à proximité",
     "nearbyNote": "Distance au point le plus proche de la ligne entre les extrémités d’un pipeline, ou à la base. Les zones militaires, centres de données et barrages cartographiés sont cherchés dans un rayon de 200 km (dans une zone : 0). La position du relevé peut être approximative.",

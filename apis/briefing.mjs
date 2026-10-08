@@ -77,6 +77,7 @@ import { briefing as wmoSwic } from './sources/wmo-swic.mjs';
 import { briefing as unhcrArrivals } from './sources/unhcr-arrivals.mjs';
 import { briefing as sec8k } from './sources/sec-8k.mjs';
 import { briefing as nhc } from './sources/nhc.mjs';
+import { briefing as adsbOrbits } from './sources/adsb-orbits.mjs';
 import { briefing as launches } from './sources/launches.mjs';
 import { briefing as hibp } from './sources/hibp.mjs';
 import { briefing as informRisk } from './sources/inform.mjs';
@@ -179,6 +180,7 @@ export async function fullBriefing() {
     runSource('Copernicus-EMS', copernicusEms),
     runSource('Aviation-SIGMET', sigmet),
     runSource('ADSB-Military', adsbMilitary, { theaters: config.publicSources.adsbTheaters }),
+    runSource('ADSB-Orbits', adsbOrbits, { theaters: config.publicSources.adsbTheaters }),
     runSource('OpenSanctions-Index', opensanctionsIndex),
     runSource('Federal-Register', federalRegister),
     runSource('Energy-Charts-HU', energyCharts),

@@ -800,7 +800,8 @@
     "method_centroid": "Mean position of the affected areas (aggregate, not a single point)",
     "method_member-point": "Point of the issuing national service (not the affected area)",
     "kind_displacement": "Displacement",
-    "kind_launch": "Launch"
+    "kind_launch": "Launch",
+    "method_orbit-centre": "Mean centre of the detected orbits (aggregate, not an aircraft position)"
   },
   "pwa": {
     "menu": "Install / offline",
@@ -957,7 +958,8 @@
       "orbit": "Orbit",
       "provider": "Launch provider",
       "pad": "Launch pad",
-      "launchStatus": "Launch status"
+      "launchStatus": "Launch status",
+      "operators": "Operator countries"
     },
     "nearby": "Nearby infrastructure",
     "nearbyNote": "Distance to the nearest point of the line between a pipeline’s end points, or to the base. Mapped military areas, data centres and dams are searched within 200 km (inside an area: 0). The record’s own position may be approximate.",

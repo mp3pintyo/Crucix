@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.28.0 — Körpályán repülő katonai gépek: új forrás az adsb.lol nyomvonalaiból / Military aircraft flying orbits: a new source from adsb.lol position traces](docs/releases/v2.28.0.md) — 2026-10-08
+
 - [2.27.0 — Ciklonok előrejelzett pályája és kúpja, valamint az űrindítások: két új élő forrás / Cyclone forecast tracks and cones, and orbital launches: two new live sources](docs/releases/v2.27.0.md) — 2026-10-08
 
 - [2.26.0 — Katonai területek, adatközpontok és gátak: térképrétegek, közeli telephelyek és FIRMS-jelzés / Military areas, data centres and dams: map layers, nearby sites and a FIRMS signal](docs/releases/v2.26.0.md) — 2026-10-08

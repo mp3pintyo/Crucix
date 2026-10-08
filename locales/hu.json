@@ -800,7 +800,8 @@
     "method_centroid": "Az érintett területek átlagos helye (összesítés, nem egyetlen pont)",
     "method_member-point": "A kibocsátó nemzeti szolgálat pontja (nem az érintett terület)",
     "kind_displacement": "Menekültmozgás",
-    "kind_launch": "Indítás"
+    "kind_launch": "Indítás",
+    "method_orbit-centre": "A felismert körpályák átlagos középpontja (összesítés, nem repülőgép-pozíció)"
   },
   "pwa": {
     "menu": "Telepítés / offline",
@@ -957,7 +958,8 @@
       "orbit": "Pálya",
       "provider": "Indító szolgáltató",
       "pad": "Indítóállás",
-      "launchStatus": "Indítás állapota"
+      "launchStatus": "Indítás állapota",
+      "operators": "Üzemeltető országok"
     },
     "nearby": "Közeli infrastruktúra",
     "nearbyNote": "Vezetéknél a végpontok közötti vonal legközelebbi pontjáig, bázisnál a pontig mért távolság. A feltérképezett katonai területeket, adatközpontokat és gátakat 200 km-en belül keressük (területen belül: 0). A rekord saját helye lehet közelítő.",
