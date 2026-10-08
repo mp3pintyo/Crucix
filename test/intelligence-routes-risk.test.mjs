@@ -154,6 +154,7 @@ test('POST /api/briefing is guarded and validated, keeps only cited bullets from
   const provider = { isConfigured: true, config: {}, async complete(system, user) {
     calls++;
     assert.match(system, /untrusted observations/);
+    assert.match(system, /compactly on a single line/);
     assert.match(user, /^\[1\] /m);
     await new Promise(resolve => setImmediate(resolve));
     return { text: `Here you go:\n\`\`\`json\n${JSON.stringify({ bullets: [
