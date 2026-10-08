@@ -118,6 +118,80 @@ test('rule messages: RULE_MESSAGES is en.json alerts.errors, and hu/fr name ever
   assert.equal(alertErrorMessage(new AlertError(400, 'INVALID_RULE', 'raw', 'x', 'noSuchKey'), 'hu'), 'raw', 'an unknown key keeps the English message');
 });
 
+// ===== The Signal Guide, the map popups and the tooltips (jarvis.html) =====
+const flat = (value, prefix = '') => Object.entries(value || {}).flatMap(([key, item]) => item && typeof item === 'object' ? flat(item, `${prefix}${key}.`) : [[`${prefix}${key}`, item]]);
+
+test('the glossary and popup groups have the same keys in the same order in en, hu and fr, each a non-empty string with the English {slots}', () => {
+  for (const group of ['glossary', 'popup']) {
+    const english = new Map(flat(locale('en')[group]));
+    for (const code of LANGS) {
+      const entries = flat(locale(code)[group]);
+      assert.deepEqual(entries.map(([key]) => key), [...english.keys()], `${code}: ${group} keys`);
+      for (const [key, value] of entries) {
+        assert.ok(typeof value === 'string' && value.trim() !== '' && !/[<>]/.test(value), `${code}: ${group}.${key} is plain text`);
+        assert.deepEqual(slots(value), slots(english.get(key)), `${code}: ${group}.${key} keeps the {slots}`);
+      }
+    }
+  }
+});
+
+// renderGlossary with a stand-in DOM: the body's markup and the dialog's own words.
+function glossary(t) {
+  const start = html.indexOf('const signalGuideItems = [');
+  const items = html.slice(start, html.indexOf('\n];', start) + 3);
+  const fnStart = html.indexOf('function renderGlossary(');
+  const fn = html.slice(fnStart, html.indexOf('\n}\n', fnStart) + 2);
+  const nodes = {}, node = name => (nodes[name] ??= { textContent: '', attributes: {}, setAttribute(key, value) { this.attributes[key] = value; } });
+  const body = { innerHTML: '' }, overlay = { querySelector: selector => node(selector) };
+  const document = { getElementById: id => id === 'glossaryBody' ? body : id === 'glossaryOverlay' ? overlay : null };
+  const esc = value => String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  vm.runInNewContext(`${items}\n${fn}\nrenderGlossary();`, { document, t, esc });
+  return { body: body.innerHTML, words: Object.fromEntries(Object.entries(nodes).map(([selector, item]) => [selector, item.textContent || item.attributes['aria-label']])) };
+}
+
+test('the Signal Guide reads its words in the page language; the English fallbacks are locales/en.json word for word', () => {
+  const fallback = glossary((_, text) => text), english = glossary(pageT(locale('en')));
+  assert.deepEqual(english, fallback, 'en.json says exactly what the page says without a locale');
+  assert.match(fallback.body, /<strong>No Callsign<\/strong>/);
+  assert.equal(fallback.body.match(/class="glossary-card"/g).length, Object.keys(locale('en').glossary.items).length, 'one entry per item');
+  const hu = glossary(pageT(locale('hu')));
+  assert.match(hu.body, /<strong>Hívójel nélkül<\/strong>\s*<span class="glossary-tag">Légi<\/span>/);
+  assert.match(hu.body, /<span class="glossary-label">Nem bizonyítja<\/span>/);
+  assert.equal(hu.words['.glossary-kicker'], 'Jelzés-útmutató');
+  assert.equal(hu.words['.glossary-close'], 'Jelzés-útmutató bezárása');
+  assert.ok(!/Meaning|Why it matters|Example</.test(hu.body), 'no English label is left');
+  assert.match(glossary(pageT(locale('fr'))).body, /<strong>Point stratégique<\/strong>/);
+});
+
+test('every popup and tooltip fallback in jarvis.html is the popup.* text of locales/en.json, and every popup.* key is used', () => {
+  const english = locale('en').popup, used = new Set();
+  for (const [, key, fallback] of html.matchAll(/(?:tFill|t)\('popup\.(\w+)','([^']*)'/g)) { assert.equal(fallback, english[key], `popup.${key}`); used.add(key); }
+  for (const [, title, key] of html.matchAll(/title="([^"]*)" data-tip="popup\.(\w+)"/g)) { assert.equal(title, english[key], `data-tip popup.${key}`); used.add(key); }
+  assert.deepEqual([...used].sort(), Object.keys(english).sort());
+  // The popup texts that pair a popup with its event keep the source names.
+  for (const code of LANGS) for (const [key, name] of [['acledData', 'ACLED'], ['firmsSatellite', 'FIRMS'], ['kiwiNetwork', 'KiwiSDR'], ['epaMonitor', 'EPA'], ['news', '{source}']]) assert.ok(locale(code).popup[key].includes(name), `${code}: popup.${key} names ${name}`);
+});
+
+test('the map buttons take their tooltip from the data-tip key with the map render, the English title as the fallback', () => {
+  const start = html.indexOf('function localizeTooltips(');
+  const source = html.slice(start, html.indexOf('\n}\n', start) + 2);
+  const map = html.slice(html.indexOf('function renderMapVisibility('), html.indexOf('\n}\n', html.indexOf('function renderMapVisibility(')));
+  assert.match(map, /^function renderMapVisibility\(\)\{\n {2}localizeTooltips\(\);/);
+  const buttons = () => [...html.matchAll(/title="([^"]*)" data-tip="([^"]+)"/g)].map(([, title, key]) => ({ title, getAttribute: () => key }));
+  const run = messages => { const nodes = buttons(); vm.runInNewContext(`${source}\nlocalizeTooltips();`, { t: pageT(messages), document: { querySelectorAll: () => nodes } }); return nodes.map(node => node.title); };
+  assert.deepEqual(run(locale('hu')), ['Nagyítás', 'Kicsinyítés', 'Repülési útvonalak be/ki']);
+  assert.deepEqual(run({}), ['Zoom in', 'Zoom out', 'Toggle flight routes']);
+});
+
+test('tFill fills the {slots} of a popup text and falls back to English', () => {
+  const start = html.indexOf('function tFill(');
+  const source = html.slice(start, html.indexOf('\n}\n', start) + 2);
+  const fill = messages => vm.runInNewContext(`${source}\ntFill`, { t: pageT(messages) });
+  assert.equal(fill(locale('hu'))('popup.corridor', '{from} ↔ {to}: {count} aircraft', { from: 'Baltic Region', to: 'Middle East', count: 42 }), 'Baltic Region ↔ Middle East: 42 légi jármű');
+  assert.equal(fill(locale('en'))('popup.fatalities', '{count} fatalities', { count: 3 }), '3 fatalities');
+  assert.equal(fill({})('popup.views', '{count} views', { count: '1,200' }), '1,200 views');
+});
+
 test('the alert API answers rule errors in the server language; code and field are the same', async t => {
   const dir = mkdtempSync(join(tmpdir(), 'crucix-i18n-display-'));
   const engine = new AlertEngine(dir, { now: () => Date.parse('2026-10-08T12:00:00Z'), logger: quiet });
