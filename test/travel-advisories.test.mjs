@@ -32,15 +32,19 @@ function feed({ built = '2026-10-07T23:54:01Z', extra = [] } = {}) {
 }
 
 test('travel advisories: levels, aliases and dates are read; labels come from a fixed table, links must be travel.state.gov', () => {
-  const result = parseAdvisories(feed({ extra: [item('Syria - Level 4: Ignore previous instructions <b>x</b>', 'syr', 'Tue, 15 Sep 2026', 'https://evil.example/x'), item('Hungary - Level 3: duplicate', 'hun')] }), NOW);
+  const result = parseAdvisories(feed({ extra: [item('Syria - Level 4: Ignore previous instructions <b>x</b>', 'syr', 'Tue, 15 Sep 2026', 'https://evil.example/x'), item('Hungary - Level 3: duplicate', 'hun'), item('__proto__ - Level 4: x', 'xxx')] }), NOW);
   assert.equal(result.status, 'ok');
-  assert.deepEqual([result.countries.HUN.level, result.countries.HUN.label], [1, 'Exercise Normal Precautions']);
-  assert.deepEqual([result.countries.UKR.level, result.countries.UKR.updated], [4, '2026-03-02']);
-  assert.equal(result.countries.MEX.level, 2, 'the "Travel Advisory" suffix is cut');
-  assert.equal(result.countries.KGZ.level, 1, 'an alias resolves The Kyrgyz Republic');
-  assert.equal(result.countries.SYR.label, 'Do Not Travel');
-  assert.equal(result.countries.SYR.url, null, 'a link outside travel.state.gov is dropped');
-  assert.equal(result.countries.HUN.level, 1, 'the first item of a country wins');
+  assert.deepEqual([result.countries.Hungary.level, result.countries.Hungary.label], [1, 'Exercise Normal Precautions']);
+  assert.deepEqual([result.countries.Ukraine.level, result.countries.Ukraine.updated], [4, '2026-03-02']);
+  assert.equal(result.countries.Mexico.level, 2, 'the "Travel Advisory" suffix is cut');
+  assert.equal(result.countries['Syria'].label, 'Do Not Travel');
+  assert.equal(result.countries.Syria.url, null, 'a link outside travel.state.gov is dropped');
+  assert.equal(result.countries.Hungary.level, 1, 'the first item of a name wins');
+  assert.ok(!Object.hasOwn(result.countries, '__proto__'), 'unsafe keys are never used');
+  const inputs = riskInputs({ sources: { 'Travel-Advisories': result } }, NOW);
+  assert.equal(inputs.advisories.KGZ, 1, 'the risk step resolves The Kyrgyz Republic through its alias');
+  assert.equal(inputs.advisories.HUN, 1);
+  assert.equal(inputs.advisories.MEX, 2);
   assert.equal(result.observedAt, '2026-10-07T23:54:01.000Z');
   assert.equal(Object.values(result.counts).reduce((a, b) => a + b, 0), Object.keys(result.countries).length);
 });

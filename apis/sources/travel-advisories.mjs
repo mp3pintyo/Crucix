@@ -5,12 +5,12 @@
 // country-risk step reads it as the `advisory` component and the country sheet shows it with its link.
 //   - An item is "<Country> - Level <1-4>: <label>", its pubDate the date the advisory last changed (a date, no time). The channel date is the
 //     time the feed was built and stands in for the observation time; a feed older than 14 days is stale and not used.
-//   - Names are resolved with the gazetteer (countryByName); a handful of State Department spellings get an alias; the rest is counted as unmatched.
+//   - Countries are keyed by the name the State Department writes (the "Travel Advisory" suffix cut); the risk step maps names to the gazetteer's codes, as an
+//     adapter never imports from lib/. A feed with fewer than 100 countries is not trusted.
 //   - Provider text is never shown as written: the label comes from a fixed table of the four levels, the link must be an https travel.state.gov URL.
 import { safeFetch } from '../utils/fetch.mjs';
 import { parseXml } from '../utils/xml.mjs';
 import { providerTime } from '../utils/freshness.mjs';
-import { countryByName } from '../../lib/intelligence/countries.mjs';
 
 const SOURCE = 'Travel-Advisories';
 const ENDPOINT = 'https://travel.state.gov/_res/rss/TAsTWs.xml';
@@ -21,8 +21,7 @@ const MAX_AGE = 14 * DAY;
 const CACHE_MS = 6 * 3600000;
 const STALE_MS = 14 * DAY;
 export const LEVEL_LABELS = Object.freeze({ 1: 'Exercise Normal Precautions', 2: 'Exercise Increased Caution', 3: 'Reconsider Travel', 4: 'Do Not Travel' });
-// State Department spellings the gazetteer does not know, by the name as written (after the title cut).
-const ALIASES = Object.freeze({ 'The Kyrgyz Republic': 'KGZ', 'Kingdom of Denmark': 'DNK' });
+const UNSAFE_NAMES = new Set(['__proto__', 'constructor', 'prototype']);
 const TITLE = /^(.{1,80}?) - Level ([1-4])(?::.{0,80})?$/;
 const LINK = /^https:\/\/travel\.state\.gov\/[A-Za-z0-9/._-]{1,300}$/;
 const ATTRIBUTION = 'U.S. Department of State, Bureau of Consular Affairs, Travel Advisories (travel.state.gov).';
@@ -44,7 +43,7 @@ function dayOf(raw) {
 }
 const text = value => (typeof value === 'string' ? value : value && typeof value === 'object' && typeof value['#text'] === 'string' ? value['#text'] : '');
 
-/** The advisories of the feed text: { countries: { ISO3: { level, label, updated, url } }, counts, unmatched, observedAt }, or an error result. */
+/** The advisories of the feed text: { countries: { name: { level, label, updated, url } }, counts, unmatched, observedAt }, or an error result. */
 export function parseAdvisories(xml, now = Date.now()) {
   let doc;
   try { doc = parseXml(xml); } catch { return unavailable('Travel advisories returned an unreadable document', now); }
@@ -64,12 +63,11 @@ export function parseAdvisories(xml, now = Date.now()) {
     const match = TITLE.exec(title);
     if (!match) { unmatched += 1; continue; }
     const name = match[1].replace(/\s+Travel Advisory$/i, '').trim();
-    const iso3 = ALIASES[name] ?? countryByName(name)?.iso3;
-    if (!iso3 || Object.hasOwn(countries, iso3)) { unmatched += 1; continue; }
+    if (!name || UNSAFE_NAMES.has(name) || Object.hasOwn(countries, name)) { unmatched += 1; continue; }
     const level = Number(match[2]);
     const updated = dayOf(text(item?.pubDate));
     const link = text(item?.link).trim();
-    countries[iso3] = { level, label: LEVEL_LABELS[level], updated, url: LINK.test(link) ? link : null };
+    countries[name] = { level, label: LEVEL_LABELS[level], updated, url: LINK.test(link) ? link : null };
     counts[level] += 1;
   }
   if (Object.keys(countries).length < 100 || unmatched * 4 > items.length) return unavailable('Travel advisories returned an unexpected shape', now);
