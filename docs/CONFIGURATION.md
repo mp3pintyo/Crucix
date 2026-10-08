@@ -78,7 +78,7 @@ Set `LLM_PROVIDER` to one of: `anthropic`, `openai`, `gemini`, `codex`, `openrou
 
 | Provider | Key Required | Default Model |
 |----------|-------------|---------------|
-| `anthropic` | `LLM_API_KEY` | claude-sonnet-4-6 |
+| `anthropic` | `LLM_API_KEY` or `ANTHROPIC_AUTH_TOKEN` | claude-sonnet-4-6 |
 | `openai` | `LLM_API_KEY` | gpt-5.4 |
 | `gemini` | `LLM_API_KEY` | gemini-3.1-pro |
 | `openrouter` | `LLM_API_KEY` | openrouter/auto |
@@ -157,6 +157,8 @@ All settings are in `.env` with sensible defaults:
 | `DISCORD_GUILD_ID` | — | Server ID (instant slash command registration) |
 | `DISCORD_WEBHOOK_URL` | — | Webhook URL (alert-only fallback, no bot needed) |
 | `LLM_BASE_URL` | — | Separate OpenAI-compatible endpoint |
+| `ANTHROPIC_BASE_URL` | — | Anthropic Messages endpoint for `LLM_PROVIDER=anthropic` (a self-hosted gateway or router); default `https://api.anthropic.com` |
+| `ANTHROPIC_AUTH_TOKEN` | — | Bearer token for `LLM_PROVIDER=anthropic`, sent as `Authorization: Bearer` instead of `x-api-key`; use it or `LLM_API_KEY`, not both |
 | `LLM_IDEAS_EVERY_N_SWEEPS` | `1` | First sweep, then every Nth sweep; delta alerts run every sweep |
 | `TELEGRAM_OSINT_ENABLED` | `false` | Opt-in public preview source |
 | `ALERT_NOTIFY_CHANNELS` | — | `telegram` and/or `discord` (comma-separated): also send alert engine messages there (opt-in; their `/mute` applies) |
