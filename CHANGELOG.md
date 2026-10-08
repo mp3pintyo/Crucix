@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.36.1 — Javítás: a rögzített kockázati összegzés-teszt ismeri az új „timeline” mezőt / Fix: the pinned risk-summary test knows the new "timeline" field](docs/releases/v2.36.1.md) — 2026-10-08
+
 - [2.36.0 — Fenyegetési idővonal és Eurostat Magyarországra / Threat timeline and Eurostat for Hungary](docs/releases/v2.36.0.md) — 2026-10-08
 
 - [2.35.0 — Hőanomália-eszkaláció (FIRMS) / Thermal escalation (FIRMS)](docs/releases/v2.35.0.md) — 2026-10-08
