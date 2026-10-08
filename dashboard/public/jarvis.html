@@ -26,6 +26,7 @@
 <script src="record-core.js"></script>
 <script src="live-sources.js"></script>
 <script src="pivots.js"></script>
+<script src="infrastructure.js"></script>
 <script src="record-inspector.js"></script>
 <script src="alerts-core.js"></script>
 <script src="alerts.js"></script>
@@ -560,7 +561,9 @@ const mapLayerRegistry = [
   {id:'disaster',key:'map.disaster',label:'Current natural events',types:['disaster']},
   {id:'space',key:'map.spaceStation',label:'Space stations',types:['space']},
   {id:'earthquake',key:'map.earthquake',label:'Earthquakes · USGS significant + EMSC M4.5+',types:['earthquake']},
-  {id:'interference',key:'map.gnssInterference',label:'GNSS interference',types:['interference']}
+  {id:'interference',key:'map.gnssInterference',label:'GNSS interference',types:['interference']},
+  {id:'pipelines',key:'map.pipelines',label:'Oil and gas pipelines',types:['pipeline'],off:true},
+  {id:'bases',key:'map.militaryBases',label:'Military bases',types:['base'],off:true}
 ];
 // Layer type of a located live-source row, by its kind. Kinds without coordinates draw nothing; any other kind keeps the weather type.
 const LIVE_MARKER_TYPE={earthquake:'earthquake',maritime:'maritime',aviation:'air',disaster:'disaster',forecast:'forecast',weather:'weather',interference:'interference'};
@@ -572,7 +575,7 @@ let mapLayers = loadMapLayers();
 flightsVisible = mapLayers.air !== false;
 function loadMapLayers(){
   let raw;try{raw=JSON.parse(readPreference(MAP_LAYER_STORAGE_KEY)||'null')}catch{}
-  return Object.fromEntries(mapLayerRegistry.map(layer=>[layer.id,typeof raw?.[layer.id]==='boolean'?raw[layer.id]:true]));
+  return Object.fromEntries(mapLayerRegistry.map(layer=>[layer.id,typeof raw?.[layer.id]==='boolean'?raw[layer.id]:layer.off!==true]));
 }
 function isMarkerTypeVisible(type){const layer=mapLayerRegistry.find(layer=>layer.types.includes(type));return !layer||mapLayers[layer.id]!==false}
 function hasCoordinates(lat,lon){return typeof lat==='number'&&typeof lon==='number'&&Number.isFinite(lat)&&Number.isFinite(lon)&&Math.abs(lat)<=90&&Math.abs(lon)<=180}
@@ -581,7 +584,7 @@ function setMapLayer(id,visible){
   mapLayers[id]=!!visible;flightsVisible=mapLayers.air!==false;
   writePreference(MAP_LAYER_STORAGE_KEY,JSON.stringify(mapLayers));
   closePopup();plotMarkers();
-  if(flatG){flatG.selectAll('.markers,.corridors-layer').remove();plotFlatMarkers()}
+  if(flatG){flatG.selectAll('.markers,.corridors-layer,.infra-layer').remove();plotFlatMarkers()}
   const flightButton=document.getElementById('flightToggle');
   if(flightButton){flightButton.classList.toggle('off',!flightsVisible);flightButton.setAttribute('aria-pressed',String(flightsVisible))}
   const input=document.getElementById('layer-'+id);if(input)input.checked=!!visible;
@@ -1319,7 +1322,7 @@ function bindMapLifecycleEvents(){
 function renderMapLegend(){
   document.getElementById('mapLegend').innerHTML=
     [{c:'#64f0c8',l:t('map.airTraffic','Air Traffic')},{c:'#ff5f63',l:t('map.thermalFire','Thermal/Fire')},{c:'rgba(255,120,80,0.8)',l:t('map.conflict','Conflict')},{c:'#44ccff',l:t('map.sdrReceiver','SDR Receiver')},
-     {c:'#ffe082',l:t('map.nuclearSite','Nuclear Site')},{c:'#b388ff',l:t('map.chokepoint','Chokepoint')},{c:'#ffc400',l:t('map.gnssInterference','GNSS interference')},{c:'#ffb84c',l:t('map.osintEvent','OSINT Event')},{c:'#69f0ae',l:t('map.healthAlert','Health Alert')},{c:'#9be7b1',l:'Supplemental Health'},{c:'#4dd0e1',l:t('map.internetOutage','Internet Outage')},{c:'#81d4fa',l:t('map.worldNews','World News')},{c:'#ff9800',l:t('map.weatherAlert','Weather Alert')},{c:'#cddc39',l:t('map.epaRadNet','EPA RadNet')},{c:'#ffffff',l:t('map.spaceStation','Space Station')},{c:'#6495ed',l:t('map.gdeltEvent','GDELT Event')},{c:'#ff7043',l:t('map.earthquake','Earthquakes')}]
+     {c:'#ffe082',l:t('map.nuclearSite','Nuclear Site')},{c:'#b388ff',l:t('map.chokepoint','Chokepoint')},{c:'#ffc400',l:t('map.gnssInterference','GNSS interference')},{c:'#ffa03c',l:t('map.pipelines','Oil and gas pipelines')},{c:'#ce93d8',l:t('map.militaryBases','Military bases')},{c:'#ffb84c',l:t('map.osintEvent','OSINT Event')},{c:'#69f0ae',l:t('map.healthAlert','Health Alert')},{c:'#9be7b1',l:'Supplemental Health'},{c:'#4dd0e1',l:t('map.internetOutage','Internet Outage')},{c:'#81d4fa',l:t('map.worldNews','World News')},{c:'#ff9800',l:t('map.weatherAlert','Weather Alert')},{c:'#cddc39',l:t('map.epaRadNet','EPA RadNet')},{c:'#ffffff',l:t('map.spaceStation','Space Station')},{c:'#6495ed',l:t('map.gdeltEvent','GDELT Event')},{c:'#ff7043',l:t('map.earthquake','Earthquakes')}]
     .map(x=>`<div class="leg-item"><div class="leg-dot" style="background:${x.c}"></div>${x.l}</div>`).join('');
 }
 
@@ -1394,6 +1397,10 @@ function initGlobe(){
     .arcDashAnimateTime(2000)
     .arcAltitudeAutoScale(0.3)
     .arcLabel(d => esc(d.label))
+    // Paths layer (static pipelines, see infrastructure.js)
+    .pathPoints('pts').pathPointLat(pt=>pt[0]).pathPointLng(pt=>pt[1]).pathPointAlt(0.004).pathColor(d=>d.color).pathStroke(d=>d.stroke||0.25)
+    .pathLabel(d=>'<b>'+esc(d.popHead)+'</b><br><span style="opacity:0.7">'+esc(d.popMeta)+'</span>').pathTransitionDuration(0)
+    .onPathClick((path,ev)=>showPopup(ev,path.popHead,path.popText,path.popMeta))
     // Rings layer (pulsing conflict events)
     .ringColor(d => t => `rgba(255,120,80,${1-t})`)
     .ringMaxRadius(d => d.maxR || 3)
@@ -1458,6 +1465,43 @@ function initGlobe(){
   }
 
   globeInitialized = true;
+}
+
+// === STATIC INFRASTRUCTURE (pipelines, bases; infrastructure.js) ===
+const PIPELINE_COLOR={offline:'rgba(255,95,99,0.9)',reduced:'rgba(255,214,102,0.85)',o:'rgba(255,160,60,0.6)',g:'rgba(80,220,230,0.6)',unknown:'rgba(176,190,197,0.45)'};
+const BASE_COLOR={'us-nato':'rgba(100,181,246,0.9)',russia:'rgba(255,95,99,0.9)',china:'rgba(255,138,101,0.9)'};
+const pipelineColor=p=>p.state==='offline'?PIPELINE_COLOR.offline:p.state==='reduced'?PIPELINE_COLOR.reduced:p.state==='unknown'?PIPELINE_COLOR.unknown:PIPELINE_COLOR[p.kind];
+const baseColor=b=>BASE_COLOR[b.family]||'rgba(206,147,216,0.9)';
+const infraSay=(key,fallback)=>t(key,fallback);
+let infraRequested=false,infraPaths=null,infraPathsFor=null;
+// The dataset when a layer needs it; the first call that finds it missing starts the one request and redraws both maps when it arrives.
+function infraData(){
+  const I=window.CrucixInfrastructure;if(!I)return null;
+  const data=I.get();if(data)return data;
+  if((mapLayers.pipelines||mapLayers.bases)&&!infraRequested){infraRequested=true;I.load().then(loaded=>{if(loaded){plotMarkers();if(flatG){flatG.selectAll('.markers,.corridors-layer,.infra-layer').remove();plotFlatMarkers();}}});}
+  return null;
+}
+function pipelineMeta(p){return [p.kind==='o'?t('infra.oil','Oil pipeline'):t('infra.gas','Gas pipeline'),t('infra.state_'+p.state,p.state)].join(' · ');}
+function globePipelinePaths(data){
+  if(infraPaths&&infraPathsFor===data)return infraPaths;
+  infraPathsFor=data;
+  infraPaths=data.pipelines.map(p=>({pts:window.CrucixInfrastructure.greatCircle([p.line[0],p.line[1]],[p.line[2],p.line[3]],24),color:pipelineColor(p),stroke:p.state==='offline'?0.35:0.22,
+    popHead:p.name,popMeta:pipelineMeta(p),popText:window.CrucixInfrastructure.pipelineText(p,infraSay)}));
+  return infraPaths;
+}
+function plotFlatInfrastructure(data){
+  const layer=flatG.append('g').attr('class','infra-layer');
+  const I=window.CrucixInfrastructure;
+  if(isMarkerTypeVisible('pipeline'))data.pipelines.forEach(p=>{
+    const coords=I.greatCircle([p.line[0],p.line[1]],[p.line[2],p.line[3]],24).map(pt=>[pt[1],pt[0]]);
+    layer.append('path').datum({type:'Feature',geometry:{type:'LineString',coordinates:coords}}).attr('d',flatPath).attr('fill','none').attr('stroke',pipelineColor(p)).attr('stroke-width',p.state==='offline'?1.4:0.9)
+      .attr('data-layer','pipelines').style('cursor','pointer').on('click',ev=>{ev.stopPropagation();showPopup(ev,p.name,I.pipelineText(p,infraSay),pipelineMeta(p));});
+  });
+  if(isMarkerTypeVisible('base'))data.bases.forEach(b=>{
+    const projected=flatProjection([b.lon,b.lat]);if(!projected||!projected.every(Number.isFinite))return;
+    const g=layer.append('g').attr('transform','translate('+projected[0]+','+projected[1]+')').attr('data-layer','bases').style('cursor','pointer').on('click',ev=>{ev.stopPropagation();showPopup(ev,b.name,I.baseText(b,infraSay),t('infra.base','Military base'));});
+    g.append('circle').attr('class','marker-circle').attr('r',2.6).attr('data-base-r',2.6).attr('fill',baseColor(b)).attr('stroke','rgba(255,255,255,0.35)').attr('stroke-width',0.6);
+  });
 }
 
 function plotMarkers(){
@@ -1632,6 +1676,9 @@ function plotMarkers(){
   const conflictEvents=(D.acled?.deadliestEvents||[]).filter(e=>hasCoordinates(e.lat,e.lon));
   conflictEvents.forEach(e=>points.push({lat:e.lat,lng:e.lon,size:0.25,alt:0.01,color:'rgba(255,120,80,0.8)',type:'conflict',priority:1,popHead:e.type||'Conflict',popMeta:'ACLED',popText:`${e.fatalities} fatalities\n${e.location}, ${e.country}`}));
   if(groupNews)for(const cluster of visibleEventClusters())points.push({lat:cluster.lat,lng:cluster.lon,size:.4,alt:.015,color:'rgba(129,212,250,0.9)',type:'news',priority:1,cluster,popHead:t('intelligence.cluster','Grouped reports'),popMeta:cluster.count+' '+t('badges.items','ITEMS')});
+  const infra=infraData();
+  if(infra&&isMarkerTypeVisible('base'))infra.bases.forEach(b=>points.push({lat:b.lat,lng:b.lon,size:0.2,alt:0.012,color:baseColor(b),type:'base',priority:2,popHead:b.name,popMeta:t('infra.base','Military base'),popText:window.CrucixInfrastructure.baseText(b,infraSay)}));
+  globe.pathsData(infra&&isMarkerTypeVisible('pipeline')?globePipelinePaths(infra):[]);
   const visiblePoints=points.filter(point=>hasCoordinates(point.lat,point.lng)&&isMarkerTypeVisible(point.type));
   // Set points on globe
   globe.pointsData(visiblePoints);
@@ -1906,7 +1953,7 @@ function earthquakeDescription(q){
 
 function plotFlatMarkers(){
   if(!flatG||!flatProjection)return;
-  flatG.selectAll('.markers,.corridors-layer').remove();
+  flatG.selectAll('.markers,.corridors-layer,.infra-layer').remove();
   let flatMarkerType='air';
   const mg=flatG.append('g').attr('class','markers');
   const proj=flatProjection;
@@ -2029,6 +2076,8 @@ function plotFlatMarkers(){
       cG.append('path').datum({type:'Feature',geometry:{type:'LineString',coordinates:coords}}).attr('d',flatPath).attr('fill','none').attr('stroke','rgba(100,240,200,0.15)').attr('stroke-width',0.6);
     })});
   }
+  const infraFlat=infraData();
+  if(infraFlat)plotFlatInfrastructure(infraFlat);
 }
 
 // Update setRegion for flat mode

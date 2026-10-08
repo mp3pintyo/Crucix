@@ -121,7 +121,9 @@
     "spaceStation": "Space Station",
     "gdeltEvent": "GDELT Event",
     "rotateHint": "DRAG TO ROTATE · SCROLL TO ZOOM",
-    "gnssInterference": "GNSS interference"
+    "gnssInterference": "GNSS interference",
+    "pipelines": "Oil and gas pipelines",
+    "militaryBases": "Military bases"
   },
   "ideas": {
     "confidence": "Confidence",
@@ -789,7 +791,9 @@
     "method_polygon-centroid": "Centre of the provider’s area (polygon centroid)",
     "method_polygon-vertex-mean": "Approximate centre of the provider’s area (mean of its points)",
     "method_global": "Global (no single location)",
-    "kind_interference": "GNSS interference"
+    "kind_interference": "GNSS interference",
+    "method_centroid": "Mean position of the affected areas (aggregate, not a single point)",
+    "method_member-point": "Point of the issuing national service (not the affected area)"
   },
   "pwa": {
     "menu": "Install / offline",
@@ -1187,5 +1191,32 @@
     "tierHelp": "1 official body or wire, 2 major outlet, 3 specialist or regional source, 4 aggregator or blog. A tier ranks a source; it does not say a headline is true.",
     "state": "State-owned or state-funded outlet",
     "language": "Headline language (not translated)"
+  },
+  "infra": {
+    "oil": "Oil pipeline",
+    "gas": "Gas pipeline",
+    "base": "Military base",
+    "state_flowing": "Flowing",
+    "state_reduced": "Reduced flow",
+    "state_offline": "Offline",
+    "state_unknown": "State unknown",
+    "route": "From {a} to {b}",
+    "via": "via {list}",
+    "capacityOil": "Capacity {k} million barrels a day",
+    "capacityGas": "Capacity {k} billion cubic metres a year",
+    "length": "Length {l} km",
+    "since": "in service since {y}",
+    "sanctions": "{n} sanction references on record",
+    "lineNote": "Drawn as the great circle between the end points, not the physical route.",
+    "baseNote": "A public-source compilation; it is not a statement about the current garrison.",
+    "family_us-nato": "US / NATO",
+    "family_uk": "United Kingdom",
+    "family_russia": "Russia",
+    "family_india": "India",
+    "family_france": "France",
+    "family_china": "China",
+    "family_italy": "Italy",
+    "family_uae": "United Arab Emirates",
+    "family_japan": "Japan"
   }
 }

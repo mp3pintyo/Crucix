@@ -121,7 +121,9 @@
     "spaceStation": "Station Spatiale",
     "gdeltEvent": "Événement GDELT",
     "rotateHint": "GLISSER POUR TOURNER · MOLETTE POUR ZOOMER",
-    "gnssInterference": "Brouillage GNSS"
+    "gnssInterference": "Brouillage GNSS",
+    "pipelines": "Oléoducs et gazoducs",
+    "militaryBases": "Bases militaires"
   },
   "ideas": {
     "confidence": "Confiance",
@@ -789,7 +791,9 @@
     "method_polygon-centroid": "Centre de la zone du fournisseur (centroïde du polygone)",
     "method_polygon-vertex-mean": "Centre approximatif de la zone du fournisseur (moyenne de ses points)",
     "method_global": "Mondial (aucun lieu unique)",
-    "kind_interference": "Brouillage GNSS"
+    "kind_interference": "Brouillage GNSS",
+    "method_centroid": "Position moyenne des zones touchées (agrégat, pas un point unique)",
+    "method_member-point": "Point du service national émetteur (pas la zone touchée)"
   },
   "pwa": {
     "menu": "Installer / hors ligne",
@@ -1187,5 +1191,32 @@
     "tierHelp": "1 organisme officiel ou agence, 2 grand média, 3 source spécialisée ou régionale, 4 agrégateur ou blog. Un niveau classe une source ; il ne dit pas qu'un titre est vrai.",
     "state": "Média détenu ou financé par un État",
     "language": "Langue du titre (non traduit)"
+  },
+  "infra": {
+    "oil": "Oléoduc",
+    "gas": "Gazoduc",
+    "base": "Base militaire",
+    "state_flowing": "En service",
+    "state_reduced": "Débit réduit",
+    "state_offline": "Hors service",
+    "state_unknown": "État inconnu",
+    "route": "De {a} à {b}",
+    "via": "via {list}",
+    "capacityOil": "Capacité : {k} millions de barils par jour",
+    "capacityGas": "Capacité : {k} milliards de mètres cubes par an",
+    "length": "Longueur : {l} km",
+    "since": "en service depuis {y}",
+    "sanctions": "{n} références de sanctions",
+    "lineNote": "Tracé comme le grand cercle entre les extrémités, pas le tracé réel.",
+    "baseNote": "Une compilation de sources publiques ; ce n’est pas une affirmation sur la garnison actuelle.",
+    "family_us-nato": "É.-U. / OTAN",
+    "family_uk": "Royaume-Uni",
+    "family_russia": "Russie",
+    "family_india": "Inde",
+    "family_france": "France",
+    "family_china": "Chine",
+    "family_italy": "Italie",
+    "family_uae": "Émirats arabes unis",
+    "family_japan": "Japon"
   }
 }

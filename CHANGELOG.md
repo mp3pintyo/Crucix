@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.21.0 — Olaj- és gázvezeték-, valamint katonaibázis-réteg a térképen (és a v2.20.0 CI-javítása) / Oil and gas pipeline and military base layers on the map (and the v2.20.0 CI fix)](docs/releases/v2.21.0.md) — 2026-10-08
+
 - [2.20.0 — GNSS-zavarás (GPSJam) és hivatalos figyelmeztetések a világ minden tájáról (WMO SWIC) / GNSS interference (GPSJam) and official warnings from around the world (WMO SWIC)](docs/releases/v2.20.0.md) — 2026-10-08
 
 - [2.19.0 — Utazási figyelmeztetések: az USA külügyminisztériumának országszintjei a kockázati modellben / Travel advisories: the U.S. State Department's country levels in the risk model](docs/releases/v2.19.0.md) — 2026-10-08

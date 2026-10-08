@@ -173,6 +173,10 @@ The country sheet gains a **Threat actor groups** section from the keyless [MISP
 
 From the [worldmonitor](https://github.com/koala73/worldmonitor) analysis: the **U.S. State Department travel advisory** (four levels, 212 countries) is the seventh component of the country risk model (model v2: re-cut weights, an advisory section on the country sheet, [release notes](docs/releases/v2.19.0.md)); **GPSJam** adds a GNSS interference map layer (regions and the worst hexagons, never rated above moderate, no country attribution) and **WMO SWIC** official severe-weather warnings of the members outside Europe and the USA ([release notes](docs/releases/v2.20.0.md)). The NGA navigational warnings were measured and left out: the newest active warning is from 2024.
 
+### Pipeline and military base layers (v2.21)
+
+Two new map layers, both off by default (Settings > Map layers): **618 oil and gas pipelines** with their physical state (flowing, reduced, offline, unknown), capacity and operator statement, and **226 military bases** by affiliation, from the World Monitor compilation (pipelines: operator disclosures, regulator filings, ENTSOG and Global Energy Monitor, CC BY 4.0). Only the end points of a pipeline are known, so the line is the great circle between them, not the route. The data file (200 KB) loads on first switch-on; see the [release notes](docs/releases/v2.21.0.md).
+
 ### Dashboard structure (v2.12)
 
 - **Domain lenses.** A bar under the alert strip offers **All** and eight domains (security and conflict, natural hazards and weather, space, cyber and internet, markets and economy, energy and supply chain, sanctions and regulation, health and environment) that together cover all 52 source adapters. A lens narrows the live panel, the source-health panel, the changes panel and its chip, the record browser's source list and the live record markers on both maps. News, OSINT and delta signals have no domain and only show under **All**; the older map layers keep their own switches. The choice is kept per browser (in memory only when storage is blocked).
