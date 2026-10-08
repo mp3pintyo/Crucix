@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.36.0 — Fenyegetési idővonal és Eurostat Magyarországra / Threat timeline and Eurostat for Hungary](docs/releases/v2.36.0.md) — 2026-10-08
+
 - [2.35.0 — Hőanomália-eszkaláció (FIRMS) / Thermal escalation (FIRMS)](docs/releases/v2.35.0.md) — 2026-10-08
 
 - [2.34.0 — Amerikai repülőtéri késések (FAA) és szabályozói közlemények / U.S. airport delays (FAA) and regulator announcements](docs/releases/v2.34.0.md) — 2026-10-08

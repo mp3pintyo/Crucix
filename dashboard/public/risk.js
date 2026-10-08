@@ -33,6 +33,9 @@
     trackStats:'Resolved: {n} · Brier {brier} · skill {skill}',trackSkillHelp:'Skill compares the Brier score with always forecasting the base rate: above 0 is better than the base rate, below 0 worse.',
     anomaliesTitle:'Unusual activity',anomaliesHelp:'Located events in the last 24 hours against the same country’s own previous 24-hour windows (mean and spread; at least 10 windows needed). Weekday patterns are not modelled.',anomaliesNone:'Nothing unusual against each country’s own recent history.',anomalyRow:'{current} events, usually {mean} (z {z})',
     spikesTitle:'Trending terms',spikesHelp:'Words in far more headlines than usual in the last two hours: at least 4 headlines from at least 2 sources and more than 3 times the usual count.',spikesNotReady:'Collecting a baseline: {hours} of the 24 hours of headlines needed.',spikesNone:'No term stands out against its usual count.',spikeRow:'{count} headlines, usually {baseline} · {sources} sources',
+    timelineTitle:'Threat timeline',timelineHelp:'Located events by UTC day for the last seven days and threat level (today is a partial day). The trend compares critical plus high events of the last three complete days with the three before.',
+    timelineNotReady:'Collecting history: {days} of 3 days needed for a trend.',timelineTrend_worsening:'Trend: worsening',timelineTrend_easing:'Trend: easing',timelineTrend_steady:'Trend: steady',
+    timelineRow:'{total} events · {critical} critical · {high} high · {watch} watch',
     thermalTitle:'Thermal escalation',thermalHelp:'Satellite heat detections above 10 MW (NASA FIRMS, strongest 300 per region) grouped within 20 km and compared with the same 0.5° cell’s own previous days. Heat, not a cause: a prompt to look.',
     thermalNotReady:'Collecting a baseline: {days} of about 5 days of detections needed.',thermalNone:'No heat cluster stands out against its cell’s usual activity.',thermalSpike:'Spike',thermalPersistent:'Persistent',thermalElevated:'Elevated',
     thermalRow:'{count} detections, {frp} MW, usually {usual} a day · burning {hours} h',
@@ -92,6 +95,14 @@
         site:typeof item.site==='string'?item.site.slice(0,80):''}));
     return {ready:value.ready===true,observedDays:Number.isSafeInteger(value.observedDays)?value.observedDays:0,items};
   }
+  // The seven-day threat timeline of the summary (2.36; absent in older sweeps): every field checked and cut.
+  const TL_LEVELS=['critical','high','watch','info'],TL_TRENDS=['worsening','easing','steady'];
+  function readTimeline(value){
+    if(!isObject(value)||!Array.isArray(value.days))return null;
+    const days=value.days.filter(item=>isObject(item)&&typeof item.day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(item.day)).slice(0,7).map(item=>{
+      const row={day:item.day};for(const level of TL_LEVELS)row[level]=Number.isSafeInteger(item[level])&&item[level]>=0?item[level]:0;return row;});
+    return {ready:value.ready===true,observedDays:Number.isSafeInteger(value.observedDays)?value.observedDays:0,days,trend:TL_TRENDS.includes(value.trend)?value.trend:null};
+  }
   function readAnomalies(value){
     if(!Array.isArray(value))return null;
     return value.filter(item=>isObject(item)&&typeof item.iso3==='string'&&ISO3.test(item.iso3)&&Number.isSafeInteger(item.current)&&typeof item.mean==='number'&&Number.isFinite(item.mean)&&typeof item.z==='number'&&Number.isFinite(item.z))
@@ -102,7 +113,7 @@
     if(!isObject(risk))return null;
     const top=Array.isArray(risk.top)?risk.top.filter(item=>isObject(item)&&typeof item.iso3==='string'&&ISO3.test(item.iso3)&&typeof item.score==='number'&&Number.isFinite(item.score)).slice(0,TOP).map(row):[];
     const counts=isObject(risk.counts)?risk.counts:{},count=value=>Number.isSafeInteger(value)&&value>=0?value:null;
-    return {version:Number.isSafeInteger(risk.version)?risk.version:null,top,scored:count(counts.scored),high:count(counts.high),calibration:isObject(risk.calibration)?risk.calibration:null,spikes:readSpikes(risk.spikes),anomalies:readAnomalies(risk.anomalies),thermal:readThermal(risk.thermal)};
+    return {version:Number.isSafeInteger(risk.version)?risk.version:null,top,scored:count(counts.scored),high:count(counts.high),calibration:isObject(risk.calibration)?risk.calibration:null,spikes:readSpikes(risk.spikes),anomalies:readAnomalies(risk.anomalies),thermal:readThermal(risk.thermal),timeline:readTimeline(risk.timeline)};
   }
 
   // ===== Markup =====
@@ -152,6 +163,17 @@
       :`<p class="rk-calm" data-risk-state="none">${esc(say('spikesNone'))}</p>`;
     return `<section class="rk-track rk-signals" aria-labelledby="countryRiskSpikes"><h4 id="countryRiskSpikes">${esc(say('spikesTitle'))}</h4><p class="rk-help">${esc(say('spikesHelp'))}</p>${body}</section>`;
   }
+  // Threat timeline: located events per UTC day for the last seven days by threat level, with a trend label (critical plus high, last three complete days against the three before).
+  function timeline(value){
+    if(value===null||!value.days.length)return '';
+    const total=day=>TL_LEVELS.reduce((sum,level)=>sum+day[level],0),most=Math.max(1,...value.days.map(total));
+    const rows=value.days.map(day=>{
+      const all=total(day),bar='█'.repeat(all?Math.max(1,Math.round(all/most*20)):0);
+      return `<li class="rk-item"><div class="rk-row"><span class="rk-name">${esc(day.day.slice(5))}</span><span class="rk-an" data-level="${day.critical?'critical':day.high?'high':'moderate'}"><span aria-hidden="true">${bar} </span>${esc(say('timelineRow',{total:all,critical:day.critical,high:day.high,watch:day.watch}))}</span></div></li>`;
+    }).join('');
+    const trend=value.ready&&value.trend?`<p class="rk-sum" data-risk-trend="${value.trend}">${esc(say('timelineTrend_'+value.trend))}</p>`:`<p class="rk-calm" data-risk-state="notReady">${esc(say('timelineNotReady',{days:value.observedDays}))}</p>`;
+    return `<section class="rk-track rk-signals" aria-labelledby="countryRiskTimeline"><h4 id="countryRiskTimeline">${esc(say('timelineTitle'))}</h4><p class="rk-help">${esc(say('timelineHelp'))}</p>${trend}<ul class="rk-list">${rows}</ul></section>`;
+  }
   // Heat clusters that are unusual for the ground they burn on (FIRMS detections above 10 MW against the cell's own previous days).
   function thermal(value){
     if(value===null)return '';
@@ -173,7 +195,7 @@
     else{
       const summary=data.scored!==null&&data.high!==null?`<p class="rk-sum">${esc(say('summary',{scored:data.scored,high:data.high}))}</p>`:'';
       const list=data.top.length?`<ol class="rk-list" aria-label="${esc(say('rankLabel'))}">${data.top.map((item,index)=>rowHtml(item,index,replay)).join('')}</ol>`:`<p class="rk-calm" data-risk-state="empty">${esc(say('empty'))}</p>`;
-      main=`<p class="rk-intro">${esc(say('intro'))}</p>${summary}${list}${anomalies(data.anomalies,replay)}${spikes(data.spikes)}${thermal(data.thermal)}${track(data.calibration)}`;
+      main=`<p class="rk-intro">${esc(say('intro'))}</p>${summary}${list}${anomalies(data.anomalies,replay)}${timeline(data.timeline)}${spikes(data.spikes)}${thermal(data.thermal)}${track(data.calibration)}`;
     }
     return `<div class="g-panel risk-panel" id="countryRiskPanel" role="region" aria-labelledby="countryRiskTitle"${replay?' data-replay="true"':''}>${head}${note}${main}</div>`;
   }

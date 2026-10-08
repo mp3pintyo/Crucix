@@ -4,9 +4,9 @@ Every source, grouped by tier, with its key requirement, licence note and what i
 
 [← Back to the README](../README.md) · [Documentation index](../README.md#documentation)
 
-## Data Sources (70)
+## Data Sources (71)
 
-70 source adapters run in every sweep: 31 established feeds in tiers 1–6, the 35 "current public data" feeds of tier 7 and 4 country inputs in tier 8. Static datasets that ship with the program (pipelines, bases, mapped sites) are listed after the tiers.
+71 source adapters run in every sweep: 31 established feeds in tiers 1–6, the 36 "current public data" feeds of tier 7 and 4 country inputs in tier 8. Static datasets that ship with the program (pipelines, bases, mapped sites) are listed after the tiers.
 
 ### Tier 1: Core OSINT & Geopolitical (11)
 
@@ -87,7 +87,7 @@ All 29 feeds are free and require no API key. The **Current public data** panel 
 | MET Norway | Budapest model forecast, separate target/validity times | Model 8h; target within 1h of now and valid interval |
 | OONI | Five recent public HU web-connectivity measurements | 24h; samples, not country-wide conclusions |
 
-Added since v2.11 (twenty-six more keyless feeds: ten in v2.11, then ThreatFox, HIBP, GPSJam, WMO SWIC, UNHCR arrivals, SEC 8-K, in v2.27–v2.29 ADSB Orbits, Open-Meteo wind, NOAA NHC and Launch Library 2, in v2.32 JMA Typhoon and ECDC Threats, in v2.33 Central banks and CFTC COT, and in v2.34 FAA Airports and Regulators; every request is bounded to 10 s and 2 MiB, 3 MiB for the OpenSanctions index):
+Added since v2.11 (twenty-seven more keyless feeds: ten in v2.11, then ThreatFox, HIBP, GPSJam, WMO SWIC, UNHCR arrivals, SEC 8-K, in v2.27–v2.29 ADSB Orbits, Open-Meteo wind, NOAA NHC and Launch Library 2, in v2.32 JMA Typhoon and ECDC Threats, in v2.33 Central banks and CFTC COT, in v2.34 FAA Airports and Regulators, and in v2.36 Eurostat HU; every request is bounded to 10 s and 2 MiB, 3 MiB for the OpenSanctions index):
 
 | Source | Data / default watched scope | Endpoint | Auth | Freshness ceiling | Licence |
 | --- | --- | --- | --- | --- | --- |
@@ -117,6 +117,7 @@ Added since v2.11 (twenty-six more keyless feeds: ten in v2.11, then ThreatFox, 
 | CFTC COT | Net position of speculators (managed money in gold, silver, WTI; leveraged funds in the euro, S&P 500 E-mini, 10-year note), its share of open interest, the week change and its rank among the last year; the extremes (top or bottom 5%) are rated moderate | `publicreporting.cftc.gov/resource/rxbv-e226.json` and `yw9f-hn96.json` (Socrata) | None | Report 12 d (weekly, as of Tuesday); 6 h cache | U.S. government public data (CFTC) |
 | FAA Airports | Ground stops, ground delay programs and arrival/departure delays announced by the FAA at busy airports (rated by the average delay: 30 min moderate, 60 elevated, 90 high; a ground stop is high), at the airport's reference position. The "Airport Closures" list is not used: it holds NOTAM restrictions, not closures | `nasstatus.faa.gov/api/airport-status-information` (XML) | None | Update time 3 h; 5 min cache | U.S. government public data (FAA) |
 | Regulators | Headlines and links of the newest Federal Reserve press releases (FOMC and monetary-policy headlines rated moderate), SEC press releases and FINRA notices; the CFTC and FDIC feeds are not used | `federalreserve.gov/feeds/press_all.xml`, `sec.gov/news/pressreleases.rss`, `feeds.finra.org/FINRANotices` | None | Feed 7 d; item 14 d; 30 min cache | U.S. government public information; FINRA public notices (headline and link only) |
+| Eurostat HU | Hungary's inflation (HICP annual rate), unemployment rate (seasonally adjusted) and real GDP growth (quarter on quarter), each with the EU27 figure for the same period; provisional values marked; inflation from 5%, unemployment from 8% and a GDP contraction are rated moderate (Crucix's own reading) | `ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/{prc_hicp_minr,une_rt_m,namq_10_gdp}` (JSON-stat) | None | Feed 90 d; value 180 d (monthly and quarterly data); 6 h cache | Eurostat reuse policy (CC BY 4.0 compatible) |
 
 Alert rules can watch the metrics `<chokepoint>_transits` (PortWatch 7-day mean, transits a day; `hormuz_transits`, `suez_transits` and the other six default chokepoints), `hu_power_price` (EUR/MWh), `grid_frequency_hz` and `mil_aircraft_total` (military aircraft worldwide, airborne, position within 2 minutes); a metric is empty while its source is stale or failing. The HU day-ahead price runs high (median about 194 EUR/MWh over 2026-09-19..10-02; price rows are rated only from 300 and 400 EUR/MWh), so give a `hu_power_price` threshold rule its own level.
 

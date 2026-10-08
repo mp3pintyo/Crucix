@@ -71,13 +71,33 @@
         {
           "release": "v2.25.0",
           "what": "UNHCR Europe sea and land arrivals (idea and portal parameters from seed-cross-border-arrivals.mjs)"
+        },
+        {
+          "release": "v2.32.0",
+          "what": "JMA western Pacific typhoons, ECDC outbreak news (idea from scripts/natural/western-pacific-cyclones.mjs and seed-disease-outbreaks.mjs)"
+        },
+        {
+          "release": "v2.33.0",
+          "what": "BIS policy rates + ECB €STR and CISS (seed-bis-data, seed-ecb-short-rates, seed-fsi-eu), CFTC COT (seed-cot)"
+        },
+        {
+          "release": "v2.34.0",
+          "what": "FAA airport status (seed-aviation), Fed/SEC/FINRA announcements (seed-regulatory-actions)"
+        },
+        {
+          "release": "v2.35.0",
+          "what": "thermal escalation of FIRMS heat clusters (docs/methodology/thermal-escalation.mdx)"
+        },
+        {
+          "release": "v2.36.0",
+          "what": "threat timeline (docs/panels/threat-timeline.mdx), Eurostat for Hungary (seed-eurostat-country-data)"
         }
       ],
-      "droppedOrOpen": "Dropped: NGA navigational warnings (newest active one is from 2024), UK FCDO and Smartraveller feeds, the CII v8 score (Crucix keeps its own transparent model), TeleGeography cables (proprietary). Open ideas: more of docs/data-sources.mdx (central banks, CFTC, UNHCR, FAA delays, disease outbreaks), the panels in docs/panels, multi-word keyword entities. Dropped on 2026-10-08: IOM DTM internal displacement (needs DTM_API_KEY), UNHCR refugee-stock situations (overlap between situations, much heavier).",
+      "droppedOrOpen": "Dropped: NGA navigational warnings (newest active one is from 2024), UK FCDO and Smartraveller feeds, the CII v8 score (Crucix keeps its own transparent model), TeleGeography cables (proprietary). Open ideas: more of docs/data-sources.mdx (central banks, CFTC, UNHCR, FAA delays, disease outbreaks), the panels in docs/panels, multi-word keyword entities. Dropped on 2026-10-08: IOM DTM internal displacement (needs DTM_API_KEY), UNHCR refugee-stock situations (overlap between situations, much heavier). Second review 2026-10-08 (231 seed scripts): dropped after measuring from Hungary: FATF (Cloudflare 403), OREF sirens (geo-blocked 403), ransomware.live (404), FAO food price index (CSV moved, 404), UCDP (needs a token), CDC newsroom and CIDRAP feeds (stale: 2020-23), CFTC RSS (Cloudflare, unreliable from Node), FDIC RSS (890 KB), HKO warnings (empty answer), CNN Fear&Greed and AAII (page scraping, licence). Keyed and skipped: GIE AGSI, AviationStack, ICAO NOTAM, ENTSO-E, OpenAQ/WAQI, Windy, AbuseIPDB, OTX, URLhaus. Still open: NOAA CO2 (gml.noaa.gov), Open-Meteo climate anomalies for 15 zones, news-to-market lead/lag correlation (needs hourly GDELT), sanctions pressure per country from the OFAC list, Ember electricity mix.",
       "lastReviewed": {
-        "sha": "1c3ce49",
+        "sha": "8568229",
         "date": "2026-10-08",
-        "note": "Reviewed the 19 commits up to 1c3ce49 (2026-10-08): took the UNHCR arrivals idea (v2.25.0); IOM DTM needs a key; the rest is World Monitor internals (MCP, forecast, security advisories, China labels)."
+        "note": "Second full review at 8568229 (2026-10-08, 231 seed scripts, 32 panels): took 9 items as v2.32.0-v2.36.0; the rest is China, Canada, finance variants and internal infrastructure."
       }
     },
     {

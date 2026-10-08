@@ -2,12 +2,12 @@
 
 # Crucix
 
-**Your own intelligence terminal. 70 sources. One command. Local processing.**
+**Your own intelligence terminal. 71 sources. One command. Local processing.**
 
 [![Node.js 22+](https://img.shields.io/badge/node-22%2B-brightgreen)](#quick-start)
 [![License: AGPL v3](https://img.shields.io/badge/license-AGPLv3-blue.svg)](LICENSE)
 [![Dependencies](https://img.shields.io/badge/dependencies-3-orange)](docs/ARCHITECTURE.md#design-principles)
-[![Sources](https://img.shields.io/badge/OSINT%20sources-70-cyan)](docs/DATA-SOURCES.md#data-sources-70)
+[![Sources](https://img.shields.io/badge/OSINT%20sources-71-cyan)](docs/DATA-SOURCES.md#data-sources-71)
 [![Docker](https://img.shields.io/badge/docker-ready-blue?logo=docker)](#docker)
 
 ![Crucix Dashboard](docs/dashboard.png)
@@ -32,7 +32,7 @@
 >
 > **Showcase site:** an animated, bilingual (HU/EN) presentation of what Crucix does lives in [docs/site](docs/site/index.html) — open `docs/site/index.html` in a browser, no build step.
 
-Crucix pulls satellite fire detection, flight tracking (including military air activity and orbits), radiation and wind at nuclear sites, cyclones and launches, earthquakes and disasters, economic indicators, live market prices, conflict data, sanctions lists, cyber and internet signals and social sentiment from 70 open-source intelligence sources — in parallel, every 15 minutes — and renders everything on a single Jarvis-style dashboard with a 3D globe and a flat map. On top of the raw feeds it keeps a searchable event history, a country risk index, an alert engine and a replayable sweep archive.
+Crucix pulls satellite fire detection, flight tracking (including military air activity and orbits), radiation and wind at nuclear sites, cyclones and launches, earthquakes and disasters, economic indicators, live market prices, conflict data, sanctions lists, cyber and internet signals and social sentiment from 71 open-source intelligence sources — in parallel, every 15 minutes — and renders everything on a single Jarvis-style dashboard with a 3D globe and a flat map. On top of the raw feeds it keeps a searchable event history, a country risk index, an alert engine and a replayable sweep archive.
 
 Hook it up to an LLM and it becomes a **two-way intelligence assistant** — pushing multi-tier alerts to Telegram and Discord when something meaningful changes, responding to commands like `/brief` and `/sweep` from your phone, and generating actionable trade ideas grounded in real cross-domain data. Your own analyst that watches the world while you sleep.
 
@@ -46,7 +46,7 @@ The README is the short version. Everything else has its own page:
 |---|---|
 | [**Features by release**](docs/FEATURES.md) | What each version added: alert engine, country risk, record inspector, sweep archive, map layers, new sources |
 | [**Configuration**](docs/CONFIGURATION.md) | API keys, Telegram and Discord bots, the LLM layer, environment variables, npm scripts |
-| [**Data sources**](docs/DATA-SOURCES.md) | All 70 sources by tier, with keys, licences and limits |
+| [**Data sources**](docs/DATA-SOURCES.md) | All 71 sources by tier, with keys, licences and limits |
 | [**HTTP API**](docs/API.md) | The JSON API: routes, parameters, errors, CORS, recipes |
 | [**Embedding**](docs/EMBEDDING.md) | Show Crucix or a status widget on your own site (iframe) |
 | [**Architecture**](docs/ARCHITECTURE.md) | The sweep cycle, components and design principles |
@@ -100,7 +100,7 @@ npm run dev
 > ```
 > This bypasses npm's script runner, which can swallow errors on some systems (particularly PowerShell on Windows). You can also run `node diag.mjs` to diagnose the exact issue — it checks your Node version, tests each module import individually, and verifies port availability. See [Troubleshooting](docs/TROUBLESHOOTING.md#troubleshooting) for more.
 
-The dashboard opens automatically at `http://localhost:3117` and immediately begins its first intelligence sweep. This initial sweep queries all 70 sources in parallel and typically takes 30–60 seconds — the dashboard will appear empty until the sweep completes and pushes the first data update. After that, it auto-refreshes every 15 minutes via SSE (Server-Sent Events). No manual page refresh needed.
+The dashboard opens automatically at `http://localhost:3117` and immediately begins its first intelligence sweep. This initial sweep queries all 71 sources in parallel and typically takes 30–60 seconds — the dashboard will appear empty until the sweep completes and pushes the first data update. After that, it auto-refreshes every 15 minutes via SSE (Server-Sent Events). No manual page refresh needed.
 
 **Requirements:** Node.js 22+ (uses native `fetch`, top-level `await`, ESM)
 
@@ -170,7 +170,7 @@ The preference is saved in browser local storage, so the UI will remember your l
 
 ### Auto-Refresh
 The server runs a sweep cycle every 15 minutes (configurable). Each cycle:
-1. Queries all 70 sources in parallel (~30s)
+1. Queries all 71 sources in parallel (~30s)
 2. Synthesizes raw data into dashboard format
 3. Computes delta from previous run (what changed, escalated, de-escalated) — visible in the **Sweep Delta** panel on the dashboard
 4. Generates LLM trade ideas (if configured)
