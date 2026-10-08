@@ -566,7 +566,7 @@ const mapLayerRegistry = [
   {id:'bases',key:'map.militaryBases',label:'Military bases',types:['base'],off:true}
 ];
 // Layer type of a located live-source row, by its kind. Kinds without coordinates draw nothing; any other kind keeps the weather type.
-const LIVE_MARKER_TYPE={earthquake:'earthquake',maritime:'maritime',aviation:'air',disaster:'disaster',forecast:'forecast',weather:'weather',interference:'interference'};
+const LIVE_MARKER_TYPE={earthquake:'earthquake',maritime:'maritime',aviation:'air',disaster:'disaster',forecast:'forecast',weather:'weather',interference:'interference',displacement:'conflict'};
 const liveMarkerType=kind=>Object.hasOwn(LIVE_MARKER_TYPE,kind)?LIVE_MARKER_TYPE[kind]:'weather';
 // Marker colour of a live row: the colour of its layer's own markers (USGS quakes, chokepoints, air theaters); the other layers keep the live blue.
 const LIVE_MARKER_COLOR={earthquake:'255,112,67',disaster:'255,112,67',maritime:'179,136,255',air:'100,240,200',interference:'255,196,0'};

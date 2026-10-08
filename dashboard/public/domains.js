@@ -3,7 +3,7 @@
   // Browser copy of lib/domains.mjs: the same eight domains and sources, in the same order (test/domains.test.mjs keeps them identical).
   const domain=(id,sources)=>Object.freeze({id,sources:Object.freeze(sources)});
   const DOMAINS=Object.freeze([
-    domain('security',['GDELT','ACLED','ReliefWeb','ADSB-Military','ADS-B','OpenSky','Maritime','Telegram','Bluesky','Reddit','KiwiSDR','VIEWS-Forecast','INFORM-Risk','Travel-Advisories','GPSJam']),
+    domain('security',['GDELT','ACLED','ReliefWeb','ADSB-Military','ADS-B','OpenSky','Maritime','Telegram','Bluesky','Reddit','KiwiSDR','VIEWS-Forecast','INFORM-Risk','Travel-Advisories','GPSJam','UNHCR-Arrivals']),
     domain('hazards',['USGS','EMSC','GDACS','Copernicus-EMS','NASA-EONET','FIRMS','Meteoalarm','MET-Norway','Aviation-SIGMET','NOAA','WMO-SWIC']),
     domain('space',['NOAA-SWPC','Space']),
     domain('cyber',['CISA-KEV','FIRST-EPSS','OONI','IODA','Cloudflare-Radar','RIPEstat','ThreatFox','HIBP','SEC-8K','MISP-Galaxy']),

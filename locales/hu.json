@@ -793,7 +793,8 @@
     "method_global": "Globális (nincs egyetlen helyszín)",
     "kind_interference": "GNSS-zavarás",
     "method_centroid": "Az érintett területek átlagos helye (összesítés, nem egyetlen pont)",
-    "method_member-point": "A kibocsátó nemzeti szolgálat pontja (nem az érintett terület)"
+    "method_member-point": "A kibocsátó nemzeti szolgálat pontja (nem az érintett terület)",
+    "kind_displacement": "Menekültmozgás"
   },
   "pwa": {
     "menu": "Telepítés / offline",
@@ -937,7 +938,10 @@
       "worstPct": "Az érintett légijárművek legrosszabb aránya (%)",
       "badAircraft": "Rossz navigációs adatot jelentő légijárművek",
       "totalAircraft": "Légijárművek",
-      "sharePct": "Az érintett légijárművek aránya (%)"
+      "sharePct": "Az érintett légijárművek aránya (%)",
+      "yearToDate": "Érkezők január 1. óta",
+      "lastMonth": "Érkezők az utolsó teljes hónapban",
+      "usualMonth": "Szokásos hónap (az előző három mediánja)"
     },
     "nearby": "Közeli infrastruktúra",
     "nearbyNote": "A vezeték végpontjai közötti vonal legközelebbi pontjáig, illetve a bázisig mért távolság. A rekord saját helye lehet közelítő."

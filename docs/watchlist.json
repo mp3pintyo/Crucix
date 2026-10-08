@@ -11,13 +11,29 @@
       "license": "MIT",
       "whyWatch": "A catalogue of 750+ OSINT tools and sources; new keyless data sources and lookup pages show up here first.",
       "adopted": [
-        { "release": "v2.14.0", "what": "pivot links (Look up elsewhere) in the record inspector" },
-        { "release": "v2.15.0", "what": "ThreatFox and Have I Been Pwned sources" },
-        { "release": "v2.16.0", "what": "MISP Galaxy threat actor groups on the country sheet" },
-        { "release": "v2.17.0", "what": "SEC 8-K Item 1.05 cyber incidents" }
+        {
+          "release": "v2.14.0",
+          "what": "pivot links (Look up elsewhere) in the record inspector"
+        },
+        {
+          "release": "v2.15.0",
+          "what": "ThreatFox and Have I Been Pwned sources"
+        },
+        {
+          "release": "v2.16.0",
+          "what": "MISP Galaxy threat actor groups on the country sheet"
+        },
+        {
+          "release": "v2.17.0",
+          "what": "SEC 8-K Item 1.05 cyber incidents"
+        }
       ],
       "droppedOrOpen": "Most entries are person, phishing or red-team tools that do not fit Crucix. Measured and dropped: Feodo Tracker (5 entries), GLEIF on-demand, Malpedia, ransomware feeds without a licence check.",
-      "lastReviewed": { "sha": "2c6475a", "date": "2026-10-08", "note": "Full analysis behind v2.14.0 to v2.17.0; head was from 2026-08-29." }
+      "lastReviewed": {
+        "sha": "2c6475a",
+        "date": "2026-10-08",
+        "note": "Full analysis behind v2.14.0 to v2.17.0; head was from 2026-08-29."
+      }
     },
     {
       "id": "worldmonitor",
@@ -28,15 +44,41 @@
       "license": "AGPL-3.0",
       "whyWatch": "The closest relative: a real-time global intelligence dashboard with a large source catalogue (docs/data-sources.mdx), country scoring and many panels. New sources, feeds and algorithms appear weekly.",
       "adopted": [
-        { "release": "v2.18.0", "what": "tiered RSS feed registry with source tiers, Hungarian outlets" },
-        { "release": "v2.19.0", "what": "U.S. travel advisories as a risk component" },
-        { "release": "v2.20.0", "what": "GPSJam GNSS interference, WMO SWIC warnings" },
-        { "release": "v2.21.0", "what": "pipeline and military base layers (scripts/data)" },
-        { "release": "v2.22.0", "what": "nearby infrastructure, chokepoint exposure table" },
-        { "release": "v2.23.0", "what": "keyword spikes, Welford unusual-activity baseline" }
+        {
+          "release": "v2.18.0",
+          "what": "tiered RSS feed registry with source tiers, Hungarian outlets"
+        },
+        {
+          "release": "v2.19.0",
+          "what": "U.S. travel advisories as a risk component"
+        },
+        {
+          "release": "v2.20.0",
+          "what": "GPSJam GNSS interference, WMO SWIC warnings"
+        },
+        {
+          "release": "v2.21.0",
+          "what": "pipeline and military base layers (scripts/data)"
+        },
+        {
+          "release": "v2.22.0",
+          "what": "nearby infrastructure, chokepoint exposure table"
+        },
+        {
+          "release": "v2.23.0",
+          "what": "keyword spikes, Welford unusual-activity baseline"
+        },
+        {
+          "release": "v2.25.0",
+          "what": "UNHCR Europe sea and land arrivals (idea and portal parameters from seed-cross-border-arrivals.mjs)"
+        }
       ],
-      "droppedOrOpen": "Dropped: NGA navigational warnings (newest active one is from 2024), UK FCDO and Smartraveller feeds, the CII v8 score (Crucix keeps its own transparent model), TeleGeography cables (proprietary). Open ideas: more of docs/data-sources.mdx (central banks, CFTC, UNHCR, FAA delays, disease outbreaks), the panels in docs/panels, multi-word keyword entities.",
-      "lastReviewed": { "sha": "761de73", "date": "2026-10-08", "note": "Full analysis behind v2.18.0 to v2.23.0 (shallow clone of 2026-10-07)." }
+      "droppedOrOpen": "Dropped: NGA navigational warnings (newest active one is from 2024), UK FCDO and Smartraveller feeds, the CII v8 score (Crucix keeps its own transparent model), TeleGeography cables (proprietary). Open ideas: more of docs/data-sources.mdx (central banks, CFTC, UNHCR, FAA delays, disease outbreaks), the panels in docs/panels, multi-word keyword entities. Dropped on 2026-10-08: IOM DTM internal displacement (needs DTM_API_KEY), UNHCR refugee-stock situations (overlap between situations, much heavier).",
+      "lastReviewed": {
+        "sha": "1c3ce49",
+        "date": "2026-10-08",
+        "note": "Reviewed the 19 commits up to 1c3ce49 (2026-10-08): took the UNHCR arrivals idea (v2.25.0); IOM DTM needs a key; the rest is World Monitor internals (MCP, forecast, security advisories, China labels)."
+      }
     },
     {
       "id": "gods-eye-view",

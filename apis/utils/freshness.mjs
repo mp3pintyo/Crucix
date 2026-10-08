@@ -20,6 +20,7 @@ export const POLICIES = Object.freeze({
   HIBP: { maxAgeMs: 336*HOUR, observationMaxAgeMs: 720*HOUR },
   GPSJam: { maxAgeMs: 96*HOUR, observationMaxAgeMs: 96*HOUR },
   'WMO-SWIC': { maxAgeMs: 3*HOUR, observationMaxAgeMs: 24*HOUR },
+  'UNHCR-Arrivals': { maxAgeMs: 504*HOUR, observationMaxAgeMs: 1440*HOUR },
   'SEC-8K': { maxAgeMs: 2160*HOUR, observationMaxAgeMs: 2160*HOUR },
 });
 

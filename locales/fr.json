@@ -793,7 +793,8 @@
     "method_global": "Mondial (aucun lieu unique)",
     "kind_interference": "Brouillage GNSS",
     "method_centroid": "Position moyenne des zones touchées (agrégat, pas un point unique)",
-    "method_member-point": "Point du service national émetteur (pas la zone touchée)"
+    "method_member-point": "Point du service national émetteur (pas la zone touchée)",
+    "kind_displacement": "Déplacements"
   },
   "pwa": {
     "menu": "Installer / hors ligne",
@@ -937,7 +938,10 @@
       "worstPct": "Pire part d’aéronefs touchés (%)",
       "badAircraft": "Aéronefs avec de mauvaises données de navigation",
       "totalAircraft": "Aéronefs",
-      "sharePct": "Part d’aéronefs touchés (%)"
+      "sharePct": "Part d’aéronefs touchés (%)",
+      "yearToDate": "Arrivées depuis le 1er janvier",
+      "lastMonth": "Arrivées du dernier mois complet",
+      "usualMonth": "Mois habituel (médiane des trois précédents)"
     },
     "nearby": "Infrastructures à proximité",
     "nearbyNote": "Distance au point le plus proche de la ligne entre les extrémités d’un pipeline, ou à la base. La position du relevé peut elle-même être approximative."

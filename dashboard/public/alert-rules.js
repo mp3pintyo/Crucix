@@ -12,7 +12,7 @@
   // of form values (strings, booleans, one array); parseDraft turns it into the body of PUT /api/alerts/rules/:id.
   const KINDS=['event','threshold','change','absence','convergence','delta'];
   // The kinds of events the dashboard can hold (lib/intelligence/history.mjs); a rule may name others, they stay selectable.
-  const EVENT_KINDS=['news','osint','health','earthquake','weather','outage','conflict','signal','disaster','space-weather','economic','forecast','network','cyber','maritime','aviation','sanctions','market','energy', 'interference'];
+  const EVENT_KINDS=['news','osint','health','earthquake','weather','outage','conflict','signal','disaster','space-weather','economic','forecast','network','cyber','maritime','aviation','sanctions','market','energy', 'interference','displacement'];
   const KIND_TEXT={event:'Event',threshold:'Threshold',change:'Change',absence:'Absence',convergence:'Convergence',delta:'Delta'};
   const SOURCE_TEXT={builtin:'Built-in',override:'Modified',user:'Custom'};
   const OPERATORS=[['>','>'],['>=','≥'],['<','<'],['<=','≤']];

@@ -793,7 +793,8 @@
     "method_global": "Global (no single location)",
     "kind_interference": "GNSS interference",
     "method_centroid": "Mean position of the affected areas (aggregate, not a single point)",
-    "method_member-point": "Point of the issuing national service (not the affected area)"
+    "method_member-point": "Point of the issuing national service (not the affected area)",
+    "kind_displacement": "Displacement"
   },
   "pwa": {
     "menu": "Install / offline",
@@ -937,7 +938,10 @@
       "worstPct": "Worst share of aircraft affected (%)",
       "badAircraft": "Aircraft with bad navigation data",
       "totalAircraft": "Aircraft",
-      "sharePct": "Share of aircraft affected (%)"
+      "sharePct": "Share of aircraft affected (%)",
+      "yearToDate": "Arrivals since 1 January",
+      "lastMonth": "Arrivals in the last complete month",
+      "usualMonth": "Usual month (median of the three before)"
     },
     "nearby": "Nearby infrastructure",
     "nearbyNote": "Distance to the nearest point of the line between a pipeline’s end points, or to the base. The record’s own position may be approximate."
