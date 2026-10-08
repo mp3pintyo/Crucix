@@ -460,6 +460,8 @@ export async function synthesize(data, options = {}) {
       return row;
     })
   }));
+  // Forecast tracks and cones of the active tropical cyclones (NOAA-NHC); only while that source answered fresh.
+  const cyclones = data.sources['NOAA-NHC']?.status === 'ok' && Array.isArray(data.sources['NOAA-NHC'].geometry) ? data.sources['NOAA-NHC'].geometry.slice(0, 12) : [];
   const siteFires = (data.sources.FIRMS?.hotspots || []).flatMap(h => (h.highIntensity || [])
     .map(f => ({ region: h.region, frp: f.frp || 0, site: militarySiteAt(f.lat, f.lon) })).filter(f => f.site));
   const siteSignals = siteFires.length ? [militarySiteSignal(siteFires)] : [];
@@ -767,7 +769,7 @@ export async function synthesize(data, options = {}) {
   const news = allNews.filter(n => Number.isFinite(n.lat) && Number.isFinite(n.lon));
 
   const V2 = {
-    meta: data.crucix, air, thermal, tSignals, chokepoints, nuke, nukeSignals, liveSources,
+    meta: data.crucix, air, thermal, tSignals, chokepoints, nuke, nukeSignals, liveSources, cyclones,
     airMeta: {
       fallback: Boolean(airFallback),
       liveTotal: sumAirHotspots(liveAirHotspots),

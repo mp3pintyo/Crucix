@@ -126,7 +126,9 @@
     "militaryBases": "Military bases",
     "militaryAreas": "Mapped military areas",
     "datacenters": "Data centres",
-    "dams": "Dams"
+    "dams": "Dams",
+    "cyclones": "Cyclone forecast tracks and cones",
+    "launches": "Orbital launches"
   },
   "ideas": {
     "confidence": "Confidence",
@@ -797,7 +799,8 @@
     "kind_interference": "GNSS interference",
     "method_centroid": "Mean position of the affected areas (aggregate, not a single point)",
     "method_member-point": "Point of the issuing national service (not the affected area)",
-    "kind_displacement": "Displacement"
+    "kind_displacement": "Displacement",
+    "kind_launch": "Launch"
   },
   "pwa": {
     "menu": "Install / offline",
@@ -944,7 +947,17 @@
       "sharePct": "Share of aircraft affected (%)",
       "yearToDate": "Arrivals since 1 January",
       "lastMonth": "Arrivals in the last complete month",
-      "usualMonth": "Usual month (median of the three before)"
+      "usualMonth": "Usual month (median of the three before)",
+      "stormClass": "Storm class",
+      "windKt": "Sustained wind (kt)",
+      "pressureMb": "Central pressure (mb)",
+      "movement": "Movement",
+      "rocket": "Rocket",
+      "missionType": "Mission type",
+      "orbit": "Orbit",
+      "provider": "Launch provider",
+      "pad": "Launch pad",
+      "launchStatus": "Launch status"
     },
     "nearby": "Nearby infrastructure",
     "nearbyNote": "Distance to the nearest point of the line between a pipeline’s end points, or to the base. Mapped military areas, data centres and dams are searched within 200 km (inside an area: 0). The record’s own position may be approximate.",
@@ -1270,5 +1283,11 @@
     "class_barracks": "Barracks",
     "class_base": "Base",
     "class_training_area": "Training area"
+  },
+  "cyclone": {
+    "meta": "Advisory forecast",
+    "track": "Forecast track",
+    "cone": "Forecast cone",
+    "coneNote": "The cone is the uncertainty of the forecast centre track, not the size of the storm or the area it can harm."
   }
 }

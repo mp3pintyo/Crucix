@@ -94,6 +94,6 @@ test('the page, the service worker and the workspace profiles know the layers; b
   assert.match(registry, /\{id:'bases',[^}]*types:\['base'\],off:true\}/);
   assert.match(html, /layer\.off!==true\]/);
   const profiles = read('intelligence.js');
-  assert.match(profiles, /LAYERS = \[[^\]]*'interference', 'pipelines', 'bases'\]/);
-  assert.match(profiles, /LAYERS_OFF = \['pipelines', 'bases'\]/);
+  assert.match(profiles, /LAYERS = \[[^\]]*'interference', 'pipelines', 'bases', 'milareas', 'datacenters', 'dams', 'cyclones', 'launches'\]/);
+  assert.match(profiles, /LAYERS_OFF = \['pipelines', 'bases', 'milareas', 'datacenters', 'dams'\]/);
 });

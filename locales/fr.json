@@ -126,7 +126,9 @@
     "militaryBases": "Bases militaires",
     "militaryAreas": "Zones militaires cartographiées",
     "datacenters": "Centres de données",
-    "dams": "Barrages"
+    "dams": "Barrages",
+    "cyclones": "Trajectoires et cônes de prévision des cyclones",
+    "launches": "Lancements orbitaux"
   },
   "ideas": {
     "confidence": "Confiance",
@@ -797,7 +799,8 @@
     "kind_interference": "Brouillage GNSS",
     "method_centroid": "Position moyenne des zones touchées (agrégat, pas un point unique)",
     "method_member-point": "Point du service national émetteur (pas la zone touchée)",
-    "kind_displacement": "Déplacements"
+    "kind_displacement": "Déplacements",
+    "kind_launch": "Lancement"
   },
   "pwa": {
     "menu": "Installer / hors ligne",
@@ -944,7 +947,17 @@
       "sharePct": "Part d’aéronefs touchés (%)",
       "yearToDate": "Arrivées depuis le 1er janvier",
       "lastMonth": "Arrivées du dernier mois complet",
-      "usualMonth": "Mois habituel (médiane des trois précédents)"
+      "usualMonth": "Mois habituel (médiane des trois précédents)",
+      "stormClass": "Classe de la tempête",
+      "windKt": "Vent soutenu (nœuds)",
+      "pressureMb": "Pression centrale (mb)",
+      "movement": "Déplacement",
+      "rocket": "Fusée",
+      "missionType": "Type de mission",
+      "orbit": "Orbite",
+      "provider": "Fournisseur de lancement",
+      "pad": "Pas de tir",
+      "launchStatus": "État du lancement"
     },
     "nearby": "Infrastructures à proximité",
     "nearbyNote": "Distance au point le plus proche de la ligne entre les extrémités d’un pipeline, ou à la base. Les zones militaires, centres de données et barrages cartographiés sont cherchés dans un rayon de 200 km (dans une zone : 0). La position du relevé peut être approximative.",
@@ -1270,5 +1283,11 @@
     "class_barracks": "Caserne",
     "class_base": "Base",
     "class_training_area": "Zone d’entraînement"
+  },
+  "cyclone": {
+    "meta": "Prévision officielle",
+    "track": "Trajectoire prévue",
+    "cone": "Cône de prévision",
+    "coneNote": "Le cône est l’incertitude de la trajectoire prévue du centre, pas la taille de la tempête ni la zone menacée."
   }
 }

@@ -22,6 +22,8 @@ export const POLICIES = Object.freeze({
   'WMO-SWIC': { maxAgeMs: 3*HOUR, observationMaxAgeMs: 24*HOUR },
   'UNHCR-Arrivals': { maxAgeMs: 504*HOUR, observationMaxAgeMs: 1440*HOUR },
   'SEC-8K': { maxAgeMs: 2160*HOUR, observationMaxAgeMs: 2160*HOUR },
+  'NOAA-NHC': { maxAgeMs: 8*HOUR, observationMaxAgeMs: 12*HOUR },
+  'Launch-Library': { maxAgeMs: 12*HOUR, observationMaxAgeMs: 720*HOUR },
 });
 
 // Never use collection time as a replacement for a missing provider date.

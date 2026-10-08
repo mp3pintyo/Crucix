@@ -93,7 +93,7 @@ function earlier(source, kind, now, extra = {}) {
   return { source, status: 'ok', observedAt: iso(now - 20 * MINUTE), timestamp: iso(now), summary: `${source} summary`, attribution: `${source} attribution`,
     observations: [{ providerId: `${source}:1`, kind, title: `${source} current record`, summary: 'Adapter-shaped row', url: `https://example.org/${encodeURIComponent(source)}/1`, observedAt: iso(now - 20 * MINUTE), ...extra }] };
 }
-const EARLIER = { Meteoalarm: ['weather'], GDACS: ['disaster', { lat: 14.5, lon: 121, locationMethod: 'provider', severity: 'Orange' }], 'NOAA-SWPC': ['space-weather'], ECB: ['economic', { currency: 'HUF', rate: 369.18 }],
+const EARLIER = { 'NOAA-NHC': ['disaster', { lat: 23.1, lon: -91.7, locationMethod: 'provider', severity: 'elevated', windKt: 65 }], 'Launch-Library': ['launch', { lat: 34.6, lon: -120.6, locationMethod: 'provider', rocket: 'Falcon 9' }], Meteoalarm: ['weather'], GDACS: ['disaster', { lat: 14.5, lon: 121, locationMethod: 'provider', severity: 'Orange' }], 'NOAA-SWPC': ['space-weather'], ECB: ['economic', { currency: 'HUF', rate: 369.18 }],
   'NASA-EONET': ['disaster', { lat: -8.3, lon: 115.5, locationMethod: 'provider' }], RIPEstat: ['network'], 'FIRST-EPSS': ['cyber'], OONI: ['network'], ThreatFox: ['cyber'], HIBP: ['cyber'], 'SEC-8K': ['cyber'],
   GPSJam: ['interference', { lat: 56.1, lon: 23.4, locationMethod: 'centroid', severity: 'moderate', highCells: 136 }], 'UNHCR-Arrivals': ['displacement', { lat: 41.9, lon: 12.5, locationMethod: 'country-centroid', severity: 'moderate', yearToDate: 22736 }], 'WMO-SWIC': ['weather', { lat: 35.9, lon: 104.2, locationMethod: 'member-point', severity: 'high' }] };
 
@@ -129,13 +129,13 @@ test('the chain yields the expected events per kind and source, and nothing is l
   assert.deepEqual(new Set(events.map(event => event.id)), new Set(rows.map(row => row.eventId)), 'the stamped ids are the event ids');
   assert.deepEqual(countBy(events, event => event.source.name), {
     Meteoalarm: 1, GDACS: 1, 'NOAA-SWPC': 1, ECB: 1, 'NASA-EONET': 1, RIPEstat: 1, 'FIRST-EPSS': 1, 'MET-Norway': 1, OONI: 1,
-    'IMF-PortWatch': 2, EMSC: 2, 'Copernicus-EMS': 1, 'Aviation-SIGMET': 1, 'ADSB-Military': 1, 'OpenSanctions-Index': 2, 'Federal-Register': 2, 'Energy-Charts-HU': 3, 'ENTSOG-HU': 7, 'Prediction-Markets': 5, ThreatFox: 1, HIBP: 1, 'SEC-8K': 1, GPSJam: 1, 'WMO-SWIC': 1, 'UNHCR-Arrivals': 1 });
-  assert.deepEqual(countBy(events, event => event.kind), { weather: 3, disaster: 3, 'space-weather': 1, economic: 1, network: 2, cyber: 4, forecast: 1,
-    maritime: 2, earthquake: 2, aviation: 1, sanctions: 4, energy: 10, market: 5, interference: 1, displacement: 1 });
+    'IMF-PortWatch': 2, EMSC: 2, 'Copernicus-EMS': 1, 'Aviation-SIGMET': 1, 'ADSB-Military': 1, 'OpenSanctions-Index': 2, 'Federal-Register': 2, 'Energy-Charts-HU': 3, 'ENTSOG-HU': 7, 'Prediction-Markets': 5, ThreatFox: 1, HIBP: 1, 'SEC-8K': 1, GPSJam: 1, 'WMO-SWIC': 1, 'UNHCR-Arrivals': 1, 'NOAA-NHC': 1, 'Launch-Library': 1 });
+  assert.deepEqual(countBy(events, event => event.kind), { weather: 3, disaster: 4, 'space-weather': 1, economic: 1, network: 2, cyber: 4, forecast: 1,
+    maritime: 2, earthquake: 2, aviation: 1, sanctions: 4, energy: 10, market: 5, interference: 1, displacement: 1, launch: 1 });
   // Located kinds keep their coordinates and the location method the adapter named.
   const methods = Object.fromEntries(events.filter(event => event.location.lat !== null).map(event => [event.source.name, event.location.method]));
   assert.deepEqual(methods, { GDACS: 'provider', 'NASA-EONET': 'provider', 'MET-Norway': 'configured-point', 'IMF-PortWatch': 'provider', EMSC: 'provider', 'Copernicus-EMS': 'provider',
-    'Aviation-SIGMET': 'polygon-centroid', 'ADSB-Military': 'theater-centre', GPSJam: 'centroid', 'WMO-SWIC': 'member-point', 'UNHCR-Arrivals': 'country-centroid' });
+    'Aviation-SIGMET': 'polygon-centroid', 'ADSB-Military': 'theater-centre', GPSJam: 'centroid', 'WMO-SWIC': 'member-point', 'UNHCR-Arrivals': 'country-centroid', 'NOAA-NHC': 'provider', 'Launch-Library': 'provider' });
   // Every live row has a deep link of its own (history merges rows with the same kind and URL).
   const urls = events.map(event => `${event.kind}|${event.source.url}`);
   assert.equal(new Set(urls).size, urls.length, 'no two live rows share a kind and URL');
@@ -179,7 +179,7 @@ test('the alert metrics of the new sources resolve from the chain', () => {
 // as large as the adapters make them: 250-character titles (the longest in a stored sweep, 2026-10-07: 223), summaries at the adapter cut where it has one (GDACS and EONET 1500, Meteoalarm
 // 1000) and 600 characters otherwise (the longest template summary seen in a live sweep was 525), a long value for every fact, coordinates.
 // The browser keeps at most 5 MiB of snapshot for offline use (dashboard/public/pwa.js).
-const CAPS = { 'NOAA-SWPC': 3, 'IMF-PortWatch': 12, EMSC: 100, 'Copernicus-EMS': 20, 'Aviation-SIGMET': 100, 'ADSB-Military': 32, 'OpenSanctions-Index': 12, 'Federal-Register': 30, 'Energy-Charts-HU': 3, 'ENTSOG-HU': 7, 'Prediction-Markets': 20, ThreatFox: 10, HIBP: 20, 'SEC-8K': 20, GPSJam: 27, 'WMO-SWIC': 25, 'UNHCR-Arrivals': 12 };
+const CAPS = { 'NOAA-SWPC': 3, 'IMF-PortWatch': 12, EMSC: 100, 'Copernicus-EMS': 20, 'Aviation-SIGMET': 100, 'ADSB-Military': 32, 'OpenSanctions-Index': 12, 'Federal-Register': 30, 'Energy-Charts-HU': 3, 'ENTSOG-HU': 7, 'Prediction-Markets': 20, ThreatFox: 10, HIBP: 20, 'SEC-8K': 20, GPSJam: 27, 'WMO-SWIC': 25, 'UNHCR-Arrivals': 12, 'NOAA-NHC': 12, 'Launch-Library': 24 };
 const SUMMARY_CUT = { Meteoalarm: 1000, GDACS: 1500, 'NASA-EONET': 1500 };
 test('with every source at its row cap the live part of the snapshot stays under the 5 MiB offline limit and no row is lost', () => {
   const raw = Object.fromEntries(Object.keys(POLICIES).map(source => [source, { source, status: 'ok', observedAt: iso(NOW - MINUTE), timestamp: iso(NOW), summary: 'S'.repeat(2000),
