@@ -805,7 +805,8 @@
     "method_member-point": "Point du service national émetteur (pas la zone touchée)",
     "kind_displacement": "Déplacements",
     "kind_launch": "Lancement",
-    "method_orbit-centre": "Centre moyen des orbites détectées (agrégat, pas la position d’un aéronef)"
+    "method_orbit-centre": "Centre moyen des orbites détectées (agrégat, pas la position d’un aéronef)",
+    "method_airport": "Point de référence de l’aéroport (pas un aéronef)"
   },
   "pwa": {
     "menu": "Installer / hors ligne",
@@ -964,6 +965,9 @@
       "netPosition": "Position nette (contrats)",
       "netShare": "Position nette, part de l’intérêt ouvert (%)",
       "rank52w": "Rang sur la dernière année (centile)",
+      "delayKind": "Programme",
+      "avgDelayMin": "Retard moyen (min)",
+      "reason": "Raison",
       "rocket": "Fusée",
       "missionType": "Type de mission",
       "orbit": "Orbite",

@@ -81,6 +81,8 @@ import { briefing as jmaTyphoon } from './sources/jma-typhoon.mjs';
 import { briefing as ecdcThreats } from './sources/ecdc-threats.mjs';
 import { briefing as centralBanks } from './sources/central-banks.mjs';
 import { briefing as cftcCot } from './sources/cftc-cot.mjs';
+import { briefing as faaAirports } from './sources/faa-airports.mjs';
+import { briefing as regulators } from './sources/regulators.mjs';
 import { briefing as openMeteoWind } from './sources/openmeteo-wind.mjs';
 import { briefing as adsbOrbits } from './sources/adsb-orbits.mjs';
 import { briefing as launches } from './sources/launches.mjs';
@@ -199,6 +201,8 @@ export async function fullBriefing() {
     runSource('ECDC-Threats', ecdcThreats),
     runSource('Central-Banks', centralBanks),
     runSource('CFTC-COT', cftcCot),
+    runSource('FAA-Airports', faaAirports),
+    runSource('Regulators', regulators),
     runSource('Open-Meteo-Wind', openMeteoWind),
     runSource('Launch-Library', launches),
     // Conflict forecast and country risk baseline for the intelligence layer's country risk (plain sources, no live row).

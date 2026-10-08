@@ -805,7 +805,8 @@
     "method_member-point": "Point of the issuing national service (not the affected area)",
     "kind_displacement": "Displacement",
     "kind_launch": "Launch",
-    "method_orbit-centre": "Mean centre of the detected orbits (aggregate, not an aircraft position)"
+    "method_orbit-centre": "Mean centre of the detected orbits (aggregate, not an aircraft position)",
+    "method_airport": "Airport reference position (not an aircraft)"
   },
   "pwa": {
     "menu": "Install / offline",
@@ -964,6 +965,9 @@
       "netPosition": "Net position (contracts)",
       "netShare": "Net position, share of open interest (%)",
       "rank52w": "Rank among the last year (percentile)",
+      "delayKind": "Programme",
+      "avgDelayMin": "Average delay (min)",
+      "reason": "Reason",
       "rocket": "Rocket",
       "missionType": "Mission type",
       "orbit": "Orbit",

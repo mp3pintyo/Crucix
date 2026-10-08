@@ -47,7 +47,7 @@ Crucix requires Node.js 22 or later. If you have an older version, download the 
 
 ### Dashboard shows empty panels after first start
 
-This is normal — the first sweep takes 30–60 seconds to query all 68 sources. The dashboard will populate automatically once the sweep completes. Check the terminal for sweep progress logs.
+This is normal — the first sweep takes 30–60 seconds to query all 70 sources. The dashboard will populate automatically once the sweep completes. Check the terminal for sweep progress logs.
 
 ### Some sources show errors
 

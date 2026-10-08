@@ -29,6 +29,8 @@ export const POLICIES = Object.freeze({
   'ECDC-Threats': { maxAgeMs: 336*HOUR, observationMaxAgeMs: 504*HOUR },
   'Central-Banks': { maxAgeMs: 336*HOUR, observationMaxAgeMs: 2880*HOUR },
   'CFTC-COT': { maxAgeMs: 288*HOUR, observationMaxAgeMs: 288*HOUR },
+  'FAA-Airports': { maxAgeMs: 3*HOUR, observationMaxAgeMs: 3*HOUR },
+  Regulators: { maxAgeMs: 168*HOUR, observationMaxAgeMs: 336*HOUR },
   'Launch-Library': { maxAgeMs: 12*HOUR, observationMaxAgeMs: 720*HOUR },
 });
 

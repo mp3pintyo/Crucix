@@ -4,9 +4,9 @@ Every source, grouped by tier, with its key requirement, licence note and what i
 
 [← Back to the README](../README.md) · [Documentation index](../README.md#documentation)
 
-## Data Sources (68)
+## Data Sources (70)
 
-68 source adapters run in every sweep: 31 established feeds in tiers 1–6, the 33 "current public data" feeds of tier 7 and 4 country inputs in tier 8. Static datasets that ship with the program (pipelines, bases, mapped sites) are listed after the tiers.
+70 source adapters run in every sweep: 31 established feeds in tiers 1–6, the 35 "current public data" feeds of tier 7 and 4 country inputs in tier 8. Static datasets that ship with the program (pipelines, bases, mapped sites) are listed after the tiers.
 
 ### Tier 1: Core OSINT & Geopolitical (11)
 
@@ -87,7 +87,7 @@ All 29 feeds are free and require no API key. The **Current public data** panel 
 | MET Norway | Budapest model forecast, separate target/validity times | Model 8h; target within 1h of now and valid interval |
 | OONI | Five recent public HU web-connectivity measurements | 24h; samples, not country-wide conclusions |
 
-Added since v2.11 (twenty-four more keyless feeds: ten in v2.11, then ThreatFox, HIBP, GPSJam, WMO SWIC, UNHCR arrivals, SEC 8-K, in v2.27–v2.29 ADSB Orbits, Open-Meteo wind, NOAA NHC and Launch Library 2, in v2.32 JMA Typhoon and ECDC Threats, and in v2.33 Central banks and CFTC COT; every request is bounded to 10 s and 2 MiB, 3 MiB for the OpenSanctions index):
+Added since v2.11 (twenty-six more keyless feeds: ten in v2.11, then ThreatFox, HIBP, GPSJam, WMO SWIC, UNHCR arrivals, SEC 8-K, in v2.27–v2.29 ADSB Orbits, Open-Meteo wind, NOAA NHC and Launch Library 2, in v2.32 JMA Typhoon and ECDC Threats, in v2.33 Central banks and CFTC COT, and in v2.34 FAA Airports and Regulators; every request is bounded to 10 s and 2 MiB, 3 MiB for the OpenSanctions index):
 
 | Source | Data / default watched scope | Endpoint | Auth | Freshness ceiling | Licence |
 | --- | --- | --- | --- | --- | --- |
@@ -115,6 +115,8 @@ Added since v2.11 (twenty-four more keyless feeds: ten in v2.11, then ThreatFox,
 | ECDC Threats | The newest outbreak news and epidemiological updates of the European Centre for Disease Prevention and Control; the ALERT / WARNING / WATCH level is read from the headline words only, it is not an ECDC risk assessment | `ecdc.europa.eu/en/taxonomy/term/1307/feed` and `.../1310/feed` (RSS) | None | Feed 14 d; item 21 d; 1 h cache | ECDC copyright notice (reuse with attribution) |
 | Central banks | Policy rates of 14 central banks (BIS, Hungary first), their change over about a quarter, the ECB euro short-term rate (€STR) and the ECB composite indicator of systemic stress (CISS; moderate from 0.3, high from 0.6, Crucix's own reading) | `stats.bis.org/api/v1/data/WS_CBPOL` and `data-api.ecb.europa.eu` (EST, CISS), SDMX JSON | None | Feed 14 d; policy rate row 120 d (the BIS date is the last reported day); €STR and CISS 10 d; 1 h cache | BIS terms of use and ECB reuse policy (attribution) |
 | CFTC COT | Net position of speculators (managed money in gold, silver, WTI; leveraged funds in the euro, S&P 500 E-mini, 10-year note), its share of open interest, the week change and its rank among the last year; the extremes (top or bottom 5%) are rated moderate | `publicreporting.cftc.gov/resource/rxbv-e226.json` and `yw9f-hn96.json` (Socrata) | None | Report 12 d (weekly, as of Tuesday); 6 h cache | U.S. government public data (CFTC) |
+| FAA Airports | Ground stops, ground delay programs and arrival/departure delays announced by the FAA at busy airports (rated by the average delay: 30 min moderate, 60 elevated, 90 high; a ground stop is high), at the airport's reference position. The "Airport Closures" list is not used: it holds NOTAM restrictions, not closures | `nasstatus.faa.gov/api/airport-status-information` (XML) | None | Update time 3 h; 5 min cache | U.S. government public data (FAA) |
+| Regulators | Headlines and links of the newest Federal Reserve press releases (FOMC and monetary-policy headlines rated moderate), SEC press releases and FINRA notices; the CFTC and FDIC feeds are not used | `federalreserve.gov/feeds/press_all.xml`, `sec.gov/news/pressreleases.rss`, `feeds.finra.org/FINRANotices` | None | Feed 7 d; item 14 d; 30 min cache | U.S. government public information; FINRA public notices (headline and link only) |
 
 Alert rules can watch the metrics `<chokepoint>_transits` (PortWatch 7-day mean, transits a day; `hormuz_transits`, `suez_transits` and the other six default chokepoints), `hu_power_price` (EUR/MWh), `grid_frequency_hz` and `mil_aircraft_total` (military aircraft worldwide, airborne, position within 2 minutes); a metric is empty while its source is stale or failing. The HU day-ahead price runs high (median about 194 EUR/MWh over 2026-09-19..10-02; price rows are rated only from 300 and 400 EUR/MWh), so give a `hu_power_price` threshold rule its own level.
 

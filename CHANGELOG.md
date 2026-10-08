@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.34.0 — Amerikai repülőtéri késések (FAA) és szabályozói közlemények / U.S. airport delays (FAA) and regulator announcements](docs/releases/v2.34.0.md) — 2026-10-08
+
 - [2.33.0 — Jegybanki kamatok, ECB stresszindex és CFTC-pozíciók / Central bank rates, the ECB stress index and CFTC positioning](docs/releases/v2.33.0.md) — 2026-10-08
 
 - [2.32.0 — Nyugat-csendes-óceáni tájfunok és járványhírek (ECDC) / Western Pacific typhoons and outbreak news (ECDC)](docs/releases/v2.32.0.md) — 2026-10-08

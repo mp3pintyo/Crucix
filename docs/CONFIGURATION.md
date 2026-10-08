@@ -121,7 +121,7 @@ Alerts work with or without an LLM on both Telegram and Discord. With an LLM con
 
 ### Without Any Keys
 
-Crucix still works with zero API keys. Most of the 68 sources need no authentication at all, including all 33 live feeds and the country context inputs; the few that need a key or an account (FRED, FIRMS, EIA, ACLED, Reddit, Cloudflare Radar, ADS-B Exchange, optional Telegram) report a structured error or stay disabled, and the rest of the sweep continues normally.
+Crucix still works with zero API keys. Most of the 70 sources need no authentication at all, including all 35 live feeds and the country context inputs; the few that need a key or an account (FRED, FIRMS, EIA, ACLED, Reddit, Cloudflare Radar, ADS-B Exchange, optional Telegram) report a structured error or stay disabled, and the rest of the sweep continues normally.
 
 ## npm Scripts
 

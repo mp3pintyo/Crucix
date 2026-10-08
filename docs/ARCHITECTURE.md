@@ -16,10 +16,10 @@ crucix/
 ├── locales/                   # en.json, hu.json, fr.json (dashboard and server texts)
 │
 ├── apis/
-│   ├── briefing.mjs           # Master orchestrator — runs all 68 sources in parallel
+│   ├── briefing.mjs           # Master orchestrator — runs all 70 sources in parallel
 │   ├── save-briefing.mjs      # CLI: save timestamped + latest.json
 │   ├── utils/                 # safeFetch() (timeout, retries, bounded bodies), freshness policies, .env loader
-│   └── sources/               # 68 source adapters, each exports briefing() and runs standalone:
+│   └── sources/               # 70 source adapters, each exports briefing() and runs standalone:
 │       ├── gdelt.mjs          #   node apis/sources/gdelt.mjs
 │       ├── nhc.mjs, launches.mjs, adsb-orbits.mjs, openmeteo-wind.mjs ...
 │       └── ...                # (live "current public data" adapters return freshResult rows)
@@ -58,7 +58,7 @@ crucix/
 ### Design Principles
 - **Pure ESM** — every file is `.mjs` with explicit imports
 - **Minimal dependencies** — three runtime packages: Express, `fast-xml-parser` (XML feeds) and `h3-js` (GPSJam hexagons). `discord.js` is optional (for the Discord bot). LLM providers use raw `fetch()`, no SDKs; browser libraries are pinned local assets.
-- **Parallel execution** — `Promise.allSettled()` fires all 68 sources simultaneously
+- **Parallel execution** — `Promise.allSettled()` fires all 70 sources simultaneously
 - **Graceful degradation** — missing keys are disabled, upstream errors are visible, and model failures use rules. Other sources continue.
 - **Each source is standalone** — run `node apis/sources/gdelt.mjs` to test any source independently
 - **Provider time, never collection time** — live rows carry the provider's own timestamp and a freshness policy; stale data is labelled or withheld, and a source's attribution and licence travel with its rows

@@ -805,7 +805,8 @@
     "method_member-point": "A kibocsátó nemzeti szolgálat pontja (nem az érintett terület)",
     "kind_displacement": "Menekültmozgás",
     "kind_launch": "Indítás",
-    "method_orbit-centre": "A felismert körpályák átlagos középpontja (összesítés, nem repülőgép-pozíció)"
+    "method_orbit-centre": "A felismert körpályák átlagos középpontja (összesítés, nem repülőgép-pozíció)",
+    "method_airport": "A repülőtér vonatkoztatási pontja (nem légijármű)"
   },
   "pwa": {
     "menu": "Telepítés / offline",
@@ -964,6 +965,9 @@
       "netPosition": "Nettó pozíció (szerződés)",
       "netShare": "Nettó pozíció a nyitott állományhoz (%)",
       "rank52w": "Helyezés az elmúlt évben (percentilis)",
+      "delayKind": "Program",
+      "avgDelayMin": "Átlagos késés (perc)",
+      "reason": "Ok",
       "rocket": "Rakéta",
       "missionType": "Küldetés típusa",
       "orbit": "Pálya",
