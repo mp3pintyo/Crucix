@@ -298,8 +298,11 @@ if (discordAlerter.isConfigured) {
 }
 
 // === Express Server ===
+if (config.web.corsOrigins.includes('*') && !config.auth.user) {
+  console.warn("[Crucix] CORS_ORIGINS=* without AUTH_USER/AUTH_PASSWORD: any website you open can read this server's API from your browser");
+}
 const app = express();
-installHttpSecurity(app, config.auth);
+installHttpSecurity(app, config.auth, config.web);
 app.use(express.static(join(ROOT, 'dashboard/public')));
 app.get('/favicon.ico', (_req, res) => res.status(204).end());
 app.get('/offline-shell', (_req, res) => {

@@ -47,6 +47,15 @@ function envList(name, accept, expected) {
   if (rejected) console.warn(`[Config] ${name} has entries that are not ${expected}; they are ignored`);
   return entries;
 }
+// A comma-separated list of browser origins (scheme://host[:port], no path) from the environment. `wildcard` additionally accepts
+// a lone `*`. Anything else is dropped with one warning that names the variable only.
+function envOrigins(name, { wildcard = false } = {}) {
+  const origin = entry => {
+    try { const url = new URL(entry); return ['http:', 'https:'].includes(url.protocol) && url.origin === entry && !url.username ? url.origin : null; }
+    catch { return null; }
+  };
+  return envList(name, entry => (wildcard && entry === '*') || origin(entry) !== null, wildcard ? 'origins or *' : 'origins like https://example.com');
+}
 // An on/off switch from the environment: unset or empty gives the fallback; anything but true/false/1/0/yes/no/on/off stops startup.
 export function envBoolean(name, fallback) {
   const raw = (process.env[name] ?? '').trim().toLowerCase();
@@ -64,6 +73,12 @@ export default {
   publicUrl: envUrl('PUBLIC_URL', `http://localhost:${envInteger('PORT', 3117, 1, 65535)}`),
   auth: { user: process.env.AUTH_USER || '', password: process.env.AUTH_PASSWORD || '' },
   maxSseClients: envInteger('MAX_SSE_CLIENTS', 100, 1, 10000),
+  // Opt-in browser access from other sites (both empty = off, the default). corsOrigins: pages from these origins (or `*`) may
+  // READ the GET /api routes; embedOrigins: pages from these origins may show the dashboard / widget in an iframe.
+  web: {
+    corsOrigins: envOrigins('CORS_ORIGINS', { wildcard: true }),
+    embedOrigins: envOrigins('EMBED_ORIGINS'),
+  },
   refreshIntervalMinutes: envInteger('REFRESH_INTERVAL_MINUTES', 15, 1, 1440),
 
   // Small public watchlists. Adapters validate/cap these values; no API keys.

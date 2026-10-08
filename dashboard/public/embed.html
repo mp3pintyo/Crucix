@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crucix widget</title>
+<style>
+:root{--bg:#020408;--text:#e8f4f0;--dim:#6a8a82;--accent:#64f0c8;--line:rgba(100,240,200,.14);--c1:#64f0c8;--c2:#9bd66b;--c3:#f0d264;--c4:#f09a50;--c5:#f06464}
+:root[data-theme="light"]{--bg:#f6f9f8;--text:#10201c;--dim:#58706a;--accent:#0a7d62;--line:rgba(10,125,98,.2);--c1:#0a7d62;--c2:#5a8f2a;--c3:#a68500;--c4:#c26a10;--c5:#c4352f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:12px 14px}
+h1{font-size:11px;letter-spacing:.18em;font-weight:600;color:var(--accent);display:flex;justify-content:space-between;gap:8px}
+h1 a{color:var(--dim);text-decoration:none;letter-spacing:0;font-weight:400}
+.level{display:flex;align-items:baseline;gap:10px;margin:10px 0 6px}
+.level b{font-size:30px;line-height:1}
+.dots{display:flex;gap:3px}.dots i{width:14px;height:6px;border-radius:2px;background:var(--line)}
+ul{list-style:none;border-top:1px solid var(--line);margin-top:8px}
+li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid var(--line)}
+li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+li span:last-child{color:var(--dim);flex:none}
+.sub{color:var(--dim);font-size:11px;margin-top:10px}
+#state{color:var(--dim);margin-top:8px}
+</style>
+</head>
+<body>
+<h1><span>CRUCIX</span><a id="open" target="_blank" rel="noopener">&#8599;</a></h1>
+<div class="level"><b id="lvl">–</b><div><div id="lvlName"></div><div class="dots" id="dots"></div></div></div>
+<ul id="alerts"></ul>
+<div class="sub" id="countriesTitle"></div>
+<ul id="countries"></ul>
+<div id="state"></div>
+<script>
+// Compact status widget for iframes: threat level, top alerts, highest country scores.
+// <iframe src="https://HOST/embed.html?lang=hu&theme=light&alerts=3&countries=5&refresh=60" width="360" height="420"></iframe>
+(() => {
+  const q = new URLSearchParams(location.search);
+  const text = {
+    en: { level: 'Threat level', countries: 'Highest country risk', none: 'No firing alerts', loading: 'Loading…', error: 'Data unavailable', names: ['', 'Calm', 'Info', 'Watch', 'High', 'Critical'] },
+    hu: { level: 'Fenyegetettségi szint', countries: 'Legmagasabb országkockázat', none: 'Nincs aktív riasztás', loading: 'Betöltés…', error: 'Az adat nem érhető el', names: ['', 'Nyugodt', 'Infó', 'Figyelendő', 'Magas', 'Kritikus'] },
+  }[q.get('lang') === 'hu' ? 'hu' : 'en'];
+  if (q.get('theme') === 'light') document.documentElement.dataset.theme = 'light';
+  const count = (name, fallback, max) => { const n = q.has(name) && /^\d+$/.test(q.get(name)) ? Number(q.get(name)) : NaN; return n <= max ? n : fallback; };
+  const nAlerts = count('alerts', 3, 8), nCountries = count('countries', 5, 20), every = Math.max(15, count('refresh', 60, 3600));
+  const $ = id => document.getElementById(id);
+  $('open').href = location.origin + '/';
+  $('countriesTitle').textContent = nCountries ? text.countries : '';
+  const rows = (list, items) => {
+    list.replaceChildren(...items.map(([left, right]) => {
+      const li = document.createElement('li'), a = document.createElement('span'), b = document.createElement('span');
+      a.textContent = left; b.textContent = right; li.append(a, b); return li;
+    }));
+  };
+  async function load() {
+    $('state').textContent = text.loading;
+    try {
+      const [alerts, countries] = await Promise.all([
+        fetch('/api/alerts/summary').then(r => r.ok ? r.json() : Promise.reject(r.status)),
+        nCountries ? fetch('/api/countries').then(r => r.ok ? r.json() : { countries: [] }).catch(() => ({ countries: [] })) : { countries: [] },
+      ]);
+      const level = Math.min(5, Math.max(1, Number(alerts.threat?.level) || 1));
+      $('lvl').textContent = level; $('lvl').style.color = `var(--c${level})`;
+      $('lvlName').textContent = `${text.level}: ${text.names[level]}`;
+      $('dots').replaceChildren(...[1, 2, 3, 4, 5].map(n => { const d = document.createElement('i'); if (n <= level) d.style.background = `var(--c${level})`; return d; }));
+      const top = (alerts.top || []).slice(0, nAlerts).map(a => [String(a.title ?? ''), String(a.severity ?? '')]);
+      rows($('alerts'), nAlerts ? (top.length ? top : [[text.none, '']]) : []);
+      rows($('countries'), (countries.countries || []).slice(0, nCountries).map(c => [String(c.name ?? c.iso3), String(Math.round(c.score))]));
+      $('state').textContent = '';
+    } catch { $('state').textContent = text.error; }
+  }
+  load();
+  setInterval(load, every * 1000);
+})();
+</script>
+</body>
+</html>
