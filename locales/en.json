@@ -147,7 +147,20 @@
     "rules": "RULES",
     "noRuleSignals": "No qualifying rule signals in this sweep",
     "cached": "Preserved from an earlier sweep",
-    "generated": "Generated"
+    "generated": "Generated",
+    "type_LONG": "LONG",
+    "type_SHORT": "SHORT",
+    "type_HEDGE": "HEDGE",
+    "type_WATCH": "WATCH",
+    "type_AVOID": "AVOID",
+    "confidence_HIGH": "HIGH",
+    "confidence_MEDIUM": "MEDIUM",
+    "confidence_LOW": "LOW",
+    "confidenceBadge": "{level} confidence",
+    "horizon_Intraday": "Intraday",
+    "horizon_Days": "Days",
+    "horizon_Weeks": "Weeks",
+    "horizon_Months": "Months"
   },
   "ioda": {
     "countries": "Countries",

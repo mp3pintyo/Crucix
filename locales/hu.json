@@ -147,7 +147,20 @@
     "rules": "SZABÁLYOK",
     "noRuleSignals": "Ebben a lekérdezésben nincs a szabályoknak megfelelő jelzés",
     "cached": "Korábbi lekérdezésből megőrizve",
-    "generated": "Létrehozva"
+    "generated": "Létrehozva",
+    "type_LONG": "LONG",
+    "type_SHORT": "SHORT",
+    "type_HEDGE": "FEDEZÉS",
+    "type_WATCH": "FIGYELENDŐ",
+    "type_AVOID": "KERÜLENDŐ",
+    "confidence_HIGH": "MAGAS",
+    "confidence_MEDIUM": "KÖZEPES",
+    "confidence_LOW": "ALACSONY",
+    "confidenceBadge": "{level} bizonyosság",
+    "horizon_Intraday": "Napon belül",
+    "horizon_Days": "Napok",
+    "horizon_Weeks": "Hetek",
+    "horizon_Months": "Hónapok"
   },
   "ioda": {
     "countries": "Országok",

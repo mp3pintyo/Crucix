@@ -147,7 +147,20 @@
     "rules": "RÈGLES",
     "noRuleSignals": "Aucun signal ne remplit les règles dans cette collecte",
     "cached": "Conservées d’une collecte précédente",
-    "generated": "Générées"
+    "generated": "Générées",
+    "type_LONG": "LONG",
+    "type_SHORT": "SHORT",
+    "type_HEDGE": "COUVERTURE",
+    "type_WATCH": "À SURVEILLER",
+    "type_AVOID": "À ÉVITER",
+    "confidence_HIGH": "ÉLEVÉE",
+    "confidence_MEDIUM": "MOYENNE",
+    "confidence_LOW": "FAIBLE",
+    "confidenceBadge": "confiance {level}",
+    "horizon_Intraday": "Intrajournalier",
+    "horizon_Days": "Jours",
+    "horizon_Weeks": "Semaines",
+    "horizon_Months": "Mois"
   },
   "ioda": {
     "countries": "Pays",

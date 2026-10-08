@@ -63,12 +63,14 @@
 
   // ===== The object =====
   const cleanName=(value,iso3)=>typeof value==='string'&&value.trim()?value.trim().slice(0,MAX_NAME):iso3;
+  // The server language's name when the server sent one (older sweeps have none), else the English `name`; the English one stays a palette keyword.
+  const shownName=item=>cleanName(typeof item.displayName==='string'&&item.displayName.trim()?item.displayName:item.name,item.iso3);
   function row(item){
     const score=Math.max(0,Math.min(100,Math.round(item.score)));
     const change=typeof item.change24h==='number'&&Number.isFinite(item.change24h)?Math.round(item.change24h):null;
     const coverage=typeof item.coverage==='number'&&Number.isFinite(item.coverage)&&item.coverage>=0&&item.coverage<=1?Math.round(item.coverage*100):null;
     const conv=isObject(item.convergence)&&item.convergence.active===true&&Array.isArray(item.convergence.kinds)?item.convergence.kinds.filter(kind=>typeof kind==='string'&&kind).slice(0,12).map(kind=>kind.slice(0,40)):null;
-    return {iso3:item.iso3,name:cleanName(item.name,item.iso3),score,change,coverage,kinds:conv};
+    return {iso3:item.iso3,name:shownName(item),english:cleanName(item.name,item.iso3),score,change,coverage,kinds:conv};
   }
   // The trending terms and the unusual-activity list of the summary (2.23; absent in older sweeps): every field checked and cut.
   const TERM=/^[\p{L}\p{N}][\p{L}\p{N}-]{2,29}$/u,LEVEL_WORDS=['moderate','high','critical'];
@@ -82,7 +84,7 @@
   function readAnomalies(value){
     if(!Array.isArray(value))return null;
     return value.filter(item=>isObject(item)&&typeof item.iso3==='string'&&ISO3.test(item.iso3)&&Number.isSafeInteger(item.current)&&typeof item.mean==='number'&&Number.isFinite(item.mean)&&typeof item.z==='number'&&Number.isFinite(item.z))
-      .slice(0,5).map(item=>({iso3:item.iso3,name:cleanName(item.name,item.iso3),current:item.current,mean:item.mean,z:item.z,level:LEVEL_WORDS.includes(item.level)?item.level:'moderate'}));
+      .slice(0,5).map(item=>({iso3:item.iso3,name:shownName(item),current:item.current,mean:item.mean,z:item.z,level:LEVEL_WORDS.includes(item.level)?item.level:'moderate'}));
   }
   // null when `risk` is not an object (no sweep yet, RISK_ENABLED=false or a failed step).
   function read(risk){
@@ -185,7 +187,7 @@
     try{request=Promise.resolve(opts.fetchJson('/api/countries'));}catch(error){request=Promise.reject(error);}
     request.then(data=>{
       if(mine!==listSeq||!isObject(data)||!Array.isArray(data.countries))return;
-      listed=data.countries.filter(item=>isObject(item)&&typeof item.iso3==='string'&&ISO3.test(item.iso3)).slice(0,250).map(item=>({iso3:item.iso3,name:cleanName(item.name,item.iso3),score:typeof item.score==='number'&&Number.isFinite(item.score)?Math.round(item.score):null}));
+      listed=data.countries.filter(item=>isObject(item)&&typeof item.iso3==='string'&&ISO3.test(item.iso3)).slice(0,250).map(item=>({iso3:item.iso3,name:shownName(item),english:cleanName(item.name,item.iso3),score:typeof item.score==='number'&&Number.isFinite(item.score)?Math.round(item.score):null}));
     },()=>{if(mine===listSeq)listAt='';}).catch(log);
   }
 
@@ -205,7 +207,7 @@
     for(const item of [...top,...listed,...shapeNames()]){
       const known=seen.get(item.iso3);
       if(known){if(item.name!==known.name&&!known.keywords.includes(item.name))known.keywords.push(item.name);continue;}
-      seen.set(item.iso3,{iso3:item.iso3,name:item.name,score:item.score,keywords:[item.iso3]});
+      seen.set(item.iso3,{iso3:item.iso3,name:item.name,score:item.score,keywords:item.english&&item.english!==item.name?[item.iso3,item.english]:[item.iso3]});
     }
     for(const country of seen.values()){
       const hint=country.score!==null?tx('country.paletteHint','Risk score {score}').split('{score}').join(String(country.score)):tx('country.paletteHintNone','Country sheet');
