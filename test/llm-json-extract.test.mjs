@@ -29,6 +29,7 @@ test('extractJson finds the answer in the shapes local and cloud models return',
     ['paired think block', `<think>draft {"bullets":"no"} [1]</think>\n${answer}`],
     ['lone closing think tag', `reasoning that was opened by the template {not: json}</think>\n${answer}`],
     ['unbalanced [ before the answer', `[note: see below\n${answer}`],
+    ['unbalanced JSON-like prose bracket before the answer', `[1, 2 and then: ${answer}`],
   ];
   for (const [name, text] of cases) assert.deepEqual(extractJson(text, { accept: isBullets }), { value: bullets, reason: null }, name);
 });
@@ -56,6 +57,20 @@ test('extractJson reports why nothing was found and never repairs', () => {
   for (const [text, reason] of cases) assert.deepEqual(extractJson(text, { accept: isBullets }), { value: null, reason }, String(text));
   assert.deepEqual(extractJson('x'.repeat(200), { maxLength: 100 }), { value: null, reason: 'too_long' });
   assert.equal(extractJson('{}', { accept: () => { throw new Error('caller bug'); } }).reason, 'wrong_shape');
+});
+
+test('extractJson does not salvage a complete inner fragment from a truncated answer', () => {
+  const cases = [
+    ['truncated array of objects', '[{"a":1},{"b":2'],
+    ['truncated object with a nested object', '{"outer":{"inner":1},"next":{"x":'],
+    ['truncated inside a string', '[{"a":1},{"b":"cut'],
+    ['truncated after prose', 'Here you go: [{"a":1},{"b":2'],
+    ['truncated inside an unclosed fence', '```json\n[{"a":1},{"b":2'],
+    ['truncated inside a closed fence', '```json\n[{"a":1},{"b":2\n```'],
+  ];
+  for (const [name, text] of cases) assert.deepEqual(extractJson(text), { value: null, reason: 'invalid_json' }, name);
+  const cut = `[${JSON.stringify(idea())},{"title":"Second`;
+  assert.deepEqual(parseIdeasResult(cut), { ideas: [], reason: 'invalid_json', accepted: 0, dropped: 0 });
 });
 
 test('extractJson stays fast on a pathological bracket run', () => {
