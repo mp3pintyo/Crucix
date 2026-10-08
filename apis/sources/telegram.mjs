@@ -287,7 +287,7 @@ export async function briefing() {
   return {
     source: 'Telegram',
     timestamp: new Date().toISOString(),
-    status: token ? 'bot_api_empty_fallback_scrape' : 'web_scrape',
+    status: 'web_scrape',
     method: 'Public channel web preview scraping (no auth required)',
     channelsMonitored: channelSummaries.length,
     channelsReachable: channelSummaries.filter(c => c.reachable).length,
@@ -297,9 +297,6 @@ export async function briefing() {
     channels: channelSummaries,
     errors: errors.length > 0 ? errors : undefined,
     topPosts: allPosts.slice(0, 15),
-    hint: token
-      ? undefined
-      : 'Set TELEGRAM_BOT_TOKEN in .env for Bot API access. Create a bot via @BotFather on Telegram.',
   };
 }
 
