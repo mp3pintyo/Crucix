@@ -915,7 +915,7 @@ function togglePerfMode(){
   writePreference('crucix_low_perf', String(lowPerfMode));
   document.body.classList.toggle('low-perf', lowPerfMode);
   const perfStatus = document.getElementById('perfStatus');
-  if(perfStatus) perfStatus.textContent = lowPerfMode ? 'LITE' : 'FULL';
+  if(perfStatus) perfStatus.textContent = lowPerfMode ? t('dashboard.visualsLite','LITE') : t('dashboard.visualsFull','FULL');
   if(globe){
     globe.controls().autoRotate = !lowPerfMode && !reducedMotion;
     globe.arcDashAnimateTime(lowPerfMode || reducedMotion ? 0 : 2000);
@@ -957,7 +957,7 @@ function rerenderDashboard(forceMapRefresh=false){
 // === TOPBAR ===
 function getRegionControlsMarkup(){
   return ['world','americas','europe','middleEast','asiaPacific','africa'].map(r=>
-    `<button class="region-btn ${r===currentRegion?'active':''}" data-region="${r}" onclick="setRegion('${r}')">${r==='middleEast'?'MIDDLE EAST':r==='asiaPacific'?'ASIA PACIFIC':r.toUpperCase()}</button>`
+    `<button class="region-btn ${r===currentRegion?'active':''}" data-region="${r}" onclick="setRegion('${r}')">${t('regions.'+r,r==='middleEast'?'Middle East':r==='asiaPacific'?'Asia Pacific':r).toUpperCase()}</button>`
   ).join('');
 }
 
@@ -1062,7 +1062,7 @@ function buildNuclearWatchPanel(){
   const live=D.nuke.filter(s=>s.n>0);
   const allNormal=live.length>0&&live.every(s=>!s.anom);
   const windText=s=>s.wind&&Number.isFinite(s.wind.ms)?' · <span title="'+esc(t('nuclear.windNote','Modelled current 10 m wind, not a dispersion forecast'))+'">&#10148; '+esc(s.wind.dir||'')+' '+s.wind.ms.toFixed(1)+' m/s</span>':'';
-  const nukeHtml=D.nuke.map(s=>`<div class="site-row"><span>${esc(s.site)}</span><span class="site-val">${s.n>0?(s.cpm?.toFixed(1)||'--')+' CPM'+(s.last?' · '+esc(getAge(s.last)):''):'No data'}${windText(s)}</span></div>`).join('');
+  const nukeHtml=D.nuke.map(s=>`<div class="site-row"><span>${esc(s.site)}</span><span class="site-val">${s.n>0?(s.cpm?.toFixed(1)||'--')+' CPM'+(s.last?' · '+esc(getAge(s.last)):''):t('nuclear.noData','No data')}${windText(s)}</span></div>`).join('');
   return `<div class="g-panel">
     <div class="sec-head"><h3>${t('panels.nuclearWatch','Nuclear Watch')}</h3><span class="badge">${t('badges.radiation','RADIATION')}</span></div>
     <div class="nuke-ok">${!live.length?t('status.noNuclear','No radiation readings in this snapshot'):allNormal?'&#9679; '+t('nuclear.allSitesNormal','ALL SITES NORMAL'):'&#9888; '+t('nuclear.anomalyDetected','ANOMALY DETECTED')}</div>
@@ -1095,7 +1095,7 @@ function buildSpaceWatchPanel(){
     ${D.space ? `
       <div class="econ-row"><span class="elabel">New Objects (30d)</span><span class="eval" style="color:var(--accent2)">${D.space.totalNewObjects||0}</span></div>
       <div class="econ-row"><span class="elabel">Military Sats</span><span class="eval">${D.space.militarySats||0}</span></div>
-      <div class="econ-row"><span class="elabel">Starlink</span><span class="eval">${D.space.constellations?.starlink||0}</span></div>
+      <div class="econ-row"><span class="elabel">${t('metrics.starlink','Starlink')}</span><span class="eval">${D.space.constellations?.starlink||0}</span></div>
       <div class="econ-row"><span class="elabel">OneWeb</span><span class="eval">${D.space.constellations?.oneweb||0}</span></div>
       ${D.space.iss ? `<div class="econ-row"><span class="elabel">ISS</span><span class="eval" style="color:var(--accent)">ALT ${((D.space.iss.apogee+D.space.iss.perigee)/2).toFixed(0)} km</span></div>` : ''}
       ${Object.entries(D.space.militaryByCountry||{}).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([c,n])=>`<div class="econ-row"><span class="elabel" style="padding-left:8px">${esc(c)}</span><span class="eval" style="font-size:10px">${esc(n)} mil sats</span></div>`).join('')}
@@ -1177,16 +1177,16 @@ function buildMacroMarketsPanel(){
   const fmtMarketPrice = (price) => price != null ? `$${price.toLocaleString(undefined,{maximumFractionDigits:2})}` : '--';
   const dayMove = (pct) => pct != null ? `${pct>=0?'+':''}${pct}% today` : '';
   const metrics=[
-    {l:'WTI Crude',v:`$${D.energy.wti}`,s:'$/bbl',p:70},
-    {l:'Brent',v:`$${D.energy.brent}`,s:'$/bbl',p:75},
-    {l:'Nat Gas',v:`$${D.energy.natgas||'--'}`,s:'$/MMBtu',p:30},
-    {l:'Gold',v:fmtMarketPrice(metals.gold),s:dayMove(metals.goldChangePct)||'COMEX proxy',p:58},
-    {l:'Silver',v:fmtMarketPrice(metals.silver),s:dayMove(metals.silverChangePct)||'COMEX proxy',p:54},
-    {l:'VIX',v:vixVal?vixVal.toFixed(1):'--',s:vixChg||'volatility index',p:vixVal?Math.min(vixVal*2.5,100):30},
-    {l:'Fed Funds',v:ff?`${ff.value}%`:'--',s:ff?.date||'',p:36},
-    {l:'GSCPI',v:gscpi?gscpi.value.toFixed(2):'--',s:gscpi?.interpretation||'',p:49},
-    {l:'CPI MoM',v:cpi?`+${cpi.momChangePct?.toFixed(2)}%`:'--',s:cpi?.date||'',p:37},
-    {l:'Unemployment',v:ue?`${ue.value}%`:'--',s:ue?`${ue.momChange>0?'+':''}${ue.momChange} vs prior`:'',p:44},
+    {l:t('metrics.wtiCrude','WTI Crude'),v:`$${D.energy.wti}`,s:'$/bbl',p:70},
+    {l:t('metrics.brent','Brent'),v:`$${D.energy.brent}`,s:'$/bbl',p:75},
+    {l:t('metrics.natGas','Nat Gas'),v:`$${D.energy.natgas||'--'}`,s:'$/MMBtu',p:30},
+    {l:t('alerts.rules.metric.gold','Gold'),v:fmtMarketPrice(metals.gold),s:dayMove(metals.goldChangePct)||'COMEX proxy',p:58},
+    {l:t('alerts.rules.metric.silver','Silver'),v:fmtMarketPrice(metals.silver),s:dayMove(metals.silverChangePct)||'COMEX proxy',p:54},
+    {l:t('metrics.vix','VIX'),v:vixVal?vixVal.toFixed(1):'--',s:vixChg||'volatility index',p:vixVal?Math.min(vixVal*2.5,100):30},
+    {l:t('metrics.fedFunds','Fed Funds'),v:ff?`${ff.value}%`:'--',s:ff?.date||'',p:36},
+    {l:t('metrics.gscpi','GSCPI'),v:gscpi?gscpi.value.toFixed(2):'--',s:gscpi?.interpretation||'',p:49},
+    {l:t('metrics.cpiMom','CPI MoM'),v:cpi?`+${cpi.momChangePct?.toFixed(2)}%`:'--',s:cpi?.date||'',p:37},
+    {l:t('metrics.unemployment','Unemployment'),v:ue?`${ue.value}%`:'--',s:ue?`${ue.momChange>0?'+':''}${ue.momChange} ${t('metrics.vsPrior','vs prior')}`:'',p:44},
   ];
   metrics[0] = {...metrics[0], spark: D.energy.wtiRecent, sparkUp: false};
   metrics[3] = {...metrics[3], spark: metals.goldRecent, sparkUp: (metals.goldChangePct ?? 0) >= 0};
@@ -1196,18 +1196,18 @@ function buildMacroMarketsPanel(){
   const hasMarkets = indexCards || cryptoCards;
   return `<div class="g-panel lp-macro">
     <div class="sec-head"><h3>${t('panels.macroMarkets','Macro + Markets')}</h3><span class="badge">${mkt.timestamp?t('badges.live','LIVE'):t('badges.delayed','DELAYED')}</span></div>
-    ${hasMarkets?`<div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">INDEXES</div><div class="metrics-row">${indexCards}</div></div><div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">CRYPTO</div><div class="metrics-row">${cryptoCards}</div></div>`:''}
-    <div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">ENERGY + METALS + MACRO</div><div class="metrics-row">${metrics.map(m=>{const sparkSvg = m.spark ? mkSparkSvg(m.spark, m.sparkUp) : ''; return `<div class="mc"><div class="ml">${esc(m.l)}</div><span class="mv">${esc(m.v)}${sparkSvg}</span><span class="ms">${esc(m.s)}</span><div class="mbar"><span style="width:${m.p}%"></span></div></div>`;}).join('')}</div></div>
-    <div style="margin-top:6px"><div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:4px">WTI 5-DAY</div><div class="spark">${sparkHtml}</div></div>
+    ${hasMarkets?`<div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">${t('metrics.indexes','INDEXES')}</div><div class="metrics-row">${indexCards}</div></div><div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">${t('metrics.crypto','CRYPTO')}</div><div class="metrics-row">${cryptoCards}</div></div>`:''}
+    <div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">${t('metrics.energyMacro','ENERGY + METALS + MACRO')}</div><div class="metrics-row">${metrics.map(m=>{const sparkSvg = m.spark ? mkSparkSvg(m.spark, m.sparkUp) : ''; return `<div class="mc"><div class="ml">${esc(m.l)}</div><span class="mv">${esc(m.v)}${sparkSvg}</span><span class="ms">${esc(m.s)}</span><div class="mbar"><span style="width:${m.p}%"></span></div></div>`;}).join('')}</div></div>
+    <div style="margin-top:6px"><div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:4px">${t('metrics.wti5day','WTI 5-DAY')}</div><div class="spark">${sparkHtml}</div></div>
   </div>`;
 }
 
 function buildTradeIdeasPanel(){
   const hasIdeas = D.ideas && D.ideas.length > 0;
-  const ideasHtml = hasIdeas ? (D.ideas||[]).map(idea=>`<div class="idea-card"><span class="idea-type ${ideaTypeClass(idea.type)}">${esc((idea.type||'').toUpperCase())}</span>${idea.ticker ? `<span class="idea-horizon">${esc(idea.ticker)}</span>` : ''}${idea.horizon ? `<span class="idea-horizon">${esc(idea.horizon)}</span>` : ''}<span class="idea-conf">${esc(idea.confidence)} confidence</span><div class="idea-title">${esc(idea.title)}</div><div class="idea-text">${esc(idea.text||idea.rationale||'')}</div>${idea.risk ? `<div class="idea-text" style="color:var(--warn);margin-top:3px">Risk: ${esc(idea.risk)}</div>` : ''}</div>`).join('') : `<div style="padding:20px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:11px"><div style="font-size:24px;margin-bottom:8px;opacity:0.3">&#9888;</div><div>LLM NOT CONFIGURED</div><div style="font-size:9px;margin-top:6px;opacity:0.6">Set LLM_PROVIDER + credentials in .env to enable AI-powered trade ideas</div></div>`;
+  const ideasHtml = hasIdeas ? (D.ideas||[]).map(idea=>`<div class="idea-card"><span class="idea-type ${ideaTypeClass(idea.type)}">${esc((idea.type||'').toUpperCase())}</span>${idea.ticker ? `<span class="idea-horizon">${esc(idea.ticker)}</span>` : ''}${idea.horizon ? `<span class="idea-horizon">${esc(idea.horizon)}</span>` : ''}<span class="idea-conf">${esc(idea.confidence)} confidence</span><div class="idea-title">${esc(idea.title)}</div><div class="idea-text">${esc(idea.text||idea.rationale||'')}</div>${idea.risk ? `<div class="idea-text" style="color:var(--warn);margin-top:3px">${t('ideas.risk','Risk')}: ${esc(idea.risk)}</div>` : ''}</div>`).join('') : `<div style="padding:20px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:11px"><div style="font-size:24px;margin-bottom:8px;opacity:0.3">&#9888;</div><div>${t('ideas.llmNotConfigured','LLM NOT CONFIGURED')}</div><div style="font-size:9px;margin-top:6px;opacity:0.6">${t('ideas.llmHelp','Set LLM_PROVIDER + credentials in .env to enable AI-powered trade ideas')}</div></div>`;
   const sourceLabel=D.ideasSource==='llm'?t('ideas.aiEnhanced','AI ENHANCED'):D.ideasSource==='rules'?t('ideas.rules','RULES'):D.ideasSource==='disabled'?t('ideas.llmOff','LLM OFF'):t('ideas.pending','PENDING');
   const emptyHtml=D.ideasSource==='rules'?`<div class="empty-state">${t('ideas.noRuleSignals','No qualifying rule signals in this sweep')}</div>`:ideasHtml;
-  return `<div class="g-panel lp-ideas"><div class="sec-head"><h3>${t('panels.tradeIdeas','Leverageable Ideas')}</h3><span class="ideas-src ${D.ideasSource==='llm'?'llm':'static'}">${sourceLabel}</span></div>${D.ideasGeneratedAt?`<div class="ideas-age">${esc(D.ideasCached?t('ideas.cached','Preserved from an earlier sweep'):t('ideas.generated','Generated'))} · ${esc(getAge(D.ideasGeneratedAt))}</div>`:''}${hasIdeas?ideasHtml:emptyHtml}<div class="disclosure">FOR INFORMATIONAL PURPOSES ONLY. This is not financial advice, a recommendation to buy or sell any security, or a solicitation of any kind. All signal-based observations are derived from publicly available OSINT data and should not be relied upon for investment decisions. Consult a licensed financial advisor before making any investment. Past performance does not guarantee future results.</div></div>`;
+  return `<div class="g-panel lp-ideas"><div class="sec-head"><h3>${t('panels.tradeIdeas','Leverageable Ideas')}</h3><span class="ideas-src ${D.ideasSource==='llm'?'llm':'static'}">${sourceLabel}</span></div>${D.ideasGeneratedAt?`<div class="ideas-age">${esc(D.ideasCached?t('ideas.cached','Preserved from an earlier sweep'):t('ideas.generated','Generated'))} · ${esc(getAge(D.ideasGeneratedAt))}</div>`:''}${hasIdeas?ideasHtml:emptyHtml}<div class="disclosure">${t('ideas.disclosure','FOR INFORMATIONAL PURPOSES ONLY. This is not financial advice, a recommendation to buy or sell any security, or a solicitation of any kind. All signal-based observations are derived from publicly available OSINT data and should not be relied upon for investment decisions. Consult a licensed financial advisor before making any investment. Past performance does not guarantee future results.')}</div></div>`;
 }
 
 function buildCrossSourceSignalsPanel(){
@@ -1217,13 +1217,13 @@ function buildCrossSourceSignalsPanel(){
 
 function buildSignalCorePanel(){
   const signalMetrics=[
-    {l:'Incident Tempo',v:D.tg.urgent.length,p:70},
-    {l:'Air Theaters',v:D.air.length,p:60},
-    {l:'Thermal Spikes',v:D.thermal.reduce((s,t)=>s+t.hc,0),p:80},
-    {l:'SDR Nodes',v:D.sdr.total,p:92},
-    {l:'Internet Outages',v:D.ioda?.activeEvents||0,p:Math.min(100,((D.ioda?.countries?.length||0)*12)+((D.ioda?.activeEvents||0)*10))},
-    {l:'Chokepoints',v:D.chokepoints.length,p:50},
-    {l:'WHO Alerts',v:D.who.length,p:40},
+    {l:t('signalMetrics.incidentTempo','Incident Tempo'),v:D.tg.urgent.length,p:70},
+    {l:t('signalMetrics.airTheaters','Air Theaters'),v:D.air.length,p:60},
+    {l:t('signalMetrics.thermalSpikes','Thermal Spikes'),v:D.thermal.reduce((s,t)=>s+t.hc,0),p:80},
+    {l:t('signalMetrics.sdrNodes','SDR Nodes'),v:D.sdr.total,p:92},
+    {l:t('panels.internetOutages','Internet Outages'),v:D.ioda?.activeEvents||0,p:Math.min(100,((D.ioda?.countries?.length||0)*12)+((D.ioda?.activeEvents||0)*10))},
+    {l:t('signalMetrics.chokepoints','Chokepoints'),v:D.chokepoints.length,p:50},
+    {l:t('signalMetrics.whoAlerts','WHO Alerts'),v:D.who.length,p:40},
     {l:'Supp Health',v:(D.supplementalHealth||[]).length,p:36}
   ];
   return `<div class="g-panel right-core"><div class="sec-head"><h3>${t('panels.signalCore','Signal Core')}</h3><span class="badge">${t('badges.hotMetrics','HOT METRICS')}</span></div>${signalMetrics.map(s=>`<div class="sm"><span class="sml">${s.l}</span><div class="smb"><span style="width:${s.p}%"></span></div><span class="smv">${s.v}</span></div>`).join('')}</div>`;
@@ -1241,7 +1241,7 @@ function buildInternetOutagesPanel(){
 
 function buildHealthAlertsPanel(){
   const whoRows=(D.who||[]).slice(0,10).map((w,i)=>{
-    const sev=(w.severity||'monitor').toUpperCase();
+    const sev=t('intelligence.severity_'+(w.severity||'monitor'),w.severity||'monitor').toUpperCase();
     const sevColor=w.severity==='critical'?'var(--warn)':w.severity==='high'?'#ffb74d':w.severity==='elevated'?'#b2ff59':'var(--dim)';
     const link=safeExternalUrl(w.url);
     return `<div class="signal-row"><strong>#${i+1} <span style="color:${sevColor}">${esc(sev)}</span> ${w.region?`· ${esc(w.region)}`:''}</strong><p>${cleanText(w.title||'')}</p><div style="display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px"><span>${getAge(w.date)}</span><span>score ${w.score||0}</span>${link?`<a href="${esc(link)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent2);text-decoration:none">WHO</a>`:''}</div>${(w.emergencyEvent||w.whoRegionCode)?`<div style="margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--dim)">${cleanText([w.emergencyEvent,w.whoRegionCode].filter(Boolean).join(' · '))}</div>`:''}</div>`;
@@ -1251,7 +1251,7 @@ function buildHealthAlertsPanel(){
 
 function buildSupplementalHealthPanel(){
   const supplementalRows=(D.supplementalHealth||[]).slice(0,10).map((w,i)=>{
-    const sev=(w.severity||'monitor').toUpperCase();
+    const sev=t('intelligence.severity_'+(w.severity||'monitor'),w.severity||'monitor').toUpperCase();
     const sevColor=w.severity==='critical'?'var(--warn)':w.severity==='high'?'#ffb74d':w.severity==='elevated'?'#b2ff59':'var(--dim)';
     const link=safeExternalUrl(w.url);
     return `<div class="signal-row"><strong>#${i+1} <span style="color:${sevColor}">${esc(sev)}</span> ${w.region?`· ${esc(w.region)}`:''}</strong><p>${cleanText(w.title||'')}</p><div style="display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px"><span>${getAge(w.date)}</span><span>score ${w.score||0}</span>${link?`<a href="${esc(link)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent2);text-decoration:none">OPEN</a>`:''}</div>${w.source?`<div style="margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--dim)">${cleanText(w.source)}</div>`:''}</div>`;
@@ -1271,7 +1271,7 @@ function buildSweepDeltaPanel(){
   const deescalated = (delta.signals?.deescalated || []).slice(0,4);
   const newSigs = (delta.signals?.new || []).slice(0,4);
   const deltaRows = [];
-  for(const s of newSigs) deltaRows.push(`<div class="delta-row new"><span class="delta-badge new">NEW</span><span class="delta-label">${esc(s.reason||s.label||s.key)}</span></div>`);
+  for(const s of newSigs) deltaRows.push(`<div class="delta-row new"><span class="delta-badge new">${t('delta.new','NEW')}</span><span class="delta-label">${esc(s.reason||s.label||s.key)}</span></div>`);
   for(const s of escalated){
     const sev = s.severity==='critical'?'style="color:var(--warn);font-weight:600"':s.severity==='high'?'style="color:#ffab40"':'';
     const val = s.pctChange!==undefined?`${s.pctChange>0?'+':''}${s.pctChange}%`:`${s.change>0?'+':''}${s.change}`;
@@ -2272,7 +2272,7 @@ function safeExternalUrl(raw){if(typeof raw!=='string'||!raw.trim())return null;
 // === BOOT SEQUENCE ===
 function runBoot(){
   if(reducedMotion || typeof gsap==='undefined'){document.getElementById('boot').style.display='none';document.getElementById('main').style.opacity='1';return;}
-  const acledStatus = D.acled?.totalEvents > 0 ? `<span class="ok">${D.acled.totalEvents} EVENTS</span>` : '<span style="color:var(--warn)">DEGRADED</span>';
+  const acledStatus = D.acled?.totalEvents > 0 ? `<span class="ok">${D.acled.totalEvents} ${t('boot.events','EVENTS')}</span>` : `<span style="color:var(--warn)">${t('boot.degraded','DEGRADED')}</span>`;
   const lines=[
     {text:t('boot.initializing','INITIALIZING CRUCIX ENGINE'),delay:0},
     {text:t('boot.connecting','CONNECTING {count} OSINT SOURCES...').replace('{count}',D.meta.sourcesQueried),delay:400},

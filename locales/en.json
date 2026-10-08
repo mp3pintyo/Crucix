@@ -209,7 +209,7 @@
     "wti5day": "WTI 5-DAY",
     "indexes": "INDEXES",
     "crypto": "CRYPTO",
-    "energyMacro": "ENERGY + MACRO",
+    "energyMacro": "ENERGY + METALS + MACRO",
     "vsPrior": "vs prior",
     "ecbRate": "ECB Rate",
     "eurusd": "EUR/USD",
