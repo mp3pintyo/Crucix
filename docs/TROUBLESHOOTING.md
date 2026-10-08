@@ -53,7 +53,7 @@ This is normal — the first sweep takes 30–60 seconds to query all 64 sources
 
 Missing keys disable the corresponding source; provider failures have a separate error state. Other sources continue. Check Source Integrity or sanitized server logs for the affected source and reason. Optional keys include `FRED_API_KEY`, `FIRMS_MAP_KEY` and `EIA_API_KEY`.
 
-OpenSky may return `HTTP 429`. Crucix surfaces the error, preserves successful current regions, and can reuse an original observation from `runs/` for at most one hour when all regions fail. Expired, missing or invalid timestamps are rejected; stale data stays visibly labelled.
+OpenSky queries the hotspots at most every 120 minutes anonymously (400 credits/day) or every 15 minutes with the optional `OPENSKY_CLIENT_ID` / `OPENSKY_CLIENT_SECRET` OAuth2 client (4,000 credits/day). `HTTP 429` is not retried: requests pause until the time in `X-Rate-Limit-Retry-After-Seconds`, and meanwhile the last good result is shown as stale (or the credit-limit error if there is none). Successful current regions are preserved, and Crucix can reuse an original observation from `runs/` for at most one hour when all regions fail; that one-hour limit applies to the `runs/` fallback only, not to the in-process stale result, which can be as old as the round interval or, during a 429 pause, at most three hours. Expired, missing or invalid timestamps are rejected; stale data stays visibly labelled.
 
 ### Telegram bot not responding to commands
 
