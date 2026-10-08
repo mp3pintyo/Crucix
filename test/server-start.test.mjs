@@ -19,7 +19,7 @@ test('real server starts on a five-digit port with isolated runtime data', { tim
     cwd: new URL('..', import.meta.url), windowsHide: true,
     env: { ...process.env, CRUCIX_ENV_FILE: envFile, RUNS_DIR: join(directory, 'runs'), PORT: String(port), HOST: '127.0.0.1',
       NO_AUTO_OPEN: '1', AUTH_USER: '', AUTH_PASSWORD: '', LLM_PROVIDER: '', TELEGRAM_BOT_TOKEN: '',
-      DISCORD_BOT_TOKEN: '', DISCORD_WEBHOOK_URL: '', TELEGRAM_OSINT_ENABLED: 'false', SWEEP_ARCHIVE_COUNT: '', SWEEP_ARCHIVE_MAX_MB: '' },
+      DISCORD_BOT_TOKEN: '', DISCORD_WEBHOOK_URL: '', TELEGRAM_OSINT_ENABLED: 'false', SWEEP_ARCHIVE_COUNT: '', SWEEP_ARCHIVE_MAX_MB: '', AISSTREAM_API_KEY: '' },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   let logs = '';

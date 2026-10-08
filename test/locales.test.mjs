@@ -5,6 +5,7 @@ import { FACT_FIELDS } from '../lib/intelligence/live-sources.mjs';
 import { DEFAULT_RULES, RULE_KINDS } from '../lib/alerts/rules.mjs';
 import { METRICS } from '../lib/alerts/metrics.mjs';
 import { DOMAIN_IDS } from '../lib/domains.mjs';
+import { AREAS, VESSEL_TYPES } from '../apis/sources/ships.mjs';
 
 const LANGS = ['en', 'hu', 'fr'];
 const locale = lang => JSON.parse(fs.readFileSync(new URL(`../locales/${lang}.json`, import.meta.url), 'utf8'));
@@ -33,6 +34,19 @@ const LENS_UI_KEYS = ['sourceCount', 'sourceCountOne', 'recordCount', 'recordCou
 test('the lenses group names "all", the lens bar and each domain of the registry, in registry order, then the group-header strings', () => {
   for (const lang of LANGS) assert.deepEqual(Object.keys(locale(lang).lenses), ['all', 'label', ...DOMAIN_IDS, ...LENS_UI_KEYS], `${lang}: lenses keys`);
   assert.deepEqual(['en', 'hu', 'fr'].map(lang => locale(lang).lenses.all), ['All', 'Mind', 'Tous']);
+});
+
+// Every string of the AIS vessel popups (jarvis.html aisVesselText): one per type group and chokepoint apis/sources/ships.mjs emits.
+const MARITIME_KEYS = ['meta', 'mmsi', 'speed', 'speedUnknown', 'lastSeen', 'typeUnknown', ...VESSEL_TYPES.map(type => 'type_' + type), ...AREAS.map(area => 'area_' + area.id)];
+
+test('the maritime group has the same keys in the same order in en, hu and fr, each a plain non-empty string with its placeholders', () => {
+  for (const lang of LANGS) {
+    const group = locale(lang).maritime;
+    assert.deepEqual(Object.keys(group || {}), MARITIME_KEYS, `${lang}: maritime keys`);
+    for (const key of MARITIME_KEYS) assert.ok(typeof group[key] === 'string' && group[key].trim() !== '' && !/[<>]/.test(group[key]), `${lang}: maritime.${key}`);
+    for (const [key, slot] of [['mmsi', '{mmsi}'], ['speed', '{speed}'], ['lastSeen', '{age}']]) assert.ok(group[key].includes(slot), `${lang}: maritime.${key} has ${slot}`);
+  }
+  assert.deepEqual(LANGS.map(lang => locale(lang).maritime.type_tanker), ['tanker', 'tartályhajó', 'navire-citerne']);
 });
 
 // Every string replay.js renders, in locale order (the same order in en, hu and fr).

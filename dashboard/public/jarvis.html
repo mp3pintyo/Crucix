@@ -605,7 +605,7 @@ function setMapLayer(id,visible){
 }
 function normalizeSnapshot(data){
   const out={...data,meta:{...(data?.meta||{})}};
-  for(const key of ['air','thermal','chokepoints','nuke','who','supplementalHealth','news','newsFeed','tSignals','fred','bls','ideas','health','earthquakes','events','eventClusters','liveSources','cyclones'])out[key]=Array.isArray(data?.[key])?data[key]:[];
+  for(const key of ['air','thermal','chokepoints','aisVessels','nuke','who','supplementalHealth','news','newsFeed','tSignals','fred','bls','ideas','health','earthquakes','events','eventClusters','liveSources','cyclones'])out[key]=Array.isArray(data?.[key])?data[key]:[];
   out.tg={posts:0,urgent:[],topPosts:[],...(data?.tg||{})};
   for(const key of ['urgent','topPosts'])if(!Array.isArray(out.tg[key]))out.tg[key]=[];
   out.sdr={total:0,online:0,zones:[],...(data?.sdr||{})};if(!Array.isArray(out.sdr.zones))out.sdr.zones=[];
@@ -1402,7 +1402,7 @@ function initGlobe(){
     .pointRadius(d => d.size || 0.3)
     .pointColor(d => d.color)
     .pointLabel(d => `<b>${esc(d.popHead)}</b><br><span style="opacity:0.7">${esc(d.popMeta)}</span>`)
-    .onPointClick((pt, ev) => { if(pt.cluster)CrucixIntelligence.openCluster(pt.cluster);else showPopup(ev, pt.popHead, pt.popText, pt.popMeta, pt.lat, pt.lng, pt.alt); })
+    .onPointClick((pt, ev) => { if(pt.cluster)CrucixIntelligence.openCluster(pt.cluster);else showPopup(ev, pt.popHead, pt.popText, pt.popMeta, pt.lat, pt.lng, pt.alt, pt.noEvent); })
     .onPointHover(pt => { document.getElementById('globeViz').style.cursor = pt ? 'pointer' : 'grab'; })
     // Arcs layer (flight corridors)
     .arcColor(d => d.color)
@@ -1621,6 +1621,7 @@ function plotMarkers(){
     });
     labels.push({type:'maritime', lat:cp.lat, lng:cp.lon+1.5, text:cp.label, size:0.3, color:'rgba(179,136,255,0.6)'});
   });
+  D.aisVessels.forEach(v=>{const s=aisVesselText(v);points.push({lat:v.lat,lng:v.lon,size:0.12,alt:0.015,color:'rgba(179,136,255,0.8)',type:'maritime',priority:2,popHead:s.head,popMeta:t('maritime.meta','AIS (aisstream.io)'),popText:s.text,noEvent:true})});
 
   // === Nuclear sites (yellow) ===
   const nukeCoords=[{lat:47.5,lon:34.6},{lat:51.4,lon:30.1},{lat:28.8,lon:50.9},{lat:39.8,lon:125.8},{lat:37.4,lon:141},{lat:31.0,lon:35.1}];
@@ -1902,7 +1903,7 @@ let groupNews=readPreference('crucix.newsGrouping.v1')==='true';
 function visibleEventClusters(){return D.eventClusters.filter(c=>hasCoordinates(c.lat,c.lon)&&Array.isArray(c.eventIds)&&c.eventIds.length>1);}
 function isGroupedNews(item){const event=findEvent(item);return groupNews&&event&&visibleEventClusters().some(c=>c.eventIds.includes(event.id));}
 function toggleNewsGrouping(){groupNews=!groupNews;writePreference('crucix.newsGrouping.v1',String(groupNews));reinit();if(flatG)plotFlatMarkers();}
-function showPopup(event,head,text,meta,lat,lng,alt){
+function showPopup(event,head,text,meta,lat,lng,alt,noEvent){
   const popup=document.getElementById('mapPopup');
   const container=document.getElementById('mapContainer');
   const rect=container.getBoundingClientRect();
@@ -1928,7 +1929,7 @@ function showPopup(event,head,text,meta,lat,lng,alt){
   popup.querySelector('.pp-text').textContent=String(text??'').replace(/<br\s*\/?\s*>/gi,'\n').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&amp;/g,'&');
   popup.querySelector('.pp-meta').textContent=meta||'';
   popup.querySelector('.pp-detail')?.remove();
-  const match=D.events.find(e=>e.title===String(head||'')||e.title===String(text||'')||
+  const match=!noEvent&&D.events.find(e=>e.title===String(head||'')||e.title===String(text||'')||
     (Number.isFinite(lat)&&Number.isFinite(lng)&&e.location.lat===lat&&e.location.lon===lng&&
       [head,text,meta].some(value=>String(value||'').includes(e.source.name))));
   if(match){const button=document.createElement('button');button.className='guide-btn pp-detail';button.textContent=t('intelligence.details','Event details');button.onclick=()=>CrucixIntelligence.openEvent(match);popup.append(button);}
@@ -2068,6 +2069,8 @@ function drawFlatMap(){
 function syncCountryShapes(){
   if(flatG)flatG.selectAll('path.land').classed('land-open',!!window.CrucixCountry?.mounted?.()&&!!window.CrucixRisk?.dialogsEnabled?.());
 }
+// An AIS vessel marker (dashboard/inject.mjs aisVessels) in the dashboard language; popups render it as text (showPopup textContent).
+function aisVesselText(v){const say=(key,fallback,values)=>{let out=t('maritime.'+key,fallback);for(const [k,x] of Object.entries(values||{}))out=out.split('{'+k+'}').join(String(x));return out},num=x=>Number(x).toLocaleString(L.meta?.code==='hu'?'hu-HU':L.meta?.code==='fr'?'fr-FR':'en-US'),mmsi=v.mmsi?say('mmsi','MMSI {mmsi}',{mmsi:v.mmsi}):'';return {head:v.name||mmsi,text:[v.area?say('area_'+v.area,v.area):'',Number.isFinite(v.speedKn)?say('speed','{speed} kn',{speed:num(v.speedKn)}):say('speedUnknown','speed unknown'),v.vesselType?say('type_'+v.vesselType,v.vesselType):say('typeUnknown','type unknown'),v.name?mmsi:'',v.lastSeen?say('lastSeen','last seen {age}',{age:getAge(v.lastSeen)}):''].filter(Boolean).join(' · ')}}
 function earthquakeDescription(q){
   return (q.place||'')+'\n'+t('earthquakes.depth','Depth')+': '+(q.depth??'?')+' km'+(q.tsunamiPotential===true||q.tsunamiFlag===true?'\n'+t('earthquakes.tsunamiPotential','Tsunami potential flag · not an issued warning'):'');
 }
@@ -2113,6 +2116,7 @@ function plotFlatMarkers(){
     g.append('rect').attr('x',-4).attr('y',-4).attr('width',8).attr('height',8).attr('fill','rgba(179,136,255,0.7)').attr('stroke','rgba(179,136,255,0.3)').attr('stroke-width',0.5).attr('transform','rotate(45)');
     g.append('text').attr('class','marker-label').attr('x',8).attr('y',3).attr('fill','var(--dim)').attr('font-size','8px').attr('font-family','var(--mono)').text(cp.label);
   });
+  D.aisVessels.forEach(v=>{const s=aisVesselText(v);addPt(v.lat,v.lon,2.5,'rgba(179,136,255,0.8)','rgba(179,136,255,0.3)',ev=>showPopup(ev,s.head,s.text,t('maritime.meta','AIS (aisstream.io)'),null,null,null,true),2)});
   // Nuclear
   flatMarkerType='nuke';
   const nukeCoords=[{lat:47.5,lon:34.6},{lat:51.4,lon:30.1},{lat:28.8,lon:50.9},{lat:39.8,lon:125.8},{lat:37.4,lon:141},{lat:31.0,lon:35.1}];

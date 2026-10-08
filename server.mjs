@@ -27,6 +27,7 @@ import { broadcastEvent, writeToClient } from './lib/sse.mjs';
 import config from './crucix.config.mjs';
 import { getLocale, currentLanguage, getSupportedLocales } from './lib/i18n.mjs';
 import { fullBriefing } from './apis/briefing.mjs';
+import { startMaritimeCollector } from './apis/sources/ships.mjs';
 import { synthesize, generateIdeas } from './dashboard/inject.mjs';
 import { MemoryManager, computeDelta } from './lib/delta/index.mjs';
 import { createLLMProvider } from './lib/llm/index.mjs';
@@ -564,6 +565,9 @@ async function start() {
     } catch {
       console.log('[Crucix] No existing data found — first sweep required');
     }
+
+    // Live AIS vessel counts at the maritime chokepoints: one aisstream.io WebSocket for the life of the server, only with a key.
+    if (process.env.AISSTREAM_API_KEY) startMaritimeCollector(process.env.AISSTREAM_API_KEY);
 
     // Run first sweep (refreshes data in background)
     console.log('[Crucix] Running initial sweep...');
