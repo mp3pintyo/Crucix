@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.30.4 — Új képernyőképek és egy hiba a ciklonkúp rajzolásában a lapos térképen / New screenshots and a bug in the cyclone cone on the flat map](docs/releases/v2.30.4.md) — 2026-10-08
+
 - [2.30.3 — A README átnézése és frissítése / The README reviewed and updated](docs/releases/v2.30.3.md) — 2026-10-08
 
 - [2.30.2 — Javítás: a rögzített előzményszűrő-tesztek ismerik az új „launch” fajtát / Fix: the pinned history-filter tests know the new "launch" kind](docs/releases/v2.30.2.md) — 2026-10-08

@@ -1538,7 +1538,7 @@ function plotFlatCyclones(){
   const layer=flatG.select('.infra-layer').empty()?flatG.append('g').attr('class','infra-layer'):flatG.select('.infra-layer');
   cycloneList().forEach(c=>{
     const cone=cycloneCoords(c.cone),track=cycloneCoords(c.track);
-    if(cone.length>2)layer.append('path').datum({type:'Feature',geometry:{type:'Polygon',coordinates:[cone.concat([cone[0]]).map(pt=>[pt[1],pt[0]])]}}).attr('d',flatPath).attr('fill','rgba(255,214,102,0.12)').attr('stroke',CYCLONE_CONE).attr('stroke-width',0.8).attr('data-layer','cyclones').style('cursor','pointer')
+    if(cone.length>2)layer.append('path').datum({type:'Feature',geometry:{type:'Polygon',coordinates:[(ring=>ring.concat([ring[0]]))(window.CrucixInfrastructure.windClockwise(cone)).map(pt=>[pt[1],pt[0]])]}}).attr('d',flatPath).attr('fill','rgba(255,214,102,0.12)').attr('stroke',CYCLONE_CONE).attr('stroke-width',0.8).attr('data-layer','cyclones').style('cursor','pointer')
       .on('click',ev=>{ev.stopPropagation();showPopup(ev,c.name+' · '+t('cyclone.cone','Forecast cone'),t('cyclone.coneNote','The cone is the uncertainty of the forecast centre track, not the size of the storm or the area it can harm.'),t('cyclone.meta','Advisory forecast'));});
     if(track.length>1)layer.append('path').datum({type:'Feature',geometry:{type:'LineString',coordinates:track.map(pt=>[pt[1],pt[0]])}}).attr('d',flatPath).attr('fill','none').attr('stroke',CYCLONE_TRACK).attr('stroke-width',1.1).attr('data-layer','cyclones');
   });

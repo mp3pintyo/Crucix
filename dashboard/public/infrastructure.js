@@ -133,6 +133,16 @@
     for(const key of Object.keys(out)){out[key].sort((a,b)=>a.km-b.km||(a.item.name<b.item.name?-1:1));out[key].length=Math.min(out[key].length,cap);}
     return out;
   }
+  // d3-geo reads a polygon ring as the INSIDE when it runs clockwise (lon/lat with north up); a counter-clockwise ring means "everything else" and
+  // fills the whole map. Returns the [lat, lon] points of a small ring in the clockwise order, reversed when needed (planar shoelace: fine for the
+  // few-hundred-kilometre cones, which do not reach a pole or the antimeridian).
+  function windClockwise(points){
+    if(!Array.isArray(points)||points.length<3)return Array.isArray(points)?points.slice():[];
+    let sum=0;
+    for(let i=0;i<points.length;i++){const a=points[i],b=points[(i+1)%points.length];sum+=(b[1]-a[1])*(b[0]+a[0]);}
+    // sum > 0 is clockwise for x = lon, y = lat (shoelace with the sign convention above)
+    return sum>0?points.slice():points.slice().reverse();
+  }
   const fill=(template,values)=>{let out=template;for(const [key,value] of Object.entries(values||{}))out=out.split('{'+key+'}').join(String(value));return out;};
   function say(translate,key,fallback,values){let template=fallback;try{if(typeof translate==='function'){const got=translate('infra.'+key,fallback);if(typeof got==='string'&&got)template=got;}}catch{}return fill(template,values);}
   function pipelineText(p,translate){
@@ -171,6 +181,6 @@
     return lines.join('\n');
   }
   window.CrucixInfrastructure={load,get:()=>dataset,parse,greatCircle,distanceKm,distanceToLineKm,nearby,pipelineText,baseText,
-    loadSites,getSites:()=>sites,parseSites,nearbySites,siteText,boxKm,
+    windClockwise,loadSites,getSites:()=>sites,parseSites,nearbySites,siteText,boxKm,
     reset:()=>{dataset=null;pending=null;failed=false;sites=null;sitesPending=null;sitesFailed=false;}};
 })(window);

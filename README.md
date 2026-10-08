@@ -766,7 +766,7 @@ The `docs/` folder contains dashboard screenshots referenced by this README:
 | `docs/map.png` | D3 world map with marker types and flight arcs |
 | `docs/globe.png` | 3D WebGL globe view with atmosphere glow and markers |
 
-To update them: run the dashboard, wait for a sweep to complete, then use your browser's DevTools (`F12` → `Ctrl+Shift+P` → "Capture full size screenshot") or a tool like [LICEcap](https://www.cockos.com/licecap/) for GIFs.
+The current set was taken from a real sweep on 2026-10-08 (v2.30.4; English UI, 1945×1233). To update them: run the dashboard (for screenshots, with the bots, the LLM and the alert channels left empty), wait for a sweep to complete, then use your browser's DevTools (`F12` → `Ctrl+Shift+P` → "Capture full size screenshot") or a tool like [LICEcap](https://www.cockos.com/licecap/) for GIFs.
 
 ---
 

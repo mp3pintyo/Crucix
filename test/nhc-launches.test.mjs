@@ -101,3 +101,15 @@ test('both sources pass the live-row normalisation with their facts, and the syn
   assert.equal(data.cyclones.length, 1);
   assert.equal(data.cyclones[0].name, 'Isaias');
 });
+
+test('a cone ring is wound clockwise for d3-geo whichever way the provider sent it (a counter-clockwise ring would fill the whole flat map)', async () => {
+  const { default: vm } = await import('node:vm');
+  const { readFileSync } = await import('node:fs');
+  const window = {};
+  vm.runInContext(readFileSync(new URL('../dashboard/public/infrastructure.js', import.meta.url), 'utf8'), vm.createContext({ window, Math, Number, Object, Array, JSON, Promise, String }));
+  const clockwise = [[25, -95], [25, -91], [22, -91], [22, -95]];
+  const plain = value => JSON.parse(JSON.stringify(value));
+  assert.deepEqual(plain(window.CrucixInfrastructure.windClockwise(clockwise)), clockwise);
+  assert.deepEqual(plain(window.CrucixInfrastructure.windClockwise([...clockwise].reverse())), clockwise);
+  assert.deepEqual(plain(window.CrucixInfrastructure.windClockwise([[1, 2]])), [[1, 2]]);
+});
