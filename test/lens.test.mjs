@@ -186,7 +186,8 @@ test('the live panel groups every card by domain: every card reachable, its attr
   }
   const hazards = groups.find(section => groupOf(section) === 'hazards');
   assert.ok(hazards.includes('data-attention="true"')); assert.match(hazards, /<span class="lg-worst sev-high"><i aria-hidden="true">▲<\/i> High<\/span>/, 'worst level: glyph and text');
-  assert.ok(hazards.includes('7 records'), 'hazards record count'); assert.ok(hazards.includes('Needs attention'));
+  const hazardRecords = Object.keys(POLICIES).filter(name => domainOfSource(name) === 'hazards').length; // one fixture row per source
+  assert.ok(hazards.includes(`${hazardRecords} records`), 'hazards record count'); assert.ok(hazards.includes('Needs attention'));
   assert.match(html, new RegExp(`<span class="badge">${N}\/${N}<\/span>`), 'the badge still counts every source');
 });
 

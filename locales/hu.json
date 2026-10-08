@@ -120,7 +120,8 @@
     "epaRadNet": "EPA RadNet",
     "spaceStation": "Űrállomás",
     "gdeltEvent": "GDELT-esemény",
-    "rotateHint": "HÚZD A FORGATÁSHOZ · GÖRGESS A ZOOMHOZ"
+    "rotateHint": "HÚZD A FORGATÁSHOZ · GÖRGESS A ZOOMHOZ",
+    "gnssInterference": "GNSS-zavarás"
   },
   "ideas": {
     "confidence": "Bizonyosság",
@@ -787,7 +788,8 @@
     "method_theater-centre": "A figyelt terület közepe (összesítés, nem pozíció)",
     "method_polygon-centroid": "A forrás által megadott terület középpontja (sokszög súlypontja)",
     "method_polygon-vertex-mean": "A forrás által megadott terület közelítő közepe (pontjainak átlaga)",
-    "method_global": "Globális (nincs egyetlen helyszín)"
+    "method_global": "Globális (nincs egyetlen helyszín)",
+    "kind_interference": "GNSS-zavarás"
   },
   "pwa": {
     "menu": "Telepítés / offline",
@@ -925,7 +927,13 @@
       "company": "Vállalat",
       "ticker": "Tőzsdei jel",
       "formType": "Nyomtatvány",
-      "cik": "SEC CIK"
+      "cik": "SEC CIK",
+      "highCells": "Erős zavarású hatszögek",
+      "mediumCells": "Közepes zavarású hatszögek",
+      "worstPct": "Az érintett légijárművek legrosszabb aránya (%)",
+      "badAircraft": "Rossz navigációs adatot jelentő légijárművek",
+      "totalAircraft": "Légijárművek",
+      "sharePct": "Az érintett légijárművek aránya (%)"
     }
   },
   "lenses": {

@@ -120,7 +120,8 @@
     "epaRadNet": "EPA RadNet",
     "spaceStation": "Station Spatiale",
     "gdeltEvent": "Événement GDELT",
-    "rotateHint": "GLISSER POUR TOURNER · MOLETTE POUR ZOOMER"
+    "rotateHint": "GLISSER POUR TOURNER · MOLETTE POUR ZOOMER",
+    "gnssInterference": "Brouillage GNSS"
   },
   "ideas": {
     "confidence": "Confiance",
@@ -787,7 +788,8 @@
     "method_theater-centre": "Centre de la zone surveillée (agrégat, pas une position)",
     "method_polygon-centroid": "Centre de la zone du fournisseur (centroïde du polygone)",
     "method_polygon-vertex-mean": "Centre approximatif de la zone du fournisseur (moyenne de ses points)",
-    "method_global": "Mondial (aucun lieu unique)"
+    "method_global": "Mondial (aucun lieu unique)",
+    "kind_interference": "Brouillage GNSS"
   },
   "pwa": {
     "menu": "Installer / hors ligne",
@@ -925,7 +927,13 @@
       "company": "Société",
       "ticker": "Symbole boursier",
       "formType": "Formulaire",
-      "cik": "CIK SEC"
+      "cik": "CIK SEC",
+      "highCells": "Hexagones à fort brouillage",
+      "mediumCells": "Hexagones à brouillage moyen",
+      "worstPct": "Pire part d’aéronefs touchés (%)",
+      "badAircraft": "Aéronefs avec de mauvaises données de navigation",
+      "totalAircraft": "Aéronefs",
+      "sharePct": "Part d’aéronefs touchés (%)"
     }
   },
   "lenses": {

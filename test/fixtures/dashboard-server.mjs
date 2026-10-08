@@ -109,6 +109,7 @@ const SAMPLE={
   'Copernicus-EMS':{at:[37.7895,-7.2135],row:{severity:'moderate'}},
   'Aviation-SIGMET':{kind:'weather',at:[39.2,45.417],method:'polygon-centroid',row:{severity:'high'}},
   'ADSB-Military':{kind:'aviation',at:[25,48],method:'theater-centre',metrics:{mil_aircraft_total:71}},
+  GPSJam:{kind:'interference',at:[56.1,23.4],method:'centroid',row:{severity:'moderate'}},'WMO-SWIC':{kind:'weather',at:[35.9,104.2],method:'member-point',row:{severity:'high'}},
   'OpenSanctions-Index':{kind:'sanctions'},'Federal-Register':{kind:'sanctions'},
   'Energy-Charts-HU':{kind:'energy',metrics:{hu_power_price:172.6,grid_frequency_hz:50.0307}},'ENTSOG-HU':{kind:'energy'},'Prediction-Markets':{kind:'market'},
 };

@@ -1,6 +1,6 @@
 {
   "name": "crucix",
-  "version": "2.19.0",
+  "version": "2.20.0",
   "description": "Local intelligence engine - 52 OSINT adapters, live dashboard, bounded requests, optional local or cloud AI.",
   "type": "module",
   "scripts": {
@@ -30,7 +30,8 @@
   },
   "dependencies": {
     "express": "^5.1.0",
-    "fast-xml-parser": "5.11.2"
+    "fast-xml-parser": "5.11.2",
+    "h3-js": "^4.5.0"
   },
   "optionalDependencies": {
     "discord.js": "^14.26.4"

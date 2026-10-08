@@ -120,7 +120,8 @@
     "epaRadNet": "EPA RadNet",
     "spaceStation": "Space Station",
     "gdeltEvent": "GDELT Event",
-    "rotateHint": "DRAG TO ROTATE · SCROLL TO ZOOM"
+    "rotateHint": "DRAG TO ROTATE · SCROLL TO ZOOM",
+    "gnssInterference": "GNSS interference"
   },
   "ideas": {
     "confidence": "Confidence",
@@ -787,7 +788,8 @@
     "method_theater-centre": "Centre of the watched area (aggregate, not a position)",
     "method_polygon-centroid": "Centre of the provider’s area (polygon centroid)",
     "method_polygon-vertex-mean": "Approximate centre of the provider’s area (mean of its points)",
-    "method_global": "Global (no single location)"
+    "method_global": "Global (no single location)",
+    "kind_interference": "GNSS interference"
   },
   "pwa": {
     "menu": "Install / offline",
@@ -925,7 +927,13 @@
       "company": "Company",
       "ticker": "Ticker",
       "formType": "Form",
-      "cik": "SEC CIK"
+      "cik": "SEC CIK",
+      "highCells": "High-interference hexagons",
+      "mediumCells": "Medium-interference hexagons",
+      "worstPct": "Worst share of aircraft affected (%)",
+      "badAircraft": "Aircraft with bad navigation data",
+      "totalAircraft": "Aircraft",
+      "sharePct": "Share of aircraft affected (%)"
     }
   },
   "lenses": {

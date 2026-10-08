@@ -18,7 +18,7 @@
   // leading it, as in jarvis.html), not at the end.
   const TOP_PANELS = ['changes', 'countryRisk'];
   const LAYERS = ['air', 'thermal', 'sdr', 'maritime', 'nuclear', 'conflict', 'osint', 'health', 'network', 'news', 'weather', 'space', 'earthquake', 'disaster'];
-  const EVENT_KINDS = ['news', 'osint', 'health', 'earthquake', 'weather', 'outage', 'conflict', 'signal', 'disaster', 'space-weather', 'economic', 'forecast', 'network', 'cyber', 'maritime', 'aviation', 'sanctions', 'market', 'energy'];
+  const EVENT_KINDS = ['news', 'osint', 'health', 'earthquake', 'weather', 'outage', 'conflict', 'signal', 'disaster', 'space-weather', 'economic', 'forecast', 'network', 'cyber', 'maritime', 'aviation', 'sanctions', 'market', 'energy', 'interference'];
   const REGIONS = ['world', 'americas', 'europe', 'middleEast', 'asiaPacific', 'africa'];
   const STORAGE_KEY = 'crucix_workspace_profiles_v1', MAX_PROFILES = 12, MAX_STORAGE = 128 * 1024;
   let options = {}, snapshot = { events: [] }, pushedSnapshot = false, overlay, dialog, content, heading, priorFocus, priorOverflow;

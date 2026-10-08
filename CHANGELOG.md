@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.20.0 — GNSS-zavarás (GPSJam) és hivatalos figyelmeztetések a világ minden tájáról (WMO SWIC) / GNSS interference (GPSJam) and official warnings from around the world (WMO SWIC)](docs/releases/v2.20.0.md) — 2026-10-08
+
 - [2.19.0 — Utazási figyelmeztetések: az USA külügyminisztériumának országszintjei a kockázati modellben / Travel advisories: the U.S. State Department's country levels in the risk model](docs/releases/v2.19.0.md) — 2026-10-08
 
 - [2.18.0 — Hírgerinc: 52 szintezett RSS-forrás, magyar hírek és forrásszint-jelvények / News backbone: 52 tiered RSS feeds, Hungarian news and source-tier badges](docs/releases/v2.18.0.md) — 2026-10-08

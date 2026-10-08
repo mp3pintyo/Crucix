@@ -559,13 +559,14 @@ const mapLayerRegistry = [
   {id:'weather',key:'map.weatherAlert',label:'Weather alerts / forecasts',types:['weather','forecast']},
   {id:'disaster',key:'map.disaster',label:'Current natural events',types:['disaster']},
   {id:'space',key:'map.spaceStation',label:'Space stations',types:['space']},
-  {id:'earthquake',key:'map.earthquake',label:'Earthquakes · USGS significant + EMSC M4.5+',types:['earthquake']}
+  {id:'earthquake',key:'map.earthquake',label:'Earthquakes · USGS significant + EMSC M4.5+',types:['earthquake']},
+  {id:'interference',key:'map.gnssInterference',label:'GNSS interference',types:['interference']}
 ];
 // Layer type of a located live-source row, by its kind. Kinds without coordinates draw nothing; any other kind keeps the weather type.
-const LIVE_MARKER_TYPE={earthquake:'earthquake',maritime:'maritime',aviation:'air',disaster:'disaster',forecast:'forecast',weather:'weather'};
+const LIVE_MARKER_TYPE={earthquake:'earthquake',maritime:'maritime',aviation:'air',disaster:'disaster',forecast:'forecast',weather:'weather',interference:'interference'};
 const liveMarkerType=kind=>Object.hasOwn(LIVE_MARKER_TYPE,kind)?LIVE_MARKER_TYPE[kind]:'weather';
 // Marker colour of a live row: the colour of its layer's own markers (USGS quakes, chokepoints, air theaters); the other layers keep the live blue.
-const LIVE_MARKER_COLOR={earthquake:'255,112,67',disaster:'255,112,67',maritime:'179,136,255',air:'100,240,200'};
+const LIVE_MARKER_COLOR={earthquake:'255,112,67',disaster:'255,112,67',maritime:'179,136,255',air:'100,240,200',interference:'255,196,0'};
 const liveMarkerColor=(kind,alpha)=>{const type=liveMarkerType(kind);return 'rgba('+(Object.hasOwn(LIVE_MARKER_COLOR,type)?LIVE_MARKER_COLOR[type]:'100,200,255')+','+alpha+')'};
 let mapLayers = loadMapLayers();
 flightsVisible = mapLayers.air !== false;
@@ -1318,7 +1319,7 @@ function bindMapLifecycleEvents(){
 function renderMapLegend(){
   document.getElementById('mapLegend').innerHTML=
     [{c:'#64f0c8',l:t('map.airTraffic','Air Traffic')},{c:'#ff5f63',l:t('map.thermalFire','Thermal/Fire')},{c:'rgba(255,120,80,0.8)',l:t('map.conflict','Conflict')},{c:'#44ccff',l:t('map.sdrReceiver','SDR Receiver')},
-     {c:'#ffe082',l:t('map.nuclearSite','Nuclear Site')},{c:'#b388ff',l:t('map.chokepoint','Chokepoint')},{c:'#ffb84c',l:t('map.osintEvent','OSINT Event')},{c:'#69f0ae',l:t('map.healthAlert','Health Alert')},{c:'#9be7b1',l:'Supplemental Health'},{c:'#4dd0e1',l:t('map.internetOutage','Internet Outage')},{c:'#81d4fa',l:t('map.worldNews','World News')},{c:'#ff9800',l:t('map.weatherAlert','Weather Alert')},{c:'#cddc39',l:t('map.epaRadNet','EPA RadNet')},{c:'#ffffff',l:t('map.spaceStation','Space Station')},{c:'#6495ed',l:t('map.gdeltEvent','GDELT Event')},{c:'#ff7043',l:t('map.earthquake','Earthquakes')}]
+     {c:'#ffe082',l:t('map.nuclearSite','Nuclear Site')},{c:'#b388ff',l:t('map.chokepoint','Chokepoint')},{c:'#ffc400',l:t('map.gnssInterference','GNSS interference')},{c:'#ffb84c',l:t('map.osintEvent','OSINT Event')},{c:'#69f0ae',l:t('map.healthAlert','Health Alert')},{c:'#9be7b1',l:'Supplemental Health'},{c:'#4dd0e1',l:t('map.internetOutage','Internet Outage')},{c:'#81d4fa',l:t('map.worldNews','World News')},{c:'#ff9800',l:t('map.weatherAlert','Weather Alert')},{c:'#cddc39',l:t('map.epaRadNet','EPA RadNet')},{c:'#ffffff',l:t('map.spaceStation','Space Station')},{c:'#6495ed',l:t('map.gdeltEvent','GDELT Event')},{c:'#ff7043',l:t('map.earthquake','Earthquakes')}]
     .map(x=>`<div class="leg-item"><div class="leg-dot" style="background:${x.c}"></div>${x.l}</div>`).join('');
 }
 

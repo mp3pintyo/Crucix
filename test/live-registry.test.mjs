@@ -11,7 +11,7 @@ import { normalizeHistoryEvent, validateHistoryFilters } from '../lib/intelligen
 // The framework behind the "Current public data" pipeline: every list that has to grow with a new source or kind.
 const root = new URL('../', import.meta.url);
 const read = path => readFileSync(new URL(path, root), 'utf8');
-const NEW_KINDS = ['earthquake', 'maritime', 'aviation', 'sanctions', 'market', 'energy'];
+const NEW_KINDS = ['earthquake', 'maritime', 'aviation', 'sanctions', 'market', 'energy', 'interference'];
 const OTHER_KINDS = ['news', 'osint', 'health', 'outage', 'conflict', 'signal'];
 const now = Date.parse('2026-10-01T21:00:00Z');
 const keys = value => Object.keys(value).sort();
@@ -103,7 +103,7 @@ test('the map kind table sends located live rows to layer types that exist', () 
   const code = html.match(/const LIVE_MARKER_TYPE\s*=\s*\{[^}]*\};\s*const liveMarkerType=[^\n]*/);
   assert(code, 'LIVE_MARKER_TYPE and liveMarkerType are defined');
   const { table, pick } = vm.runInNewContext(code[0] + '\n({ table: LIVE_MARKER_TYPE, pick: liveMarkerType })');
-  assert.deepEqual(JSON.parse(JSON.stringify(table)), { earthquake: 'earthquake', maritime: 'maritime', aviation: 'air', disaster: 'disaster', forecast: 'forecast', weather: 'weather' });
+  assert.deepEqual(JSON.parse(JSON.stringify(table)), { earthquake: 'earthquake', maritime: 'maritime', aviation: 'air', disaster: 'disaster', forecast: 'forecast', weather: 'weather', interference: 'interference' });
   const registry = html.slice(html.indexOf('const mapLayerRegistry'), html.indexOf('let mapLayers'));
   const layerTypes = new Set([...registry.matchAll(/types:\[([^\]]*)\]/g)].flatMap(item => [...item[1].matchAll(/'([^']+)'/g)].map(type => type[1])));
   for (const [kind, type] of Object.entries(table)) { assert(layerTypes.has(type), `${kind} -> ${type} is a layer type`); assert.equal(pick(kind), type); }

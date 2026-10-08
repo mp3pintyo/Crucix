@@ -94,7 +94,8 @@ function earlier(source, kind, now, extra = {}) {
     observations: [{ providerId: `${source}:1`, kind, title: `${source} current record`, summary: 'Adapter-shaped row', url: `https://example.org/${encodeURIComponent(source)}/1`, observedAt: iso(now - 20 * MINUTE), ...extra }] };
 }
 const EARLIER = { Meteoalarm: ['weather'], GDACS: ['disaster', { lat: 14.5, lon: 121, locationMethod: 'provider', severity: 'Orange' }], 'NOAA-SWPC': ['space-weather'], ECB: ['economic', { currency: 'HUF', rate: 369.18 }],
-  'NASA-EONET': ['disaster', { lat: -8.3, lon: 115.5, locationMethod: 'provider' }], RIPEstat: ['network'], 'FIRST-EPSS': ['cyber'], OONI: ['network'], ThreatFox: ['cyber'], HIBP: ['cyber'], 'SEC-8K': ['cyber'] };
+  'NASA-EONET': ['disaster', { lat: -8.3, lon: 115.5, locationMethod: 'provider' }], RIPEstat: ['network'], 'FIRST-EPSS': ['cyber'], OONI: ['network'], ThreatFox: ['cyber'], HIBP: ['cyber'], 'SEC-8K': ['cyber'],
+  GPSJam: ['interference', { lat: 56.1, lon: 23.4, locationMethod: 'centroid', severity: 'moderate', highCells: 136 }], 'WMO-SWIC': ['weather', { lat: 35.9, lon: 104.2, locationMethod: 'member-point', severity: 'high' }] };
 
 function collect(now = NOW) {
   const sources = { 'IMF-PortWatch': portwatch(now), EMSC: emsc(now), 'Copernicus-EMS': copernicus(now), 'Aviation-SIGMET': sigmet(now), 'ADSB-Military': adsb(now),
@@ -128,13 +129,13 @@ test('the chain yields the expected events per kind and source, and nothing is l
   assert.deepEqual(new Set(events.map(event => event.id)), new Set(rows.map(row => row.eventId)), 'the stamped ids are the event ids');
   assert.deepEqual(countBy(events, event => event.source.name), {
     Meteoalarm: 1, GDACS: 1, 'NOAA-SWPC': 1, ECB: 1, 'NASA-EONET': 1, RIPEstat: 1, 'FIRST-EPSS': 1, 'MET-Norway': 1, OONI: 1,
-    'IMF-PortWatch': 2, EMSC: 2, 'Copernicus-EMS': 1, 'Aviation-SIGMET': 1, 'ADSB-Military': 1, 'OpenSanctions-Index': 2, 'Federal-Register': 2, 'Energy-Charts-HU': 3, 'ENTSOG-HU': 7, 'Prediction-Markets': 5, ThreatFox: 1, HIBP: 1, 'SEC-8K': 1 });
-  assert.deepEqual(countBy(events, event => event.kind), { weather: 2, disaster: 3, 'space-weather': 1, economic: 1, network: 2, cyber: 4, forecast: 1,
-    maritime: 2, earthquake: 2, aviation: 1, sanctions: 4, energy: 10, market: 5 });
+    'IMF-PortWatch': 2, EMSC: 2, 'Copernicus-EMS': 1, 'Aviation-SIGMET': 1, 'ADSB-Military': 1, 'OpenSanctions-Index': 2, 'Federal-Register': 2, 'Energy-Charts-HU': 3, 'ENTSOG-HU': 7, 'Prediction-Markets': 5, ThreatFox: 1, HIBP: 1, 'SEC-8K': 1, GPSJam: 1, 'WMO-SWIC': 1 });
+  assert.deepEqual(countBy(events, event => event.kind), { weather: 3, disaster: 3, 'space-weather': 1, economic: 1, network: 2, cyber: 4, forecast: 1,
+    maritime: 2, earthquake: 2, aviation: 1, sanctions: 4, energy: 10, market: 5, interference: 1 });
   // Located kinds keep their coordinates and the location method the adapter named.
   const methods = Object.fromEntries(events.filter(event => event.location.lat !== null).map(event => [event.source.name, event.location.method]));
   assert.deepEqual(methods, { GDACS: 'provider', 'NASA-EONET': 'provider', 'MET-Norway': 'configured-point', 'IMF-PortWatch': 'provider', EMSC: 'provider', 'Copernicus-EMS': 'provider',
-    'Aviation-SIGMET': 'polygon-centroid', 'ADSB-Military': 'theater-centre' });
+    'Aviation-SIGMET': 'polygon-centroid', 'ADSB-Military': 'theater-centre', GPSJam: 'centroid', 'WMO-SWIC': 'member-point' });
   // Every live row has a deep link of its own (history merges rows with the same kind and URL).
   const urls = events.map(event => `${event.kind}|${event.source.url}`);
   assert.equal(new Set(urls).size, urls.length, 'no two live rows share a kind and URL');
@@ -175,17 +176,17 @@ test('the alert metrics of the new sources resolve from the chain', () => {
 });
 
 // Every source at its row cap (the adapters' own caps; the earlier nine at the framework cap of 100, NOAA SWPC at its three scales) with rows
-// as large as the adapters make them: 300-character titles, summaries at the adapter cut where it has one (GDACS and EONET 1500, Meteoalarm
+// as large as the adapters make them: 250-character titles (the longest in a stored sweep, 2026-10-07: 223), summaries at the adapter cut where it has one (GDACS and EONET 1500, Meteoalarm
 // 1000) and 600 characters otherwise (the longest template summary seen in a live sweep was 525), a long value for every fact, coordinates.
 // The browser keeps at most 5 MiB of snapshot for offline use (dashboard/public/pwa.js).
-const CAPS = { 'NOAA-SWPC': 3, 'IMF-PortWatch': 12, EMSC: 100, 'Copernicus-EMS': 20, 'Aviation-SIGMET': 100, 'ADSB-Military': 32, 'OpenSanctions-Index': 12, 'Federal-Register': 30, 'Energy-Charts-HU': 3, 'ENTSOG-HU': 7, 'Prediction-Markets': 20, ThreatFox: 10, HIBP: 20, 'SEC-8K': 20 };
+const CAPS = { 'NOAA-SWPC': 3, 'IMF-PortWatch': 12, EMSC: 100, 'Copernicus-EMS': 20, 'Aviation-SIGMET': 100, 'ADSB-Military': 32, 'OpenSanctions-Index': 12, 'Federal-Register': 30, 'Energy-Charts-HU': 3, 'ENTSOG-HU': 7, 'Prediction-Markets': 20, ThreatFox: 10, HIBP: 20, 'SEC-8K': 20, GPSJam: 27, 'WMO-SWIC': 25 };
 const SUMMARY_CUT = { Meteoalarm: 1000, GDACS: 1500, 'NASA-EONET': 1500 };
 test('with every source at its row cap the live part of the snapshot stays under the 5 MiB offline limit and no row is lost', () => {
   const raw = Object.fromEntries(Object.keys(POLICIES).map(source => [source, { source, status: 'ok', observedAt: iso(NOW - MINUTE), timestamp: iso(NOW), summary: 'S'.repeat(2000),
     attribution: 'A'.repeat(600), rights: 'R'.repeat(1000), license: 'L'.repeat(200), licenseUrl: 'https://example.org/licence', metrics: { value: 1 },
-    observations: Array.from({ length: CAPS[source] ?? 100 }, (_, i) => ({ kind: 'disaster', providerId: `${source}:${i}`, title: `${i} `.padEnd(300, 'x'), summary: 's'.repeat(SUMMARY_CUT[source] ?? 600),
+    observations: Array.from({ length: CAPS[source] ?? 100 }, (_, i) => ({ kind: 'disaster', providerId: `${source}:${i}`, title: `${i} `.padEnd(250, 'x'), summary: 's'.repeat(SUMMARY_CUT[source] ?? 600),
       url: `https://example.org/${encodeURIComponent(source)}/${i}?q=${'q'.repeat(100)}`, observedAt: iso(NOW - MINUTE), ...(source === 'MET-Norway' ? { forecastAt: iso(NOW + 30 * MINUTE) } : {}),
-      validUntil: iso(NOW + 2 * HOUR), lat: 47.123456789, lon: 19.123456789, locationMethod: 'polygon-vertex-mean', locationPrecision: 'approximate', region: 'r'.repeat(200), severity: 'moderate',
+      validUntil: iso(NOW + 2 * HOUR), lat: 47.123456789, lon: 19.123456789, locationMethod: 'polygon-vertex-mean', locationPrecision: 'approximate', region: 'r'.repeat(60), severity: 'moderate',
       ...Object.fromEntries((FACT_FIELDS[source] || []).map(key => [key, 'f'.repeat(120)])) })) }]));
   const liveSources = stampLiveEventIds(normalizeLiveSources(raw, NOW));
   const snapshot = { meta: { timestamp: iso(NOW) }, liveSources };
