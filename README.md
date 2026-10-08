@@ -185,6 +185,10 @@ The record inspector lists the nearest pipelines and bases (within 600 km) of ev
 
 The Country risk panel gains two sections: **trending terms** (words in far more headlines than usual in the last two hours, from at least two sources; a headline counts once; stored in `runs/intelligence/keywords.json`) and **unusual activity** (countries whose last-24-hour located events are unusual against their own previous windows, a Welford z-score; weekday patterns are not modelled). Neither reports anything before it has a baseline (24 hours and 11 days); see the [release notes](docs/releases/v2.23.0.md).
 
+### Watchlist of reference projects (v2.24)
+
+[docs/watchlist.json](docs/watchlist.json) lists the projects Crucix learns from (awesome-osint-arsenal, World Monitor, God's Eye View) with what was adopted and what is open; `node scripts/watchlist.mjs` shows the commits and releases since each was last reviewed, `--mark <id>` records a review. See the [release notes](docs/releases/v2.24.0.md).
+
 ### Dashboard structure (v2.12)
 
 - **Domain lenses.** A bar under the alert strip offers **All** and eight domains (security and conflict, natural hazards and weather, space, cyber and internet, markets and economy, energy and supply chain, sanctions and regulation, health and environment) that together cover all 52 source adapters. A lens narrows the live panel, the source-health panel, the changes panel and its chip, the record browser's source list and the live record markers on both maps. News, OSINT and delta signals have no domain and only show under **All**; the older map layers keep their own switches. The choice is kept per browser (in memory only when storage is blocked).
