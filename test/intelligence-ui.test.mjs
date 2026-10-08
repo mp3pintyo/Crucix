@@ -151,13 +151,13 @@ test('committing an unchanged completed search does not clear results during exp
 });
 
 test('history type filter offers only API-supported event categories',async()=>{
-  const h=harness({historyEnabled:true});h.api.openHistory();await tick();const values=byId(h,'ci-history-kind').children.map(option=>option.value);assert.deepEqual(values.sort(),['','aviation','conflict','cyber','disaster','displacement','earthquake','economic','energy','forecast','health','interference','maritime','market','network','news','osint','outage','sanctions','signal','space-weather','weather']);
+  const h=harness({historyEnabled:true});h.api.openHistory();await tick();const values=byId(h,'ci-history-kind').children.map(option=>option.value);assert.deepEqual(values.sort(),['','aviation','conflict','cyber','disaster','displacement','earthquake','economic','energy','forecast','health','interference','launch','maritime','market','network','news','osint','outage','sanctions','signal','space-weather','weather']);
 });
 
 test('history type filter labels every kind in English and in the locale',async()=>{
   const hu=JSON.parse(fs.readFileSync(new URL('../locales/hu.json',import.meta.url),'utf8')).intelligence,translations=Object.fromEntries(Object.entries(hu).map(([key,value])=>['intelligence.'+key,value]));
   const english=harness({historyEnabled:true});english.api.openHistory();await tick();const labelled=byId(english,'ci-history-kind').children.filter(option=>option.value);
-  assert.equal(labelled.length,21);for(const option of labelled)assert.notEqual(option.textContent,option.value,'English: '+option.value+' shows a label, not the raw code');
+  assert.equal(labelled.length,22);for(const option of labelled)assert.notEqual(option.textContent,option.value,'English: '+option.value+' shows a label, not the raw code');
   assert.deepEqual(['aviation','sanctions','market','energy'].map(kind=>labelled.find(option=>option.value===kind).textContent),['Aviation','Sanctions','Prediction market','Energy']);
   const local=harness({historyEnabled:true,translations});local.api.openHistory();await tick();
   for(const option of byId(local,'ci-history-kind').children.filter(option=>option.value))assert.equal(option.textContent,hu['kind_'+option.value],option.value);
