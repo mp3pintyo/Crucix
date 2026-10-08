@@ -1167,6 +1167,16 @@ test('the panel reads its words in hu and fr', () => {
   }
 });
 
+test('the signal rows read the delta engine labels in the page language by key, the stored label as the fallback', () => {
+  const withDelta = lang => { const table = new Map([...strings(lang), ...flatten(JSON.parse(read(`locales/${lang}.json`)).delta, 'delta')]); return (key, fallback) => table.has(key) ? table.get(key) : (fallback ?? key); };
+  const changes = { ...FULL, signals: [...FULL.signals, { key: 'source_degradation', label: '3 additional sources failing (4 total down)', direction: null, severity: 'watch', type: 'new' }] };
+  const titles = t => [...mounted({ changes, t }).api.panelHtml(changes).matchAll(/data-signal="[^"]*"><div class="ch-row">.*?<span class="ch-title">([^<]*)<\/span>/g)].map(match => match[1]);
+  assert.deepEqual(titles(withDelta('hu')), ['VIX', 'Új sürgős OSINT-poszt', '3 additional sources failing (4 total down)'], 'its numbers are only in the stored sentence, so it stays');
+  assert.deepEqual(titles(withDelta('fr')).slice(0, 2), ['VIX', 'Nouveau post OSINT urgent']);
+  assert.deepEqual(titles(withDelta('en')).slice(0, 2), ['VIX', 'New urgent OSINT post'], 'English shows the engine wording');
+  assert.deepEqual(titles(localT('hu')).slice(0, 2), ['VIX', 'Urgent post'], 'without the delta group the stored label stays');
+});
+
 test('the module falls back to English text when the page has no translation', () => {
   const { api } = mounted({ changes: FULL, t: () => undefined });
   assert.ok(api.panelHtml(FULL).includes('>What changed</h3>'));

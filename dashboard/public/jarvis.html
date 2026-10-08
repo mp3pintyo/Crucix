@@ -1261,6 +1261,16 @@ function buildSupplementalHealthPanel(){
   return `<div class="g-panel right-health-supp"><div class="sec-head"><h3>Supplemental Health</h3><span class="badge">RELIEFWEB/HDX ${Math.min((D.supplementalHealth||[]).length,10)}</span></div>${supplementalRows}</div>`;
 }
 
+// A delta signal's words in the page language. The engine's labels and reasons are English constants that also feed the bots, the
+// alert titles and the archive, so they are looked up here by the signal key (delta.labels.* / delta.reasons.*), the stored text being
+// the fallback. A source_degradation reason carries its numbers only in the stored sentence, so it stays as stored.
+function deltaText(s){
+  const key=typeof s?.key==='string'?s.key:'',stored=String(s?.reason||s?.label||key);
+  const id=key.startsWith('tg_urgent:')?'tg_urgent':/^[a-z0-9_]{1,40}$/.test(key)&&key!=='source_degradation'?key:'';
+  if(!id)return stored;
+  return t((s.reason?'delta.reasons.':'delta.labels.')+id,stored);
+}
+
 function buildSweepDeltaPanel(){
   const delta = D.delta || {};
   const ds = delta.summary || {};
@@ -1273,15 +1283,15 @@ function buildSweepDeltaPanel(){
   const deescalated = (delta.signals?.deescalated || []).slice(0,4);
   const newSigs = (delta.signals?.new || []).slice(0,4);
   const deltaRows = [];
-  for(const s of newSigs) deltaRows.push(`<div class="delta-row new"><span class="delta-badge new">${t('delta.new','NEW')}</span><span class="delta-label">${esc(s.reason||s.label||s.key)}</span></div>`);
+  for(const s of newSigs) deltaRows.push(`<div class="delta-row new"><span class="delta-badge new">${t('delta.new','NEW')}</span><span class="delta-label">${esc(deltaText(s))}</span></div>`);
   for(const s of escalated){
     const sev = s.severity==='critical'?'style="color:var(--warn);font-weight:600"':s.severity==='high'?'style="color:#ffab40"':'';
     const val = s.pctChange!==undefined?`${s.pctChange>0?'+':''}${s.pctChange}%`:`${s.change>0?'+':''}${s.change}`;
-    deltaRows.push(`<div class="delta-row"><span class="delta-badge up">&#9650;</span><span class="delta-label" ${sev}>${esc(s.label)}</span><span class="delta-val">${esc(s.from)}→${esc(s.to)} (${val})</span></div>`);
+    deltaRows.push(`<div class="delta-row"><span class="delta-badge up">&#9650;</span><span class="delta-label" ${sev}>${esc(deltaText(s))}</span><span class="delta-val">${esc(s.from)}→${esc(s.to)} (${val})</span></div>`);
   }
   for(const s of deescalated){
     const val = s.pctChange!==undefined?`${s.pctChange}%`:`${s.change}`;
-    deltaRows.push(`<div class="delta-row"><span class="delta-badge down">&#9660;</span><span class="delta-label">${esc(s.label||s.key)}</span><span class="delta-val">${esc(s.from)}→${esc(s.to)} (${val})</span></div>`);
+    deltaRows.push(`<div class="delta-row"><span class="delta-badge down">&#9660;</span><span class="delta-label">${esc(deltaText(s))}</span><span class="delta-val">${esc(s.from)}→${esc(s.to)} (${val})</span></div>`);
   }
   const deltaHtml = hasDelta ? deltaRows.join('') : `<div style="padding:12px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:10px">${t('delta.noChanges','No changes since last sweep')}</div>`;
   return `<div class="g-panel right-delta"><div class="sec-head"><h3>${t('panels.sweepDelta','Sweep Delta')}</h3><span class="badge ${dirClass}">${dirEmoji} ${ds.direction?t(dirKey||'delta.'+ds.direction,ds.direction.toUpperCase()):t('delta.baseline','BASELINE')}</span></div>${hasDelta?`<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;font-family:var(--mono);font-size:10px"><span style="color:var(--dim)">${t('delta.changes','Changes')}: <span style="color:var(--accent)">${ds.totalChanges}</span></span><span style="color:var(--dim)">${t('delta.critical','Critical')}: <span style="color:${ds.criticalChanges>0?'var(--warn)':'var(--dim)'}">${ds.criticalChanges||0}</span></span>${ds.signalBreakdown?`<span style="color:var(--dim)">${t('delta.new','New')}: <span style="color:#4dd0e1">${ds.signalBreakdown.new}</span> &#8593;${ds.signalBreakdown.escalated} &#8595;${ds.signalBreakdown.deescalated}</span>`:''}</div>`:''}<div class="delta-list">${deltaHtml}</div></div>`;

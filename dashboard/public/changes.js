@@ -117,8 +117,16 @@
     const name=item.source,inner=`<span class="ch-name">${esc(name)}</span><span class="ch-trans">${stateTag(item.from)}<span class="ch-arrow" aria-hidden="true">→</span><span class="ch-sr">${esc(say('to'))}</span>${stateTag(item.to)}</span>`;
     return `<li class="ch-item">${opts&&typeof opts.openMatrix==='function'?`<button type="button" class="ch-row ch-src" data-changes-source="${esc(name)}">${inner}</button>`:`<div class="ch-row ch-src">${inner}</div>`}</li>`;
   }
+  // The delta engine's labels are English constants (the archive keeps them too): shown in the page language by the signal key
+  // (delta.labels.* / delta.reasons.*), the stored label being the fallback. A source_degradation label carries its numbers only in the
+  // stored sentence, so it stays as stored.
+  function signalText(name,type,stored){
+    if(name.startsWith('tg_urgent:'))return tx('delta.reasons.tg_urgent',stored);
+    if(!/^[a-z0-9_]{1,40}$/.test(name)||name==='source_degradation')return stored;
+    return tx(type==='new'&&name==='nuke_anomaly'?'delta.reasons.nuke_anomaly':'delta.labels.'+name,stored);
+  }
   function signalRow(item){
-    const name=typeof item.key==='string'?item.key:'',label=typeof item.label==='string'&&item.label?item.label:name,type=typeof item.type==='string'&&Object.hasOwn(TYPES,item.type)?TYPES[item.type]:null;
+    const name=typeof item.key==='string'?item.key:'',label=signalText(name,item.type,typeof item.label==='string'&&item.label?item.label:name),type=typeof item.type==='string'&&Object.hasOwn(TYPES,item.type)?TYPES[item.type]:null;
     const tag=type?`<span class="ch-meta"><span class="ch-type" data-type="${esc(item.type)}"><i aria-hidden="true">${type[0]}</i> ${esc(say(type[1]))}</span></span>`:'';
     return `<li class="ch-item ch-sig" data-signal="${esc(name)}"><div class="ch-row">${severity(item.severity)}<span class="ch-title">${esc(label)}</span>${tag}</div></li>`;
   }

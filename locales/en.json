@@ -202,7 +202,36 @@
     "noChanges": "No changes since last sweep",
     "changes": "Changes",
     "critical": "Critical",
-    "new": "NEW"
+    "new": "NEW",
+    "labels": {
+      "vix": "VIX",
+      "hy_spread": "HY Spread",
+      "10y2y": "10Y-2Y Spread",
+      "wti": "WTI Crude",
+      "brent": "Brent Crude",
+      "natgas": "Natural Gas",
+      "gold": "Gold",
+      "silver": "Silver",
+      "unemployment": "Unemployment",
+      "fed_funds": "Fed Funds Rate",
+      "10y_yield": "10Y Yield",
+      "usd_index": "USD Index",
+      "mortgage": "30Y Mortgage",
+      "urgent_posts": "Urgent OSINT Posts",
+      "thermal_total": "Thermal Detections",
+      "air_total": "Air Activity",
+      "who_alerts": "WHO Alerts",
+      "conflict_events": "Conflict Events",
+      "conflict_fatalities": "Conflict Fatalities",
+      "sdr_online": "SDR Receivers",
+      "news_count": "News Items",
+      "sources_ok": "Sources OK",
+      "nuke_anomaly": "Nuclear Anomaly"
+    },
+    "reasons": {
+      "tg_urgent": "New urgent OSINT post",
+      "nuke_anomaly": "Nuclear anomaly detected"
+    }
   },
   "metrics": {
     "wtiCrude": "WTI Crude",
@@ -561,6 +590,39 @@
       "retry": "Retry",
       "unavailable": "Rules are only available on the live dashboard",
       "confirmDelete": "Delete this rule?"
+    },
+    "errors": {
+      "boolean": "must be true or false",
+      "integerRange": "must be an integer from {min} to {max}",
+      "finite": "must be a finite number",
+      "numberRange": "must be a number from {min} to {max}",
+      "oneOf": "must be one of {list}",
+      "metricKey": "must be a known metric key",
+      "string": "must be a string",
+      "notEmpty": "must not be empty",
+      "maxLength": "must be at most {max} characters",
+      "controlChars": "must not contain control characters",
+      "idPattern": "must be 1-40 characters of a-z, 0-9 and -",
+      "list": "must be a list",
+      "maxEntries": "must have at most {max} entries",
+      "plainString": "must be a plain string",
+      "eventKind": "must be a lowercase event kind such as conflict or space-weather",
+      "object": "must be an object",
+      "plainObject": "must be a plain object",
+      "symbolKeys": "must not have symbol keys",
+      "unknownField": "is not a known field",
+      "plainData": "must be plain data",
+      "required": "is required",
+      "clearAtMost": "must be at most the threshold value",
+      "clearAtLeast": "must be at least the threshold value",
+      "maxBelowMin": "must not be below params.minLevel",
+      "kindsTooFew": "needs at least that many different entries in params.kinds",
+      "idMismatch": "must match the rule id in the path",
+      "scopeEventOnly": "is only allowed on event rules",
+      "builtinFixed": "cannot be changed on a built-in rule",
+      "userRuleLimit": "At most {max} user rules",
+      "builtinDelete": "Built-in rules cannot be deleted; disable them instead",
+      "noSuchRule": "No such rule"
     }
   },
   "discord": {
@@ -1321,5 +1383,18 @@
     "groupSoftware": "Software",
     "source": "source",
     "button": "Data credits"
+  },
+  "export": {
+    "title": "Crucix public-source report",
+    "summary": "Exported {exported} of {total} matching records. {scope} Generated {generatedAt}. Query filters: {filters}. Public-source context and traceability checks do not establish the truth of claims or independent corroboration.",
+    "truncated": "Truncated: export is limited to {cap} records or the supplied result page.",
+    "complete": "Complete supplied result set.",
+    "empty": "No matching events.",
+    "related": "Related reports: {list}",
+    "unknownHost": "unknown source host",
+    "scopeNote": "Export scope and limitations",
+    "reportName": "Crucix public-source context export",
+    "relatedNote": "Related report; not independent corroboration",
+    "contextOnly": "Public-source context only; not a cyber indicator or an asserted threat."
   }
 }

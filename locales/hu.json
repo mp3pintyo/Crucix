@@ -202,7 +202,36 @@
     "noChanges": "Az előző lekérdezés óta nincs változás",
     "changes": "Változások",
     "critical": "Kritikus",
-    "new": "ÚJ"
+    "new": "ÚJ",
+    "labels": {
+      "vix": "VIX",
+      "hy_spread": "HY-felár",
+      "10y2y": "10 éves–2 éves hozamkülönbség",
+      "wti": "WTI kőolaj",
+      "brent": "Brent kőolaj",
+      "natgas": "Földgáz",
+      "gold": "Arany",
+      "silver": "Ezüst",
+      "unemployment": "Munkanélküliség",
+      "fed_funds": "Fed alapkamat",
+      "10y_yield": "10 éves hozam",
+      "usd_index": "USD-index",
+      "mortgage": "30 éves jelzáloghitel",
+      "urgent_posts": "Sürgős OSINT-posztok",
+      "thermal_total": "Hőészlelések",
+      "air_total": "Légi aktivitás",
+      "who_alerts": "WHO-riasztások",
+      "conflict_events": "Konfliktusesemények",
+      "conflict_fatalities": "Konfliktusok áldozatai",
+      "sdr_online": "SDR-vevők",
+      "news_count": "Hírek",
+      "sources_ok": "Működő források",
+      "nuke_anomaly": "Nukleáris anomália"
+    },
+    "reasons": {
+      "tg_urgent": "Új sürgős OSINT-poszt",
+      "nuke_anomaly": "Nukleáris anomália észlelve"
+    }
   },
   "metrics": {
     "wtiCrude": "WTI nyersolaj",
@@ -561,6 +590,39 @@
       "retry": "Újra",
       "unavailable": "A szabályok csak az élő irányítópulton érhetők el",
       "confirmDelete": "Törlöd ezt a szabályt?"
+    },
+    "errors": {
+      "boolean": "igaz vagy hamis legyen",
+      "integerRange": "{min} és {max} közötti egész szám legyen",
+      "finite": "véges szám legyen",
+      "numberRange": "{min} és {max} közötti szám legyen",
+      "oneOf": "ezek egyike legyen: {list}",
+      "metricKey": "ismert mutatókulcs legyen",
+      "string": "szöveg legyen",
+      "notEmpty": "nem lehet üres",
+      "maxLength": "legfeljebb {max} karakter lehet",
+      "controlChars": "nem tartalmazhat vezérlőkaraktert",
+      "idPattern": "1–40 karakter legyen, csak a-z, 0-9 és -",
+      "list": "lista legyen",
+      "maxEntries": "legfeljebb {max} elemet tartalmazhat",
+      "plainString": "egyszerű szöveg legyen",
+      "eventKind": "kisbetűs eseménytípus legyen, például conflict vagy space-weather",
+      "object": "objektum legyen",
+      "plainObject": "egyszerű objektum legyen",
+      "symbolKeys": "nem lehet szimbólumkulcsa",
+      "unknownField": "ismeretlen mező",
+      "plainData": "egyszerű adat legyen",
+      "required": "kötelező",
+      "clearAtMost": "legfeljebb a küszöbérték lehet",
+      "clearAtLeast": "legalább a küszöbérték legyen",
+      "maxBelowMin": "nem lehet a params.minLevel alatt",
+      "kindsTooFew": "a params.kinds listában legalább ennyi különböző elem kell",
+      "idMismatch": "egyezzen az útvonalban megadott szabályazonosítóval",
+      "scopeEventOnly": "csak eseményszabálynál adható meg",
+      "builtinFixed": "beépített szabálynál nem módosítható",
+      "userRuleLimit": "Legfeljebb {max} saját szabály lehet",
+      "builtinDelete": "A beépített szabályok nem törölhetők, csak kikapcsolhatók",
+      "noSuchRule": "Nincs ilyen szabály"
     }
   },
   "discord": {
@@ -1321,5 +1383,18 @@
     "groupSoftware": "Szoftver",
     "source": "forrás",
     "button": "Adatforrások"
+  },
+  "export": {
+    "title": "Crucix-jelentés nyilvános forrásokból",
+    "summary": "{total} találatból {exported} rekord exportálva. {scope} Készült: {generatedAt}. Lekérdezési szűrők: {filters}. A nyilvános forrásokból származó kontextus és a nyomon követhetőségi ellenőrzések nem igazolják az állítások valódiságát, és nem jelentenek független megerősítést.",
+    "truncated": "Csonkolva: az export legfeljebb {cap} rekordot vagy a megadott találati oldalt tartalmazza.",
+    "complete": "A megadott találatok teljes köre.",
+    "empty": "Nincs a szűrőknek megfelelő esemény.",
+    "related": "Kapcsolódó jelentések: {list}",
+    "unknownHost": "ismeretlen forrásszerver",
+    "scopeNote": "Az export köre és korlátai",
+    "reportName": "Crucix kontextus-export nyilvános forrásokból",
+    "relatedNote": "Kapcsolódó jelentés; nem független megerősítés",
+    "contextOnly": "Csak nyilvános forrásból származó kontextus; nem kiberbiztonsági indikátor és nem állított fenyegetés."
   }
 }

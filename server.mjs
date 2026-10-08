@@ -360,7 +360,7 @@ if (riskStore) {
 installAlertRoutes(app, { engine: alertEngine, getSnapshot: () => freshLiveSnapshot(currentData), onChange: (summary, newIds) => {
   if (currentData) currentData.alerts = summary;
   broadcast({ type: 'alerts', data: summary, newIds });
-}, security: { publicUrl: config.alerts.publicUrl, allowedHosts: config.alerts.allowedHosts } });
+}, security: { publicUrl: config.alerts.publicUrl, allowedHosts: config.alerts.allowedHosts }, language: currentLanguage });
 installSweepRoutes(app, { archive: sweepArchive, getCurrent: () => currentData });
 
 function archivedSweepCount() {

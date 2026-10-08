@@ -202,7 +202,36 @@
     "noChanges": "Aucun changement depuis le dernier scan",
     "changes": "Changements",
     "critical": "Critiques",
-    "new": "NOUVEAU"
+    "new": "NOUVEAU",
+    "labels": {
+      "vix": "VIX",
+      "hy_spread": "Écart high yield",
+      "10y2y": "Écart 10 ans–2 ans",
+      "wti": "Pétrole WTI",
+      "brent": "Pétrole Brent",
+      "natgas": "Gaz naturel",
+      "gold": "Or",
+      "silver": "Argent",
+      "unemployment": "Chômage",
+      "fed_funds": "Taux des Fed funds",
+      "10y_yield": "Rendement à 10 ans",
+      "usd_index": "Indice USD",
+      "mortgage": "Prêt immobilier à 30 ans",
+      "urgent_posts": "Posts OSINT urgents",
+      "thermal_total": "Détections thermiques",
+      "air_total": "Activité aérienne",
+      "who_alerts": "Alertes OMS",
+      "conflict_events": "Événements de conflit",
+      "conflict_fatalities": "Victimes de conflit",
+      "sdr_online": "Récepteurs SDR",
+      "news_count": "Articles d’actualité",
+      "sources_ok": "Sources OK",
+      "nuke_anomaly": "Anomalie nucléaire"
+    },
+    "reasons": {
+      "tg_urgent": "Nouveau post OSINT urgent",
+      "nuke_anomaly": "Anomalie nucléaire détectée"
+    }
   },
   "metrics": {
     "wtiCrude": "Pétrole WTI",
@@ -561,6 +590,39 @@
       "retry": "Réessayer",
       "unavailable": "Les règles ne sont disponibles que sur le tableau de bord en direct",
       "confirmDelete": "Supprimer cette règle ?"
+    },
+    "errors": {
+      "boolean": "doit être vrai ou faux",
+      "integerRange": "doit être un entier de {min} à {max}",
+      "finite": "doit être un nombre fini",
+      "numberRange": "doit être un nombre de {min} à {max}",
+      "oneOf": "doit être l’une des valeurs suivantes : {list}",
+      "metricKey": "doit être une clé de métrique connue",
+      "string": "doit être une chaîne de caractères",
+      "notEmpty": "ne doit pas être vide",
+      "maxLength": "doit comporter au plus {max} caractères",
+      "controlChars": "ne doit pas contenir de caractères de contrôle",
+      "idPattern": "doit comporter de 1 à 40 caractères parmi a-z, 0-9 et -",
+      "list": "doit être une liste",
+      "maxEntries": "doit comporter au plus {max} entrées",
+      "plainString": "doit être une simple chaîne de caractères",
+      "eventKind": "doit être un type d’événement en minuscules, comme conflict ou space-weather",
+      "object": "doit être un objet",
+      "plainObject": "doit être un objet simple",
+      "symbolKeys": "ne doit pas avoir de clés de type symbole",
+      "unknownField": "n’est pas un champ connu",
+      "plainData": "doit contenir des données simples",
+      "required": "est obligatoire",
+      "clearAtMost": "doit être au plus égal au seuil",
+      "clearAtLeast": "doit être au moins égal au seuil",
+      "maxBelowMin": "ne doit pas être inférieur à params.minLevel",
+      "kindsTooFew": "exige au moins autant d’entrées différentes dans params.kinds",
+      "idMismatch": "doit correspondre à l’identifiant de règle du chemin",
+      "scopeEventOnly": "n’est autorisé que sur les règles d’événement",
+      "builtinFixed": "ne peut pas être modifié sur une règle intégrée",
+      "userRuleLimit": "{max} règles personnalisées au maximum",
+      "builtinDelete": "Les règles intégrées ne peuvent pas être supprimées ; désactivez-les plutôt",
+      "noSuchRule": "Règle introuvable"
     }
   },
   "discord": {
@@ -1321,5 +1383,18 @@
     "groupSoftware": "Logiciels",
     "source": "source",
     "button": "Sources de données"
+  },
+  "export": {
+    "title": "Rapport Crucix de sources publiques",
+    "summary": "{exported} enregistrements exportés sur {total} correspondants. {scope} Généré le {generatedAt}. Filtres de la requête : {filters}. Le contexte de sources publiques et les contrôles de traçabilité n’établissent ni la véracité des affirmations ni une corroboration indépendante.",
+    "truncated": "Tronqué : l’export est limité à {cap} enregistrements ou à la page de résultats fournie.",
+    "complete": "Ensemble complet des résultats fournis.",
+    "empty": "Aucun événement correspondant.",
+    "related": "Rapports liés : {list}",
+    "unknownHost": "hôte de la source inconnu",
+    "scopeNote": "Portée et limites de l’export",
+    "reportName": "Export de contexte Crucix de sources publiques",
+    "relatedNote": "Rapport lié ; pas une corroboration indépendante",
+    "contextOnly": "Contexte de sources publiques uniquement ; ni indicateur cyber ni menace avérée."
   }
 }
