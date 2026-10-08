@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { extractJson } from '../lib/llm/json-extract.mjs';
-import { parseIdeasResponse } from '../lib/llm/idea-schema.mjs';
+import { extractJson, fallbackLine } from '../lib/llm/json-extract.mjs';
+import { parseIdeasResponse, parseIdeasResult } from '../lib/llm/idea-schema.mjs';
+import { resolveIdeas } from '../lib/llm/rule-ideas.mjs';
 import { generateBriefing } from '../lib/llm/briefing.mjs';
 import { TelegramAlerter } from '../lib/alerts/telegram.mjs';
 import { DiscordAlerter } from '../lib/alerts/discord.mjs';
@@ -98,4 +99,79 @@ test('alerts take the real answer after a <think> draft, on Telegram and Discord
   discord.sendMessage = async (_text, list) => { embeds.push(JSON.stringify(list)); return true; };
   assert.equal(await discord.evaluateAndAlert(provider, delta(), memory()), true);
   assert.match(embeds[0], /Real headline/);
+});
+
+test('parseIdeasResult names the outcome while parseIdeasResponse keeps returning ideas or null', () => {
+  assert.deepEqual(parseIdeasResult('{bad}'), { ideas: [], reason: 'invalid_json', accepted: 0, dropped: 0 });
+  assert.deepEqual(parseIdeasResult('[{"title":"x"}]'), { ideas: [], reason: 'all_items_invalid', accepted: 0, dropped: 1 });
+  const mixed = parseIdeasResult(JSON.stringify([idea(), idea({ type: 'BUY' })]));
+  assert.deepEqual([mixed.ideas.length, mixed.reason, mixed.accepted, mixed.dropped], [1, null, 1, 1]);
+  assert.equal(parseIdeasResponse('[{"title":"x"}]'), null);
+});
+
+test('an ideas fallback logs one line with the reason, finish reason and a truncation hint', async t => {
+  const warnings = [];
+  t.mock.method(console, 'warn', (...parts) => warnings.push(parts.join(' ')));
+  const data = { fred: [{ id: 'VIXCLS', value: 30 }], health: [{ n: 'FRED', err: false }], energy: {}, tg: { urgent: [] } };
+  const run = answer => resolveIdeas({ isConfigured: true, config: {}, complete: async () => answer }, data);
+  for (const [answer, pattern] of [[{ text: '{bad}', finishReason: 'stop' }, /reason=invalid_json, finishReason=stop, length=5, accepted=0, dropped=0/],
+    [{ text: '[{"title":"x"}]' }, /reason=all_items_invalid, finishReason=n\/a, .*dropped=1/]]) {
+    warnings.length = 0;
+    assert.equal((await run(answer)).ideasSource, 'rules');
+    assert.equal(warnings.length, 1);
+    assert.match(warnings[0], /^\[LLM Ideas\] ideas answer unusable/);
+    assert.match(warnings[0], pattern);
+    assert.doesNotMatch(warnings[0], /truncated/);
+  }
+  warnings.length = 0;
+  assert.equal((await run({ text: '[{"title":"a"', finishReason: 'length' })).ideasSource, 'rules');
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /truncated at the output token limit; raise LLM_IDEAS_MAX_TOKENS/);
+  assert.match(warnings[0], /Head: "\[\{\\"title\\":\\"a\\""$/);
+});
+
+test('the fallback head is one sanitised line of at most 120 characters', () => {
+  const text = `‮evil\u0000\n${'x'.repeat(500)}`;
+  const message = fallbackLine({ label: '[T]', path: 'ideas', reason: 'invalid_json', result: { text, finishReason: 'MAX_TOKENS' }, budgetVar: 'LLM_X' });
+  const head = JSON.parse(message.slice(message.indexOf('Head: ') + 6));
+  assert.ok(head.length <= 120 && head.startsWith('evil x'));
+  assert.doesNotMatch(message, /[\u0000-\u001f‮]/);
+  assert.match(message, /raise LLM_X/);
+  assert.match(fallbackLine({ label: '[T]', path: 'p', reason: 'empty', result: null }), /length=0/);
+});
+
+test('a briefing fallback logs its reason through the injected log, with the briefing budget on truncation', async () => {
+  const snapshot = { events: [{ id: `event-${'1'.padStart(32, '0')}`, kind: 'earthquake', title: 'M6.4 earthquake near Tokyo', severity: 'high', observedAt: new Date(NOW - 3600000).toISOString() }] };
+  const warnings = [];
+  const log = { ...quiet, warn: message => warnings.push(message) };
+  const brief = answer => generateBriefing({ scope: 'global', snapshot, provider: { isConfigured: true, config: {}, complete: async () => answer }, now: NOW, log });
+  assert.equal((await brief({ text: '{"bullets":[{"text":"cut', finishReason: 'max_tokens' })).source, 'rules');
+  assert.match(warnings[0], /^\[Briefing\] briefing answer unusable.*reason=invalid_json, finishReason=max_tokens.*raise LLM_BRIEFING_MAX_TOKENS/);
+  assert.equal((await brief({ text: '{"bullets":[{"text":"uncited","refs":[77]}]}' })).source, 'rules');
+  assert.match(warnings[1], /reason=all_items_invalid, .*accepted=0, dropped=1/);
+});
+
+test('an alert answer of the wrong shape is logged before the rules take over, on Telegram and Discord', async t => {
+  t.mock.method(console, 'log', () => {});
+  const warnings = [];
+  t.mock.method(console, 'warn', (...parts) => warnings.push(parts.join(' ')));
+  const answer = JSON.stringify([{ shouldAlert: true, tier: 'PRIORITY', confidence: 'HIGH', headline: 'Array headline', reason: 'In an array.' }]);
+  const provider = { isConfigured: true, config: {}, complete: async () => ({ text: answer, finishReason: 'stop' }) };
+  const delta = () => ({ summary: { totalChanges: 1 }, signals: { new: [{ key: 'vix', label: 'VIX', severity: 'high', from: 20, to: 22, pctChange: 10 }] } });
+  const memory = () => ({ getAlertedSignals: () => ({}), markAsAlerted() {} });
+  const telegram = new TelegramAlerter({ botToken: '123:abc', chatId: '42' });
+  telegram.sendAlert = async () => true;
+  await telegram.evaluateAndAlert(provider, delta(), memory());
+  const discord = new DiscordAlerter({ webhookUrl: 'https://discord.example.test/api/webhooks/1/token' });
+  discord.sendMessage = async () => true;
+  await discord.evaluateAndAlert(provider, delta(), memory());
+  assert.equal(warnings.length, 2);
+  assert.match(warnings[0], /^\[Telegram\] alert answer unusable, rule-based fallback used \(reason=wrong_shape, finishReason=stop/);
+  assert.match(warnings[1], /^\[Discord\] alert answer unusable, rule-based fallback used \(reason=wrong_shape/);
+  warnings.length = 0;
+  const truncated = { isConfigured: true, config: {}, complete: async () => ({ text: '{"shouldAlert": tr', finishReason: 'MAX_TOKENS' }) };
+  const second = new TelegramAlerter({ botToken: '123:abc', chatId: '42' });
+  second.sendAlert = async () => true;
+  await second.evaluateAndAlert(truncated, delta(), memory());
+  assert.match(warnings[0], /reason=invalid_json, finishReason=MAX_TOKENS.*raise LLM_ALERT_MAX_TOKENS/);
 });
