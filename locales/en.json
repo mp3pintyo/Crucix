@@ -938,7 +938,9 @@
       "badAircraft": "Aircraft with bad navigation data",
       "totalAircraft": "Aircraft",
       "sharePct": "Share of aircraft affected (%)"
-    }
+    },
+    "nearby": "Nearby infrastructure",
+    "nearbyNote": "Distance to the nearest point of the line between a pipeline’s end points, or to the base. The record’s own position may be approximate."
   },
   "lenses": {
     "all": "All",
@@ -1163,7 +1165,26 @@
     "adv_4": "Do Not Travel",
     "advisoryUpdated": "Last changed {date}",
     "advisoryNote": "A risk reading for U.S. travellers written by one government; it is not a finding about the country and not European guidance.",
-    "advisoryOpen": "Open the advisory"
+    "advisoryOpen": "Open the advisory",
+    "exposure": "Chokepoint exposure (editorial)",
+    "exposurePassage": "Passage",
+    "exposureIndex": "Exposure index",
+    "exposureBasis": "Depends on it for",
+    "exposureLive": "Traffic now",
+    "exposureNow": "{pct}% transits against the 28-day median",
+    "exposureMean": "{n} transits a day (7-day mean)",
+    "exposureNoLive": "No current traffic data",
+    "basis_oil": "oil imports",
+    "basis_trade": "trade route",
+    "basis_access": "sea access",
+    "cp_hormuz": "Strait of Hormuz",
+    "cp_suez": "Suez Canal",
+    "cp_malacca": "Malacca Strait",
+    "cp_bab_el_mandeb": "Bab el-Mandeb Strait",
+    "cp_panama": "Panama Canal",
+    "cp_gibraltar": "Gibraltar Strait",
+    "cp_bosporus": "Bosporus Strait",
+    "exposureNote": "World Monitor’s editorial judgement of how much a country leans on a passage and could route around it (index = reliance × (1 − alternatives) for a full closure). It is not measured trade data. Traffic: IMF PortWatch, AIS-visible ships only."
   },
   "briefing": {
     "title": "Briefing",

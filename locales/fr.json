@@ -938,7 +938,9 @@
       "badAircraft": "Aéronefs avec de mauvaises données de navigation",
       "totalAircraft": "Aéronefs",
       "sharePct": "Part d’aéronefs touchés (%)"
-    }
+    },
+    "nearby": "Infrastructures à proximité",
+    "nearbyNote": "Distance au point le plus proche de la ligne entre les extrémités d’un pipeline, ou à la base. La position du relevé peut elle-même être approximative."
   },
   "lenses": {
     "all": "Tous",
@@ -1163,7 +1165,26 @@
     "adv_4": "Ne pas voyager",
     "advisoryUpdated": "Dernière modification : {date}",
     "advisoryNote": "Une évaluation du risque pour les voyageurs américains, rédigée par un seul gouvernement ; ce n’est pas un constat sur le pays ni une consigne européenne.",
-    "advisoryOpen": "Ouvrir l’avis"
+    "advisoryOpen": "Ouvrir l’avis",
+    "exposure": "Exposition aux passages stratégiques (estimation éditoriale)",
+    "exposurePassage": "Passage",
+    "exposureIndex": "Indice d’exposition",
+    "exposureBasis": "En dépend pour",
+    "exposureLive": "Trafic actuel",
+    "exposureNow": "{pct} % de transits par rapport à la médiane sur 28 jours",
+    "exposureMean": "{n} transits par jour (moyenne sur 7 jours)",
+    "exposureNoLive": "Pas de données de trafic actuelles",
+    "basis_oil": "importations de pétrole",
+    "basis_trade": "route commerciale",
+    "basis_access": "accès maritime",
+    "cp_hormuz": "Détroit d’Ormuz",
+    "cp_suez": "Canal de Suez",
+    "cp_malacca": "Détroit de Malacca",
+    "cp_bab_el_mandeb": "Détroit de Bab el-Mandeb",
+    "cp_panama": "Canal de Panama",
+    "cp_gibraltar": "Détroit de Gibraltar",
+    "cp_bosporus": "Bosphore",
+    "exposureNote": "Jugement éditorial de World Monitor sur la dépendance d’un pays à un passage et sa capacité à le contourner (indice = dépendance × (1 − alternatives) pour une fermeture totale). Ce ne sont pas des données commerciales mesurées. Trafic : IMF PortWatch, navires visibles par AIS uniquement."
   },
   "briefing": {
     "title": "Synthèse",

@@ -102,3 +102,4 @@
 @media(hover:none) and (pointer:coarse){.ri-keys{display:none}}
 @media(prefers-reduced-motion:reduce){#record-inspector{animation:none}}
 .ri-pivots{list-style:none;margin:0 0 10px;padding:0;font-size:11px}.ri-pivots li{margin:0 0 4px}.ri-pivot-value{font-family:var(--mono);color:var(--dim);word-break:break-all}
+.ri-near{list-style:none;margin:0 0 6px;padding:0;font-size:11px}.ri-near li{margin:0 0 3px}.ri-near-note{margin:0 0 10px;font-size:10px;color:var(--dim)}

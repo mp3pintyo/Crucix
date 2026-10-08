@@ -938,7 +938,9 @@
       "badAircraft": "Rossz navigációs adatot jelentő légijárművek",
       "totalAircraft": "Légijárművek",
       "sharePct": "Az érintett légijárművek aránya (%)"
-    }
+    },
+    "nearby": "Közeli infrastruktúra",
+    "nearbyNote": "A vezeték végpontjai közötti vonal legközelebbi pontjáig, illetve a bázisig mért távolság. A rekord saját helye lehet közelítő."
   },
   "lenses": {
     "all": "Mind",
@@ -1163,7 +1165,26 @@
     "adv_4": "Ne utazzon",
     "advisoryUpdated": "Utolsó változás: {date}",
     "advisoryNote": "Egyetlen kormány kockázatértékelése amerikai utazóknak; nem megállapítás az országról, és nem európai útmutatás.",
-    "advisoryOpen": "A figyelmeztetés megnyitása"
+    "advisoryOpen": "A figyelmeztetés megnyitása",
+    "exposure": "Tengerszoros-kitettség (szerkesztői becslés)",
+    "exposurePassage": "Átjáró",
+    "exposureIndex": "Kitettségi index",
+    "exposureBasis": "Ennyiben függ tőle",
+    "exposureLive": "Forgalom most",
+    "exposureNow": "{pct}% átvonulás a 28 napos mediánhoz képest",
+    "exposureMean": "Napi {n} átvonulás (7 napos átlag)",
+    "exposureNoLive": "Nincs aktuális forgalmi adat",
+    "basis_oil": "olajimport",
+    "basis_trade": "kereskedelmi útvonal",
+    "basis_access": "tengeri hozzáférés",
+    "cp_hormuz": "Hormuzi-szoros",
+    "cp_suez": "Szuezi-csatorna",
+    "cp_malacca": "Malaka-szoros",
+    "cp_bab_el_mandeb": "Báb el-Mandeb-szoros",
+    "cp_panama": "Panama-csatorna",
+    "cp_gibraltar": "Gibraltári-szoros",
+    "cp_bosporus": "Boszporusz",
+    "exposureNote": "A World Monitor szerkesztői megítélése arról, mennyire támaszkodik egy ország egy átjáróra, és mennyire kerülheti meg (index = függés × (1 − alternatívák) teljes lezárás esetén). Nem mért kereskedelmi adat. Forgalom: IMF PortWatch, csak az AIS-sel látható hajók."
   },
   "briefing": {
     "title": "Összefoglaló",

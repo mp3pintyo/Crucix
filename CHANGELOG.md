@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.22.0 — Közeli infrastruktúra a rekordböngészőben és tengerszoros-kitettség az országlapon / Nearby infrastructure in the record inspector and chokepoint exposure on the country sheet](docs/releases/v2.22.0.md) — 2026-10-08
+
 - [2.21.0 — Olaj- és gázvezeték-, valamint katonaibázis-réteg a térképen (és a v2.20.0 CI-javítása) / Oil and gas pipeline and military base layers on the map (and the v2.20.0 CI fix)](docs/releases/v2.21.0.md) — 2026-10-08
 
 - [2.20.0 — GNSS-zavarás (GPSJam) és hivatalos figyelmeztetések a világ minden tájáról (WMO SWIC) / GNSS interference (GPSJam) and official warnings from around the world (WMO SWIC)](docs/releases/v2.20.0.md) — 2026-10-08

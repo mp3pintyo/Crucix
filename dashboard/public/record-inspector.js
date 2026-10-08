@@ -58,6 +58,23 @@
     const more=recs.length>limit?`<button type="button" class="ri-more" data-ri-action="more">${tx('inspector.showMore','Show 25 more')}</button>`:'';
     return list+more+(total?`<p class="ri-count" role="status">${page.length} / ${total} ${tx('inspector.shown','shown')}</p>`:'');
   }
+  // Nearby infrastructure (infrastructure.js, optional): pipelines and bases within NEAR_KM of a located record, from the static dataset. The first
+  // located record starts the one request for the dataset; when it arrives the page is told once and the open inspector draws again.
+  const NEAR_KM=600,NEAR_EACH=5;
+  function nearbyPart(rec,tx){
+    const I=window.CrucixInfrastructure;
+    if(!I||typeof I.nearby!=='function'||!Number.isFinite(rec.lat)||!Number.isFinite(rec.lon))return '';
+    if(!I.get()){
+      try{I.load().then(data=>{if(data&&typeof window.dispatchEvent==='function'&&typeof window.Event==='function')window.dispatchEvent(new window.Event('crucix:infrastructure'));},()=>{});}catch{}
+      return '';
+    }
+    const found=I.nearby(rec.lat,rec.lon,NEAR_KM,NEAR_EACH);
+    if(!found.pipelines.length&&!found.bases.length)return '';
+    const kind=item=>tx(item.kind==='o'?'infra.oil':'infra.gas',item.kind==='o'?'Oil pipeline':'Gas pipeline');
+    const rows=found.pipelines.map(entry=>`<li>${esc(kind(entry.item))} · <strong>${esc(entry.item.name)}</strong> · ${tx('infra.state_'+entry.item.state,entry.item.state)} · ${entry.km} km</li>`)
+      .concat(found.bases.map(entry=>`<li>${tx('infra.base','Military base')} · <strong>${esc(entry.item.name)}</strong>${entry.item.country?' · '+esc(entry.item.country):''} · ${entry.km} km</li>`)).join('');
+    return `<h4>${tx('inspector.nearby','Nearby infrastructure')} (${NEAR_KM} km)</h4><ul class="ri-near">${rows}</ul><p class="ri-near-note">${tx('inspector.nearbyNote','Distance to the nearest point of the line between a pipeline\u2019s end points, or to the base. The record\u2019s own position may be approximate.')}</p>`;
+  }
   // `outdated` comes from reconcileSelection; rec.current is not consulted.
   function detail(selected,tx){
     const rec=obj(obj(selected)?.record);
@@ -76,7 +93,7 @@
     const details=text(rec.eventId)?`<button type="button" class="ri-details" data-ri-action="details" data-event-id="${esc(rec.eventId)}">${tx('inspector.details','Event details')}</button>`:'';
     return `<section class="ri-detail${outdated?' ri-outdated':''}"><h3 class="ri-detail-title">${glyph(tx,level)}<span>${esc(rec.title)}</span></h3>${outdated?`<span class="ri-badge">${tx('inspector.outdated','No longer current')}</span>`:''}`
       +`${text(rec.summary)?`<p class="ri-summary">${esc(rec.summary)}</p>`:''}${info?`<dl class="ri-meta">${info}</dl>`:''}`
-      +`${facts?`<h4>${tx('inspector.facts','Facts')}</h4><dl class="ri-facts">${facts}</dl>`:''}${pivots?`<h4>${tx('inspector.pivots','Look up elsewhere')}</h4><ul class="ri-pivots">${pivots}</ul>`:''}${original}${details}</section>`;
+      +`${facts?`<h4>${tx('inspector.facts','Facts')}</h4><dl class="ri-facts">${facts}</dl>`:''}${pivots?`<h4>${tx('inspector.pivots','Look up elsewhere')}</h4><ul class="ri-pivots">${pivots}</ul>`:''}${nearbyPart(rec,tx)}${original}${details}</section>`;
   }
   // Waiting (no source yet, e.g. opened from the hash before data), a reason, or filters + list.
   function body(view,source,tx,now,id){
@@ -293,6 +310,7 @@
       dialog.addEventListener('close',()=>{const state=R.store.get();if(state.source&&(state.browserOpen||state.source==='all'))collapse();});
       document.addEventListener('click',event=>{const button=event.target.closest?.('[data-open-records]');if(button)openFrom(button.dataset.openRecords);});
       window.addEventListener('hashchange',()=>{lastRec=null;set(fromHash());});
+      window.addEventListener('crucix:infrastructure',()=>{try{if(!aside.hidden||dialog.open)render();}catch{}});
       // The dashboard scrolls <body>, whose scroll events do not bubble: listen in the capture phase.
       // The top bar and the alert strip are filled (and re-wrap) after mount: follow their size as well as the scroll position.
       document.addEventListener('scroll',event=>{if(!aside.contains(event.target))dock();},{capture:true,passive:true});

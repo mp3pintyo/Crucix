@@ -24,6 +24,9 @@
     baseline:'Baseline risk (INFORM)',baselineNone:'No INFORM baseline for this country.',baselineValue:'INFORM Risk {score} of 10',release:'Release {release}, published {published}',license:'Licence: {license}',
     advisory:'Travel advisory (U.S. State Department)',advisoryNone:'No U.S. travel advisory for this country.',advisoryLevel:'Level {level} of 4',adv_1:'Exercise Normal Precautions',adv_2:'Exercise Increased Caution',adv_3:'Reconsider Travel',adv_4:'Do Not Travel',
     advisoryUpdated:'Last changed {date}',advisoryNote:'A risk reading for U.S. travellers written by one government; it is not a finding about the country and not European guidance.',advisoryOpen:'Open the advisory',
+    exposure:'Chokepoint exposure (editorial)',exposurePassage:'Passage',exposureIndex:'Exposure index',exposureBasis:'Depends on it for',exposureLive:'Traffic now',exposureNow:'{pct}% transits against the 28-day median',exposureMean:'{n} transits a day (7-day mean)',exposureNoLive:'No current traffic data',
+    basis_oil:'oil imports',basis_trade:'trade route',basis_access:'sea access',cp_hormuz:'Strait of Hormuz',cp_suez:'Suez Canal',cp_malacca:'Malacca Strait',cp_bab_el_mandeb:'Bab el-Mandeb Strait',cp_panama:'Panama Canal',cp_gibraltar:'Gibraltar Strait',cp_bosporus:'Bosporus Strait',
+    exposureNote:'World Monitor\u2019s editorial judgement of how much a country leans on a passage and could route around it (index = reliance x (1 - alternatives) for a full closure). It is not measured trade data. Traffic: IMF PortWatch, AIS-visible ships only.',
     actors:'Threat actor groups',actorsNone:'No threat actor group is attributed to this country in the MISP galaxy.',actorsCount:'{count} groups in the MISP galaxy; the {shown} with the most known aliases are shown.',
     actorsNote:'Attribution is the MISP community’s suspicion, not a proven finding, and many groups have no country at all.',aliases:'also known as {names}',
     events:'Recent records',eventsNone:'No recorded event linked to this country.',located:'Located',mentioned:'Mentioned',untitled:'Title unavailable',
@@ -113,6 +116,18 @@
     }
     return `<section class="cs-sec" aria-labelledby="cs-advisory"><h3 id="cs-advisory">${esc(say('advisory'))}</h3>${body}</section>`;
   }
+  const EXPOSURE_BASES=['oil','trade','access'];
+  function exposure(list){
+    const rows=(Array.isArray(list)?list:[]).filter(item=>isObject(item)&&typeof item.chokepoint==='string'&&/^[a-z_]{3,20}$/.test(item.chokepoint)&&finite(item.index)).slice(0,8);
+    if(!rows.length)return '';
+    const body=rows.map(item=>{
+      const live=isObject(item.live)?item.live:null;
+      const now=live&&finite(live.changePct)?say('exposureNow',{pct:(live.changePct>0?'+':'')+Math.round(live.changePct)}):live&&finite(live.mean7d)?say('exposureMean',{n:number(live.mean7d,0)}):say('exposureNoLive');
+      const basis=EXPOSURE_BASES.includes(item.basis)?item.basis:'trade';
+      return `<tr><th scope="row">${esc(tx('country.cp_'+item.chokepoint,text(item.name,60)||item.chokepoint))}</th><td>${esc(percent(item.index))}</td><td>${esc(say('basis_'+basis))}</td><td>${esc(now)}</td></tr>`;
+    }).join('');
+    return `<section class="cs-sec" aria-labelledby="cs-exposure"><h3 id="cs-exposure">${esc(say('exposure'))}</h3><div class="cs-scroll"><table class="cs-table"><thead><tr><th scope="col">${esc(say('exposurePassage'))}</th><th scope="col">${esc(say('exposureIndex'))}</th><th scope="col">${esc(say('exposureBasis'))}</th><th scope="col">${esc(say('exposureLive'))}</th></tr></thead><tbody>${body}</tbody></table></div><p class="cs-cite">${esc(say('exposureNote'))}</p></section>`;
+  }
   function actors(value){
     let body;
     const groups=isObject(value)&&Array.isArray(value.groups)?value.groups.slice(0,12).filter(isObject).filter(group=>text(group.name,60)):[];
@@ -149,7 +164,7 @@
       ?`<div class="cs-head"><p class="cs-score" data-band="${score>=70?'high':score>=40?'elevated':score>=10?'watch':'low'}"><span class="cs-label">${esc(say('score'))}</span> <strong>${esc(say('outOf',{score}))}</strong></p><span class="cs-bar" aria-hidden="true"><span class="cs-fill" style="width:${score}%"></span></span><dl class="cs-facts"><div><dt>${esc(say('change'))}</dt><dd>${esc(changeText(data.change24h))}</dd></div><div><dt>${esc(say('coverage'))}</dt><dd>${esc(percent(data.coverage))}</dd></div></dl>${at!==null?`<p class="cs-cite">${esc(say('updated',{time:clock(at),version:Number.isSafeInteger(data.version)?data.version:'?'}))}</p>`:''}</div>`
       :`<p class="cs-calm cs-noscore">${esc(say('noScore'))}</p>`;
     const brief=`<p class="cs-actions"><button type="button" class="cs-brief" data-country-briefing="${data.iso3}" aria-haspopup="dialog">${esc(say('briefing'))}</button></p>`;
-    return head+(scored?components(data.components):'')+trend(data.series)+(scored?convergence(data.convergence):'')+forecast(data.forecast)+baseline(data.baseline)+advisory(data.advisory)+actors(data.actors)+events(data.events)+linked(data.linked)+brief;
+    return head+(scored?components(data.components):'')+trend(data.series)+(scored?convergence(data.convergence):'')+forecast(data.forecast)+baseline(data.baseline)+advisory(data.advisory)+exposure(data.exposure)+actors(data.actors)+events(data.events)+linked(data.linked)+brief;
   }
 
   // ===== The dialog =====
