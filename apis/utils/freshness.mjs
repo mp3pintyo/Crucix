@@ -27,6 +27,8 @@ export const POLICIES = Object.freeze({
   'NOAA-NHC': { maxAgeMs: 8*HOUR, observationMaxAgeMs: 12*HOUR },
   'JMA-Typhoon': { maxAgeMs: 8*HOUR, observationMaxAgeMs: 12*HOUR },
   'ECDC-Threats': { maxAgeMs: 336*HOUR, observationMaxAgeMs: 504*HOUR },
+  'Central-Banks': { maxAgeMs: 336*HOUR, observationMaxAgeMs: 2880*HOUR },
+  'CFTC-COT': { maxAgeMs: 288*HOUR, observationMaxAgeMs: 288*HOUR },
   'Launch-Library': { maxAgeMs: 12*HOUR, observationMaxAgeMs: 720*HOUR },
 });
 
