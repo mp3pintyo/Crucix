@@ -13,15 +13,17 @@
   // Close button and the backdrop close it too, and the focus goes back to where it was before the dialog opened.
   const ISO3=/^[A-Z]{3}$/,EVENT_ID=/^event-[0-9a-f]{32}$/;
   const ISO_TIME=/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,9})?)?(Z|[+-]\d{2}:\d{2})$/;
-  const LEVELS=['critical','high','watch','info'],COMPONENTS=['events','persistence','diversity','attention','forecast','baseline'];
+  const LEVELS=['critical','high','watch','info'],COMPONENTS=['events','persistence','diversity','attention','forecast','baseline','advisory'];
   const COPY={title:'Country sheet',close:'Close',loading:'Loading the country sheet…',error:'Could not load the country sheet. Close and reopen it to try again.',notFound:'This country is not in the gazetteer.',
     noScore:'No risk score: no recorded event in the last 7 days and no forecast or baseline for this country.',score:'Risk score',outOf:'{score} of 100',change:'24 h change',coverage:'Coverage',
     updated:'Scored {time} · model v{version}',components:'Components',component:'Component',weight:'Weight',value:'Value (0–100)',status:'Data',available:'Available',missing:'Missing (left out)',
-    c_events:'Events (24 h)',c_persistence:'Persistence (7 days)',c_diversity:'Diversity of event types',c_attention:'News attention',c_forecast:'Conflict forecast (VIEWS)',c_baseline:'Baseline risk (INFORM)',
+    c_events:'Events (24 h)',c_persistence:'Persistence (7 days)',c_diversity:'Diversity of event types',c_attention:'News attention',c_forecast:'Conflict forecast (VIEWS)',c_baseline:'Baseline risk (INFORM)',c_advisory:'Travel advisory (U.S.)',
     trend:'Trend',trendDaily:'Daily score, last {count} days: {values}',trendRecent:'Score in the last 48 hours: {values}',trendNone:'Not enough history for a trend yet.',
     convergence:'Convergence',convergenceOn:'{count} event types at high or above within 24 hours: {kinds}.',convergenceOff:'No convergence: fewer than 3 event types at high or above within 24 hours.',
     forecast:'Conflict forecast (VIEWS)',forecastNone:'No VIEWS forecast for this country.',month:'Month',probability:'Chance of ≥ 25 battle deaths',fatalities:'Expected battle deaths',monthUsed:'used in the score',run:'Run {run}',
     baseline:'Baseline risk (INFORM)',baselineNone:'No INFORM baseline for this country.',baselineValue:'INFORM Risk {score} of 10',release:'Release {release}, published {published}',license:'Licence: {license}',
+    advisory:'Travel advisory (U.S. State Department)',advisoryNone:'No U.S. travel advisory for this country.',advisoryLevel:'Level {level} of 4',adv_1:'Exercise Normal Precautions',adv_2:'Exercise Increased Caution',adv_3:'Reconsider Travel',adv_4:'Do Not Travel',
+    advisoryUpdated:'Last changed {date}',advisoryNote:'A risk reading for U.S. travellers written by one government; it is not a finding about the country and not European guidance.',advisoryOpen:'Open the advisory',
     actors:'Threat actor groups',actorsNone:'No threat actor group is attributed to this country in the MISP galaxy.',actorsCount:'{count} groups in the MISP galaxy; the {shown} with the most known aliases are shown.',
     actorsNote:'Attribution is the MISP community’s suspicion, not a proven finding, and many groups have no country at all.',aliases:'also known as {names}',
     events:'Recent records',eventsNone:'No recorded event linked to this country.',located:'Located',mentioned:'Mentioned',untitled:'Title unavailable',
@@ -98,6 +100,19 @@
     else body=`<p class="cs-value">${esc(say('baselineValue',{score:number(value.score,1)}))}</p>${text(value.release,80)?`<p class="cs-cite">${esc(say('release',{release:text(value.release,80),published:text(value.published,40)||'—'}))}</p>`:''}<p class="cs-cite">${esc(text(value.attribution,400))}</p>${text(value.license,300)?`<p class="cs-cite">${esc(say('license',{license:text(value.license,300)}))}</p>`:''}`;
     return `<section class="cs-sec" aria-labelledby="cs-baseline"><h3 id="cs-baseline">${esc(say('baseline'))}</h3>${body}</section>`;
   }
+  const ADVISORY_URL=/^https:\/\/travel\.state\.gov\/[A-Za-z0-9/._-]{1,300}$/,DAY=/^\d{4}-\d{2}-\d{2}$/;
+  function advisory(value){
+    let body;
+    const level=isObject(value)&&Number.isInteger(value.level)&&value.level>=1&&value.level<=4?value.level:0;
+    if(!level)body=`<p class="cs-calm">${esc(say('advisoryNone'))}</p>`;
+    else{
+      const day=typeof value.updated==='string'&&DAY.test(value.updated)?value.updated:'';
+      const link=typeof value.url==='string'&&ADVISORY_URL.test(value.url)?value.url:'';
+      body=`<p class="cs-value" data-level="${level}">${esc(say('advisoryLevel',{level}))} · ${esc(say('adv_'+level))}</p>${day?`<p class="cs-cite">${esc(say('advisoryUpdated',{date:day}))}</p>`:''}<p class="cs-cite">${esc(say('advisoryNote'))}</p>`
+        +`${link?`<p class="cs-cite"><a href="${esc(link)}" target="_blank" rel="noopener noreferrer">${esc(say('advisoryOpen'))}</a></p>`:''}<p class="cs-cite">${esc(text(value.attribution,400))}</p>${text(value.license,300)?`<p class="cs-cite">${esc(say('license',{license:text(value.license,300)}))}</p>`:''}`;
+    }
+    return `<section class="cs-sec" aria-labelledby="cs-advisory"><h3 id="cs-advisory">${esc(say('advisory'))}</h3>${body}</section>`;
+  }
   function actors(value){
     let body;
     const groups=isObject(value)&&Array.isArray(value.groups)?value.groups.slice(0,12).filter(isObject).filter(group=>text(group.name,60)):[];
@@ -134,7 +149,7 @@
       ?`<div class="cs-head"><p class="cs-score" data-band="${score>=70?'high':score>=40?'elevated':score>=10?'watch':'low'}"><span class="cs-label">${esc(say('score'))}</span> <strong>${esc(say('outOf',{score}))}</strong></p><span class="cs-bar" aria-hidden="true"><span class="cs-fill" style="width:${score}%"></span></span><dl class="cs-facts"><div><dt>${esc(say('change'))}</dt><dd>${esc(changeText(data.change24h))}</dd></div><div><dt>${esc(say('coverage'))}</dt><dd>${esc(percent(data.coverage))}</dd></div></dl>${at!==null?`<p class="cs-cite">${esc(say('updated',{time:clock(at),version:Number.isSafeInteger(data.version)?data.version:'?'}))}</p>`:''}</div>`
       :`<p class="cs-calm cs-noscore">${esc(say('noScore'))}</p>`;
     const brief=`<p class="cs-actions"><button type="button" class="cs-brief" data-country-briefing="${data.iso3}" aria-haspopup="dialog">${esc(say('briefing'))}</button></p>`;
-    return head+(scored?components(data.components):'')+trend(data.series)+(scored?convergence(data.convergence):'')+forecast(data.forecast)+baseline(data.baseline)+actors(data.actors)+events(data.events)+linked(data.linked)+brief;
+    return head+(scored?components(data.components):'')+trend(data.series)+(scored?convergence(data.convergence):'')+forecast(data.forecast)+baseline(data.baseline)+advisory(data.advisory)+actors(data.actors)+events(data.events)+linked(data.linked)+brief;
   }
 
   // ===== The dialog =====

@@ -1140,7 +1140,18 @@
     "briefing": "Briefing for this country",
     "paletteOpen": "Open country: {name}",
     "paletteHint": "Risk score {score}",
-    "paletteHintNone": "Country sheet"
+    "paletteHintNone": "Country sheet",
+    "c_advisory": "Travel advisory (U.S.)",
+    "advisory": "Travel advisory (U.S. State Department)",
+    "advisoryNone": "No U.S. travel advisory for this country.",
+    "advisoryLevel": "Level {level} of 4",
+    "adv_1": "Exercise Normal Precautions",
+    "adv_2": "Exercise Increased Caution",
+    "adv_3": "Reconsider Travel",
+    "adv_4": "Do Not Travel",
+    "advisoryUpdated": "Last changed {date}",
+    "advisoryNote": "A risk reading for U.S. travellers written by one government; it is not a finding about the country and not European guidance.",
+    "advisoryOpen": "Open the advisory"
   },
   "briefing": {
     "title": "Briefing",

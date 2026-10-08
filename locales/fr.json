@@ -1140,7 +1140,18 @@
     "briefing": "Synthèse pour ce pays",
     "paletteOpen": "Ouvrir le pays : {name}",
     "paletteHint": "Score de risque {score}",
-    "paletteHintNone": "Fiche pays"
+    "paletteHintNone": "Fiche pays",
+    "c_advisory": "Avis aux voyageurs (É.-U.)",
+    "advisory": "Avis aux voyageurs (département d’État américain)",
+    "advisoryNone": "Aucun avis américain aux voyageurs pour ce pays.",
+    "advisoryLevel": "Niveau {level} sur 4",
+    "adv_1": "Précautions normales",
+    "adv_2": "Prudence accrue",
+    "adv_3": "Reconsidérer le voyage",
+    "adv_4": "Ne pas voyager",
+    "advisoryUpdated": "Dernière modification : {date}",
+    "advisoryNote": "Une évaluation du risque pour les voyageurs américains, rédigée par un seul gouvernement ; ce n’est pas un constat sur le pays ni une consigne européenne.",
+    "advisoryOpen": "Ouvrir l’avis"
   },
   "briefing": {
     "title": "Synthèse",

@@ -1140,7 +1140,18 @@
     "briefing": "Összefoglaló erről az országról",
     "paletteOpen": "Ország megnyitása: {name}",
     "paletteHint": "Kockázati pontszám: {score}",
-    "paletteHintNone": "Országlap"
+    "paletteHintNone": "Országlap",
+    "c_advisory": "Utazási figyelmeztetés (USA)",
+    "advisory": "Utazási figyelmeztetés (USA külügyminisztérium)",
+    "advisoryNone": "Ehhez az országhoz nincs amerikai utazási figyelmeztetés.",
+    "advisoryLevel": "{level}. szint a 4-ből",
+    "adv_1": "Normál óvintézkedések",
+    "adv_2": "Fokozott óvatosság",
+    "adv_3": "Az utazás átgondolása",
+    "adv_4": "Ne utazzon",
+    "advisoryUpdated": "Utolsó változás: {date}",
+    "advisoryNote": "Egyetlen kormány kockázatértékelése amerikai utazóknak; nem megállapítás az országról, és nem európai útmutatás.",
+    "advisoryOpen": "A figyelmeztetés megnyitása"
   },
   "briefing": {
     "title": "Összefoglaló",
