@@ -145,6 +145,18 @@ test('normalization enforces enums, text fields, deduplication and bounded outpu
   assert.equal(bounded.risk.length, 800);
 });
 
+test('normalization takes the first usable rationale string and strips zero-width and bidi characters', () => {
+  for (const rationale of [{ note: 'object' }, 42, true, ['x'], '', '   ']) {
+    assert.equal(normalizeIdeas([idea({ rationale, text: 'From text.' })])[0].rationale, 'From text.', JSON.stringify(rationale));
+  }
+  assert.equal(normalizeIdeas([idea({ rationale: 'Own.', text: 'From text.' })])[0].rationale, 'Own.');
+  assert.equal(normalizeIdeas([idea({ rationale: undefined, text: undefined })])[0].rationale, ''); // empty rationale is still accepted
+  const hidden = [0x200b, 0x200f, 0x202a, 0x202e, 0x2066, 0x2069].map(code => String.fromCharCode(code)).join('');
+  const [clean] = normalizeIdeas([idea({ title: `Gold${hidden} rally`, rationale: `Up${hidden}.`, signals: [`${hidden}WTI`] })]);
+  assert.deepEqual([clean.title, clean.rationale, clean.signals], ['Gold rally', 'Up.', ['WTI']]);
+  assert.equal(normalizeIdeas([idea({ horizon: 'decade' })])[0].horizon, '');
+});
+
 test('parser handles fenced/prose/wrapped JSON and brackets or escaped quotes inside text', () => {
   const json = JSON.stringify([idea({ title: 'Quoted "title" [still text]' })]);
   assert.equal(parseIdeasResponse(JSON.stringify([idea({ title: '<think>literal data</think>' })]))[0].title, '<think>literal data</think>');
