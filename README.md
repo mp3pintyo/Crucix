@@ -2,12 +2,12 @@
 
 # Crucix
 
-**Your own intelligence terminal. 52 sources. One command. Local processing.**
+**Your own intelligence terminal. 64 sources. One command. Local processing.**
 
 [![Node.js 22+](https://img.shields.io/badge/node-22%2B-brightgreen)](#quick-start)
 [![License: AGPL v3](https://img.shields.io/badge/license-AGPLv3-blue.svg)](LICENSE)
-[![Dependencies](https://img.shields.io/badge/dependencies-1%20(express)-orange)](#architecture)
-[![Sources](https://img.shields.io/badge/OSINT%20sources-52-cyan)](#data-sources-52)
+[![Dependencies](https://img.shields.io/badge/dependencies-3-orange)](#design-principles)
+[![Sources](https://img.shields.io/badge/OSINT%20sources-64-cyan)](#data-sources-64)
 [![Docker](https://img.shields.io/badge/docker-ready-blue?logo=docker)](#docker)
 
 ![Crucix Dashboard](docs/dashboard.png)
@@ -32,7 +32,7 @@
 >
 > **Showcase site:** an animated, bilingual (HU/EN) presentation of what Crucix does lives in [docs/site](docs/site/index.html) — open `docs/site/index.html` in a browser, no build step.
 
-Crucix pulls satellite fire detection, flight tracking, radiation monitoring, satellite constellation tracking, economic indicators, live market prices, conflict data, sanctions lists, and social sentiment from 31 open-source intelligence feeds — in parallel, every 15 minutes — and renders everything on a single self-contained Jarvis-style dashboard.
+Crucix pulls satellite fire detection, flight tracking (including military air activity and orbits), radiation and wind at nuclear sites, cyclones and launches, earthquakes and disasters, economic indicators, live market prices, conflict data, sanctions lists, cyber and internet signals and social sentiment from 64 open-source intelligence sources — in parallel, every 15 minutes — and renders everything on a single Jarvis-style dashboard with a 3D globe and a flat map. On top of the raw feeds it keeps a searchable event history, a country risk index, an alert engine and a replayable sweep archive.
 
 Hook it up to an LLM and it becomes a **two-way intelligence assistant** — pushing multi-tier alerts to Telegram and Discord when something meaningful changes, responding to commands like `/brief` and `/sweep` from your phone, and generating actionable trade ideas grounded in real cross-domain data. Your own analyst that watches the world while you sleep.
 
@@ -80,7 +80,7 @@ npm run dev
 > ```
 > This bypasses npm's script runner, which can swallow errors on some systems (particularly PowerShell on Windows). You can also run `node diag.mjs` to diagnose the exact issue — it checks your Node version, tests each module import individually, and verifies port availability. See [Troubleshooting](#troubleshooting) for more.
 
-The dashboard opens automatically at `http://localhost:3117` and immediately begins its first intelligence sweep. This initial sweep queries all 52 sources in parallel and typically takes 30–60 seconds — the dashboard will appear empty until the sweep completes and pushes the first data update. After that, it auto-refreshes every 15 minutes via SSE (Server-Sent Events). No manual page refresh needed.
+The dashboard opens automatically at `http://localhost:3117` and immediately begins its first intelligence sweep. This initial sweep queries all 64 sources in parallel and typically takes 30–60 seconds — the dashboard will appear empty until the sweep completes and pushes the first data update. After that, it auto-refreshes every 15 minutes via SSE (Server-Sent Events). No manual page refresh needed.
 
 **Requirements:** Node.js 22+ (uses native `fetch`, top-level `await`, ESM)
 
@@ -109,7 +109,7 @@ Run `npm run check` and `npm test` before submitting changes. See [the bilingual
 
 ### Data reliability and local models (v2.2)
 
-The source registry now queries 31 adapters, including this fork's IODA and the keyless USGS significant-day earthquake feed. USGS coverage is significant earthquakes in the past day, not every earthquake above a magnitude threshold. Its tsunami flag does not establish that a warning was issued. Maritime chokepoints are reference locations; no live AIS connection is claimed by the briefing adapter.
+The source registry grew from 31 adapters at this point (64 since v2.30, see [Data Sources](#data-sources-64)) and included this fork's IODA and the keyless USGS significant-day earthquake feed. USGS coverage is significant earthquakes in the past day, not every earthquake above a magnitude threshold. Its tsunami flag does not establish that a warning was issued. Maritime chokepoints are reference locations; no live AIS connection is claimed by the briefing adapter.
 
 `LLM_IDEAS_EVERY_N_SWEEPS=3` generates on the first sweep, then sweeps 3, 6, and so on. Intermediate sweeps reuse ideas with their original timestamp; the cache is per process. The default is 1. Delta alerts still evaluate every sweep, and failed model calls produce fresh rule-based ideas.
 
@@ -121,7 +121,7 @@ Ideas fall back to deterministic English/Hungarian rules when no model is enable
 
 ### Dashboard usability and audit (v2.3)
 
-Settings share 13 logical layer switches between the flat map and globe, including earthquakes. Source health distinguishes failures, disabled collection and stale data; live connection status and snapshot age are separate. Ideas display rule/model origin and cached age. Missing first data has a waiting state; empty readings do not imply normal conditions.
+Settings share the map layer switches between the flat map and globe (13 in v2.3, 22 since v2.30: see [What You Get](#live-dashboard)). Source health distinguishes failures, disabled collection and stale data; live connection status and snapshot age are separate. Ideas display rule/model origin and cached age. Missing first data has a waiting state; empty readings do not imply normal conditions.
 
 The settings dialog supports keyboard focus, Escape and focus restoration. Panel order can be changed with Alt+Up/Down and panels can be assigned to a zone. Preferences survive reload when storage is available. Reduced-motion preferences disable automatic globe rotation. Desktop and 390px mobile checks cover layers, saved settings, malicious text, empty data, connection recovery and polling fallback.
 
@@ -155,11 +155,11 @@ The dashboard shows an **alert strip** under the top bar (threat level 1–5 fro
 
 ### Ten new live sources (v2.11)
 
-The **Current public data** panel grows from nine to 19 keyless sources: IMF PortWatch chokepoint transits, EMSC earthquakes, Copernicus EMS activations, aviation SIGMETs, adsb.lol military air activity, the OpenSanctions index, Federal Register OFAC/BIS documents, Hungarian power (Energy-Charts) and gas (ENTSOG) data and Manifold prediction markets. They are listed in the [Tier 7 table](#tier-7-current-public-data-19), feed the map layers and the alert engine (eleven new metrics) and are described, with their freshness rules, licences and limits, in the [release notes](docs/releases/v2.11.0.md). Known limits: PortWatch and adsb.lol see only ships with AIS and aircraft with ADS-B transponders on, three sources (IMF PortWatch, OpenSanctions, Manifold) are non-commercial by their terms, the live panel was tall with 19 cards (v2.12 groups them), and the PWA offline snapshot is refused above 5 MiB (about 1.8 MiB with every source's longest real row repeated up to its row cap).
+The **Current public data** panel grew from nine to 19 keyless sources (29 since v2.30): IMF PortWatch chokepoint transits, EMSC earthquakes, Copernicus EMS activations, aviation SIGMETs, adsb.lol military air activity, the OpenSanctions index, Federal Register OFAC/BIS documents, Hungarian power (Energy-Charts) and gas (ENTSOG) data and Manifold prediction markets. They are listed in the [Tier 7 table](#tier-7-current-public-data-29), feed the map layers and the alert engine (eleven new metrics) and are described, with their freshness rules, licences and limits, in the [release notes](docs/releases/v2.11.0.md). Known limits: PortWatch and adsb.lol see only ships with AIS and aircraft with ADS-B transponders on, three sources (IMF PortWatch, OpenSanctions, Manifold) are non-commercial by their terms, the live panel was tall with 19 cards (v2.12 groups them), and the PWA offline snapshot is refused above 5 MiB (about 1.8 MiB with every source's longest real row repeated up to its row cap).
 
 ### Two cyber feeds from the OSINT catalogue (v2.15)
 
-The **Cyber and internet** lens gains two keyless sources found by analysing the [awesome-osint-arsenal](https://github.com/rawfilejson/awesome-osint-arsenal) catalogue: **ThreatFox** (abuse.ch, CC0: new indicators of compromise per malware family over 24 hours; single indicators are never listed) and **Have I Been Pwned** (CC BY 4.0: breaches added in the last 30 days, rated by size; sensitive, fabricated, spam-list and retired breaches are left out). Both are in the [Tier 7 table](#tier-7-current-public-data-19) below and described, with limits and the measurements behind the ratings, in the [release notes](docs/releases/v2.15.0.md). The Feodo Tracker was measured too and left out: it lists five servers, one online, last active in March 2026.
+The **Cyber and internet** lens gains two keyless sources found by analysing the [awesome-osint-arsenal](https://github.com/rawfilejson/awesome-osint-arsenal) catalogue: **ThreatFox** (abuse.ch, CC0: new indicators of compromise per malware family over 24 hours; single indicators are never listed) and **Have I Been Pwned** (CC BY 4.0: breaches added in the last 30 days, rated by size; sensitive, fabricated, spam-list and retired breaches are left out). Both are in the [Tier 7 table](#tier-7-current-public-data-29) below and described, with limits and the measurements behind the ratings, in the [release notes](docs/releases/v2.15.0.md). The Feodo Tracker was measured too and left out: it lists five servers, one online, last active in March 2026.
 
 ### Cyber incidents disclosed to the SEC (v2.17)
 
@@ -181,14 +181,6 @@ Two new map layers, both off by default (Settings > Map layers): **618 oil and g
 
 The record inspector lists the nearest pipelines and bases (within 600 km) of every located record, and the country sheet has a chokepoint exposure table (an editorial index from World Monitor, not measured trade data) next to the current PortWatch traffic of the passage; see the [release notes](docs/releases/v2.22.0.md).
 
-Three more map layers, also off by default: **6,634 mapped military areas**, **3,681 data centres** and **581 dams** from OpenStreetMap / Overture (ODbL) via God's Eye View; the record inspector lists the 3 nearest of each within 200 km, and a high-intensity FIRMS detection on or beside a mapped military area raises a cross-check signal (see the [release notes](docs/releases/v2.26.0.md)).
-
-Two more live sources with their own map layers (on by default): the **forecast tracks and cones of active tropical cyclones** (NOAA NHC/CPHC; a cone is the uncertainty of the centre track, not the storm's size) and **orbital launches** of the next 14 days and the last 7 (Launch Library 2), with government and military payloads rated moderate (see the [release notes](docs/releases/v2.27.0.md)).
-
-The globe has a **daily satellite image** button (NASA GIBS VIIRS true colour of yesterday, cached by the server at `/api/basemap/daily.jpg`; falls back to night lights), and the Nuclear sites panel shows the modelled current wind at each site (see the [release notes](docs/releases/v2.29.0.md)).
-
-The **©** button on the map opens a data-attribution panel that lists the credits and licences of what is on screen: the basemap, the switched-on layers and loaded datasets, and every live source (see the [release notes](docs/releases/v2.30.0.md)).
-
 ### Trending terms and unusual activity (v2.23)
 
 The Country risk panel gains two sections: **trending terms** (words in far more headlines than usual in the last two hours, from at least two sources; a headline counts once; stored in `runs/intelligence/keywords.json`) and **unusual activity** (countries whose last-24-hour located events are unusual against their own previous windows, a Welford z-score; weekday patterns are not modelled). Neither reports anything before it has a baseline (24 hours and 11 days); see the [release notes](docs/releases/v2.23.0.md).
@@ -197,20 +189,30 @@ The Country risk panel gains two sections: **trending terms** (words in far more
 
 [docs/watchlist.json](docs/watchlist.json) lists the projects Crucix learns from (awesome-osint-arsenal, World Monitor, God's Eye View) with what was adopted and what is open; `node scripts/watchlist.mjs` shows the commits and releases since each was last reviewed, `--mark <id>` records a review. See the [release notes](docs/releases/v2.24.0.md).
 
+### Ideas from God's Eye View (v2.26–v2.30)
+
+The [God's Eye View](https://github.com/bilawalsidhu/gods-eye-view) analysis (MIT code; its datasets keep their own licences) produced five releases, listed here with what each adds:
+
+- **Mapped sites (v2.26).** Three more map layers, off by default: **6,634 mapped military areas**, **3,681 data centres** and **581 dams** from OpenStreetMap / Overture (ODbL), in one 770 KB file (`dashboard/public/data/sites.json`, rebuilt with `scripts/build-sites.mjs`). The record inspector lists the 3 nearest of each within 200 km (0 km inside a military area), and a high-intensity FIRMS detection on or beside a mapped military area raises one cross-check signal (a range fire, a burn-off and an attack look alike from orbit). [Release notes](docs/releases/v2.26.0.md).
+- **Cyclones and launches (v2.27).** Two live sources with map layers (on by default): the **forecast tracks and cones of active tropical cyclones** (NOAA NHC/CPHC; a cone is the uncertainty of the centre track, not the storm's size) and **orbital launches** of the next 14 days and the last 7 (Launch Library 2; government and military payloads rated moderate, failures elevated). [Release notes](docs/releases/v2.27.0.md).
+- **Military aircraft flying orbits (v2.28).** `ADSB-Orbits` reads the day's position traces of up to 12 military aircraft (adsb.lol, ODbL) and reports circles and racetracks, one aggregate row per theater, without callsigns or addresses; an orbit is no proof of a purpose and aircraft with the transponder off are not seen. [Release notes](docs/releases/v2.28.0.md).
+- **Wind and a daily satellite image (v2.29).** The Nuclear sites panel shows the modelled current wind at each site (Open-Meteo; not a dispersion forecast), and a globe button switches the basemap to NASA GIBS' VIIRS true-colour image of yesterday (cached by the server at `/api/basemap/daily.jpg`; it falls back to night lights). [Release notes](docs/releases/v2.29.0.md).
+- **Data credits (v2.30).** The **©** button on the map opens a panel with the credits and licences of what is on screen: the basemap, the switched-on layers and loaded datasets, every live source and the software. [Release notes](docs/releases/v2.30.0.md).
+
 ### Dashboard structure (v2.12)
 
-- **Domain lenses.** A bar under the alert strip offers **All** and eight domains (security and conflict, natural hazards and weather, space, cyber and internet, markets and economy, energy and supply chain, sanctions and regulation, health and environment) that together cover all 52 source adapters. A lens narrows the live panel, the source-health panel, the changes panel and its chip, the record browser's source list and the live record markers on both maps. News, OSINT and delta signals have no domain and only show under **All**; the older map layers keep their own switches. The choice is kept per browser (in memory only when storage is blocked).
-- **Compact live panel.** The 19 cards sit in domain groups, collapsed to one line each (sources, records, worst severity, failing sources); a group that needs attention (a source not ok, or a high or critical record) opens by itself, and under a lens only that domain's group is shown, open. The failing-source chips of a collapsed group stay on one line (a long name is cut short with an ellipsis; its full text is in the tooltip and the button name, and "+N more" always shows). Collapsed, the panel measured 378 px (English) and 395 px (Hungarian and French) tall at 1280 px, the same with every source current, with one failing source per group and with every source failing (measured on the QA test fixture, not on a live sweep). The panel badge counts the cards shown: under a lens, that domain's current / shown cards. A focused group header or **Open records** button keeps the focus when the panel is redrawn.
+- **Domain lenses.** A bar under the alert strip offers **All** and eight domains (security and conflict, natural hazards and weather, space, cyber and internet, markets and economy, energy and supply chain, sanctions and regulation, health and environment) that together cover all 64 source adapters. A lens narrows the live panel, the source-health panel, the changes panel and its chip, the record browser's source list and the live record markers on both maps. News, OSINT and delta signals have no domain and only show under **All**; the older map layers keep their own switches. The choice is kept per browser (in memory only when storage is blocked).
+- **Compact live panel.** The live cards (19 in v2.12, 29 since v2.30) sit in domain groups, collapsed to one line each (sources, records, worst severity, failing sources); a group that needs attention (a source not ok, or a high or critical record) opens by itself, and under a lens only that domain's group is shown, open. The failing-source chips of a collapsed group stay on one line (a long name is cut short with an ellipsis; its full text is in the tooltip and the button name, and "+N more" always shows). Collapsed, with 19 cards, the panel measured 378 px (English) and 395 px (Hungarian and French) tall at 1280 px, the same with every source current, with one failing source per group and with every source failing (measured on the QA test fixture, not on a live sweep). The panel badge counts the cards shown: under a lens, that domain's current / shown cards. A focused group header or **Open records** button keeps the focus when the panel is redrawn.
 - **Ctrl+K / Cmd+K command palette** (or the **Commands** button): actions (lenses, alerts, settings, signal guide, source-health matrix, record browser, replay, What changed, country risk briefing, Open country: <name>), one entry per source (it opens that source's records, or the matrix: it does not scroll to the source's row), and a live search of the record history from two characters (6 records, 200 ms after the last keystroke; a slower older answer never replaces a newer one). At most 12 results; ↑/↓, Home/End, Enter, Esc. It does not take the inspector's keys and does nothing while another dialog is open.
 - **Source-health matrix** (the **Matrix** button of the Source health panel, or the palette): every source × the last archived sweeps (48 by default, up to the retention), grouped by domain. Each cell is a glyph and a word (✓ OK, ◔ Stale, ✕ Error, – Disabled, · No data), the last column the newest run time; arrow keys move between cells (a screen reader hears each one as source, sweep time and state, e.g. "GDELT, Oct 3 09:00, OK") and a cell opens that sweep in the replay.
 - **What changed.** A right-rail panel and a `Δ N` header chip: new records (most severe first), source state changes and delta signals since the previous sweep, with per-domain counts and the windows Last sweep / 1 h / 6 h / 24 h (a merged window's totals are upper bounds, shown as "up to"). Each list shows three rows until **Show all**. The chip always counts the last sweep, under the active lens.
 - **Sweep replay** (the **Replay** button, a matrix cell or the palette): step through archived sweeps with the slider, ◀ / ▶ or the arrow keys. The dashboard redraws the chosen sweep with its clock frozen at the sweep's time, under a REPLAY bar with **Back to live**. Live updates are kept aside (the bar counts them) and applied when you go back; nothing is written to the offline cache. Alerts stay live; event history, export and alert evidence links are off during a replay. The button stays disabled, with the reason, until two sweeps are archived.
 
-The server stores every sweep in `RUNS_DIR/sweeps` (`SWEEP_ARCHIVE_COUNT`, `SWEEP_ARCHIVE_MAX_MB`; a measured real sweep with all 19 live sources current was 757,482 bytes of JSON and 110,404 bytes gzipped, so the default 96 sweeps take about 11 MB) and serves it through four read-only routes (see [API Endpoints](#api-endpoints)). Replay steps over stored sweeps, not continuous time, and only sweeps archived by 2.12.0 or later exist. Storage, retention and the known limits are in the Hungarian [operations guide](docs/OPERATIONS.md#söprés-archívum-és-változások). The measured numbers, the route contracts and the full list of known limits are in the [release notes](docs/releases/v2.12.0.md).
+The server stores every sweep in `RUNS_DIR/sweeps` (`SWEEP_ARCHIVE_COUNT`, `SWEEP_ARCHIVE_MAX_MB`; a measured real sweep (v2.12) with all 19 live sources current was 757,482 bytes of JSON and 110,404 bytes gzipped, so the default 96 sweeps take about 11 MB) and serves it through four read-only routes (see [API Endpoints](#api-endpoints)). Replay steps over stored sweeps, not continuous time, and only sweeps archived by 2.12.0 or later exist. Storage, retention and the known limits are in the Hungarian [operations guide](docs/OPERATIONS.md#söprés-archívum-és-változások). The measured numbers, the route contracts and the full list of known limits are in the [release notes](docs/releases/v2.12.0.md).
 
 ### Country risk and cited briefings (v2.13, server side)
 
-- **Country risk 0–100.** After the events of each sweep the server links every event to at most three countries (trusted coordinates or a structured place name count as *located*; news and keyword-placed records only by a country named in their title or summary, as *mentioned*) and scores each country from six components: located events of the last 24 hours, persistence over 7 days, diversity of high-level event kinds, news attention (after 7 days of data), the [VIEWS](#tier-8-country-risk-inputs-2) conflict forecast for the current month and the INFORM baseline. A missing component is left out and the rest renormalised; `coverage` says how much of the model was available. It is a **heuristic index, not a probability** and not an official rating. Three or more physical event kinds at high or above in 24 hours mark a country as *convergent*.
+- **Country risk 0–100.** After the events of each sweep the server links every event to at most three countries (trusted coordinates or a structured place name count as *located*; news and keyword-placed records only by a country named in their title or summary, as *mentioned*) and scores each country from seven components: located events of the last 24 hours, persistence over 7 days, diversity of high-level event kinds, news attention (after 7 days of data), the [VIEWS](#tier-8-country-risk-and-context-inputs-4) conflict forecast for the current month, the INFORM baseline and (since v2.19, model v2) the U.S. travel advisory level. A missing component is left out and the rest renormalised; `coverage` says how much of the model was available. It is a **heuristic index, not a probability** and not an official rating. Three or more physical event kinds at high or above in 24 hours mark a country as *convergent*.
 - **Logged predictions.** Once a day per active country the server logs "will a new located high-level physical event happen in the next 7 days?" and scores it from its own stored data after 7 days (Brier score, skill against the base rate, reliability bins). Until 30 predictions are resolved it says "not enough data yet".
 - **Cited briefings.** `POST /api/briefing` writes a global or per-country briefing of at most 8 bullets. With an LLM configured the model sees numbered rows, treated as untrusted observations, and must cite row numbers; the server drops invalid numbers and uncited bullets, strips markup and cuts each bullet to 400 characters. Without an LLM, or when it fails, a rule-based briefing in `CRUCIX_LANG` comes back in the same shape, every bullet citing a real record. At most 2 model calls run at once: a further request gets the rule-based briefing with `busy: true` (not cached), and the prompt holds at most 24,000 characters, so only the rows it shows can be cited.
 - **Alerts.** Two new metrics, `risk_max_score` and `risk_countries_high` (countries scored 70 or more), work with the threshold and change rules; they are empty while no risk summary exists.
@@ -231,7 +233,8 @@ The step runs before the alert step and the archive, never stops a sweep (`/api/
 ### Live Dashboard
 A self-contained Jarvis-style HUD with:
 - **3D WebGL globe** (Globe.gl) with atmosphere glow, star field, and smooth rotation — plus a classic flat map toggle
-- **Shared layer controls** across both views: fire, air, radiation, maritime references, SDR, OSINT, health, inferred news, conflict, internet outages, weather, earthquakes and estimated satellite positions
+- **Shared layer controls** across both views (22 layers): fire, air, radiation, maritime references, SDR, OSINT, health, inferred news, conflict, internet outages, weather, earthquakes, natural events, space stations, GNSS interference, cyclone forecast tracks and cones, orbital launches and (off by default) oil and gas pipelines, military bases, mapped military areas, data centres and dams. Located live records take the colour of their layer
+- **Globe basemap button** — night lights or the daily NASA GIBS satellite image of yesterday; the **©** button lists the credits and licences of what is on screen
 - **Animated 3D flight corridor arcs** between air traffic hotspots and global hubs
 - **Region filters** (World, Americas, Europe, Middle East, Asia Pacific, Africa) — rotates the globe or zooms the flat map
 - **Live market data** — indexes, crypto, energy, commodities via Yahoo Finance (no API key needed)
@@ -240,9 +243,11 @@ A self-contained Jarvis-style HUD with:
 - **News ticker** — merged RSS + GDELT headlines + Telegram posts, auto-scrolling. 52 RSS feeds carry a source tier (T1 official or wire … T4 aggregator, a ranking of the source, not of the headline), a language tag and a state-funded tag; seven Hungarian outlets are included (v2.18)
 - **Sweep delta** — live panel showing what changed since last sweep (new signals, escalations, de-escalations with severity)
 - **Cross-source signals** — correlated intelligence across satellite, economic, conflict, and social domains
-- **Nuclear watch** — recent (72 h) radiation readings from Safecast, shown with their age, plus EPA RadNet when reachable
-- **Space watch** — CelesTrak satellite tracking: recent launches, ISS, military constellations, Starlink/OneWeb counts
+- **Nuclear watch** — recent (72 h) radiation readings from Safecast, shown with their age, the modelled current wind at each site (Open-Meteo; not a dispersion forecast), plus EPA RadNet when reachable
+- **Space watch** — CelesTrak satellite tracking: recent launches, ISS, military constellations, Starlink/OneWeb counts; Launch Library 2 launches of the next 14 days and the last 7 on the map
 - **Leverageable ideas** — AI-generated trade ideas (with LLM) or signal-correlated ideas (without)
+- **Intelligence layer on top** — record inspector, searchable history and exports, alert engine, domain lenses, sweep replay, country risk index with cited briefings and a source-health matrix (see the sections above and the [API endpoints](#api-endpoints))
+- **Three languages** — the dashboard and the rule-based ideas and briefings follow `CRUCIX_LANG` (`en`, `hu`, `fr`)
 
 ### Performance Modes
 The `VISUALS FULL` / `VISUALS LITE` button in the top bar only changes rendering behavior - it does **not** remove data sources or reduce sweep coverage.
@@ -262,7 +267,7 @@ The preference is saved in browser local storage, so the UI will remember your l
 
 ### Auto-Refresh
 The server runs a sweep cycle every 15 minutes (configurable). Each cycle:
-1. Queries all 52 sources in parallel (~30s)
+1. Queries all 64 sources in parallel (~30s)
 2. Synthesizes raw data into dashboard format
 3. Computes delta from previous run (what changed, escalated, de-escalated) — visible in the **Sweep Delta** panel on the dashboard
 4. Generates LLM trade ideas (if configured)
@@ -389,7 +394,7 @@ Alerts work with or without an LLM on both Telegram and Discord. With an LLM con
 
 ### Without Any Keys
 
-Crucix still works with zero API keys. 18+ sources require no authentication at all. Sources that need keys return structured errors and the rest of the sweep continues normally.
+Crucix still works with zero API keys. Most of the 64 sources need no authentication at all, including all 29 live feeds and the country context inputs; the few that need a key or an account (FRED, FIRMS, EIA, ACLED, Reddit, Cloudflare Radar, ADS-B Exchange, optional Telegram) report a structured error or stay disabled, and the rest of the sweep continues normally.
 
 ---
 
@@ -397,72 +402,67 @@ Crucix still works with zero API keys. 18+ sources require no authentication at 
 
 ```
 crucix/
-├── server.mjs                 # Express dev server (SSE, auto-refresh, LLM, bot commands)
-├── crucix.config.mjs          # Configuration with env var overrides + delta thresholds
+├── server.mjs                 # Express server: sweep loop, SSE, APIs, bots, alert and risk steps
+├── crucix.config.mjs          # Configuration with env var overrides + delta thresholds + watched scopes
 ├── diag.mjs                   # Diagnostic script — run if server fails to start
 ├── .env.example               # All documented env vars
-├── package.json               # Runtime: express | Optional: discord.js
-├── docs/                      # Screenshots for README
+├── Dockerfile, docker-compose.yml
+├── locales/                   # en.json, hu.json, fr.json (dashboard and server texts)
 │
 ├── apis/
-│   ├── briefing.mjs           # Master orchestrator — runs all 52 sources in parallel
+│   ├── briefing.mjs           # Master orchestrator — runs all 64 sources in parallel
 │   ├── save-briefing.mjs      # CLI: save timestamped + latest.json
-│   ├── BRIEFING_PROMPT.md     # Intelligence synthesis protocol
-│   ├── BRIEFING_TEMPLATE.md   # Briefing output structure
-│   ├── utils/
-│   │   ├── fetch.mjs          # safeFetch() — timeout, retries, abort, auto-JSON
-│   │   └── env.mjs            # .env loader (no dotenv dependency)
-│   └── sources/               # 52 registered source adapters
-│       ├── gdelt.mjs          # Each exports briefing() → structured data
-│       ├── fred.mjs           # Can run standalone: node apis/sources/fred.mjs
-│       ├── space.mjs          # CelesTrak satellite tracking
-│       ├── yfinance.mjs       # Yahoo Finance — free live market data
-│       └── ...                # Other registered sources and supporting modules
+│   ├── utils/                 # safeFetch() (timeout, retries, bounded bodies), freshness policies, .env loader
+│   └── sources/               # 64 source adapters, each exports briefing() and runs standalone:
+│       ├── gdelt.mjs          #   node apis/sources/gdelt.mjs
+│       ├── nhc.mjs, launches.mjs, adsb-orbits.mjs, openmeteo-wind.mjs ...
+│       └── ...                # (live "current public data" adapters return freshResult rows)
 │
 ├── dashboard/
-│   ├── inject.mjs             # Data synthesis + standalone HTML injection
+│   ├── inject.mjs             # Data synthesis for the page (thermal, air, nuclear, cyclones, signals ...)
 │   └── public/
-│       └── jarvis.html        # Self-contained Jarvis HUD
+│       ├── jarvis.html        # The HUD: globe, flat map, panels
+│       ├── *.js, *.css        # Browser modules: record inspector, alerts, lenses, replay, risk, palette, credits ...
+│       ├── data/              # Static datasets: infrastructure.json, sites.json
+│       ├── vendor/            # Pinned local assets: globe.gl, D3, GSAP, fonts, textures (+ licences)
+│       └── sw.js, pwa.js      # Offline shell (service worker)
 │
 ├── lib/
-│   ├── llm/                   # LLM abstraction (10 providers, raw fetch, no SDKs)
-│   │   ├── provider.mjs       # Base class
-│   │   ├── anthropic.mjs      # Claude
-│   │   ├── openai.mjs         # GPT
-│   │   ├── gemini.mjs         # Gemini
-│   │   ├── grok.mjs           # Grok
-│   │   ├── openrouter.mjs     # OpenRouter (Unified API)
-│   │   ├── codex.mjs          # Codex (ChatGPT subscription)
-│   │   ├── minimax.mjs        # MiniMax (M2.5, 204K context)
-│   │   ├── mistral.mjs        # Mistral AI
-│   │   ├── ollama.mjs         # Local Ollama
-│   │   ├── openai-compatible.mjs # Local/custom compatible endpoints
-│   │   ├── ideas.mjs          # Normalized ideas with rules fallback
-│   │   └── index.mjs          # Factory: createLLMProvider()
-│   ├── delta/                 # Change tracking between sweeps
-│   │   ├── engine.mjs         # Delta computation — semantic dedup, configurable thresholds, severity scoring
-│   │   ├── memory.mjs         # Hot memory (3 runs, atomic writes) + cold storage (daily archives)
-│   │   └── index.mjs          # Re-exports
-│   └── alerts/
-│       ├── telegram.mjs       # Multi-tier alerts (FLASH/PRIORITY/ROUTINE) + two-way bot commands
-│       └── discord.mjs        # Discord bot (slash commands, rich embeds) + webhook fallback
+│   ├── llm/                   # LLM abstraction (10 providers, raw fetch, no SDKs) + rule-based ideas
+│   ├── delta/                 # Change tracking between sweeps (semantic dedup, severity scoring, hot/cold memory)
+│   ├── alerts/                # Telegram/Discord bots, the v2.10 alert engine, notifiers, routes
+│   ├── intelligence/          # Events, history and export, country risk, predictions, keywords and anomalies,
+│   │                          # live-source normalisation, nearby infrastructure and military-site lookup
+│   ├── sweeps/                # Sweep archive, changes, source-health matrix routes
+│   ├── basemap.mjs            # Daily NASA GIBS basemap cache
+│   └── *.mjs                  # HTTP security, SSE, snapshots, i18n, domains (lenses), offline shell
+│
+├── scripts/                   # check.mjs (syntax + locales), build-sites.mjs, watchlist.mjs, QA helpers
+├── test/                      # node:test suites and fixtures (npm test)
+├── docs/                      # OPERATIONS.md, release notes (docs/releases), audits, watchlist.json, site
 │
 └── runs/                      # Runtime data (gitignored)
     ├── latest.json            # Most recent sweep output
-    └── memory/                # Delta memory (hot.json + cold/YYYY-MM-DD.json)
+    ├── memory/                # Delta memory (hot.json + cold/YYYY-MM-DD.json)
+    ├── sweeps/                # Sweep archive for replay and the source-health matrix
+    ├── intelligence/          # History, country scores, predictions, keywords
+    └── alerts/                # Alerts and rules
 ```
 
 ### Design Principles
 - **Pure ESM** — every file is `.mjs` with explicit imports
-- **Minimal dependencies** — Express is the only runtime dependency. `discord.js` is optional (for Discord bot). LLM providers use raw `fetch()`, no SDKs.
-- **Parallel execution** — `Promise.allSettled()` fires all 52 sources simultaneously
+- **Minimal dependencies** — three runtime packages: Express, `fast-xml-parser` (XML feeds) and `h3-js` (GPSJam hexagons). `discord.js` is optional (for the Discord bot). LLM providers use raw `fetch()`, no SDKs; browser libraries are pinned local assets.
+- **Parallel execution** — `Promise.allSettled()` fires all 64 sources simultaneously
 - **Graceful degradation** — missing keys are disabled, upstream errors are visible, and model failures use rules. Other sources continue.
 - **Each source is standalone** — run `node apis/sources/gdelt.mjs` to test any source independently
+- **Provider time, never collection time** — live rows carry the provider's own timestamp and a freshness policy; stale data is labelled or withheld, and a source's attribution and licence travel with its rows
 - **Self-contained dashboard** — the HTML file works with or without the server
 
 ---
 
-## Data Sources (52)
+## Data Sources (64)
+
+64 source adapters run in every sweep: 31 established feeds in tiers 1–6, the 29 "current public data" feeds of tier 7 and 4 country inputs in tier 8. Static datasets that ship with the program (pipelines, bases, mapped sites) are listed after the tiers.
 
 ### Tier 1: Core OSINT & Geopolitical (11)
 
@@ -527,9 +527,9 @@ crucix/
 
 ---
 
-### Tier 7: Current public data (19)
+### Tier 7: Current public data (29)
 
-All 19 feeds are free and require no API key. The **Current public data** panel shows provider time, status, attribution and a summary of the current records, which open in the [Record Inspector](#record-inspector-v29). Records have original links and enter event details, searchable history and exports. Located records are map markers in the layer of their kind (earthquakes, maritime, air, natural events, weather) and colour; a quake that USGS and EMSC both report (within 60 s and 100 km) is drawn once, as the USGS marker, while both events stay in the lists. Provider dates are checked again on snapshot reads and in the browser, including offline PWA restores; expired values are hidden.
+All 29 feeds are free and require no API key. The **Current public data** panel shows provider time, status, attribution and a summary of the current records, which open in the [Record Inspector](#record-inspector-v29). Records have original links and enter event details, searchable history and exports. Located records are map markers in the layer of their kind (earthquakes, maritime, air, natural events, weather, GNSS interference, orbital launches) and colour; a quake that USGS and EMSC both report (within 60 s and 100 km) is drawn once, as the USGS marker, while both events stay in the lists. Provider dates are checked again on snapshot reads and in the browser, including offline PWA restores; expired values are hidden.
 
 | Source | Data / default watched scope | Freshness ceiling |
 | --- | --- | --- |
@@ -543,7 +543,7 @@ All 19 feeds are free and require no API key. The **Current public data** panel 
 | MET Norway | Budapest model forecast, separate target/validity times | Model 8h; target within 1h of now and valid interval |
 | OONI | Five recent public HU web-connectivity measurements | 24h; samples, not country-wide conclusions |
 
-Added in v2.11 (ten more keyless feeds; every request is bounded to 10 s and 2 MiB, 3 MiB for the OpenSanctions index):
+Added since v2.11 (twenty more keyless feeds: ten in v2.11, then ThreatFox, HIBP, GPSJam, WMO SWIC, UNHCR arrivals, SEC 8-K, and in v2.27–v2.29 ADSB Orbits, Open-Meteo wind, NOAA NHC and Launch Library 2; every request is bounded to 10 s and 2 MiB, 3 MiB for the OpenSanctions index):
 
 | Source | Data / default watched scope | Endpoint | Auth | Freshness ceiling | Licence |
 | --- | --- | --- | --- | --- | --- |
@@ -568,20 +568,35 @@ Added in v2.11 (ten more keyless feeds; every request is bounded to 10 s and 2 M
 | NOAA NHC / CPHC | Active tropical cyclones of the Atlantic and the eastern and central North Pacific: one row per storm (class, sustained wind, pressure, movement; rated by wind from low to critical) and the advisory forecast track, points and cone for the map layer | `nhc.noaa.gov/CurrentStorms.json` and the NHC tropical-weather-summary MapServer (layers 5, 6, 7; server-generalised geometry) | None | Advisory 8 h; row 12 h; 5 min cache | U.S. public domain (NOAA/NWS) |
 | Launch Library 2 | Orbital launches in the next 14 days and the last 7 days, at their pad; government and military payloads rated moderate, failures elevated | `ll.thespacedevs.com/2.3.0/launches/{upcoming,previous}` | None (15 calls an hour anonymously; 2 per sweep, 15 min cache, the last good answer for an hour when throttled) | Entry updated within 12 h | The Space Devs terms (use and share; attribution encouraged) |
 
-Alert rules can watch the new metrics `<chokepoint>_transits` (PortWatch 7-day mean, transits a day; `hormuz_transits`, `suez_transits` and the other six default chokepoints), `hu_power_price` (EUR/MWh), `grid_frequency_hz` and `mil_aircraft_total` (military aircraft worldwide, airborne, position within 2 minutes); a metric is empty while its source is stale or failing. The HU day-ahead price runs high (median about 194 EUR/MWh over 2026-09-19..10-02; price rows are rated only from 300 and 400 EUR/MWh), so give a `hu_power_price` threshold rule its own level.
+Alert rules can watch the metrics `<chokepoint>_transits` (PortWatch 7-day mean, transits a day; `hormuz_transits`, `suez_transits` and the other six default chokepoints), `hu_power_price` (EUR/MWh), `grid_frequency_hz` and `mil_aircraft_total` (military aircraft worldwide, airborne, position within 2 minutes); a metric is empty while its source is stale or failing. The HU day-ahead price runs high (median about 194 EUR/MWh over 2026-09-19..10-02; price rows are rated only from 300 and 400 EUR/MWh), so give a `hu_power_price` threshold rule its own level.
 
 Edit the small `publicSources` watchlists in `crucix.config.mjs` for Meteoalarm countries, RIPE ASNs, MET location labels/coordinates, OONI countries, PortWatch chokepoints (`portwatchChokepoints`), ADS-B theater boxes (`adsbTheaters`) and prediction-market words (`marketQueries`). Each adapter validates and limits its inputs. MET identifies Crucix with a project/contact User-Agent; public requests and memory caches are bounded. Empty current feeds remain distinct from failed or undated feeds. World Bank annual indicators are deliberately excluded because this installation requires current data.
 
 Full endpoint, freshness and validation evidence: [source assessment](docs/audit/fresh-data-implementation-2026-10-01.md).
 
-### Tier 8: Country risk inputs (2)
+### Tier 8: Country risk and context inputs (4)
 
-Both are free and key-less, every request is bounded to 10 s and 2 MiB, and the country-risk model reads them (a missing source only lowers the coverage of a score). They are plain sources: a source-health row, no live-data card, listed under the security and conflict lens.
+All four are free and key-less, every request is bounded to 10 s and 2 MiB, and the country-risk model reads the first three (a missing source only lowers the coverage of a score). They are plain sources: a source-health row, no live-data card, listed under the security and conflict lens.
 
 | Source | What it tracks | Endpoint | Cache | Attribution and licence |
 | --- | --- | --- | --- | --- |
 | VIEWS-Forecast | Predicted probability of at least 25 battle-related deaths in state-based armed conflict, and predicted fatalities, per country for the three months after the newest run's data month; a forecast, not observed events | `api.viewsforecasting.org` (run list, then `/<run>/cm/sb`) | Run list 24 h; data per run id; last good payload 45 days, shown as stale | "VIEWS (Uppsala University and PRIO)" and the run id; the provider states no data licence (its code repositories are CC BY-NC) |
 | INFORM-Risk | INFORM Risk Index, 0-10 per country (higher is worse), newest published release; a yearly baseline | `drmkc.jrc.ec.europa.eu/inform-index/API/InformAPI` (release list, then scores) | Release list 24 h; scores 7 days; last good result 45 days, shown as stale | "INFORM Risk Index, European Commission Joint Research Centre (DRMKC) / INFORM partnership, <release>"; the provider says only "INFORM is open-source" |
+| Travel-Advisories | U.S. State Department travel advisory level (1-4) per country, 212 countries; the seventh component of the risk model (v2.19) | `travel.state.gov/_res/rss/TAsTWs.xml` | 6 h | U.S. government public information |
+| MISP-Galaxy | Known threat actor groups attributed to each country by the MISP community, with aliases; context on the country sheet only, never part of the score (v2.16) | `raw.githubusercontent.com/MISP/misp-galaxy/main/clusters/threat-actor.json` | 7 days; last good result 45 days, shown as stale | CC0 1.0 (MISP Project, CIRCL and the community) |
+
+### Static datasets and the basemap
+
+These ship with the program or are cached by the server; none of them is queried in the sweep.
+
+| Data | What it is | Licence and credit |
+| --- | --- | --- |
+| Pipelines and bases (`data/infrastructure.json`, 200 KB) | 618 oil and gas pipelines (end points only; the line is a great circle, not the route) with physical state, and 226 military bases, compiled by World Monitor | Pipelines: operator disclosures, regulators, ENTSOG, Global Energy Monitor (CC BY 4.0); a base listed is no statement about its garrison |
+| Mapped sites (`data/sites.json`, 770 KB) | 6,634 named military areas, 3,681 data centres, 581 dams, rebuilt with `scripts/build-sites.mjs` | © OpenStreetMap contributors and Overture Maps Foundation, ODbL 1.0, via God's Eye View; incomplete by nature |
+| Daily satellite image (`/api/basemap/daily.jpg`) | NASA GIBS VIIRS (NOAA-20) true-colour whole-Earth composite of yesterday, 4096×2048, cached by the server for the day | NASA GIBS, public domain; acknowledgement shown in the © panel |
+| Globe textures and country outlines | Night-lights texture, Natural Earth outlines via world-atlas, fonts, libraries (pinned local assets) | See `dashboard/public/vendor/licenses` |
+
+The **©** button on the map shows the credits and licences of whatever is on screen.
 
 ## npm Scripts
 
@@ -664,6 +679,7 @@ When running `npm run dev`:
 | `GET /api/countries/:iso3` | One country's profile: score, components with weights and availability, score series, VIEWS months (run id, attribution, licence note), INFORM release, convergence, the last 20 records and up to 8 linked countries (`iso3` upper-case ISO 3166-1 alpha-3: malformed → 400, unknown → 404) |
 | `GET /api/predictions` | The prediction journal: `{calibration, recent}` (the 20 newest predictions) |
 | `POST /api/briefing` | A cited briefing `{scope, generatedAt, language, source: llm or rules, busy?: true, bullets: [{text, refs: [{n, id, title}]}]}` for `{scope: "global" or an ISO3}`; guarded like the alert routes, body at most 1 KB |
+| `GET /api/basemap/daily.jpg` | The daily globe basemap (NASA GIBS true colour of yesterday, JPEG, cached by the server; `X-Basemap-Date`, `X-Basemap-Stale`; 503 when unavailable, 400 with any query parameter) |
 | `GET /api/source-health` | The source-health matrix: `{sweeps, sources: [{source, domain, cells}]}`, cells oldest to newest (`sweeps` 1 to `SWEEP_ARCHIVE_COUNT`, default 48) |
 
 The country routes take no query parameters and, like the archive routes, answer `400 {error, code, field}`, `404` or a generic `503`. The archive routes are read-only and `no-store`, behind the same Basic auth; a bad query parameter or sweep id is `400 {error, code, field}`, an unknown sweep `404`, any other failure a generic `503`.
@@ -715,7 +731,7 @@ Crucix requires Node.js 22 or later. If you have an older version, download the 
 
 ### Dashboard shows empty panels after first start
 
-This is normal — the first sweep takes 30–60 seconds to query all 52 sources. The dashboard will populate automatically once the sweep completes. Check the terminal for sweep progress logs.
+This is normal — the first sweep takes 30–60 seconds to query all 64 sources. The dashboard will populate automatically once the sweep completes. Check the terminal for sweep progress logs.
 
 ### Some sources show errors
 
@@ -756,7 +772,7 @@ To update them: run the dashboard, wait for a sweep to complete, then use your b
 
 ## Contributing
 
-Found a bug or want to add another source? PRs welcome. Each source is a standalone module in `apis/sources/` — export a `briefing()` function that returns structured data and add it to the orchestrator in `apis/briefing.mjs`.
+Found a bug or want to add another source? PRs welcome. Each source is a standalone module in `apis/sources/` — export a `briefing()` function that returns structured data and add it to the orchestrator in `apis/briefing.mjs`. A "current public data" source (provider time, freshness policy, record inspector rows) also needs a freshness policy (`apis/utils/freshness.mjs`), a domain lens (`lib/domains.mjs` and its browser copy), fact captions in `locales/*.json` and the registry tests; see [CONTRIBUTING.md](CONTRIBUTING.md) and the release notes of a recent source (for example [v2.27.0](docs/releases/v2.27.0.md)).
 
 If you find this useful, a star helps others find it too.
 
