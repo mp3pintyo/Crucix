@@ -18,6 +18,7 @@ import { installIntelligenceRoutes } from './lib/intelligence/routes.mjs';
 import { EntityStore } from './lib/intelligence/entities.mjs';
 import { PredictionJournal } from './lib/intelligence/predictions.mjs';
 import { runRiskStep } from './lib/intelligence/risk-step.mjs';
+import { KeywordStore } from './lib/intelligence/keywords.mjs';
 import { installRiskRoutes } from './lib/intelligence/risk-routes.mjs';
 import { createBriefingService } from './lib/llm/briefing.mjs';
 import { renderOfflineShell } from './lib/offline-shell.mjs';
@@ -73,14 +74,16 @@ function recordSnapshotEvents(snapshot) {
 // RISK_ENABLED=false nothing is created, the step never runs and the risk routes are not installed.
 const riskStore = config.risk.enabled ? new EntityStore(RUNS_DIR, { retentionDays: config.risk.retentionDays }) : null;
 const riskJournal = config.risk.enabled ? new PredictionJournal(RUNS_DIR) : null;
+const riskKeywords = config.risk.enabled ? new KeywordStore(RUNS_DIR) : null;
 riskStore?.load();
 riskJournal?.load();
+riskKeywords?.load();
 let riskStatus = config.risk.enabled ? 'unavailable' : 'disabled';
 let riskLatest = null; // the last successful step: {at, scores, inputs}
 // Never throws: on a failure the snapshot goes on without `risk` and /api/health says 'unavailable'.
 function recordRisk(snapshot, raw) {
   if (!riskStore) return;
-  const result = runRiskStep({ store: riskStore, journal: riskJournal, snapshot, raw, now: Date.now() });
+  const result = runRiskStep({ store: riskStore, journal: riskJournal, keywords: riskKeywords, snapshot, raw, now: Date.now() });
   riskStatus = result.ok ? 'ok' : 'unavailable';
   if (result.ok) riskLatest = result;
 }

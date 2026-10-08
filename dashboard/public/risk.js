@@ -31,6 +31,8 @@
     convergence:'Convergence',convergenceHelp:'Several event types at high or above within 24 h: {kinds}',trackTitle:'Track record',
     trackHelp:'Logged 7-day predictions (at least one new high or critical event in the country), scored after 7 days.',trackNotEnough:'Not enough resolved predictions yet (n={n}; 30 needed).',
     trackStats:'Resolved: {n} · Brier {brier} · skill {skill}',trackSkillHelp:'Skill compares the Brier score with always forecasting the base rate: above 0 is better than the base rate, below 0 worse.',
+    anomaliesTitle:'Unusual activity',anomaliesHelp:'Located events in the last 24 hours against the same country’s own previous 24-hour windows (mean and spread; at least 10 windows needed). Weekday patterns are not modelled.',anomaliesNone:'Nothing unusual against each country’s own recent history.',anomalyRow:'{current} events, usually {mean} (z {z})',
+    spikesTitle:'Trending terms',spikesHelp:'Words in far more headlines than usual in the last two hours: at least 4 headlines from at least 2 sources and more than 3 times the usual count.',spikesNotReady:'Collecting a baseline: {hours} of the 24 hours of headlines needed.',spikesNone:'No term stands out against its usual count.',spikeRow:'{count} headlines, usually {baseline} · {sources} sources',
     replayNote:'The country sheet and the briefing read the live store, so they are off during the replay. The ranking shown is the replayed sweep’s own.'};
   let opts=null,listed=[],listAt='',listSeq=0;
   const log=error=>{try{console.error('[risk]',error);}catch{}};
@@ -68,12 +70,26 @@
     const conv=isObject(item.convergence)&&item.convergence.active===true&&Array.isArray(item.convergence.kinds)?item.convergence.kinds.filter(kind=>typeof kind==='string'&&kind).slice(0,12).map(kind=>kind.slice(0,40)):null;
     return {iso3:item.iso3,name:cleanName(item.name,item.iso3),score,change,coverage,kinds:conv};
   }
+  // The trending terms and the unusual-activity list of the summary (2.23; absent in older sweeps): every field checked and cut.
+  const TERM=/^[\p{L}\p{N}][\p{L}\p{N}-]{2,29}$/u,LEVEL_WORDS=['moderate','high','critical'];
+  function readSpikes(value){
+    if(!isObject(value))return null;
+    const items=(Array.isArray(value.items)?value.items:[]).filter(item=>isObject(item)&&typeof item.term==='string'&&TERM.test(item.term)&&Number.isSafeInteger(item.count)&&item.count>0&&typeof item.ratio==='number'&&Number.isFinite(item.ratio))
+      .slice(0,8).map(item=>({term:item.term,count:item.count,baseline:typeof item.baseline==='number'&&Number.isFinite(item.baseline)?item.baseline:0,ratio:item.ratio,level:item.level==='high'?'high':'moderate',
+        sources:(Array.isArray(item.sources)?item.sources:[]).filter(name=>typeof name==='string').slice(0,4).map(name=>name.slice(0,40))}));
+    return {ready:value.ready===true,observedHours:Number.isSafeInteger(value.observedHours)?value.observedHours:0,items};
+  }
+  function readAnomalies(value){
+    if(!Array.isArray(value))return null;
+    return value.filter(item=>isObject(item)&&typeof item.iso3==='string'&&ISO3.test(item.iso3)&&Number.isSafeInteger(item.current)&&typeof item.mean==='number'&&Number.isFinite(item.mean)&&typeof item.z==='number'&&Number.isFinite(item.z))
+      .slice(0,5).map(item=>({iso3:item.iso3,name:cleanName(item.name,item.iso3),current:item.current,mean:item.mean,z:item.z,level:LEVEL_WORDS.includes(item.level)?item.level:'moderate'}));
+  }
   // null when `risk` is not an object (no sweep yet, RISK_ENABLED=false or a failed step).
   function read(risk){
     if(!isObject(risk))return null;
     const top=Array.isArray(risk.top)?risk.top.filter(item=>isObject(item)&&typeof item.iso3==='string'&&ISO3.test(item.iso3)&&typeof item.score==='number'&&Number.isFinite(item.score)).slice(0,TOP).map(row):[];
     const counts=isObject(risk.counts)?risk.counts:{},count=value=>Number.isSafeInteger(value)&&value>=0?value:null;
-    return {version:Number.isSafeInteger(risk.version)?risk.version:null,top,scored:count(counts.scored),high:count(counts.high),calibration:isObject(risk.calibration)?risk.calibration:null};
+    return {version:Number.isSafeInteger(risk.version)?risk.version:null,top,scored:count(counts.scored),high:count(counts.high),calibration:isObject(risk.calibration)?risk.calibration:null,spikes:readSpikes(risk.spikes),anomalies:readAnomalies(risk.anomalies)};
   }
 
   // ===== Markup =====
@@ -106,6 +122,23 @@
       :`<p class="rk-calm" data-risk-state="notEnough">${esc(say('trackNotEnough',{n}))}</p>`;
     return `<section class="rk-track" aria-labelledby="countryRiskTrack"><h4 id="countryRiskTrack">${esc(say('trackTitle'))}</h4><p class="rk-help">${esc(say('trackHelp'))}</p>${body}</section>`;
   }
+  // Unusual activity: located events of the last 24 hours against the country's own previous 24-hour windows (Welford z-score).
+  function anomalies(list,off){
+    if(list===null)return '';
+    const rows=list.map(item=>{
+      const inner=`<span class="rk-name">${esc(item.name)}</span><span class="rk-an" data-level="${item.level}">${esc(say('anomalyRow',{current:item.current,mean:number(item.mean,1),z:number(item.z,1)}))}</span>`;
+      return `<li class="rk-item">${dialogs()||off?`<button type="button" class="rk-row" data-risk-country="${item.iso3}"${off?' aria-disabled="true" aria-describedby="countryRiskReplay"':''}>${inner}</button>`:`<div class="rk-row">${inner}</div>`}</li>`;
+    }).join('');
+    return `<section class="rk-track rk-signals" aria-labelledby="countryRiskAnomalies"><h4 id="countryRiskAnomalies">${esc(say('anomaliesTitle'))}</h4><p class="rk-help">${esc(say('anomaliesHelp'))}</p>${rows?`<ul class="rk-list">${rows}</ul>`:`<p class="rk-calm" data-risk-state="none">${esc(say('anomaliesNone'))}</p>`}</section>`;
+  }
+  // Trending terms: words in many more headlines than usual in the last two hours, from at least two sources.
+  function spikes(value){
+    if(value===null)return '';
+    const body=!value.ready?`<p class="rk-calm" data-risk-state="notReady">${esc(say('spikesNotReady',{hours:value.observedHours}))}</p>`
+      :value.items.length?`<ul class="rk-list">${value.items.map(item=>`<li class="rk-item"><div class="rk-row"><span class="rk-name">${esc(item.term)}</span><span class="rk-an" data-level="${item.level}">${esc(say('spikeRow',{count:item.count,baseline:number(item.baseline,1),sources:item.sources.length}))}</span></div></li>`).join('')}</ul>`
+      :`<p class="rk-calm" data-risk-state="none">${esc(say('spikesNone'))}</p>`;
+    return `<section class="rk-track rk-signals" aria-labelledby="countryRiskSpikes"><h4 id="countryRiskSpikes">${esc(say('spikesTitle'))}</h4><p class="rk-help">${esc(say('spikesHelp'))}</p>${body}</section>`;
+  }
   // options (tests and callers that know better): replay.
   function build(risk,options){
     const o=isObject(options)?options:{},replay=typeof o.replay==='boolean'?o.replay:inReplay(),data=read(risk);
@@ -117,7 +150,7 @@
     else{
       const summary=data.scored!==null&&data.high!==null?`<p class="rk-sum">${esc(say('summary',{scored:data.scored,high:data.high}))}</p>`:'';
       const list=data.top.length?`<ol class="rk-list" aria-label="${esc(say('rankLabel'))}">${data.top.map((item,index)=>rowHtml(item,index,replay)).join('')}</ol>`:`<p class="rk-calm" data-risk-state="empty">${esc(say('empty'))}</p>`;
-      main=`<p class="rk-intro">${esc(say('intro'))}</p>${summary}${list}${track(data.calibration)}`;
+      main=`<p class="rk-intro">${esc(say('intro'))}</p>${summary}${list}${anomalies(data.anomalies,replay)}${spikes(data.spikes)}${track(data.calibration)}`;
     }
     return `<div class="g-panel risk-panel" id="countryRiskPanel" role="region" aria-labelledby="countryRiskTitle"${replay?' data-replay="true"':''}>${head}${note}${main}</div>`;
   }

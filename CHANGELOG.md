@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.23.0 — Felkapott kifejezések és szokatlan aktivitás: kulcsszó-kiugrás és Welford-féle alapvonal / Trending terms and unusual activity: keyword spikes and a Welford baseline](docs/releases/v2.23.0.md) — 2026-10-08
+
 - [2.22.0 — Közeli infrastruktúra a rekordböngészőben és tengerszoros-kitettség az országlapon / Nearby infrastructure in the record inspector and chokepoint exposure on the country sheet](docs/releases/v2.22.0.md) — 2026-10-08
 
 - [2.21.0 — Olaj- és gázvezeték-, valamint katonaibázis-réteg a térképen (és a v2.20.0 CI-javítása) / Oil and gas pipeline and military base layers on the map (and the v2.20.0 CI fix)](docs/releases/v2.21.0.md) — 2026-10-08

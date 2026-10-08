@@ -1092,7 +1092,16 @@
     "trackNotEnough": "Not enough resolved predictions yet (n={n}; 30 needed).",
     "trackStats": "Resolved: {n} · Brier {brier} · skill {skill}",
     "trackSkillHelp": "Skill compares the Brier score with always forecasting the base rate: above 0 is better than the base rate, below 0 worse.",
-    "replayNote": "The country sheet and the briefing read the live store, so they are off during the replay. The ranking shown is the replayed sweep’s own."
+    "replayNote": "The country sheet and the briefing read the live store, so they are off during the replay. The ranking shown is the replayed sweep’s own.",
+    "anomaliesTitle": "Unusual activity",
+    "anomaliesHelp": "Located events in the last 24 hours against the same country’s own previous 24-hour windows (mean and spread; at least 10 windows needed). Weekday patterns are not modelled.",
+    "anomaliesNone": "Nothing unusual against each country’s own recent history.",
+    "anomalyRow": "{current} events, usually {mean} (z {z})",
+    "spikesTitle": "Trending terms",
+    "spikesHelp": "Words in far more headlines than usual in the last two hours: at least 4 headlines from at least 2 sources and more than 3 times the usual count.",
+    "spikesNotReady": "Collecting a baseline: {hours} of the 24 hours of headlines needed.",
+    "spikesNone": "No term stands out against its usual count.",
+    "spikeRow": "{count} headlines, usually {baseline} · {sources} sources"
   },
   "country": {
     "title": "Country sheet",

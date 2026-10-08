@@ -32,3 +32,4 @@ button.rk-row:focus-visible,.rk-brief:focus-visible{outline:2px solid var(--acce
 .rk-track h4{margin:0 0 2px;font-family:var(--mono,monospace);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim,#8aa0a8)}
 @media(max-width:700px){button.rk-row{min-height:44px;padding:8px 4px}.rk-brief{min-height:36px}}
 @media(forced-colors:active){.rk-bar{border-color:CanvasText}.rk-fill{background:CanvasText}button.rk-row:focus-visible,.rk-brief:focus-visible{outline-color:Highlight}}
+.rk-an{font-family:var(--mono,monospace);font-size:10px;color:var(--dim)}.rk-an[data-level=high],.rk-an[data-level=critical]{color:var(--danger,#ff5f63)}.rk-signals .rk-row{display:flex;justify-content:space-between;gap:8px}

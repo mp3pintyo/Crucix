@@ -181,6 +181,10 @@ Two new map layers, both off by default (Settings > Map layers): **618 oil and g
 
 The record inspector lists the nearest pipelines and bases (within 600 km) of every located record, and the country sheet has a chokepoint exposure table (an editorial index from World Monitor, not measured trade data) next to the current PortWatch traffic of the passage; see the [release notes](docs/releases/v2.22.0.md).
 
+### Trending terms and unusual activity (v2.23)
+
+The Country risk panel gains two sections: **trending terms** (words in far more headlines than usual in the last two hours, from at least two sources; a headline counts once; stored in `runs/intelligence/keywords.json`) and **unusual activity** (countries whose last-24-hour located events are unusual against their own previous windows, a Welford z-score; weekday patterns are not modelled). Neither reports anything before it has a baseline (24 hours and 11 days); see the [release notes](docs/releases/v2.23.0.md).
+
 ### Dashboard structure (v2.12)
 
 - **Domain lenses.** A bar under the alert strip offers **All** and eight domains (security and conflict, natural hazards and weather, space, cyber and internet, markets and economy, energy and supply chain, sanctions and regulation, health and environment) that together cover all 52 source adapters. A lens narrows the live panel, the source-health panel, the changes panel and its chip, the record browser's source list and the live record markers on both maps. News, OSINT and delta signals have no domain and only show under **All**; the older map layers keep their own switches. The choice is kept per browser (in memory only when storage is blocked).

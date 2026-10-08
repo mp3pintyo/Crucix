@@ -1092,7 +1092,16 @@
     "trackNotEnough": "Még nincs elég kiértékelt előrejelzés (n={n}; 30 kell).",
     "trackStats": "Kiértékelt: {n} · Brier {brier} · skill {skill}",
     "trackSkillHelp": "A skill a Brier-pontszámot az alap-gyakoriságot mindig előrejelző módszerhez méri: 0 fölött jobb nála, 0 alatt rosszabb.",
-    "replayNote": "Az országlap és az összefoglaló az élő tárból olvas, ezért visszajátszás közben nem érhető el. A látható rangsor a visszajátszott lekérdezésé."
+    "replayNote": "Az országlap és az összefoglaló az élő tárból olvas, ezért visszajátszás közben nem érhető el. A látható rangsor a visszajátszott lekérdezésé.",
+    "anomaliesTitle": "Szokatlan aktivitás",
+    "anomaliesHelp": "Helyhez kötött események az elmúlt 24 órában ugyanannak az országnak a korábbi 24 órás ablakaihoz képest (átlag és szórás; legalább 10 ablak kell). A hét napjait nem modellezzük.",
+    "anomaliesNone": "Egyik ország sem szokatlan a saját közelmúltjához képest.",
+    "anomalyRow": "{current} esemény, általában {mean} (z {z})",
+    "spikesTitle": "Felkapott kifejezések",
+    "spikesHelp": "Az elmúlt két órában a szokásosnál jóval több címben szereplő szavak: legalább 4 cím, legalább 2 forrásból, és a szokásos szám több mint háromszorosa.",
+    "spikesNotReady": "Alapvonal gyűjtése: a szükséges 24 óra címből eddig {hours} van meg.",
+    "spikesNone": "Egyik kifejezés sem tűnik ki a szokásos számából.",
+    "spikeRow": "{count} cím, általában {baseline} · {sources} forrás"
   },
   "country": {
     "title": "Országlap",

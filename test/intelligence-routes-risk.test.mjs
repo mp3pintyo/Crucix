@@ -84,7 +84,7 @@ test('the risk step never throws on a hostile or empty snapshot and sets snapsho
   const snapshot = { events: [...events(), 'junk', null] };
   const result = runRiskStep({ store, journal, snapshot, raw: raw(), now: NOW, log: quiet });
   assert.equal(result.ok, true);
-  assert.deepEqual(Object.keys(snapshot.risk), ['version', 'at', 'top', 'counts', 'calibration']);
+  assert.deepEqual(Object.keys(snapshot.risk), ['version', 'at', 'top', 'counts', 'calibration', 'anomalies']);
   const japan = result.scores.find(row => row.iso3 === 'JPN');
   assert.equal(snapshot.risk.top[0].iso3, 'JPN');
   assert.equal(japan.components.forecast.value, 25, 'the VIEWS row of the current month, main_dich x 100');

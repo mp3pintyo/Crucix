@@ -1092,7 +1092,16 @@
     "trackNotEnough": "Pas encore assez de prévisions évaluées (n={n} ; il en faut 30).",
     "trackStats": "Évaluées : {n} · Brier {brier} · skill {skill}",
     "trackSkillHelp": "Le skill compare le score de Brier à une prévision constante du taux de base : au-dessus de 0, c’est mieux que ce taux ; en dessous, moins bien.",
-    "replayNote": "La fiche pays et la synthèse lisent les données en direct : elles sont désactivées pendant la relecture. Le classement affiché est celui du scan relu."
+    "replayNote": "La fiche pays et la synthèse lisent les données en direct : elles sont désactivées pendant la relecture. Le classement affiché est celui du scan relu.",
+    "anomaliesTitle": "Activité inhabituelle",
+    "anomaliesHelp": "Événements localisés des dernières 24 heures par rapport aux fenêtres de 24 heures précédentes du même pays (moyenne et écart ; au moins 10 fenêtres). Les jours de la semaine ne sont pas modélisés.",
+    "anomaliesNone": "Rien d’inhabituel par rapport à l’historique récent de chaque pays.",
+    "anomalyRow": "{current} événements, habituellement {mean} (z {z})",
+    "spikesTitle": "Termes en vogue",
+    "spikesHelp": "Mots présents dans bien plus de titres que d’habitude ces deux dernières heures : au moins 4 titres de 2 sources au moins et plus de 3 fois le nombre habituel.",
+    "spikesNotReady": "Collecte d’une base : {hours} des 24 heures de titres nécessaires.",
+    "spikesNone": "Aucun terme ne se détache de son nombre habituel.",
+    "spikeRow": "{count} titres, habituellement {baseline} · {sources} sources"
   },
   "country": {
     "title": "Fiche pays",
