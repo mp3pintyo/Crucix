@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.30.1 — Javítás: a figyelőlista-teszt szintaxishibája / Fix: a syntax error in the watchlist test](docs/releases/v2.30.1.md) — 2026-10-08
+
 - [2.30.0 — Adatforrások és licencek a felületen: alkalmazáson belüli jogi/forráspanel / Data attribution in the app: an in-app credits panel](docs/releases/v2.30.0.md) — 2026-10-08
 
 - [2.29.0 — Szél az atomlétesítményeknél és napi műholdkép a földgömbön / Wind at the nuclear sites and a daily satellite image on the globe](docs/releases/v2.29.0.md) — 2026-10-08
