@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.30.0 — Adatforrások és licencek a felületen: alkalmazáson belüli jogi/forráspanel / Data attribution in the app: an in-app credits panel](docs/releases/v2.30.0.md) — 2026-10-08
+
 - [2.29.0 — Szél az atomlétesítményeknél és napi műholdkép a földgömbön / Wind at the nuclear sites and a daily satellite image on the globe](docs/releases/v2.29.0.md) — 2026-10-08
 
 - [2.28.0 — Körpályán repülő katonai gépek: új forrás az adsb.lol nyomvonalaiból / Military aircraft flying orbits: a new source from adsb.lol position traces](docs/releases/v2.28.0.md) — 2026-10-08

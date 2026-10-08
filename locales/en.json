@@ -1299,5 +1299,14 @@
     "track": "Forecast track",
     "cone": "Forecast cone",
     "coneNote": "The cone is the uncertainty of the forecast centre track, not the size of the storm or the area it can harm."
+  },
+  "credits": {
+    "title": "Data attribution",
+    "groupMap": "Map and globe",
+    "groupData": "Static datasets",
+    "groupLive": "Live sources",
+    "groupSoftware": "Software",
+    "source": "source",
+    "button": "Data credits"
   }
 }

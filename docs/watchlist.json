@@ -86,11 +86,36 @@
       "url": "https://github.com/bilawalsidhu/gods-eye-view",
       "repo": "bilawalsidhu/gods-eye-view",
       "kind": "dashboard",
-      "license": "NOASSERTION (check the repository before copying anything)",
+      "license": "MIT for the code; the bundled datasets keep their own terms (OpenStreetMap/Overture ODbL, TeleGeography CC BY-NC-SA, Natural Earth public domain)",
       "whyWatch": "A browser spy-satellite simulator on a 3D globe with live open spatial data; a source of visualisation ideas and data feeds.",
-      "adopted": [],
-      "droppedOrOpen": "Not analysed yet. First step: clone it into a temporary folder and compare its data sources and map layers with Crucix. The licence is not stated (NOASSERTION): take ideas and public data sources, not code, until it is checked.",
-      "lastReviewed": null
+      "adopted": [
+        {
+          "release": "v2.26.0",
+          "what": "mapped military areas, data centres and dams (ODbL data, own build script), nearby sites in the record inspector, FIRMS-on-military-area signal"
+        },
+        {
+          "release": "v2.27.0",
+          "what": "NHC cyclone forecast track and cone layer, Launch Library 2 launches"
+        },
+        {
+          "release": "v2.28.0",
+          "what": "military aircraft orbit detection from adsb.lol traces (idea: ask the planet)"
+        },
+        {
+          "release": "v2.29.0",
+          "what": "Open-Meteo wind at the nuclear sites, NASA GIBS daily satellite basemap"
+        },
+        {
+          "release": "v2.30.0",
+          "what": "in-app data attribution panel"
+        }
+      ],
+      "droppedOrOpen": "Not taken: CCTV, ALPR, transit, bikeshare, traffic simulation, street level, directions, voice, cockpit, GLSL looks (visual or local-scale, privacy-sensitive); TeleGeography cables (CC BY-NC-SA); full GFS/ECMWF wind animation (GRIB2/WASM, heavy); NOAA infrared cloud mosaic (grayscale, 60S-60N, the GIBS image gives more); NIFC WFIGS perimeters (US only); Radio Browser (KiwiSDR covers HF).",
+      "lastReviewed": {
+        "sha": "95fa816",
+        "date": "2026-10-08",
+        "note": "Analysed at 95fa816 (v0.2.1, 1788 files); everything useful was adopted in v2.26.0-v2.30.0."
+      }
     }
   ]
 }

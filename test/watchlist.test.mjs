@@ -6,7 +6,7 @@ test('the shipped watchlist is valid and holds the three starting projects', () 
   const doc = loadWatchlist();
   assert.deepEqual(doc.projects.map(project => project.id), ['awesome-osint-arsenal', 'worldmonitor', 'gods-eye-view']);
   for (const project of doc.projects) assert.equal(project.url, `https://github.com/${project.repo}`);
-  assert.equal(doc.projects.find(project => project.id === 'gods-eye-view').lastReviewed, null);
+  assert.equal(doc.projects.find(project => project.id === 'gods-eye-view').lastReviewed.sha, '95fa816', 'God's Eye View was analysed and adopted (v2.26.0-v2.30.0)');
 });
 
 test('check reports the commits and releases since the last review, newest first, and says "not analysed" without a review', async () => {

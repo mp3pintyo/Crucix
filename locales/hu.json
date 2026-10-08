@@ -1299,5 +1299,14 @@
     "track": "Előrejelzett pálya",
     "cone": "Előrejelzési kúp",
     "coneNote": "A kúp az előrejelzett középpont-pálya bizonytalansága, nem a vihar mérete és nem a veszélyeztetett terület."
+  },
+  "credits": {
+    "title": "Adatforrások és licencek",
+    "groupMap": "Térkép és földgömb",
+    "groupData": "Statikus adatkészletek",
+    "groupLive": "Élő források",
+    "groupSoftware": "Szoftver",
+    "source": "forrás",
+    "button": "Adatforrások"
   }
 }

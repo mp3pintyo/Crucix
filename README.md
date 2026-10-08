@@ -187,6 +187,8 @@ Two more live sources with their own map layers (on by default): the **forecast 
 
 The globe has a **daily satellite image** button (NASA GIBS VIIRS true colour of yesterday, cached by the server at `/api/basemap/daily.jpg`; falls back to night lights), and the Nuclear sites panel shows the modelled current wind at each site (see the [release notes](docs/releases/v2.29.0.md)).
 
+The **©** button on the map opens a data-attribution panel that lists the credits and licences of what is on screen: the basemap, the switched-on layers and loaded datasets, and every live source (see the [release notes](docs/releases/v2.30.0.md)).
+
 ### Trending terms and unusual activity (v2.23)
 
 The Country risk panel gains two sections: **trending terms** (words in far more headlines than usual in the last two hours, from at least two sources; a headline counts once; stored in `runs/intelligence/keywords.json`) and **unusual activity** (countries whose last-24-hour located events are unusual against their own previous windows, a Welford z-score; weekday patterns are not modelled). Neither reports anything before it has a baseline (24 hours and 11 days); see the [release notes](docs/releases/v2.23.0.md).

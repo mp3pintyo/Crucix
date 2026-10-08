@@ -1299,5 +1299,14 @@
     "track": "Trajectoire prévue",
     "cone": "Cône de prévision",
     "coneNote": "Le cône est l’incertitude de la trajectoire prévue du centre, pas la taille de la tempête ni la zone menacée."
+  },
+  "credits": {
+    "title": "Sources de données",
+    "groupMap": "Carte et globe",
+    "groupData": "Jeux de données statiques",
+    "groupLive": "Sources en direct",
+    "groupSoftware": "Logiciels",
+    "source": "source",
+    "button": "Sources de données"
   }
 }
