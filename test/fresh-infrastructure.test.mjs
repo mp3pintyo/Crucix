@@ -49,6 +49,22 @@ test('RIPEstat cannot substitute collection, first-seen, or last-seen time for a
   assert.equal(parseRoutingStatus({ status: 'ok', data_call_status: 'supported', data: {} }, { now }).observedAt, null);
 });
 
+test('RIPEstat tolerates publication lag after the 8 h snapshot cadence but still expires a stuck provider', async () => {
+  // Observed live: at 09:13 UTC the newest published snapshot was still 00:00 UTC.
+  const lagging = Date.parse('2026-10-02T09:30:00Z');
+  for (const check of [parseRoutingStatus(ripe('2026-10-02T00:00:00'), { now: lagging }),
+    await ripeBriefing({ now: lagging, fetcher: async () => ripe('2026-10-02T00:00:00') })]) {
+    assert.equal(check.status, 'ok'); assert.equal(check.stale, false); assert.equal(check.observations.length, 1);
+  }
+  const ceiling = Date.parse('2026-10-02T00:00:00Z') + 12 * 3600000;
+  assert.equal(parseRoutingStatus(ripe('2026-10-02T00:00:00'), { now: ceiling }).status, 'ok');
+  for (const late of [ceiling + 1000, Date.parse('2026-10-02T16:00:00Z')]) {
+    const stuck = parseRoutingStatus(ripe('2026-10-02T00:00:00'), { now: late });
+    assert.equal(stuck.status, 'stale'); assert.equal(stuck.freshness.reason, 'expired-provider-time'); assert.deepEqual(stuck.observations, []);
+    assert.equal((await ripeBriefing({ now: late, fetcher: async () => ripe('2026-10-02T00:00:00') })).status, 'stale');
+  }
+});
+
 test('RIPEstat rejects provider errors, changed endpoint support, and impossible visibility fractions', () => {
   assert.equal(parseRoutingStatus({ error: 'HTTP 503' }, { now }).status, 'error');
   assert.equal(parseRoutingStatus({ ...ripe(), data_call_status: 'deprecated' }, { now }).status, 'error');
@@ -201,7 +217,7 @@ test('resource, country and CVE lists are capped and encoded without all-catalog
 
 test('cached payloads are revalidated and expired observations are never served as fresh fallback', async () => {
   const cases = [
-    [ripeBriefing, { resources: ['AS13335'] }, ripe('2026-10-01T13:10:00', '13335')],
+    [ripeBriefing, { resources: ['AS13335'] }, ripe('2026-10-01T09:10:00', '13335')],
     [ooniBriefing, { countries: ['IS'] }, ooni({ probe_cc: 'IS', measurement_start_time: '2026-09-30T21:10:00Z' })],
   ];
   for (const [briefing, options, payload] of cases) {

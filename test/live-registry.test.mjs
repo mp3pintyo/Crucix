@@ -30,6 +30,8 @@ test('POLICIES, the browser policy copy, FACT_FIELDS and HOME describe the same 
   const policies = keys(POLICIES);
   assert(policies.length >= 9, 'the registry is not empty');
   assert.deepEqual(keys(browser().policies), policies);
+  // The browser judges freshness on its own, so its ceilings must be the server's, not just its source names.
+  for (const source of policies) assert.deepEqual({ ...browser().policies[source] }, { ...POLICIES[source] }, source);
   assert.deepEqual(keys(FACT_FIELDS), policies);
   assert.deepEqual(keys(HOME), policies);
   for (const [source, home] of Object.entries(HOME)) assert.match(home, /^https:\/\//, source);
