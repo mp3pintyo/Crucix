@@ -460,8 +460,8 @@ export async function synthesize(data, options = {}) {
       return row;
     })
   }));
-  // Forecast tracks and cones of the active tropical cyclones (NOAA-NHC); only while that source answered fresh.
-  const cyclones = data.sources['NOAA-NHC']?.status === 'ok' && Array.isArray(data.sources['NOAA-NHC'].geometry) ? data.sources['NOAA-NHC'].geometry.slice(0, 12) : [];
+  // Forecast tracks (and cones) of the active tropical cyclones (NOAA-NHC, JMA-Typhoon); only from a source that answered fresh.
+  const cyclones = ['NOAA-NHC', 'JMA-Typhoon'].flatMap(name => data.sources[name]?.status === 'ok' && Array.isArray(data.sources[name].geometry) ? data.sources[name].geometry.slice(0, 12) : []).slice(0, 20);
   const siteFires = (data.sources.FIRMS?.hotspots || []).flatMap(h => (h.highIntensity || [])
     .map(f => ({ region: h.region, frp: f.frp || 0, site: militarySiteAt(f.lat, f.lon) })).filter(f => f.site));
   const siteSignals = siteFires.length ? [militarySiteSignal(siteFires)] : [];

@@ -957,6 +957,7 @@
       "windKt": "Vent soutenu (nœuds)",
       "pressureMb": "Pression centrale (mb)",
       "movement": "Déplacement",
+      "alertLevel": "Niveau selon le titre",
       "rocket": "Fusée",
       "missionType": "Type de mission",
       "orbit": "Orbite",

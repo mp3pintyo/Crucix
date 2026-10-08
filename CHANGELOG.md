@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.32.0 — Nyugat-csendes-óceáni tájfunok és járványhírek (ECDC) / Western Pacific typhoons and outbreak news (ECDC)](docs/releases/v2.32.0.md) — 2026-10-08
+
 - [2.31.0 — Beágyazás és API-dokumentáció: CORS és iframe engedélyezés, állapot-widget, a README szétbontása / Embedding and API docs: CORS and iframe opt-ins, a status widget, the README split into pages](docs/releases/v2.31.0.md) — 2026-10-08
 
 - [2.30.4 — Új képernyőképek és egy hiba a ciklonkúp rajzolásában a lapos térképen / New screenshots and a bug in the cyclone cone on the flat map](docs/releases/v2.30.4.md) — 2026-10-08

@@ -6,7 +6,7 @@ What each release added to the dashboard, the alert engine, the risk model and t
 
 ## Data reliability and local models (v2.2)
 
-The source registry grew from 31 adapters at this point (64 since v2.30, see [Data Sources](DATA-SOURCES.md#data-sources-64)) and included this fork's IODA and the keyless USGS significant-day earthquake feed. USGS coverage is significant earthquakes in the past day, not every earthquake above a magnitude threshold. Its tsunami flag does not establish that a warning was issued. Maritime chokepoints are reference locations; no live AIS connection is claimed by the briefing adapter.
+The source registry grew from 31 adapters at this point (66 since the latest release, see [Data Sources](DATA-SOURCES.md#data-sources-66)) and included this fork's IODA and the keyless USGS significant-day earthquake feed. USGS coverage is significant earthquakes in the past day, not every earthquake above a magnitude threshold. Its tsunami flag does not establish that a warning was issued. Maritime chokepoints are reference locations; no live AIS connection is claimed by the briefing adapter.
 
 `LLM_IDEAS_EVERY_N_SWEEPS=3` generates on the first sweep, then sweeps 3, 6, and so on. Intermediate sweeps reuse ideas with their original timestamp; the cache is per process. The default is 1. Delta alerts still evaluate every sweep, and failed model calls produce fresh rule-based ideas.
 

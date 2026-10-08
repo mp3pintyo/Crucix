@@ -25,6 +25,8 @@ export const POLICIES = Object.freeze({
   'Open-Meteo-Wind': { maxAgeMs: 3*HOUR, observationMaxAgeMs: 3*HOUR },
   'ADSB-Orbits': { maxAgeMs: 25*60000, observationMaxAgeMs: 25*60000 },
   'NOAA-NHC': { maxAgeMs: 8*HOUR, observationMaxAgeMs: 12*HOUR },
+  'JMA-Typhoon': { maxAgeMs: 8*HOUR, observationMaxAgeMs: 12*HOUR },
+  'ECDC-Threats': { maxAgeMs: 336*HOUR, observationMaxAgeMs: 504*HOUR },
   'Launch-Library': { maxAgeMs: 12*HOUR, observationMaxAgeMs: 720*HOUR },
 });
 

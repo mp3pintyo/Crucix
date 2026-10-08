@@ -77,6 +77,8 @@ import { briefing as wmoSwic } from './sources/wmo-swic.mjs';
 import { briefing as unhcrArrivals } from './sources/unhcr-arrivals.mjs';
 import { briefing as sec8k } from './sources/sec-8k.mjs';
 import { briefing as nhc } from './sources/nhc.mjs';
+import { briefing as jmaTyphoon } from './sources/jma-typhoon.mjs';
+import { briefing as ecdcThreats } from './sources/ecdc-threats.mjs';
 import { briefing as openMeteoWind } from './sources/openmeteo-wind.mjs';
 import { briefing as adsbOrbits } from './sources/adsb-orbits.mjs';
 import { briefing as launches } from './sources/launches.mjs';
@@ -191,6 +193,8 @@ export async function fullBriefing() {
     runSource('HIBP', hibp),
     runSource('SEC-8K', sec8k),
     runSource('NOAA-NHC', nhc),
+    runSource('JMA-Typhoon', jmaTyphoon),
+    runSource('ECDC-Threats', ecdcThreats),
     runSource('Open-Meteo-Wind', openMeteoWind),
     runSource('Launch-Library', launches),
     // Conflict forecast and country risk baseline for the intelligence layer's country risk (plain sources, no live row).

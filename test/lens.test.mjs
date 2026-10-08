@@ -248,7 +248,7 @@ test('a domain lens shows only its own group, open and not collapsible; a lens w
   assert.equal(sections(html).length, 1); assert.ok(!html.includes('data-live-group='), 'no collapse button under a lens'); assert.ok(!html.includes(' hidden>'), 'the group is open');
   assert.equal(html.match(/class="live-open"/g).length, hazards.length);
   window.CrucixLens.set('health');
-  const empty = api.renderPanel(nineteen(), t, [], now);
+  const empty = api.renderPanel(nineteen().filter(row => domainOfSource(row.source || row.name) !== 'health'), t, [], now);
   assert.deepEqual(cardsIn(empty), []); assert.ok(empty.includes('No live source belongs to this domain'));
   window.CrucixLens.set('all');
   assert.equal(cardsIn(api.renderPanel(nineteen(), t, [], now)).length, N);

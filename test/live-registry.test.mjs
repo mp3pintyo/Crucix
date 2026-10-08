@@ -11,7 +11,7 @@ import { normalizeHistoryEvent, validateHistoryFilters } from '../lib/intelligen
 // The framework behind the "Current public data" pipeline: every list that has to grow with a new source or kind.
 const root = new URL('../', import.meta.url);
 const read = path => readFileSync(new URL(path, root), 'utf8');
-const NEW_KINDS = ['earthquake', 'maritime', 'aviation', 'sanctions', 'market', 'energy', 'interference', 'displacement', 'launch'];
+const NEW_KINDS = ['earthquake', 'maritime', 'aviation', 'sanctions', 'market', 'energy', 'interference', 'displacement', 'launch', 'health'];
 const OTHER_KINDS = ['news', 'osint', 'health', 'outage', 'conflict', 'signal'];
 const now = Date.parse('2026-10-01T21:00:00Z');
 const keys = value => Object.keys(value).sort();
