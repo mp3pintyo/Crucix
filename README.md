@@ -84,7 +84,7 @@ It was built for anyone who wants to understand what's actually happening in the
 git clone https://github.com/mp3pintyo/Crucix.git
 cd Crucix
 
-# 2. Install locked dependencies (Express plus optional Discord support)
+# 2. Install locked dependencies (Express, fast-xml-parser, h3-js, plus optional Discord support)
 npm ci
 
 # 3. Copy env template and add your API keys (see docs/CONFIGURATION.md)
