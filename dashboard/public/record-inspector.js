@@ -60,20 +60,28 @@
   }
   // Nearby infrastructure (infrastructure.js, optional): pipelines and bases within NEAR_KM of a located record, from the static dataset. The first
   // located record starts the one request for the dataset; when it arrives the page is told once and the open inspector draws again.
-  const NEAR_KM=600,NEAR_EACH=5;
+  const NEAR_KM=600,NEAR_EACH=5,SITE_KM=200,SITE_EACH=3;
   function nearbyPart(rec,tx){
     const I=window.CrucixInfrastructure;
     if(!I||typeof I.nearby!=='function'||!Number.isFinite(rec.lat)||!Number.isFinite(rec.lon))return '';
+    const announce=data=>{if(data&&typeof window.dispatchEvent==='function'&&typeof window.Event==='function')window.dispatchEvent(new window.Event('crucix:infrastructure'));};
     if(!I.get()){
-      try{I.load().then(data=>{if(data&&typeof window.dispatchEvent==='function'&&typeof window.Event==='function')window.dispatchEvent(new window.Event('crucix:infrastructure'));},()=>{});}catch{}
-      return '';
+      try{I.load().then(announce,()=>{});}catch{}
     }
-    const found=I.nearby(rec.lat,rec.lon,NEAR_KM,NEAR_EACH);
-    if(!found.pipelines.length&&!found.bases.length)return '';
+    if(typeof I.loadSites==='function'&&!I.getSites()){
+      try{I.loadSites().then(announce,()=>{});}catch{}
+    }
+    const found=I.get()?I.nearby(rec.lat,rec.lon,NEAR_KM,NEAR_EACH):{pipelines:[],bases:[]};
+    const sites=typeof I.nearbySites==='function'&&I.getSites()?I.nearbySites(rec.lat,rec.lon,SITE_KM,SITE_EACH):{military:[],datacenters:[],dams:[]};
+    if(!found.pipelines.length&&!found.bases.length&&!sites.military.length&&!sites.datacenters.length&&!sites.dams.length)return '';
     const kind=item=>tx(item.kind==='o'?'infra.oil':'infra.gas',item.kind==='o'?'Oil pipeline':'Gas pipeline');
+    const dist=km=>km===0?tx('inspector.nearInside','inside / at the edge'):km+' km';
     const rows=found.pipelines.map(entry=>`<li>${esc(kind(entry.item))} · <strong>${esc(entry.item.name)}</strong> · ${tx('infra.state_'+entry.item.state,entry.item.state)} · ${entry.km} km</li>`)
-      .concat(found.bases.map(entry=>`<li>${tx('infra.base','Military base')} · <strong>${esc(entry.item.name)}</strong>${entry.item.country?' · '+esc(entry.item.country):''} · ${entry.km} km</li>`)).join('');
-    return `<h4>${tx('inspector.nearby','Nearby infrastructure')} (${NEAR_KM} km)</h4><ul class="ri-near">${rows}</ul><p class="ri-near-note">${tx('inspector.nearbyNote','Distance to the nearest point of the line between a pipeline\u2019s end points, or to the base. The record\u2019s own position may be approximate.')}</p>`;
+      .concat(found.bases.map(entry=>`<li>${tx('infra.base','Military base')} · <strong>${esc(entry.item.name)}</strong>${entry.item.country?' · '+esc(entry.item.country):''} · ${entry.km} km</li>`))
+      .concat(sites.military.map(entry=>`<li>${tx('infra.milarea','Mapped military area')} · <strong>${esc(entry.item.name)}</strong> · ${tx('infra.class_'+entry.item.kind,entry.item.kind)} · ${dist(entry.km)}</li>`))
+      .concat(sites.datacenters.map(entry=>`<li>${tx('infra.datacenter','Data centre')} · <strong>${esc(entry.item.name)}</strong> · ${dist(entry.km)}</li>`))
+      .concat(sites.dams.map(entry=>`<li>${tx('infra.dam','Dam')} · <strong>${esc(entry.item.name)}</strong> · ${dist(entry.km)}</li>`)).join('');
+    return `<h4>${tx('inspector.nearby','Nearby infrastructure')} (${NEAR_KM} km)</h4><ul class="ri-near">${rows}</ul><p class="ri-near-note">${tx('inspector.nearbyNote','Distance to the nearest point of the line between a pipeline’s end points, or to the base. The record’s own position may be approximate.')}</p>`;
   }
   // `outdated` comes from reconcileSelection; rec.current is not consulted.
   function detail(selected,tx){

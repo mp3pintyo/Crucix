@@ -123,7 +123,10 @@
     "rotateHint": "GLISSER POUR TOURNER · MOLETTE POUR ZOOMER",
     "gnssInterference": "Brouillage GNSS",
     "pipelines": "Oléoducs et gazoducs",
-    "militaryBases": "Bases militaires"
+    "militaryBases": "Bases militaires",
+    "militaryAreas": "Zones militaires cartographiées",
+    "datacenters": "Centres de données",
+    "dams": "Barrages"
   },
   "ideas": {
     "confidence": "Confiance",
@@ -944,7 +947,8 @@
       "usualMonth": "Mois habituel (médiane des trois précédents)"
     },
     "nearby": "Infrastructures à proximité",
-    "nearbyNote": "Distance au point le plus proche de la ligne entre les extrémités d’un pipeline, ou à la base. La position du relevé peut elle-même être approximative."
+    "nearbyNote": "Distance au point le plus proche de la ligne entre les extrémités d’un pipeline, ou à la base. Les zones militaires, centres de données et barrages cartographiés sont cherchés dans un rayon de 200 km (dans une zone : 0). La position du relevé peut être approximative.",
+    "nearInside": "à l’intérieur / en bordure"
   },
   "lenses": {
     "all": "Tous",
@@ -1251,6 +1255,20 @@
     "family_china": "Chine",
     "family_italy": "Italie",
     "family_uae": "Émirats arabes unis",
-    "family_japan": "Japon"
+    "family_japan": "Japon",
+    "milarea": "Zone militaire cartographiée",
+    "datacenter": "Centre de données",
+    "dam": "Barrage",
+    "onSite": "Sur ou près d’une zone militaire cartographiée",
+    "areaKm2": "{a} km²",
+    "milareaNote": "Une zone cartographiée par OpenStreetMap ; ce n’est pas une indication sur l’usage ni sur la garnison.",
+    "siteNote": "Cartographié par les contributeurs d’OpenStreetMap ; incomplet par nature.",
+    "class_military_land": "Terrain militaire",
+    "class_airfield": "Aérodrome militaire",
+    "class_naval_base": "Base navale",
+    "class_range": "Champ de tir",
+    "class_barracks": "Caserne",
+    "class_base": "Base",
+    "class_training_area": "Zone d’entraînement"
   }
 }

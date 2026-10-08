@@ -8,9 +8,14 @@
   //   greatCircle(a, b, steps)  [[lat, lon], ...] along the great circle
   //   distanceKm(lat1, lon1, lat2, lon2), nearby(lat, lon, km, limit)  -> { pipelines: [{item, km}], bases: [{item, km}] }
   //   pipelineText(p, say), baseText(b, say)  plain text for a popup; say(key, fallback, values) is the page's translator
+  // Mapped sites (second file, data/sites.json, built by scripts/build-sites.mjs from God's Eye View, OpenStreetMap/Overture, ODbL): named military
+  // areas (with bounding boxes), data centres and dams. Same rules: one request, a failure is remembered, every field is checked and cut.
+  //   loadSites(fetchJson?), getSites(), parseSites(doc), nearbySites(lat, lon, km, limit) -> { military, datacenters, dams: [{item, km}] }
+  //   siteText(item, say)  plain text for a popup
   const URL_PATH='data/infrastructure.json',EARTH_KM=6371.0088,RAD=Math.PI/180;
   const STATES=['flowing','reduced','offline','unknown'];
-  let dataset=null,pending=null,failed=false;
+  let dataset=null,pending=null,failed=false,sites=null,sitesPending=null,sitesFailed=false;
+  const SITES_PATH='data/sites.json';
   const finite=value=>typeof value==='number'&&Number.isFinite(value);
   const point=(lat,lon)=>finite(lat)&&finite(lon)&&Math.abs(lat)<=90&&Math.abs(lon)<=180;
   const text=(value,max)=>typeof value==='string'?value.replace(/[\u0000-\u001f\u007f<>]/g,' ').replace(/\s+/g,' ').trim().slice(0,max):'';
@@ -85,6 +90,49 @@
     out.pipelines.length=Math.min(out.pipelines.length,cap);out.bases.length=Math.min(out.bases.length,cap);
     return out;
   }
+
+  // === Mapped sites ===
+  const CLASSES=['military_land','airfield','naval_base','range','barracks','base','training_area'];
+  function cleanMilitary(row,classes){
+    if(!Array.isArray(row)||row.length!==9||!text(row[0],70))return null;
+    const [name,lon,lat,w,s,e,n,cls,area]=row;
+    if(!point(lat,lon)||!point(s,w)||!point(n,e)||s>n||w>e||!Number.isInteger(cls)||!finite(area))return null;
+    return {name:text(name,70),lat,lon,box:[w,s,e,n],kind:classes[cls]||'',areaKm2:area};
+  }
+  const cleanPoint=(row,extra)=>{
+    if(!Array.isArray(row)||row.length<3||!point(row[1],row[0])||!text(row[2],70))return null;
+    return {name:text(row[2],70),lat:row[1],lon:row[0],note:text(row[3],70),output:extra?text(row[4],30):''};
+  };
+  function parseSites(doc){
+    if(!doc||typeof doc!=='object'||!Array.isArray(doc.military)||!Array.isArray(doc.datacenters)||!Array.isArray(doc.dams))return null;
+    if(doc.military.length>20000||doc.datacenters.length>20000||doc.dams.length>20000)return null;
+    const classes=(Array.isArray(doc.classes)?doc.classes:CLASSES).map(value=>CLASSES.includes(value)?value:'');
+    const src=doc.sources&&typeof doc.sources==='object'?doc.sources:{};
+    return {military:doc.military.map(row=>cleanMilitary(row,classes)).filter(Boolean),
+      datacenters:doc.datacenters.map(row=>cleanPoint(row,false)).filter(Boolean),
+      dams:doc.dams.map(row=>cleanPoint(row,true)).filter(Boolean),
+      sources:{military:text(src.military,600),datacenters:text(src.datacenters,600),dams:text(src.dams,600)}};
+  }
+  function loadSites(fetchJson){
+    if(sites)return Promise.resolve(sites);
+    if(sitesFailed)return Promise.resolve(null);
+    if(!sitesPending){
+      const get=typeof fetchJson==='function'?fetchJson:url=>window.fetch(url,{credentials:'same-origin'}).then(response=>{if(!response.ok)throw new Error('HTTP '+response.status);return response.json();});
+      sitesPending=Promise.resolve().then(()=>get(SITES_PATH)).then(doc=>{sites=parseSites(doc);if(!sites)sitesFailed=true;return sites;},()=>{sitesFailed=true;return null;});
+    }
+    return sitesPending;
+  }
+  // Distance to a bounding box: 0 inside it, otherwise to the nearest point of its edge.
+  const boxKm=(lat,lon,box)=>distanceKm(lat,lon,Math.min(Math.max(lat,box[1]),box[3]),Math.min(Math.max(lon,box[0]),box[2]));
+  function nearbySites(lat,lon,km,limit){
+    const out={military:[],datacenters:[],dams:[]};
+    if(!sites||!point(lat,lon)||!finite(km)||km<=0)return out;
+    const cap=Math.max(1,Math.min(50,Math.round(limit||3)));
+    for(const item of sites.military){if(Math.abs(item.lat-lat)>km/100+1)continue;const d=boxKm(lat,lon,item.box);if(d<=km)out.military.push({item,km:Math.round(d)});}
+    for(const key of ['datacenters','dams'])for(const item of sites[key]){if(Math.abs(item.lat-lat)>km/100+1)continue;const d=distanceKm(lat,lon,item.lat,item.lon);if(d<=km)out[key].push({item,km:Math.round(d)});}
+    for(const key of Object.keys(out)){out[key].sort((a,b)=>a.km-b.km||(a.item.name<b.item.name?-1:1));out[key].length=Math.min(out[key].length,cap);}
+    return out;
+  }
   const fill=(template,values)=>{let out=template;for(const [key,value] of Object.entries(values||{}))out=out.split('{'+key+'}').join(String(value));return out;};
   function say(translate,key,fallback,values){let template=fallback;try{if(typeof translate==='function'){const got=translate('infra.'+key,fallback);if(typeof got==='string'&&got)template=got;}}catch{}return fill(template,values);}
   function pipelineText(p,translate){
@@ -109,6 +157,20 @@
     lines.push(say(translate,'baseNote','A public-source compilation; it is not a statement about the current garrison.'));
     return lines.join('\n');
   }
+
+  function siteText(item,translate){
+    const lines=[];
+    if(item.kind!==undefined){
+      lines.push(say(translate,'class_'+item.kind,item.kind||'—')+' · '+say(translate,'areaKm2','{a} km²',{a:item.areaKm2}));
+      lines.push(say(translate,'milareaNote','A mapped area from OpenStreetMap; it is not a statement about use or garrison.'));
+    }else{
+      if(item.note)lines.push(item.note);
+      if(item.output)lines.push(item.output);
+      lines.push(say(translate,'siteNote','Mapped by OpenStreetMap contributors; incomplete by nature.'));
+    }
+    return lines.join('\n');
+  }
   window.CrucixInfrastructure={load,get:()=>dataset,parse,greatCircle,distanceKm,distanceToLineKm,nearby,pipelineText,baseText,
-    reset:()=>{dataset=null;pending=null;failed=false;}};
+    loadSites,getSites:()=>sites,parseSites,nearbySites,siteText,boxKm,
+    reset:()=>{dataset=null;pending=null;failed=false;sites=null;sitesPending=null;sitesFailed=false;}};
 })(window);

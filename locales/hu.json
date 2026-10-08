@@ -123,7 +123,10 @@
     "rotateHint": "HÚZD A FORGATÁSHOZ · GÖRGESS A ZOOMHOZ",
     "gnssInterference": "GNSS-zavarás",
     "pipelines": "Olaj- és gázvezetékek",
-    "militaryBases": "Katonai bázisok"
+    "militaryBases": "Katonai bázisok",
+    "militaryAreas": "Feltérképezett katonai területek",
+    "datacenters": "Adatközpontok",
+    "dams": "Gátak"
   },
   "ideas": {
     "confidence": "Bizonyosság",
@@ -944,7 +947,8 @@
       "usualMonth": "Szokásos hónap (az előző három mediánja)"
     },
     "nearby": "Közeli infrastruktúra",
-    "nearbyNote": "A vezeték végpontjai közötti vonal legközelebbi pontjáig, illetve a bázisig mért távolság. A rekord saját helye lehet közelítő."
+    "nearbyNote": "Vezetéknél a végpontok közötti vonal legközelebbi pontjáig, bázisnál a pontig mért távolság. A feltérképezett katonai területeket, adatközpontokat és gátakat 200 km-en belül keressük (területen belül: 0). A rekord saját helye lehet közelítő.",
+    "nearInside": "belül / a szélén"
   },
   "lenses": {
     "all": "Mind",
@@ -1251,6 +1255,20 @@
     "family_china": "Kína",
     "family_italy": "Olaszország",
     "family_uae": "Egyesült Arab Emírségek",
-    "family_japan": "Japán"
+    "family_japan": "Japán",
+    "milarea": "Feltérképezett katonai terület",
+    "datacenter": "Adatközpont",
+    "dam": "Gát",
+    "onSite": "Feltérképezett katonai területen vagy mellette",
+    "areaKm2": "{a} km²",
+    "milareaNote": "Az OpenStreetMapből származó terület; nem állítás a használatról vagy a helyőrségről.",
+    "siteNote": "Az OpenStreetMap közreműködői térképezték fel; természeténél fogva hiányos.",
+    "class_military_land": "Katonai terület",
+    "class_airfield": "Katonai repülőtér",
+    "class_naval_base": "Haditengerészeti bázis",
+    "class_range": "Lőtér",
+    "class_barracks": "Laktanya",
+    "class_base": "Bázis",
+    "class_training_area": "Kiképzési terület"
   }
 }

@@ -123,7 +123,10 @@
     "rotateHint": "DRAG TO ROTATE · SCROLL TO ZOOM",
     "gnssInterference": "GNSS interference",
     "pipelines": "Oil and gas pipelines",
-    "militaryBases": "Military bases"
+    "militaryBases": "Military bases",
+    "militaryAreas": "Mapped military areas",
+    "datacenters": "Data centres",
+    "dams": "Dams"
   },
   "ideas": {
     "confidence": "Confidence",
@@ -944,7 +947,8 @@
       "usualMonth": "Usual month (median of the three before)"
     },
     "nearby": "Nearby infrastructure",
-    "nearbyNote": "Distance to the nearest point of the line between a pipeline’s end points, or to the base. The record’s own position may be approximate."
+    "nearbyNote": "Distance to the nearest point of the line between a pipeline’s end points, or to the base. Mapped military areas, data centres and dams are searched within 200 km (inside an area: 0). The record’s own position may be approximate.",
+    "nearInside": "inside / at the edge"
   },
   "lenses": {
     "all": "All",
@@ -1251,6 +1255,20 @@
     "family_china": "China",
     "family_italy": "Italy",
     "family_uae": "United Arab Emirates",
-    "family_japan": "Japan"
+    "family_japan": "Japan",
+    "milarea": "Mapped military area",
+    "datacenter": "Data centre",
+    "dam": "Dam",
+    "onSite": "On or beside a mapped military area",
+    "areaKm2": "{a} km²",
+    "milareaNote": "A mapped area from OpenStreetMap; it is not a statement about use or garrison.",
+    "siteNote": "Mapped by OpenStreetMap contributors; incomplete by nature.",
+    "class_military_land": "Military land",
+    "class_airfield": "Military airfield",
+    "class_naval_base": "Naval base",
+    "class_range": "Range",
+    "class_barracks": "Barracks",
+    "class_base": "Base",
+    "class_training_area": "Training area"
   }
 }

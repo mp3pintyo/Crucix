@@ -1,5 +1,7 @@
 # Changelog / Változásnapló
 
+- [2.26.0 — Katonai területek, adatközpontok és gátak: térképrétegek, közeli telephelyek és FIRMS-jelzés / Military areas, data centres and dams: map layers, nearby sites and a FIRMS signal](docs/releases/v2.26.0.md) — 2026-10-08
+
 - [2.25.0 — Európába érkezők az UNHCR-től: új élő forrás a World Monitor friss változásaiból / Arrivals in Europe from UNHCR: a new live source from World Monitor's latest changes](docs/releases/v2.25.0.md) — 2026-10-08
 
 - [2.24.0 — Figyelőlista: a referenciaprojektek egy fájlban, és egy parancs, ami megmutatja a változásaikat / Watchlist: the reference projects in one file, and a command that shows what changed in them](docs/releases/v2.24.0.md) — 2026-10-08

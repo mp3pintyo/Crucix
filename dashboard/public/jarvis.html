@@ -563,7 +563,10 @@ const mapLayerRegistry = [
   {id:'earthquake',key:'map.earthquake',label:'Earthquakes · USGS significant + EMSC M4.5+',types:['earthquake']},
   {id:'interference',key:'map.gnssInterference',label:'GNSS interference',types:['interference']},
   {id:'pipelines',key:'map.pipelines',label:'Oil and gas pipelines',types:['pipeline'],off:true},
-  {id:'bases',key:'map.militaryBases',label:'Military bases',types:['base'],off:true}
+  {id:'bases',key:'map.militaryBases',label:'Military bases',types:['base'],off:true},
+  {id:'milareas',key:'map.militaryAreas',label:'Mapped military areas',types:['milarea'],off:true},
+  {id:'datacenters',key:'map.datacenters',label:'Data centres',types:['datacenter'],off:true},
+  {id:'dams',key:'map.dams',label:'Dams',types:['dam'],off:true}
 ];
 // Layer type of a located live-source row, by its kind. Kinds without coordinates draw nothing; any other kind keeps the weather type.
 const LIVE_MARKER_TYPE={earthquake:'earthquake',maritime:'maritime',aviation:'air',disaster:'disaster',forecast:'forecast',weather:'weather',interference:'interference',displacement:'conflict'};
@@ -1322,7 +1325,7 @@ function bindMapLifecycleEvents(){
 function renderMapLegend(){
   document.getElementById('mapLegend').innerHTML=
     [{c:'#64f0c8',l:t('map.airTraffic','Air Traffic')},{c:'#ff5f63',l:t('map.thermalFire','Thermal/Fire')},{c:'rgba(255,120,80,0.8)',l:t('map.conflict','Conflict')},{c:'#44ccff',l:t('map.sdrReceiver','SDR Receiver')},
-     {c:'#ffe082',l:t('map.nuclearSite','Nuclear Site')},{c:'#b388ff',l:t('map.chokepoint','Chokepoint')},{c:'#ffc400',l:t('map.gnssInterference','GNSS interference')},{c:'#ffa03c',l:t('map.pipelines','Oil and gas pipelines')},{c:'#ce93d8',l:t('map.militaryBases','Military bases')},{c:'#ffb84c',l:t('map.osintEvent','OSINT Event')},{c:'#69f0ae',l:t('map.healthAlert','Health Alert')},{c:'#9be7b1',l:'Supplemental Health'},{c:'#4dd0e1',l:t('map.internetOutage','Internet Outage')},{c:'#81d4fa',l:t('map.worldNews','World News')},{c:'#ff9800',l:t('map.weatherAlert','Weather Alert')},{c:'#cddc39',l:t('map.epaRadNet','EPA RadNet')},{c:'#ffffff',l:t('map.spaceStation','Space Station')},{c:'#6495ed',l:t('map.gdeltEvent','GDELT Event')},{c:'#ff7043',l:t('map.earthquake','Earthquakes')}]
+     {c:'#ffe082',l:t('map.nuclearSite','Nuclear Site')},{c:'#b388ff',l:t('map.chokepoint','Chokepoint')},{c:'#ffc400',l:t('map.gnssInterference','GNSS interference')},{c:'#ffa03c',l:t('map.pipelines','Oil and gas pipelines')},{c:'#ce93d8',l:t('map.militaryBases','Military bases')},{c:'#ef9a9a',l:t('map.militaryAreas','Mapped military areas')},{c:'#7986cb',l:t('map.datacenters','Data centres')},{c:'#a1887f',l:t('map.dams','Dams')},{c:'#ffb84c',l:t('map.osintEvent','OSINT Event')},{c:'#69f0ae',l:t('map.healthAlert','Health Alert')},{c:'#9be7b1',l:'Supplemental Health'},{c:'#4dd0e1',l:t('map.internetOutage','Internet Outage')},{c:'#81d4fa',l:t('map.worldNews','World News')},{c:'#ff9800',l:t('map.weatherAlert','Weather Alert')},{c:'#cddc39',l:t('map.epaRadNet','EPA RadNet')},{c:'#ffffff',l:t('map.spaceStation','Space Station')},{c:'#6495ed',l:t('map.gdeltEvent','GDELT Event')},{c:'#ff7043',l:t('map.earthquake','Earthquakes')}]
     .map(x=>`<div class="leg-item"><div class="leg-dot" style="background:${x.c}"></div>${x.l}</div>`).join('');
 }
 
@@ -1481,6 +1484,23 @@ function infraData(){
   if((mapLayers.pipelines||mapLayers.bases)&&!infraRequested){infraRequested=true;I.load().then(loaded=>{if(loaded){plotMarkers();if(flatG){flatG.selectAll('.markers,.corridors-layer,.infra-layer').remove();plotFlatMarkers();}}});}
   return null;
 }
+// Mapped sites (second file): military areas (only the larger ones are drawn, all are searched), data centres, dams.
+const SITE_COLOR={milarea:'rgba(239,154,154,0.85)',datacenter:'rgba(121,134,203,0.9)',dam:'rgba(161,136,127,0.95)'};
+const MILAREA_DRAW_KM2=5;
+let sitesRequested=false;
+function sitesData(){
+  const I=window.CrucixInfrastructure;if(!I||typeof I.loadSites!=='function')return null;
+  const data=I.getSites();if(data)return data;
+  if((mapLayers.milareas||mapLayers.datacenters||mapLayers.dams)&&!sitesRequested){sitesRequested=true;I.loadSites().then(loaded=>{if(loaded){plotMarkers();if(flatG){flatG.selectAll('.markers,.corridors-layer,.infra-layer').remove();plotFlatMarkers();}}});}
+  return null;
+}
+function siteLayerRows(data){
+  const rows=[];
+  if(isMarkerTypeVisible('milarea'))data.military.filter(m=>m.areaKm2>=MILAREA_DRAW_KM2).forEach(m=>rows.push({type:'milarea',item:m,head:m.name,meta:t('infra.milarea','Mapped military area')}));
+  if(isMarkerTypeVisible('datacenter'))data.datacenters.forEach(m=>rows.push({type:'datacenter',item:m,head:m.name,meta:t('infra.datacenter','Data centre')}));
+  if(isMarkerTypeVisible('dam'))data.dams.forEach(m=>rows.push({type:'dam',item:m,head:m.name,meta:t('infra.dam','Dam')}));
+  return rows;
+}
 function pipelineMeta(p){return [p.kind==='o'?t('infra.oil','Oil pipeline'):t('infra.gas','Gas pipeline'),t('infra.state_'+p.state,p.state)].join(' · ');}
 function globePipelinePaths(data){
   if(infraPaths&&infraPathsFor===data)return infraPaths;
@@ -1501,6 +1521,16 @@ function plotFlatInfrastructure(data){
     const projected=flatProjection([b.lon,b.lat]);if(!projected||!projected.every(Number.isFinite))return;
     const g=layer.append('g').attr('transform','translate('+projected[0]+','+projected[1]+')').attr('data-layer','bases').style('cursor','pointer').on('click',ev=>{ev.stopPropagation();showPopup(ev,b.name,I.baseText(b,infraSay),t('infra.base','Military base'));});
     g.append('circle').attr('class','marker-circle').attr('r',2.6).attr('data-base-r',2.6).attr('fill',baseColor(b)).attr('stroke','rgba(255,255,255,0.35)').attr('stroke-width',0.6);
+  });
+}
+
+function plotFlatSites(data){
+  const layer=flatG.select('.infra-layer').empty()?flatG.append('g').attr('class','infra-layer'):flatG.select('.infra-layer');
+  const I=window.CrucixInfrastructure;
+  siteLayerRows(data).forEach(r=>{
+    const projected=flatProjection([r.item.lon,r.item.lat]);if(!projected||!projected.every(Number.isFinite))return;
+    const g=layer.append('g').attr('transform','translate('+projected[0]+','+projected[1]+')').attr('data-layer',r.type==='milarea'?'milareas':r.type==='dam'?'dams':'datacenters').style('cursor','pointer').on('click',ev=>{ev.stopPropagation();showPopup(ev,r.head,I.siteText(r.item,infraSay),r.meta);});
+    g.append('circle').attr('class','marker-circle').attr('r',r.type==='milarea'?2.2:1.8).attr('data-base-r',r.type==='milarea'?2.2:1.8).attr('fill',SITE_COLOR[r.type]).attr('stroke','rgba(255,255,255,0.3)').attr('stroke-width',0.5);
   });
 }
 
@@ -1530,7 +1560,7 @@ function plotMarkers(){
         lat:f.lat, lng:f.lon, size:0.12+Math.min(f.frp/200,0.3), alt:0.008,
         color:'rgba(255,95,99,0.7)', type:'thermal', priority:3,
         popHead:'Thermal Detection', popMeta:'FIRMS Satellite',
-        popText:`Region: ${t.region}<br>FRP: ${f.frp.toFixed(1)} MW<br>Total: ${t.det.toLocaleString()}<br>Night: ${t.night.toLocaleString()}`
+        popText:`Region: ${t.region}<br>FRP: ${f.frp.toFixed(1)} MW<br>Total: ${t.det.toLocaleString()}<br>Night: ${t.night.toLocaleString()}`+(f.site?`<br>${esc(t('infra.onSite','On or beside a mapped military area'))}: ${esc(f.site)}`:'')
       });
     });
   });
@@ -1679,6 +1709,8 @@ function plotMarkers(){
   const infra=infraData();
   if(infra&&isMarkerTypeVisible('base'))infra.bases.forEach(b=>points.push({lat:b.lat,lng:b.lon,size:0.2,alt:0.012,color:baseColor(b),type:'base',priority:2,popHead:b.name,popMeta:t('infra.base','Military base'),popText:window.CrucixInfrastructure.baseText(b,infraSay)}));
   globe.pathsData(infra&&isMarkerTypeVisible('pipeline')?globePipelinePaths(infra):[]);
+  const sitesGlobe=sitesData();
+  if(sitesGlobe)siteLayerRows(sitesGlobe).forEach(r=>points.push({lat:r.item.lat,lng:r.item.lon,size:r.type==='milarea'?0.16:0.12,alt:0.01,color:SITE_COLOR[r.type],type:r.type,priority:2,popHead:r.head,popMeta:r.meta,popText:window.CrucixInfrastructure.siteText(r.item,infraSay)}));
   const visiblePoints=points.filter(point=>hasCoordinates(point.lat,point.lng)&&isMarkerTypeVisible(point.type));
   // Set points on globe
   globe.pointsData(visiblePoints);
@@ -1980,7 +2012,7 @@ function plotFlatMarkers(){
   flatMarkerType='thermal';
   D.thermal.forEach(t=>t.fires.forEach(f=>{
     addPt(f.lat,f.lon,2+Math.min(f.frp/50,5),'rgba(255,95,99,0.6)','rgba(255,95,99,0.2)',
-      ev=>showPopup(ev,'Thermal',`${t.region}<br>FRP: ${f.frp.toFixed(1)} MW`,'FIRMS'),3);
+      ev=>showPopup(ev,'Thermal',`${t.region}<br>FRP: ${f.frp.toFixed(1)} MW`+(f.site?`<br>${esc(t('infra.onSite','On or beside a mapped military area'))}: ${esc(f.site)}`:''),'FIRMS'),3);
   }));
   // Chokepoints
   flatMarkerType='maritime';
@@ -2078,6 +2110,8 @@ function plotFlatMarkers(){
   }
   const infraFlat=infraData();
   if(infraFlat)plotFlatInfrastructure(infraFlat);
+  const sitesFlat=sitesData();
+  if(sitesFlat)plotFlatSites(sitesFlat);
 }
 
 // Update setRegion for flat mode

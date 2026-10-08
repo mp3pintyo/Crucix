@@ -5,6 +5,7 @@
 //
 // Exports synthesize(), generateIdeas(), fetchAllNews() for use by server.mjs
 
+import { militarySiteAt } from '../lib/intelligence/military-sites.mjs';
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -432,6 +433,15 @@ export async function fetchAllNews(customFeeds) {
 export function generateIdeas(V2) { return generateRuleBasedIdeas(V2, config.llm.tradeIdeasLang); }
 
 // === Synthesize raw sweep data into dashboard format ===
+// One signal for the high-intensity (FRP > 10 MW) detections that fall on or beside a mapped military area. A fire there can be a range fire,
+// a burn-off or an attack: the text says where and how many, not what it was.
+function militarySiteSignal(fires) {
+  const names = [...new Set(fires.map(f => f.site.name))];
+  const regions = [...new Set(fires.map(f => f.region))].slice(0, 3);
+  const top = Math.max(...fires.map(f => f.frp));
+  return `${fires.length} high-intensity thermal detection${fires.length === 1 ? '' : 's'} (top ${top.toFixed(0)} MW) on or beside mapped military areas in ${regions.join(', ')}: ${names.slice(0, 4).join(', ')}${names.length > 4 ? ` and ${names.length - 4} more` : ''}. Range fire, burn-off and attack look alike from orbit; check other sources.`;
+}
+
 export async function synthesize(data, options = {}) {
   const liveAirHotspots = data.sources.OpenSky?.hotspots || [];
   const hasUsableLiveAir = liveAirHotspots.some(h => !h.error && Number.isFinite(h.totalAircraft));
@@ -443,8 +453,16 @@ export async function synthesize(data, options = {}) {
   const thermal = (data.sources.FIRMS?.hotspots || []).map(h => ({
     region: h.region, det: h.totalDetections || 0, night: h.nightDetections || 0,
     hc: h.highConfidence || 0,
-    fires: (h.highIntensity || []).slice(0, 8).map(f => ({ lat: f.lat, lon: f.lon, frp: f.frp || 0 }))
+    fires: (h.highIntensity || []).slice(0, 8).map(f => {
+      const row = { lat: f.lat, lon: f.lon, frp: f.frp || 0 };
+      const site = militarySiteAt(f.lat, f.lon);
+      if (site) row.site = site.name;
+      return row;
+    })
   }));
+  const siteFires = (data.sources.FIRMS?.hotspots || []).flatMap(h => (h.highIntensity || [])
+    .map(f => ({ region: h.region, frp: f.frp || 0, site: militarySiteAt(f.lat, f.lon) })).filter(f => f.site));
+  const siteSignals = siteFires.length ? [militarySiteSignal(siteFires)] : [];
   const iodaData = data.sources.IODA || {};
   const iodaCountries = (iodaData.outages?.affectedCountries || [])
     .map(country => {
@@ -493,6 +511,7 @@ export async function synthesize(data, options = {}) {
   };
   const tSignals = [
     ...(data.sources.FIRMS?.signals || []),
+    ...siteSignals,
     ...ioda.signals,
   ];
   const chokepoints = Object.values(data.sources.Maritime?.chokepoints || {}).map(c => ({
