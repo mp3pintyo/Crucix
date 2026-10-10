@@ -154,6 +154,19 @@ test('parser handles fenced/prose/wrapped JSON and brackets or escaped quotes in
   for (const text of [JSON.stringify([idea({ confidence: null })]), '[]', '{bad}', null, '['.repeat(100000)]) assert.equal(parseIdeasResponse(text), null);
 });
 
+test('parser accepts a single bare idea object, as a local model returned it for the Hungarian prompt', () => {
+  const single = JSON.stringify(idea({ title: 'Long Gold on Geopolitical Stress', ticker: 'GLD', horizon: 'Weeks', signals: ['Record US debt levels'] }), null, 2);
+  const ideas = parseIdeasResponse(single);
+  assert.equal(ideas?.length, 1);
+  assert.equal(ideas[0].type, 'LONG');
+  assert.equal(ideas[0].horizon, 'Weeks');
+  for (const text of [JSON.stringify({ title: 'No type' }), JSON.stringify({ ideas: 'not a list' }), '"text"', '42']) assert.equal(parseIdeasResponse(text), null);
+});
+
+test('every locale prompt shows the ideas output as an array, not a single object', () => {
+  for (const lang of ['en', 'fr', 'hu']) assert.match(ideasSystemPrompt(lang), /\n\[\n  \{\n[\s\S]*\n  \}\n\]/);
+});
+
 test('prompt uses real delta fields, source health schema, and treasury object', () => {
   const data = { ...fixture(), health: [{ n: 'ok' }, { n: 'error', err: true }, { n: 'disabled', disabled: true }, { n: 'old', stale: true }], treasury: { totalDebt: '38900000000000' } };
   const context = compactSweepForLLM(data, { summary: { direction: 'escalation', totalChanges: 2, criticalChanges: 1 }, signals: {
