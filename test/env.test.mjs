@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { parseEnvLine } from '../apis/utils/env.mjs';
+import { resolve } from 'node:path';
+import { parseEnvLine, getEnvSearchPaths } from '../apis/utils/env.mjs';
 import { envInteger } from '../crucix.config.mjs';
 
 test('env quotes, comments and export syntax preserve embedded hashes', () => {
@@ -141,4 +142,17 @@ test('.env.example documents the sweep archive keys: comment line above, empty v
     assert.equal(lines[index], `${key}=`, `${key} must have an empty value and no inline comment`);
     assert.match(lines[index - 1], /^# \S/, `${key} needs a comment line above`);
   }
+});
+
+test('getEnvSearchPaths: resolves explicit CRUCIX_ENV_FILE or falls back to user profile ~/.crucix/.env', () => {
+  const explicit = getEnvSearchPaths({ envFile: '/custom/path/.env' });
+  assert.deepEqual(explicit, [resolve('/custom/path/.env')]);
+
+  const testHome = resolve('/test-home');
+  const testCwd = resolve('/test-cwd');
+  const paths = getEnvSearchPaths({ envFile: null, cwd: testCwd, home: testHome });
+  assert.ok(paths.includes(resolve(testCwd, '.env')), 'Includes cwd .env');
+  assert.ok(paths.includes(resolve(testHome, '.crucix', '.env')), 'Includes user profile ~/.crucix/.env (%USERPROFILE%\\.crucix\\.env)');
+  assert.ok(paths.includes(resolve(testHome, '.crucix.env')), 'Includes user profile ~/.crucix.env');
+  assert.ok(paths.length >= 3, 'Multiple candidates searched');
 });

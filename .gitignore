@@ -47,3 +47,9 @@ MAINTAINER_DECISIONS.local.md
 
 # Local deploy config
 dashboard/public/vercel.json
+
+# Binary build outputs
+dist/
+bin/*.exe
+bin/crucix
+*.blob

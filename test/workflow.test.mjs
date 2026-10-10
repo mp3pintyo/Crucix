@@ -31,3 +31,8 @@ test('releases and the default branch still trigger the workflow itself', () => 
   assert.match(workflow, /^on:\s*\n(?:.*\n)*?\s+push:\s*\n\s+branches:\s*\[master\]\s*\n\s+tags:\s*\['v\*'\]/m);
   assert.match(workflow, /^\s+workflow_dispatch:/m);
 });
+
+test('standalone executable build and verification run in quality matrix', () => {
+  assert.match(workflow, /npm run build:exe/);
+  assert.match(workflow, /npm run verify:exe/);
+});

@@ -1,14 +1,32 @@
 // Load .env file for API keys
-// Searches: project root .env first, then apis/.env as fallback
+// Searches: explicit CRUCIX_ENV_FILE, cwd .env, project root .env, user profile (~/.crucix/.env), apis/.env
 import { readFileSync } from 'fs';
-import { resolve, dirname } from 'path';
+import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { homedir } from 'os';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const paths = process.env.CRUCIX_ENV_FILE ? [resolve(process.env.CRUCIX_ENV_FILE)] : [
-  resolve(__dirname, '..', '..', '.env'), // project root
-  resolve(__dirname, '..', '.env'),        // apis/.env (legacy)
-];
+
+export function getEnvSearchPaths({ envFile = process.env.CRUCIX_ENV_FILE, cwd = process.cwd(), home = homedir() } = {}) {
+  if (envFile) return [resolve(envFile)];
+  const candidates = [
+    resolve(cwd, '.env'),
+    resolve(__dirname, '..', '..', '.env'), // project root
+    join(home, '.crucix', '.env'),          // platform-independent %USERPROFILE%\.crucix\.env or ~/.crucix/.env
+    join(home, '.crucix.env'),              // %USERPROFILE%\.crucix.env or ~/.crucix.env
+    resolve(__dirname, '..', '.env'),       // apis/.env (legacy)
+  ];
+  const seen = new Set();
+  const paths = [];
+  for (const p of candidates) {
+    const normalized = resolve(p);
+    if (!seen.has(normalized)) {
+      seen.add(normalized);
+      paths.push(normalized);
+    }
+  }
+  return paths;
+}
 
 export function parseEnvLine(line) {
   const match = /^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/.exec(line);
@@ -37,6 +55,13 @@ function loadEnv(filePath) {
   } catch { return -1; }
 }
 
-for (const p of paths) {
-  if (loadEnv(p) >= 0) break;
+export function loadAllEnv(paths = getEnvSearchPaths()) {
+  let anyLoaded = false;
+  for (const p of paths) {
+    const loaded = loadEnv(p);
+    if (loaded >= 0) anyLoaded = true;
+  }
+  return anyLoaded;
 }
+
+loadAllEnv();

@@ -1,0 +1,162 @@
+name: CI - Comprehensive Quality & Security Gate
+
+on:
+  push:
+    branches: [master, main, 'feat/**']
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # 1. Code Syntax, File Integrity and Locale Parity Check
+  syntax-and-lint:
+    name: Code Syntax & Locale Parity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Run Integrity & Syntax Check (343+ JS files)
+        run: npm run check
+
+  # 2. Complete Unit & Integration Test Matrix across OS & Node versions
+  test:
+    name: Test Suite (${{ matrix.os }}, Node ${{ matrix.node }})
+    needs: syntax-and-lint
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [22, 24]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Run Test Suite (1690+ tests)
+        run: npm test
+
+  # 3. Security Audit & Dependency Scanning
+  security-audit:
+    name: Dependency Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Audit Production Dependencies
+        run: npm audit --omit=dev
+
+  # 4. Multi-Platform Native Executable (SEA) Build & Verification
+  build-executable:
+    name: Standalone Binary Build & Verify (${{ matrix.os }})
+    needs: syntax-and-lint
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: [22]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Build Standalone Native Executable (Node SEA)
+        run: npm run build:exe
+
+      - name: Verify Executable in Isolated Environment
+        run: npm run verify:exe
+
+      - name: Upload Binary Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: crucix-bin-${{ matrix.os }}
+          path: |
+            bin/crucix.exe
+            bin/crucix
+          if-no-files-found: warn
+          retention-days: 14
+
+  # 5. Container & Docker Non-Root Permission Verification
+  docker-verify:
+    name: Docker Container & Non-Root Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Container
+        run: docker build -t crucix-ci-test .
+
+      - name: Verify Non-Root User & Volume Write Permissions
+        run: |
+          docker run --rm --entrypoint node crucix-ci-test -e "require('node:fs').writeFileSync('/app/runs/permission-test', 'ok'); if (process.getuid() === 0) process.exit(1); console.log('UID', process.getuid(), 'runs writable');"
+          docker run --rm --entrypoint node crucix-ci-test scripts/verify-assets.mjs
+
+  # 6. Central CI Gate (Summary check required for branch protection)
+  ci-gate:
+    name: CI Quality Gate (All Checks Passed)
+    if: always()
+    needs: [syntax-and-lint, test, security-audit, build-executable, docker-verify]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Evaluate Upstream Job Results
+        run: |
+          echo "syntax-and-lint: ${{ needs.syntax-and-lint.result }}"
+          echo "test:            ${{ needs.test.result }}"
+          echo "security-audit:  ${{ needs.security-audit.result }}"
+          echo "build-executable:${{ needs.build-executable.result }}"
+          echo "docker-verify:   ${{ needs.docker-verify.result }}"
+          
+          if [ "${{ needs.syntax-and-lint.result }}" != "success" ] || \
+             [ "${{ needs.test.result }}" != "success" ] || \
+             [ "${{ needs.security-audit.result }}" != "success" ] || \
+             [ "${{ needs.build-executable.result }}" != "success" ] || \
+             [ "${{ needs.docker-verify.result }}" != "success" ]; then
+            echo "::error::One or more CI jobs failed!"
+            exit 1
+          fi
+          echo "All quality and security checks passed successfully!"

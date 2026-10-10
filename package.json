@@ -8,6 +8,14 @@
     "check": "node scripts/check.mjs",
     "start": "node server.mjs",
     "dev": "node --trace-warnings server.mjs",
+    "daemon": "node server.mjs --headless",
+    "collector": "node scripts/cli.mjs --collector",
+    "status": "node scripts/status.mjs",
+    "cli": "node scripts/cli.mjs",
+    "build:exe": "node scripts/build-exe.mjs",
+    "verify:exe": "node scripts/verify-exe.mjs",
+    "install:local": "node scripts/install-local.mjs",
+    "benchmark:rss": "node scripts/benchmark-world-rss.mjs",
     "sweep": "node apis/briefing.mjs",
     "inject": "node dashboard/inject.mjs",
     "brief": "node apis/briefing.mjs",
@@ -38,5 +46,8 @@
   },
   "overrides": {
     "undici": "^7.24.4"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
   }
 }

@@ -115,6 +115,14 @@ Not available when `RISK_ENABLED=false` (404). These routes take no query parame
 | `GET /api/predictions` | The prediction journal: `{calibration, recent}` |
 | `POST /api/briefing` | A cited briefing for `{"scope": "global"}` or an ISO3 code. Same-origin only (it can call the LLM), body ≤ 1 KB. |
 
+### World news (539 feeds catalog)
+
+| Endpoint | Returns |
+|----------|---------|
+| `GET /api/news/countries` | The 195 covered countries and registered feed outlets: `{totalCountries, totalFeeds, countries: [{code, feeds: [{source, url, lang}]}]}` |
+| `GET /api/news/country/:code` | Country-specific news items (e.g. `HU`, `DE`, `JP`, `BR`). Returns cached feeds by default (30-minute background cache) or on-demand live with `?live=true`. Query parameter: `limit` (1–50, default 10). |
+| `GET /api/news/world` | Global balanced news items from the 30-minute world cache (up to 50 items, newest first, max 2 items per country for diversity). |
+
 ### Other
 
 | Endpoint | Returns |

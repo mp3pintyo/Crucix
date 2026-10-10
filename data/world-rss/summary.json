@@ -1,0 +1,16 @@
+{
+  "checked": 1579,
+  "xml_nonempty": 1168,
+  "enabled_candidates": 1083,
+  "selected": 539,
+  "local_alternatives": 430,
+  "un195_countries": 195,
+  "un195_coverage": {
+    "english_native": 132,
+    "local_native": 53,
+    "gap": 9,
+    "external_only": 1
+  },
+  "all_country_territory_entries": 250,
+  "original_failed_or_stale": 8
+}
