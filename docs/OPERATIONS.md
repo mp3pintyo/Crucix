@@ -210,6 +210,16 @@ npm run cli -- -a
 # Teljes adatgyűjtési sweep futtatása a terminálban háttérszerver nélkül
 npm run cli -- --sweep
 
+# Folyamatos terminálos adatgyűjtő ciklus (szerver nélkül, ütemezett 15 perces sweep)
+npm run collector
+# vagy tetszőleges intervallummal:
+npm run cli -- --collector -i 30
+
+# Háttérszerver indítása FEJETLEN (Headless / Adatgyűjtő) módban (böngésző felnyitás nélkül)
+npm run daemon
+# vagy CLI-ből:
+npm run cli -- --serve
+
 # Garantált szerver nélküli, közvetlen lemezes futás
 npm run cli -- --no-server -b
 npm run cli -- -S -c cyber -l 5

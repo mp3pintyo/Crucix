@@ -6,9 +6,9 @@
 // Usage: node scripts/cli.mjs [options] (or: npm run cli -- [options])
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve, dirname } from 'node:path';
 import http from 'node:http';
-import { pathToFileURL } from 'node:url';
+import { pathToFileURL, fileURLToPath } from 'node:url';
 import config from '../crucix.config.mjs';
 import { WORLD_FEEDS, getFeedsByCountry, searchWorldFeeds } from '../apis/utils/news-feeds.mjs';
 import { parseFeed } from '../apis/utils/rss.mjs';
@@ -18,9 +18,11 @@ import { synthesize } from '../dashboard/inject.mjs';
 import { countryByIso3 } from '../lib/intelligence/countries.mjs';
 import { saveSnapshot } from '../lib/snapshots.mjs';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = resolve(__dirname, '..');
 const port = config.port || 3117;
 const host = config.host === '0.0.0.0' ? '127.0.0.1' : (config.host || '127.0.0.1');
-const runsDir = config.runsDir || join(process.cwd(), 'runs');
+const runsDir = config.runsDir ? resolve(config.runsDir) : join(ROOT, 'runs');
 const historyFile = join(runsDir, 'intelligence', 'history.json');
 const latestFile = join(runsDir, 'latest.json');
 const alertsFile = join(runsDir, 'alerts', 'alerts.json');
@@ -47,6 +49,9 @@ function parseArgs(argv = process.argv.slice(2)) {
     help: false,
     noServer: false,
     sweep: false,
+    serve: false,
+    collector: false,
+    interval: 15,
 
     // Data switches
     brief: false,
@@ -108,6 +113,13 @@ function parseArgs(argv = process.argv.slice(2)) {
       opts.noServer = true;
     } else if (arg === '--sweep' || arg === '--run-sweep') {
       opts.sweep = true;
+    } else if (arg === '--serve' || arg === '--server' || arg === '--start-server') {
+      opts.serve = true;
+    } else if (arg === '--collector' || arg === '--daemon' || arg === '--watch') {
+      opts.collector = true;
+    } else if (arg === '-i' || arg === '--interval') {
+      const num = parseInt(args[++i], 10);
+      if (!isNaN(num) && num > 0) opts.interval = num;
     } else if (arg === '-b' || arg === '--brief' || arg === '--briefing') {
       opts.brief = true;
     } else if (arg === '-A' || arg === '--alerts') {
@@ -217,11 +229,14 @@ Hírek és Eseményarchívum:
   --live                           Aktuális sweep élő hírszalagjának (news ticker) mutatása
   --json                           Nyers JSON kimenet (más scriptekhez vagy AI csővezetékhez)
 
-Szerver nélküli (Standalone / Offline) futtatás:
+Szerver nélküli (Standalone / Offline) futtatás & Adatgyűjtő mód:
   --no-server, --standalone, -S    Közvetlen lemezes / offline futás (nem csatlakozik a web szerverhez).
                                    Kizárólag a helyi lemezen lévő archívumból és gyorsítótárból dolgozik.
   --offline, --direct              A --no-server szinonimái
   --sweep, --run-sweep             Egyszeri elemzési sweep futtatása a terminálban háttérszerver nélkül.
+  --collector, --daemon, --watch   Folyamatos adatgyűjtő ciklus indítása a terminálban (háttérszerver nélkül)
+  --serve, --start-server          Crucix háttérszerver indítása fejetlen (Headless / Adatgyűjtő) módban (web UI nélkül)
+  -i, --interval <perc>            Adatgyűjtési ciklus gyakorisága percekben (--collector esetén, alapértelmezett: 15)
 
 Világ Hírforrás Katalógus (191+ ország, 539 médium):
   --countries                      Összes támogatott ország és médiumaik számának listázása
@@ -238,6 +253,8 @@ Példák:
   npm run cli -- --cyber                     # Kiberbiztonsági sebezhetőségek (CISA KEV)
   npm run cli -- --alerts                    # Riasztások és fenyegetettségi szint
   npm run cli -- --country JP --no-server    # Japán hírek a helyi RSS gyorsítótárból
+  npm run cli -- --collector                 # Folyamatos terminálos adatgyűjtő ciklus (15 percenként sweep)
+  npm run cli -- --serve                     # Crucix backend szerver indítása böngésző felnyitás NÉLKÜL
   npm run cli -- --source-data USGS          # USGS forrás nyers adatainak megjelenítése
   npm run cli -- -a                          # Átfogó terminál jelentés minden kulcsterületről
 `);
@@ -1043,7 +1060,45 @@ async function main() {
     return;
   }
 
-  // 0. Standalone sweep execution without server
+  // 0a. Start server in headless / data collector mode (no browser popup)
+  if (opts.serve) {
+    console.log('\n🚀 Crucix háttérszerver indítása Fejetlen (Headless / Adatgyűjtő) módban...');
+    console.log('🌐 Express REST API elindul (3117-es porton), kiszolgálja a CLI-t és a helyi hálózatot.');
+    console.log('🛑 A böngésző automatikus megnyitása letiltva (nincs felugró web UI).');
+    console.log('🛑 Leállításhoz: Nyomj Ctrl+C billentyűt\n');
+    process.env.NO_AUTO_OPEN = '1';
+    process.env.HEADLESS = '1';
+    await import(pathToFileURL(join(ROOT, 'server.mjs')).href);
+    return;
+  }
+
+  // 0b. Continuous data collector loop without any web server
+  if (opts.collector) {
+    const intervalMinutes = opts.interval || 15;
+    console.log('\n🔄 Crucix Folyamatos Adatgyűjtő Ciklus (Headless Collector)');
+    console.log(`⏱️  Gyakoriság:    Minden ${intervalMinutes} percben`);
+    console.log(`💾 Célkönyvtár:   ${runsDir}`);
+    console.log('🛑 Leállításhoz:  Nyomj Ctrl+C billentyűt\n');
+
+    const runCollection = async () => {
+      const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+      console.log(`[${nowStr}] 🚀 Ütemezett sweep futtatása...`);
+      try {
+        const rawData = await fullBriefing();
+        if (!existsSync(runsDir)) mkdirSync(runsDir, { recursive: true });
+        saveSnapshot(runsDir, rawData);
+        console.log(`[${nowStr}] ✅ Adatgyűjtés kész: ${(rawData.crucix.totalDurationMs / 1000).toFixed(1)} mp | Források: ${rawData.crucix.sourcesOk}/${rawData.crucix.sourcesQueried} OK | Mentve: ${latestFile}\n`);
+      } catch (err) {
+        console.error(`[${nowStr}] ❌ Hiba a sweep során: ${err.message}\n`);
+      }
+    };
+
+    await runCollection();
+    setInterval(runCollection, intervalMinutes * 60 * 1000);
+    return;
+  }
+
+  // 0c. Standalone sweep execution without server
   if (opts.sweep) {
     console.log('\n🚀 Egyszeri intelligencia sweep futtatása háttérszerver nélkül...');
     const rawData = await fullBriefing();

@@ -147,7 +147,7 @@ A self-contained Jarvis-style HUD with:
 - **Risk gauges** — VIX, high-yield spread, supply chain pressure index
 - **OSINT feed** — English-language posts from 17 Telegram intelligence channels (expandable)
 - **News ticker & World RSS catalog** — merged RSS + GDELT headlines + Telegram posts, auto-scrolling with newest-first ordering and diversity capping. Supported by a 539-feed world RSS catalog covering 195 countries with a 30-minute background runner
-- **Command Line Interface (CLI)** — query briefing, markets, risk, earthquakes, thermal hotspots, and news directly in the terminal via `npm run cli` (works with the server or standalone/offline via `--no-server`)
+- **Command Line Interface (CLI) & Headless Collector** — query briefing, markets, risk, earthquakes, thermal hotspots, and news directly in the terminal via `npm run cli` (works with the server or standalone/offline via `--no-server`, plus `npm run daemon` for headless server and `npm run collector` for recurring terminal data harvesting)
 - **Sweep delta** — live panel showing what changed since last sweep (new signals, escalations, de-escalations with severity)
 - **Cross-source signals** — correlated intelligence across satellite, economic, conflict, and social domains
 - **Nuclear watch** — recent (72 h) radiation readings from Safecast, shown with their age, the modelled current wind at each site (Open-Meteo; not a dispersion forecast), plus EPA RadNet when reachable

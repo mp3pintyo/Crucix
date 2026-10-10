@@ -128,7 +128,9 @@ Crucix still works with zero API keys. Most of the 71 sources need no authentica
 
 | Script | Command | Description |
 |--------|---------|-------------|
-| `npm run dev` | `node --trace-warnings server.mjs` | Start dashboard with auto-refresh |
+| `npm run dev` | `node --trace-warnings server.mjs` | Start dashboard with auto-refresh (opens browser) |
+| `npm run daemon` | `node server.mjs --headless` | Start backend server in headless data collector mode (no browser popup) |
+| `npm run collector` | `node scripts/cli.mjs --collector` | Start continuous standalone terminal collector loop (no server, 15m sweep) |
 | `npm run cli` | `node scripts/cli.mjs` | Crucix intelligence CLI (query markets, alerts, OSINT, feeds, offline/online) |
 | `npm run status` | `node scripts/status.mjs` | Quick server health and operational status check in terminal |
 | `npm run sweep` | `node apis/briefing.mjs` | Run a single sweep, output JSON to stdout |
@@ -168,10 +170,13 @@ npm run cli -- --countries           # List all 195 covered countries and feed c
 npm run cli -- --country JP          # Latest news for Japan (cached or live network fallback)
 npm run cli -- --feeds DE            # List registered outlets for Germany
 
-# Standalone / Serverless execution
+# Standalone / Serverless & Collector execution
 npm run cli -- --no-server -b        # Force direct disk reading without web server
 npm run cli -- -S -c cyber -l 5      # 5 cyber events in offline mode
-npm run cli -- --sweep               # Run a complete data collection sweep in terminal
+npm run cli -- --sweep               # Run a single data collection sweep in terminal
+npm run cli -- --collector           # Continuous terminal collector loop (15m sweep, no server)
+npm run cli -- --collector -i 30     # Collector loop every 30 minutes
+npm run cli -- --serve               # Start backend server in headless mode (no browser popup)
 ```
 
 ---

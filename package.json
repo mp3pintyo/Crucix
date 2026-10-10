@@ -8,6 +8,8 @@
     "check": "node scripts/check.mjs",
     "start": "node server.mjs",
     "dev": "node --trace-warnings server.mjs",
+    "daemon": "node server.mjs --headless",
+    "collector": "node scripts/cli.mjs --collector",
     "status": "node scripts/status.mjs",
     "cli": "node scripts/cli.mjs",
     "benchmark:rss": "node scripts/benchmark-world-rss.mjs",

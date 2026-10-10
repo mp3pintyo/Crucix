@@ -36,6 +36,20 @@ test('cli parseArgs: recognizes sweep flags', () => {
   assert.equal(parseArgs(['--no-server', '--sweep']).sweep, true);
 });
 
+test('cli parseArgs: recognizes collector and daemon flags', () => {
+  assert.equal(parseArgs(['--collector']).collector, true);
+  assert.equal(parseArgs(['--daemon']).collector, true);
+  assert.equal(parseArgs(['--watch']).collector, true);
+  assert.equal(parseArgs(['--collector', '-i', '30']).interval, 30);
+  assert.equal(parseArgs(['--collector', '--interval', '45']).interval, 45);
+});
+
+test('cli parseArgs: recognizes serve / headless server flags', () => {
+  assert.equal(parseArgs(['--serve']).serve, true);
+  assert.equal(parseArgs(['--server']).serve, true);
+  assert.equal(parseArgs(['--start-server']).serve, true);
+});
+
 test('cli parseArgs: recognizes data flags', () => {
   assert.equal(parseArgs(['-b']).brief, true);
   assert.equal(parseArgs(['--brief']).brief, true);

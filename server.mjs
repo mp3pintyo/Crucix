@@ -637,11 +637,23 @@ async function runSweepCycle() {
 async function start() {
   const port = config.port;
 
+  const isHeadless =
+    process.env.NO_AUTO_OPEN === '1' ||
+    process.env.HEADLESS === '1' ||
+    process.env.CI ||
+    process.argv.includes('--headless') ||
+    process.argv.includes('--no-open') ||
+    process.argv.includes('--collector') ||
+    process.argv.includes('--daemon');
+
+  const modeDisplay = isHeadless ? 'Headless / Adatgyűjtő' : 'Standard (Web Dashboard)';
+
   console.log(`
   ╔══════════════════════════════════════════════╗
   ║           CRUCIX INTELLIGENCE ENGINE         ║
   ║          Local Intelligence Engine          ║
   ╠══════════════════════════════════════════════╣
+  ║  Mode:       ${modeDisplay.padEnd(31)}║
   ║  Dashboard:  http://localhost:${port}${' '.repeat(14 - String(port).length)}║
   ║  Health:     http://localhost:${port}/api/health${' '.repeat(Math.max(0, 4 - String(port).length))}║
   ║  Refresh:    Every ${config.refreshIntervalMinutes} min${' '.repeat(20 - String(config.refreshIntervalMinutes).length)}║
@@ -667,8 +679,12 @@ async function start() {
   server.on('listening', async () => {
     console.log(`[Crucix] Server running on http://localhost:${port}`);
 
-    // Auto-open browser
-    openBrowser(`http://localhost:${port}`);
+    if (isHeadless) {
+      console.log('[Crucix] Fejetlen (Headless / Adatgyűjtő) mód: a böngésző nem nyílik meg automatikusan');
+    } else {
+      // Auto-open browser
+      openBrowser(`http://localhost:${port}`);
+    }
 
     // Try to load existing data first for instant display (await so dashboard shows immediately)
     try {
