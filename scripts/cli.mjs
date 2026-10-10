@@ -5,7 +5,7 @@
 // and all 71 OSINT adapters, markets, energy, metals, thermal, earthquakes, chokepoints, cyber.
 // Usage: node scripts/cli.mjs [options] (or: npm run cli -- [options])
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import http from 'node:http';
 import { pathToFileURL } from 'node:url';
@@ -16,6 +16,7 @@ import { loadWorldRssCache, getWorldNewsByCountry, getWorldNews } from '../lib/w
 import { fullBriefing } from '../apis/briefing.mjs';
 import { synthesize } from '../dashboard/inject.mjs';
 import { countryByIso3 } from '../lib/intelligence/countries.mjs';
+import { saveSnapshot } from '../lib/snapshots.mjs';
 
 const port = config.port || 3117;
 const host = config.host === '0.0.0.0' ? '127.0.0.1' : (config.host || '127.0.0.1');
@@ -441,7 +442,19 @@ async function fetchCountryLive(countryCode, limit = 10) {
 
 // === Display Formatters ===
 
+function checkDataAvailable(synData) {
+  if (!synData.data && !synData.raw) {
+    console.log(`\n❌ Nincs elérhető intelligencia adat a lemezen (${latestFile}) és a szerver sem fut.`);
+    console.log(`\n👉 Megoldás:`);
+    console.log(`   1. Egyszeri adatgyűjtés futtatása a terminálban: npm run cli -- --sweep`);
+    console.log(`   2. Vagy indítsd el a folyamatos háttérszervert:   npm run dev\n`);
+    return false;
+  }
+  return true;
+}
+
 function showBriefing(synData, alertsData, riskData, opts) {
+  if (!checkDataAvailable(synData)) return;
   const d = synData.data || {};
   const raw = synData.raw || loadLatestRaw() || {};
   const hot = readJsonSafe(hotMemoryFile);
@@ -520,6 +533,7 @@ function showBriefing(synData, alertsData, riskData, opts) {
 }
 
 function showMarkets(synData, opts) {
+  if (!checkDataAvailable(synData)) return;
   const d = synData.data || {};
   const raw = synData.raw || loadLatestRaw() || {};
   const yf = raw.sources?.YFinance || {};
@@ -571,6 +585,7 @@ function showMarkets(synData, opts) {
 }
 
 function showEnergy(synData, opts) {
+  if (!checkDataAvailable(synData)) return;
   const d = synData.data || {};
   const raw = synData.raw || loadLatestRaw() || {};
   const energy = d.energy || {};
@@ -608,6 +623,7 @@ function showEnergy(synData, opts) {
 }
 
 function showMetals(synData, opts) {
+  if (!checkDataAvailable(synData)) return;
   const d = synData.data || {};
   const metals = d.metals || {};
 
@@ -696,6 +712,7 @@ function showRisk(riskData, opts) {
 }
 
 function showEarthquakes(synData, opts) {
+  if (!checkDataAvailable(synData)) return;
   const d = synData.data || {};
   const raw = synData.raw || loadLatestRaw() || {};
   const quakes = (d.earthquakes || raw.sources?.USGS?.earthquakes || []).slice(0, opts.limit);
@@ -727,6 +744,7 @@ function showEarthquakes(synData, opts) {
 }
 
 function showThermal(synData, opts) {
+  if (!checkDataAvailable(synData)) return;
   const raw = synData.raw || loadLatestRaw() || {};
   const firms = raw.sources?.FIRMS || {};
   const hotspots = firms.hotspots || [];
@@ -771,6 +789,7 @@ function showThermal(synData, opts) {
 }
 
 function showChokepoints(synData, opts) {
+  if (!checkDataAvailable(synData)) return;
   const d = synData.data || {};
   const raw = synData.raw || loadLatestRaw() || {};
   const chokepoints = d.chokepoints || raw.sources?.Maritime?.chokepoints || {};
@@ -795,6 +814,7 @@ function showChokepoints(synData, opts) {
 }
 
 function showAir(synData, opts) {
+  if (!checkDataAvailable(synData)) return;
   const d = synData.data || {};
   const raw = synData.raw || loadLatestRaw() || {};
   const opensky = raw.sources?.OpenSky || {};
@@ -825,6 +845,7 @@ function showAir(synData, opts) {
 }
 
 function showCyber(synData, opts) {
+  if (!checkDataAvailable(synData)) return;
   const raw = synData.raw || loadLatestRaw() || {};
   const cisa = raw.sources?.['CISA-KEV'] || {};
   const threatfox = raw.sources?.ThreatFox || {};
@@ -862,6 +883,7 @@ function showCyber(synData, opts) {
 }
 
 function showOutages(synData, opts) {
+  if (!checkDataAvailable(synData)) return;
   const raw = synData.raw || loadLatestRaw() || {};
   const ioda = raw.sources?.IODA || {};
   const radar = raw.sources?.['Cloudflare-Radar'] || {};
@@ -886,6 +908,7 @@ function showOutages(synData, opts) {
 }
 
 function showPredictions(synData, opts) {
+  if (!checkDataAvailable(synData)) return;
   const raw = synData.raw || loadLatestRaw() || {};
   const pm = raw.sources?.['Prediction-Markets'] || {};
   const predFile = readJsonSafe(predictionsFile);
@@ -914,6 +937,7 @@ function showPredictions(synData, opts) {
 }
 
 function showHealth(synData, opts) {
+  if (!checkDataAvailable(synData)) return;
   const raw = synData.raw || loadLatestRaw() || {};
   const meta = raw.crucix || {};
   const sources = raw.sources || {};
@@ -1023,6 +1047,13 @@ async function main() {
   if (opts.sweep) {
     console.log('\n🚀 Egyszeri intelligencia sweep futtatása háttérszerver nélkül...');
     const rawData = await fullBriefing();
+    try {
+      if (!existsSync(runsDir)) mkdirSync(runsDir, { recursive: true });
+      saveSnapshot(runsDir, rawData);
+    } catch (e) {
+      console.error(`⚠️ Nem sikerült elmenteni a pillanatképet (${latestFile}): ${e.message}`);
+    }
+
     if (opts.json) {
       console.log(JSON.stringify(rawData, null, 2));
       return;
@@ -1032,7 +1063,8 @@ async function main() {
     console.log(`📡 Források állapota:    ${rawData.crucix.sourcesOk}/${rawData.crucix.sourcesQueried} aktív`);
     if (rawData.crucix.sourcesFailed > 0) console.log(`❌ Sikertelen források:  ${rawData.crucix.sourcesFailed}`);
     if (rawData.crucix.sourcesStale > 0)  console.log(`⏳ Elavult források:    ${rawData.crucix.sourcesStale}`);
-    console.log('');
+    console.log(`💾 Mentve:               ${latestFile}`);
+    console.log(`💡 Most már lekérdezheted: npm run cli -- -b  (vagy -m, --risk, -a)\n`);
     return;
   }
 
