@@ -32,9 +32,10 @@ export async function readBoundedText(response, maxBytes = 10 * 1024 * 1024) {
 
 export async function safeFetch(url, opts = {}) {
   const { timeout = 15000, retries = 1, headers = {}, maxBytes = 10 * 1024 * 1024,
-    format = 'json', method = 'GET', body, retryDelay = 2000, maxRetryDelay = 30000 } = opts;
+    format = 'json', method = 'GET', body, retryDelay = 2000, maxRetryDelay = 30000, retryAfterHeader = 'retry-after' } = opts;
   let lastError;
   let lastStatus;
+  let lastRetryAfterMs = null;
   for (let attempt = 0; attempt <= retries; attempt++) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeout);
@@ -48,7 +49,7 @@ export async function safeFetch(url, opts = {}) {
       lastStatus = response.status;
       if (!response.ok) {
         retryable = response.status === 408 || response.status === 429 || response.status >= 500;
-        const requestedDelay = retryAfterMs(response.headers.get('retry-after'));
+        const requestedDelay = lastRetryAfterMs = retryAfterMs(response.headers.get(retryAfterHeader));
         if (requestedDelay !== null) {
           if (requestedDelay > maxRetryDelay) retryable = false;
           waitMs = requestedDelay;
@@ -67,7 +68,8 @@ export async function safeFetch(url, opts = {}) {
     if (!retryable || attempt === retries) break;
     await new Promise(resolve => setTimeout(resolve, Math.min(maxRetryDelay, waitMs)));
   }
-  return { error: lastError?.message || 'Unknown error', ...(lastStatus ? { status: lastStatus } : {}) };
+  return { error: lastError?.message || 'Unknown error', ...(lastStatus ? { status: lastStatus } : {}),
+    ...(lastRetryAfterMs !== null ? { retryAfterMs: lastRetryAfterMs } : {}) };
 }
 
 export function ago(hours) {

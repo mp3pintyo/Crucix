@@ -11,6 +11,7 @@ runs/
 output/
 test/
 apis/.env
+credentials.json
 docs/
 *.md
 !README.md

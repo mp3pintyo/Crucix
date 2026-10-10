@@ -34,6 +34,11 @@ test('429 honors Retry-After while ordinary 4xx is never retried', async t => {
   assert.deepEqual(await safeFetch(denied), { error: 'HTTP 401', status: 401 });
   assert.equal(hits, 1);
 });
+test('a provider-specific retry header is read and its wait is returned with the failure', async t => {
+  const url = await fixture(t, (_req, res) => { res.writeHead(429, { 'X-Rate-Limit-Retry-After-Seconds': '90' }); res.end(); });
+  assert.deepEqual(await safeFetch(url, { retries: 0, retryAfterHeader: 'x-rate-limit-retry-after-seconds' }), { error: 'HTTP 429', status: 429, retryAfterMs: 90000 });
+  assert.deepEqual(await safeFetch(url, { retries: 0 }), { error: 'HTTP 429', status: 429 }, 'the default header is still Retry-After');
+});
 test('numeric and HTTP-date Retry-After have explicit units', () => {
   assert.equal(retryAfterMs('3'), 3000);
   assert.equal(retryAfterMs('Thu, 01 Oct 2026 12:00:05 GMT', Date.parse('2026-10-01T12:00:00Z')), 5000);

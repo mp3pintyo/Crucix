@@ -70,6 +70,7 @@ These three unlock the most valuable economic and satellite data. Each takes abo
 |-----|--------|------------|
 | `ACLED_EMAIL` + `ACLED_PASSWORD` | Armed conflict event data | [acleddata.com/register](https://acleddata.com/register/) — free, OAuth2 |
 | `AISSTREAM_API_KEY` | Maritime AIS vessel tracking | [aisstream.io](https://aisstream.io/) — free |
+| `OPENSKY_CLIENT_ID` + `OPENSKY_CLIENT_SECRET` | OpenSky flight hotspots: 4,000 instead of 400 credits/day, refresh every 15 min instead of 2 h | [opensky-network.org/my-opensky/account](https://opensky-network.org/my-opensky/account) → "Create a new API client" → `clientId` / `clientSecret` from `credentials.json` — free, OAuth2 |
 | `ADSB_API_KEY` | Unfiltered flight tracking | [RapidAPI](https://rapidapi.com/adsbexchange/api/adsbexchange-com1) — ~$10/mo |
 
 ### LLM Provider (optional, for AI-enhanced ideas)

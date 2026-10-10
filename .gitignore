@@ -4,6 +4,7 @@ node_modules/
 # Environment (contains API keys)
 .env
 apis/.env
+credentials.json
 
 # Runtime data
 runs/

@@ -13,7 +13,7 @@ Every source, grouped by tier, with its key requirement, licence note and what i
 | Source | What It Tracks | Auth |
 |--------|---------------|------|
 | **GDELT** | Conflict, economy, health and crisis stories from the 15-minute GKG news feed (100+ languages), ranked by theme focus (distinct themes count more than one repeated theme), with city-level map points | None |
-| **OpenSky** | ADS-B observations across 10 hotspots; fallback expires after one hour | None |
+| **OpenSky** | ADS-B observations across 10 hotspots; fallback expires after one hour. A round costs 28 credits: anonymous (400/day) refreshes every 2 hours, with OAuth2 client credentials (4,000/day) every 15 minutes; between rounds and after HTTP 429 the last result is shown as stale | None (optional OAuth2) |
 | **NASA FIRMS** | Satellite fire/thermal anomaly detection (3hr latency) | Free key |
 | **Maritime** | Reference chokepoints; the briefing adapter does not connect to live AIS | None for reference data |
 | **Safecast** | Citizen-science radiation readings near 6 nuclear sites; two sites are refreshed per sweep and the rest come from a cache of at most 3 hours with its age shown | None |
