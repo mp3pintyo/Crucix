@@ -20,7 +20,7 @@
   const LAYERS = ['air', 'thermal', 'sdr', 'maritime', 'nuclear', 'conflict', 'osint', 'health', 'network', 'news', 'weather', 'space', 'earthquake', 'disaster', 'interference', 'pipelines', 'bases', 'milareas', 'datacenters', 'dams', 'cyclones', 'launches'];
   const LAYERS_OFF = ['pipelines', 'bases', 'milareas', 'datacenters', 'dams'];
   const EVENT_KINDS = ['news', 'osint', 'health', 'earthquake', 'weather', 'outage', 'conflict', 'signal', 'disaster', 'space-weather', 'economic', 'forecast', 'network', 'cyber', 'maritime', 'aviation', 'sanctions', 'market', 'energy', 'interference', 'displacement', 'launch'];
-  const REGIONS = ['world', 'americas', 'europe', 'middleEast', 'asiaPacific', 'africa'];
+  const REGIONS = ['world', 'americas', 'northAmerica', 'latinAmerica', 'europe', 'easternEurope', 'middleEast', 'africa', 'asiaPacific', 'centralAsia', 'southAsia', 'eastAsia', 'seAsia', 'oceania'];
   const STORAGE_KEY = 'crucix_workspace_profiles_v1', MAX_PROFILES = 12, MAX_STORAGE = 128 * 1024;
   let options = {}, snapshot = { events: [] }, pushedSnapshot = false, overlay, dialog, content, heading, priorFocus, priorOverflow;
   let inertNodes = [], mode = '', detailId = null, detailVersion = 0, detailController;

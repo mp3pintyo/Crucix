@@ -161,10 +161,18 @@
   "regions": {
     "world": "World",
     "americas": "Americas",
+    "northAmerica": "North America",
+    "latinAmerica": "Latin America",
     "europe": "Europe",
+    "easternEurope": "Eastern Europe",
     "middleEast": "Middle East",
+    "africa": "Africa",
     "asiaPacific": "Asia Pacific",
-    "africa": "Africa"
+    "centralAsia": "Central Asia",
+    "southAsia": "South Asia",
+    "eastAsia": "East Asia",
+    "seAsia": "Southeast Asia",
+    "oceania": "Oceania"
   },
   "badges": {
     "radiation": "RADIATION",

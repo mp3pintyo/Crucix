@@ -161,10 +161,18 @@
   "regions": {
     "world": "Világ",
     "americas": "Amerikák",
+    "northAmerica": "Észak-Amerika",
+    "latinAmerica": "Latin-Amerika",
     "europe": "Európa",
+    "easternEurope": "Kelet-Európa",
     "middleEast": "Közel-Kelet",
+    "africa": "Afrika",
     "asiaPacific": "Ázsia és Csendes-óceán",
-    "africa": "Afrika"
+    "centralAsia": "Közép-Ázsia",
+    "southAsia": "Dél-Ázsia",
+    "eastAsia": "Kelet-Ázsia",
+    "seAsia": "Délkelet-Ázsia",
+    "oceania": "Óceánia"
   },
   "badges": {
     "radiation": "SUGÁRZÁS",
