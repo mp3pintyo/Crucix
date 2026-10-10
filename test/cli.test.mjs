@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import {
   parseArgs,
   formatAge,
@@ -167,4 +169,8 @@ test('cli getCountryRiskData: loads risk list and country details from disk', as
   const detailData = await getCountryRiskData({ noServer: true, countryRisk: 'USA' });
   assert.ok(detailData.detail, 'country detail exists');
   assert.equal(detailData.detail.iso3, 'USA');
+});
+
+test('cli build-exe script exists and is executable', () => {
+  assert.ok(existsSync(join(process.cwd(), 'scripts', 'build-exe.mjs')));
 });

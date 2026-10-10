@@ -12,6 +12,7 @@
     "collector": "node scripts/cli.mjs --collector",
     "status": "node scripts/status.mjs",
     "cli": "node scripts/cli.mjs",
+    "build:exe": "node scripts/build-exe.mjs",
     "benchmark:rss": "node scripts/benchmark-world-rss.mjs",
     "sweep": "node apis/briefing.mjs",
     "inject": "node dashboard/inject.mjs",

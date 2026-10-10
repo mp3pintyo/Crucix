@@ -132,6 +132,7 @@ Crucix still works with zero API keys. Most of the 71 sources need no authentica
 | `npm run daemon` | `node server.mjs --headless` | Start backend server in headless data collector mode (no browser popup) |
 | `npm run collector` | `node scripts/cli.mjs --collector` | Start continuous standalone terminal collector loop (no server, 15m sweep) |
 | `npm run cli` | `node scripts/cli.mjs` | Crucix intelligence CLI (query markets, alerts, OSINT, feeds, offline/online) |
+| `npm run build:exe` | `node scripts/build-exe.mjs` | Build native standalone Windows executable (`bin/crucix.exe`) using Node SEA |
 | `npm run status` | `node scripts/status.mjs` | Quick server health and operational status check in terminal |
 | `npm run sweep` | `node apis/briefing.mjs` | Run a single sweep, output JSON to stdout |
 | `npm run benchmark:rss` | `node scripts/benchmark-world-rss.mjs` | Benchmark parallel speed and latency of 539 world RSS feeds |
