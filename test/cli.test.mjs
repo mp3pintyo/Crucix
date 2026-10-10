@@ -1,6 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseArgs, formatAge, loadFromDisk, loadLiveFromDisk } from '../scripts/cli.mjs';
+import {
+  parseArgs,
+  formatAge,
+  formatNumber,
+  formatPct,
+  loadFromDisk,
+  loadLiveFromDisk,
+  loadLatestRaw,
+  getSynthesizedData,
+  getAlertsData,
+  getCountryRiskData,
+} from '../scripts/cli.mjs';
 import { loadWorldRssCache, getWorldNewsByCountry } from '../lib/world-rss-runner.mjs';
 
 test('cli parseArgs: recognizes standalone / no-server flags', () => {
@@ -25,13 +36,52 @@ test('cli parseArgs: recognizes sweep flags', () => {
   assert.equal(parseArgs(['--no-server', '--sweep']).sweep, true);
 });
 
-test('cli formatAge: formats timestamps correctly', () => {
+test('cli parseArgs: recognizes data flags', () => {
+  assert.equal(parseArgs(['-b']).brief, true);
+  assert.equal(parseArgs(['--brief']).brief, true);
+  assert.equal(parseArgs(['-m']).markets, true);
+  assert.equal(parseArgs(['--markets']).markets, true);
+  assert.equal(parseArgs(['--finance']).markets, true);
+  assert.equal(parseArgs(['--energy']).energy, true);
+  assert.equal(parseArgs(['--metals']).metals, true);
+  assert.equal(parseArgs(['--commodities']).commodities, true);
+  assert.equal(parseArgs(['-A']).alerts, true);
+  assert.equal(parseArgs(['--alerts']).alerts, true);
+  assert.equal(parseArgs(['--all-alerts']).allAlerts, true);
+  assert.equal(parseArgs(['--risk']).risk, true);
+  assert.equal(parseArgs(['--risk', 'UA']).countryRisk, 'UA');
+  assert.equal(parseArgs(['--country-risk', 'PAN']).countryRisk, 'PAN');
+  assert.equal(parseArgs(['--earthquakes']).earthquakes, true);
+  assert.equal(parseArgs(['--thermal']).thermal, true);
+  assert.equal(parseArgs(['--chokepoints']).chokepoints, true);
+  assert.equal(parseArgs(['--air']).air, true);
+  assert.equal(parseArgs(['--cyber']).cyber, true);
+  assert.equal(parseArgs(['--outages']).outages, true);
+  assert.equal(parseArgs(['--predictions']).predictions, true);
+  assert.equal(parseArgs(['--health']).health, true);
+  assert.equal(parseArgs(['--status']).health, true);
+  assert.equal(parseArgs(['--sources']).sources, true);
+  assert.equal(parseArgs(['--source-data', 'USGS']).sourceData, 'USGS');
+  assert.equal(parseArgs(['--sweeps']).sweeps, true);
+  assert.equal(parseArgs(['--delta']).delta, true);
+  assert.equal(parseArgs(['-a']).all, true);
+  assert.equal(parseArgs(['--all']).all, true);
+});
+
+test('cli formatters: formatAge, formatNumber, formatPct', () => {
   const now = Date.now();
   assert.equal(formatAge(new Date(now - 10 * 1000).toISOString()), '10s ago');
   assert.equal(formatAge(new Date(now - 120 * 1000).toISOString()), '2m ago');
   assert.equal(formatAge(new Date(now - 7200 * 1000).toISOString()), '2h ago');
   assert.equal(formatAge(new Date(now - 2 * 86400 * 1000).toISOString()), '2d ago');
   assert.equal(formatAge(null), '');
+
+  assert.equal(formatNumber(1234.56), '1,234.56');
+  assert.equal(formatNumber(null), '--');
+
+  assert.equal(formatPct(2.5), '+2.50%');
+  assert.equal(formatPct(-1.75), '-1.75%');
+  assert.equal(formatPct(null), '--');
 });
 
 test('cli loadFromDisk: reads history records without requiring web server', () => {
@@ -54,4 +104,28 @@ test('cli world rss cache: can be queried in standalone/no-server mode', () => {
       assert.equal(brNews[0].country, 'BR');
     }
   }
+});
+
+test('cli getSynthesizedData: loads markets and indicators from disk', async () => {
+  const syn = await getSynthesizedData({ noServer: true });
+  assert.ok(syn.data, 'syn.data exists');
+  assert.ok(syn.data.markets, 'markets data exists');
+  assert.ok(syn.data.energy, 'energy data exists');
+  assert.ok(syn.data.metals, 'metals data exists');
+  assert.ok(syn.data.earthquakes, 'earthquakes data exists');
+  assert.ok(syn.data.chokepoints, 'chokepoints data exists');
+});
+
+test('cli getAlertsData: loads alerts from disk', async () => {
+  const alertsData = await getAlertsData({ noServer: true });
+  assert.ok(Array.isArray(alertsData.alerts), 'alerts is an array');
+});
+
+test('cli getCountryRiskData: loads risk list and country details from disk', async () => {
+  const listData = await getCountryRiskData({ noServer: true });
+  assert.ok(Array.isArray(listData.list), 'country risk list is an array');
+
+  const detailData = await getCountryRiskData({ noServer: true, countryRisk: 'USA' });
+  assert.ok(detailData.detail, 'country detail exists');
+  assert.equal(detailData.detail.iso3, 'USA');
 });
