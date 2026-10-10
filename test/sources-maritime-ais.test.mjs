@@ -453,14 +453,14 @@ test('the dashboard draws the vessels in the maritime layer, sanitised, and keep
 test('jarvis.html draws the AIS markers in the maritime layer through text-only popups', () => {
   const html = readFileSync(new URL('../dashboard/public/jarvis.html', import.meta.url), 'utf8');
   assert.match(html, /for\(const key of \['air','thermal','chokepoints','aisVessels',/, 'normalizeSnapshot keeps the array');
-  assert.match(html, /D\.aisVessels\.forEach\(v=>\{const s=aisVesselText\(v\);points\.push\(\{[^\n]*type:'maritime'[^\n]*popHead:s\.head,popMeta:t\('maritime\.meta','AIS \(aisstream\.io\)'\),popText:s\.text,noEvent:true\}\)\}\);/);
-  assert.match(html, /D\.aisVessels\.forEach\(v=>\{const s=aisVesselText\(v\);addPt\([^\n]*showPopup\(ev,s\.head,s\.text,t\('maritime\.meta','AIS \(aisstream\.io\)'\)/);
+  assert.match(html, /CrucixLiveSources\.aisVessels\(D\)\.forEach\(v=>\{const s=aisVesselText\(v\);points\.push\(\{[^\n]*type:'maritime'[^\n]*popHead:s\.head,popMeta:t\('maritime\.meta','AIS \(aisstream\.io\)'\),popText:s\.text,noEvent:true\}\)\}\);/);
+  assert.match(html, /CrucixLiveSources\.aisVessels\(D\)\.forEach\(v=>\{const s=aisVesselText\(v\);addPt\([^\n]*showPopup\(ev,s\.head,s\.text,t\('maritime\.meta','AIS \(aisstream\.io\)'\)/);
   assert.match(html, /popup\.querySelector\('\.pp-head'\)\.textContent=head/, 'popups are textContent');
   // A vessel popup never offers "Event details": vessels are no events, and a title match with one would be a false link.
   assert.match(html, /function showPopup\(event,head,text,meta,lat,lng,alt,noEvent\)\{/);
   assert.match(html, /const match=!noEvent&&D\.events\.find\(/);
   assert.match(html, /showPopup\(ev, pt\.popHead, pt\.popText, pt\.popMeta, pt\.lat, pt\.lng, pt\.alt, pt\.noEvent\)/);
-  assert.match(html, /D\.aisVessels\.forEach\(v=>\{const s=aisVesselText\(v\);points\.push\(\{[^\n]*noEvent:true[^\n]*\}\)\}\);/);
+  assert.match(html, /CrucixLiveSources\.aisVessels\(D\)\.forEach\(v=>\{const s=aisVesselText\(v\);points\.push\(\{[^\n]*noEvent:true[^\n]*\}\)\}\);/);
   assert.match(html, /showPopup\(ev,s\.head,s\.text,t\('maritime\.meta','AIS \(aisstream\.io\)'\),null,null,null,true\)/);
   assert.match(readFileSync(new URL('../dashboard/public/pwa.js', import.meta.url), 'utf8'), /'chokepoints','aisVessels'/, 'kept offline too');
 });

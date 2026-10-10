@@ -18,7 +18,7 @@ const fixture = () => ({ fred: [{ id: 'VIXCLS', value: 30 }], health: [{ n: 'FRE
 function mockResponse(t, data, capture = () => {}) {
   t.mock.method(globalThis, 'fetch', async (url, opts) => {
     capture(url, opts);
-    return { ok: true, json: async () => data };
+    return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } });
   });
 }
 

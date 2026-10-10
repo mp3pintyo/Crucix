@@ -1,0 +1,2553 @@
+{
+  "date": "2026-10-10",
+  "baseline": "be1beeee49ed2f73adff7fd557f240955f89578e",
+  "publishTarget": "mp3pintyo/Crucix",
+  "counts": {
+    "fork": 14,
+    "upstream": 50,
+    "integratedForkHeads": 13,
+    "newUpstreamMerges": 0
+  },
+  "validation": {
+    "integratedTests": {
+      "passed": 1662,
+      "failed": 0,
+      "skipped": 1
+    },
+    "dependencyAudit": 0,
+    "note": "Unsafe upstream heads were not imported or executed. Syntax-only checks and existing-fork regression suites are distinguished per row. No claim that every proposed feature was dynamically tested."
+  },
+  "pullRequests": [
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 2,
+      "sha": "477e639e309c21f761af39f2bf9c03442c9e3460",
+      "title": "docs: README install step names all three runtime dependencies",
+      "decision": "integrated",
+      "reason": "Correct dependency documentation.",
+      "filesReviewed": [
+        "README.md"
+      ],
+      "testStatus": "Full immutable head: 1514 passed, 0 failed, 1 skipped; npm run check passed.",
+      "coverageGaps": ""
+    },
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 3,
+      "sha": "2c10c9877c9d4d524ea9a9b1b553a12b7b3d2bd2",
+      "title": "fix: CRUCIX_LANG set in .env is ignored by the server routes",
+      "decision": "integrated",
+      "reason": "Load environment before language initialization.",
+      "filesReviewed": [
+        "server.mjs",
+        "test/server-start.test.mjs"
+      ],
+      "testStatus": "Full immutable head: 1515 passed, 0 failed, 1 skipped; npm run check passed.",
+      "coverageGaps": ""
+    },
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 4,
+      "sha": "0971226995884166efee900c23f55312d3d54300",
+      "title": "fix(telegram): ReferenceError when public channel collection is enabled",
+      "decision": "integrated",
+      "reason": "Fix Telegram public-preview ReferenceError; keep bot credentials out of collection.",
+      "filesReviewed": [
+        "apis/sources/telegram.mjs",
+        "test/telegram-privacy.test.mjs"
+      ],
+      "testStatus": "Full immutable head: 1515 passed, 0 failed, 1 skipped; npm run check passed.",
+      "coverageGaps": ""
+    },
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 5,
+      "sha": "00f19a6a6a835bafd85dabe0eafb6f0fceb52440",
+      "title": "fix(ripestat): freshness ceiling allows for snapshot publication lag",
+      "decision": "integrated",
+      "reason": "Align RIPEstat browser/server freshness at 12h; preserve newer source policies.",
+      "filesReviewed": [
+        "apis/sources/ripestat.mjs",
+        "apis/utils/freshness.mjs",
+        "dashboard/public/live-sources.js",
+        "docs/DATA-SOURCES.md",
+        "test/fresh-infrastructure.test.mjs",
+        "test/live-registry.test.mjs"
+      ],
+      "testStatus": "Full immutable head: 1515 passed, 0 failed, 1 skipped; npm run check passed.",
+      "coverageGaps": ""
+    },
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 6,
+      "sha": "38c57843027365442963c12a2164929e6fd5c3fb",
+      "title": "fix: LLM trade ideas and briefing fell back to rules on valid-looking model output",
+      "decision": "integrated",
+      "reason": "Accept single-object model idea output and array prompt format.",
+      "filesReviewed": [
+        "lib/llm/briefing.mjs",
+        "lib/llm/idea-schema.mjs",
+        "locales/en.json",
+        "locales/fr.json",
+        "locales/hu.json",
+        "test/intelligence-routes-risk.test.mjs",
+        "test/llm-reliability.test.mjs"
+      ],
+      "testStatus": "Full immutable head: 1516 passed, 0 failed, 1 skipped; npm run check passed.",
+      "coverageGaps": ""
+    },
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 7,
+      "sha": "b9d2bf4a38bfb7f128c376322777866d0bf6ca7f",
+      "title": "fix(llm): one shared JSON extractor for ideas, briefing and alerts, with fallback logging",
+      "decision": "integrated",
+      "reason": "Use shared bounded JSON extractor; preserve task budgets and alert normalizer.",
+      "filesReviewed": [
+        "lib/alerts/discord.mjs",
+        "lib/alerts/telegram.mjs",
+        "lib/llm/alert-schema.mjs",
+        "lib/llm/briefing.mjs",
+        "lib/llm/idea-schema.mjs",
+        "lib/llm/ideas.mjs",
+        "lib/llm/json-extract.mjs",
+        "locales/en.json",
+        "locales/fr.json",
+        "locales/hu.json",
+        "test/intelligence-routes-risk.test.mjs",
+        "test/llm-json-extract.test.mjs",
+        "test/llm-reliability.test.mjs"
+      ],
+      "testStatus": "Full immutable head: 1530 passed, 0 failed, 1 skipped; npm run check passed.",
+      "coverageGaps": ""
+    },
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 8,
+      "sha": "1f283e4e5ff4995b0c659c7d8e6c5adf3d58aac4",
+      "title": "fix(alerts): treat OSINT content as untrusted data in the alert prompt",
+      "decision": "integrated",
+      "reason": "Fence and cap untrusted OSINT context; preserve JSON extraction and normalization.",
+      "filesReviewed": [
+        "lib/alerts/telegram.mjs",
+        "lib/llm/budgets.mjs",
+        "test/alert-prompt.test.mjs"
+      ],
+      "testStatus": "Full immutable head: 1523 passed, 0 failed, 1 skipped; npm run check passed.",
+      "coverageGaps": ""
+    },
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 9,
+      "sha": "480e83ffa036fb39f7271613fa1be3a4e2d69ba4",
+      "title": "feat: configurable Anthropic base URL and bearer auth for self-hosted Messages APIs",
+      "decision": "integrated",
+      "reason": "Support Anthropic gateway/bearer token; additionally block redirects, bound response and redact provider error bodies.",
+      "filesReviewed": [
+        ".env.example",
+        "crucix.config.mjs",
+        "docs/CONFIGURATION.md",
+        "docs/FEATURES.md",
+        "docs/OPERATIONS.md",
+        "lib/llm/anthropic.mjs",
+        "lib/llm/index.mjs",
+        "test/llm-reliability.test.mjs"
+      ],
+      "testStatus": "Full immutable head: 1517 passed, 0 failed, 1 skipped; npm run check passed.",
+      "coverageGaps": "No actual AIS/OpenSky/paid LLM credentials used; provider behavior tested with fixtures."
+    },
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 10,
+      "sha": "a57a6a51fd6fd102699f391331946bfac7ccd8c8",
+      "title": "i18n: dashboard text in the selected language (Hungarian fixes, country names, delta, export, Signal Guide, popups)",
+      "decision": "integrated",
+      "reason": "Complete Hungarian/French UI copy, country display names and exports; preserve thermal escalation and threat timeline; fix CRLF-sensitive tests.",
+      "filesReviewed": [
+        "dashboard/public/briefing.js",
+        "dashboard/public/changes.js",
+        "dashboard/public/country.js",
+        "dashboard/public/jarvis.html",
+        "dashboard/public/risk.js",
+        "docs/API.md",
+        "docs/OPERATIONS.md",
+        "lib/alerts/engine.mjs",
+        "lib/alerts/lifecycle.mjs",
+        "lib/alerts/routes.mjs",
+        "lib/alerts/rules.mjs",
+        "lib/intelligence/countries.mjs",
+        "lib/intelligence/export.mjs",
+        "lib/intelligence/risk-routes.mjs",
+        "lib/intelligence/risk-step.mjs",
+        "lib/intelligence/risk.mjs",
+        "lib/llm/briefing.mjs",
+        "locales/en.json",
+        "locales/fr.json",
+        "locales/hu.json",
+        "server.mjs",
+        "test/changes-ui.test.mjs",
+        "test/country-display-names.test.mjs",
+        "test/i18n-display.test.mjs",
+        "test/intelligence-routes-risk.test.mjs"
+      ],
+      "testStatus": "Full immutable head: 1526 passed, 3 failed (Windows CRLF fixture extraction; resolved during integration), 1 skipped; npm run check passed.",
+      "coverageGaps": ""
+    },
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 11,
+      "sha": "30968a2d07ed4d9696b3a31d433e0d997e49e831",
+      "title": "fix(opensky): authenticate with OAuth2 client credentials and respect the credit budget",
+      "decision": "integrated",
+      "reason": "OpenSky client-credentials OAuth, bounded token exchange/cache and 429 handling.",
+      "filesReviewed": [
+        ".dockerignore",
+        ".env.example",
+        ".gitignore",
+        "apis/sources/opensky.mjs",
+        "apis/utils/fetch.mjs",
+        "docs/CONFIGURATION.md",
+        "docs/DATA-SOURCES.md",
+        "docs/FEATURES.md",
+        "docs/OPERATIONS.md",
+        "docs/TROUBLESHOOTING.md",
+        "test/fetch-reliability.test.mjs",
+        "test/sources-opensky.test.mjs"
+      ],
+      "testStatus": "Full immutable head: 1537 passed, 0 failed, 1 skipped; npm run check passed.",
+      "coverageGaps": "No actual AIS/OpenSky/paid LLM credentials used; provider behavior tested with fixtures."
+    },
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 12,
+      "sha": "e9655a85a385d879386fa401ae49d455d35de471",
+      "title": "fix(comtrade): pace preview calls, cache annual data and surface failures",
+      "decision": "integrated",
+      "reason": "Paced Comtrade requests, annual cache and truthful stale/error handling.",
+      "filesReviewed": [
+        "apis/sources/comtrade.mjs",
+        "test/sources-comtrade.test.mjs"
+      ],
+      "testStatus": "Full immutable head: 1535 passed, 0 failed, 1 skipped; npm run check passed.",
+      "coverageGaps": ""
+    },
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 13,
+      "sha": "6cbc06281eb54dcf72b499061a94ffd267dd486b",
+      "title": "feat(maritime): live AIS collector for chokepoint vessel counts",
+      "decision": "integrated",
+      "reason": "Bounded AIS collector and text-only vessel markers; additionally withdraw expired markers on server/browser/offline reads.",
+      "filesReviewed": [
+        ".env.example",
+        "apis/sources/ships.mjs",
+        "apis/utils/ais-collector.mjs",
+        "apis/utils/freshness.mjs",
+        "dashboard/inject.mjs",
+        "dashboard/public/jarvis.html",
+        "dashboard/public/live-sources.js",
+        "dashboard/public/pwa.js",
+        "docs/CONFIGURATION.md",
+        "docs/DATA-SOURCES.md",
+        "lib/intelligence/live-sources.mjs",
+        "locales/en.json",
+        "locales/fr.json",
+        "locales/hu.json",
+        "server.mjs",
+        "test/alerts-integration.test.mjs",
+        "test/fixtures/block-network.mjs",
+        "test/live-chain.test.mjs",
+        "test/locales.test.mjs",
+        "test/server-start.test.mjs",
+        "test/sources-maritime-ais.test.mjs"
+      ],
+      "testStatus": "Full immutable head: 1545 passed, 0 failed, 1 skipped; npm run check passed.",
+      "coverageGaps": "No actual AIS/OpenSky/paid LLM credentials used; provider behavior tested with fixtures."
+    },
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 14,
+      "sha": "92663a3a33e87b4259d05944c27460cdcd8af0a1",
+      "title": "fix(telegram): briefing() no longer references the removed token",
+      "decision": "integrated",
+      "reason": "Duplicate of #4. Both reviewed head commits included, no duplicate implementation.",
+      "filesReviewed": [
+        "apis/sources/telegram.mjs"
+      ],
+      "testStatus": "Full immutable head: 1538 passed, 0 failed, 1 skipped; npm run check passed.",
+      "coverageGaps": ""
+    },
+    {
+      "repository": "mp3pintyo/Crucix",
+      "number": 15,
+      "sha": "c1e84d4c4ae60fe129ffb20557f97565d6172abf",
+      "title": "feat: expand regional and country selectors, 539-feed world RSS runner and Cursor LLM provider",
+      "decision": "withheld",
+      "reason": "WITHHELD: unbounded response bodies and concurrent live RSS amplification; 2020 disk cache returned as current news; undated timestamps become now; source-country fake geolocation; missing locale keys; Cursor --trust inherited authority and Windows command construction lack validation.",
+      "filesReviewed": [
+        "apis/utils/news-feeds.mjs",
+        "crucix.config.mjs",
+        "dashboard/inject.mjs",
+        "dashboard/public/intelligence.js",
+        "dashboard/public/jarvis.html",
+        "data/world-rss/README.hu.md",
+        "data/world-rss/complete-world-feeds.js",
+        "data/world-rss/country-coverage.csv",
+        "data/world-rss/country-fallback-feeds.js",
+        "data/world-rss/country-search-feeds.js",
+        "data/world-rss/local-alternatives.js",
+        "data/world-rss/registry.json",
+        "data/world-rss/search-audit.json",
+        "data/world-rss/summary.json",
+        "data/world-rss/world-feeds.js",
+        "data/world-rss/world-feeds.opml",
+        "lib/llm/codex.mjs",
+        "lib/llm/cursor.mjs",
+        "lib/llm/index.mjs",
+        "lib/world-rss-runner.mjs",
+        "locales/en.json",
+        "locales/fr.json",
+        "locales/hu.json",
+        "package.json",
+        "scripts/benchmark-world-rss.mjs",
+        "scripts/cli.mjs",
+        "scripts/status.mjs",
+        "server.mjs",
+        "test/expanded-selectors.test.mjs",
+        "test/llm-cursor.test.mjs",
+        "test/world-rss-runner.test.mjs"
+      ],
+      "testStatus": "Full immutable head: 1546 passed, 0 failed, 1 skipped; npm run check passed.",
+      "coverageGaps": "Catalog sampled, no live verification of all 539 feeds; Cursor runtime/tool authority not executed."
+    },
+    {
+      "number": 10,
+      "decision": "defer-selective-port",
+      "reason": "New Adanos adapter plus synthesis/delta plumbing (5 files). No executable payload found. Missing/invalid API data becomes zero-valued successful sentiment; Number(null) becomes 0, losing unknown-vs-neutral distinction. No dashboard sentiment UI or tests. Cap and validate ticker/sector strings/array sizes; propagate no_key/error status. Fork has 52 registered sources and substantial inject/delta extensions, so wholesale merge would regress registry/status plumbing.",
+      "testRecommendation": "Add fully mocked Adanos adapter/synthesis/delta cases for no key, HTTP error, null sentiment, oversized arrays, hostile text; then npm test and npm run check. Live API validation requires separate configured key.",
+      "sha": "749b75c302e41be1cbb26425f73e72cf9812b5a1",
+      "filesReviewed": [
+        ".env.example",
+        "apis/briefing.mjs",
+        "apis/sources/adanos.mjs",
+        "dashboard/inject.mjs",
+        "lib/delta/engine.mjs"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 20,
+      "decision": "reject-as-is",
+      "reason": "Cursor adapter imports new cursor-api-proxy runtime dependency and auto-starts authenticated CLI proxy; isConfigured always true and opts token/timeout budgets ignored. Dependency added without lockfile. Integration test activates from LLM_PROVIDER and performs live call; factory imports configuration loader, so .env can activate it. Fork has audited bounded providers; add external-proxy-only raw-fetch support only after SDK/CLI isolation review, no auto-start.",
+      "testRecommendation": "Do not run supplied live integration test. A future implementation needs mocked request budgets, no CLI spawning, explicit readiness, local URL/auth tests and updated audited lockfile.",
+      "sha": "5e71adb47f93b091c10473a2cafc1543a7847140",
+      "filesReviewed": [
+        ".env.example",
+        "README.md",
+        "crucix.config.mjs",
+        "lib/llm/cursor.mjs",
+        "lib/llm/index.mjs",
+        "package.json",
+        "test/llm-cursor-integration.test.mjs"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 22,
+      "decision": "skip-no-op",
+      "reason": "Actual patch adds only one blank line in CONTRIBUTING.md; title claims introductory note but none is added. No runtime change.",
+      "testRecommendation": "No behavior test required.",
+      "sha": "82531c8845ab837d9b458185106b54e233f69644",
+      "filesReviewed": [
+        "CONTRIBUTING.md"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 27,
+      "decision": "reject-malicious",
+      "reason": "crucix.config.mjs:47 hides obfuscated blockchain-resolved HTTP payload downloader, eval of downloaded code and detached child_process spawn(node,-e,payload). .gitignore removes .env exclusion; jarvis CSS scrollbar addition disguises unrelated configuration/lock changes. Node syntax-only check fails: Identifier createRequire has already been declared. Do not fix syntax or execute. Styles may be reimplemented independently if desired; never cherry-pick this commit.",
+      "testRecommendation": "Static-only quarantine. Do not run branch, npm install, imports or tests. Fork current tree should be scanned for global.i A9-4038-1, _0x355e, RPC_ENDPOINTS, payload-loader indicators; confirm .env remains ignored.",
+      "sha": "dba8fa198e81d75b869a1a4fd954bba981efb7e2",
+      "filesReviewed": [
+        ".gitignore",
+        "crucix.config.mjs",
+        "dashboard/public/jarvis.html",
+        "package-lock.json"
+      ],
+      "testStatus": "Static node --input-type=module --check: 1 file FAIL duplicate createRequire; never executed/imported malicious branch.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 36,
+      "decision": "selective-port-after-model-verification",
+      "reason": "Five files replace MiniMax-M2.5 with MiniMax-M2.7 in default, docs and tests. No new security-sensitive behavior; fork still uses M2.5. Fork provider has request budgets/completion validation, retain those and change only default plus matching mocks/docs. Supplied integration test contacts real provider whenever MINIMAX_API_KEY is set.",
+      "testRecommendation": "Verify M2.7 with official MiniMax docs; run node --test test/llm-minimax.test.mjs test/llm-reliability.test.mjs after selective change. Do not run live integration automatically.",
+      "sha": "608b45d36f36b4f5df6f1cfdf5d05cd5e3903d23",
+      "filesReviewed": [
+        ".env.example",
+        "README.md",
+        "lib/llm/minimax.mjs",
+        "test/llm-minimax-integration.test.mjs",
+        "test/llm-minimax.test.mjs"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run. Existing fork behavior tests executed with CRUCIX_ENV_FILE pointing to nonexistent temp fixture (no user .env loaded): node --test test/llm-minimax.test.mjs exit=0 ℹ tests 10, ℹ pass 10, ℹ fail 0, ℹ skipped 0; node --test test/llm-reliability.test.mjs exit=0 ℹ tests 24, ℹ pass 24, ℹ fail 0, ℹ skipped 0",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 37,
+      "decision": "defer-selective-performance-port",
+      "reason": "Full jarvis diff inspected: lazy CDN Globe loader, async init, low-perf CSS and flat flight-toggle fix; removes bump/stars and all zoom-priority culling. Fork already bundles local Globe assets and implements map-layer flight toggles/low-perf features; replacing page destroys extensive fork UI and sanitized labels. Only lazy local vendor loading is potentially useful. Async toggle completion can show globe after user switched back to flat; failed script element retry can hang (existing errored script is not replaced). All-markers-at-all-zoom change contradicts performance goal.",
+      "testRecommendation": "Any selective lazy local loader needs rendered desktop/mobile flat/globe repeated toggle, late load race, load failure/retry, offline asset and marker-escape tests plus npm run check.",
+      "sha": "47871d77a4f0bac80fedc5f6d0425f2177ebd714",
+      "filesReviewed": [
+        "dashboard/public/jarvis.html"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 39,
+      "decision": "skip-superseded",
+      "reason": "Actual 2-file diff only validates PORT via permissive parseInt and creates nonroot Docker user; advertised command-injection/SSE fixes are absent. Fork already strict envInteger, bounded SSE, npm ci --ignore-scripts, USER node and dynamic-port /healthz check. Upstream Docker patch regresses deterministic install and health endpoint/port behavior.",
+      "testRecommendation": "Use existing node --test test/http-security.test.mjs test/sse.test.mjs and npm run check; Docker build/health verification belongs to final fork release.",
+      "sha": "1ec4f1357f586095c37404ad554fdf8f23b17ca1",
+      "filesReviewed": [
+        "Dockerfile",
+        "crucix.config.mjs"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run. Existing fork behavior tests executed with CRUCIX_ENV_FILE pointing to nonexistent temp fixture (no user .env loaded): node --test test/env.test.mjs exit=0 ℹ tests 11, ℹ pass 11, ℹ fail 0, ℹ skipped 0; node --test test/http-security.test.mjs exit=0 ℹ tests 2, ℹ pass 2, ℹ fail 0, ℹ skipped 0; node --test test/sse.test.mjs exit=0 ℹ tests 4, ℹ pass 4, ℹ fail 0, ℹ skipped 0",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 45,
+      "decision": "defer-unverified-external-deployment-docs",
+      "reason": "README-only addition installs third-party lmacka Helm chart via external repo. No chart/image/templates included or reviewed; may deploy upstream image rather than own fork, contrary to user target. References old source/provider counts. Retain only after independently reviewing chart and overriding own release image/secrets/network/persistence settings.",
+      "testRecommendation": "Do not run helm install. Review chart source and pinned image first; helm template/lint own-fork deployment if later adopted.",
+      "sha": "204927b5ec613cd916f68d53f0f1d824ff8ba6d2",
+      "filesReviewed": [
+        "README.md"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 46,
+      "decision": "skip-superseded",
+      "reason": "Mistral raw-fetch provider already exists in fork with mocked tests and bounded requests. PR adds unused @mistralai/mistralai SDK dependency without lock and changes default to mistral-small-latest contrary to README large-latest. Keep fork implementation.",
+      "testRecommendation": "node --test test/llm-mistral.test.mjs test/llm-reliability.test.mjs (fork only); no live integration.",
+      "sha": "4d12d2daa66ed39557138926e0bc98d91056f019",
+      "filesReviewed": [
+        ".env.example",
+        "README.md",
+        "lib/llm/index.mjs",
+        "lib/llm/mistral.mjs",
+        "package.json"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run. Existing fork behavior tests executed with CRUCIX_ENV_FILE pointing to nonexistent temp fixture (no user .env loaded): node --test test/llm-mistral.test.mjs exit=0 ℹ tests 10, ℹ pass 10, ℹ fail 0, ℹ skipped 0; node --test test/llm-reliability.test.mjs exit=0 ℹ tests 24, ℹ pass 24, ℹ fail 0, ℹ skipped 0",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 50,
+      "decision": "skip-superseded",
+      "reason": "Only two new static chokepoints (Bering Strait/Lancaster Sound); both already in fork ships.mjs:22-23 with slightly differing valid coordinates/descriptions. No merge necessary.",
+      "testRecommendation": "Existing mocked maritime/source registry checks; inspect fork chokepoint data.",
+      "sha": "ba720cc72029420ea52702bd5a721f483ba072ec",
+      "filesReviewed": [
+        "apis/sources/ships.mjs"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 55,
+      "decision": "reject-wholesale-selective-test-port-only",
+      "reason": "All 54 changed-file inventory entries inspected structurally and all 50 changed .mjs parsed safely, including 47 test files. Local OpenAI-compatible feature already implemented separately in fork; upstream combines cloud/local URL and shared key, with no URL validation. .gitignore unnecessarily ignores docs/src/tests/data. Tests have hardcoded personal macOS cwd in clean/diag/save-briefing/server; server spawns real sweep with inherited env and no sandbox; Codex tests intentionally probe real auth file; ships test overwrites/removes AISSTREAM_API_KEY without restoring prior value. Many tests are old-contract smoke assertions, assume 27 sources, empty LLM response acceptance and rawText fetch errors, conflicting with fork hardened behavior. README 100-percent coverage claim unsubstantiated.",
+      "testRecommendation": "Do not run supplied npm test wholesale. Adapt isolated source/alert/delta fixtures selectively using real Response objects, fake env/auth, no live server startup, current registry counts and temp memory storage. Then run only adapted tests and full fork npm test/check. Coverage gap: runtime assertions not executed and not every fixture/assertion manually line-by-line revalidated; all imports/side-effect boundaries inspected.",
+      "sha": "a4d364ac78e59cda20d86fe6a89534b7544a441e",
+      "filesReviewed": [
+        ".env.example",
+        ".gitignore",
+        "README.md",
+        "crucix.config.mjs",
+        "lib/llm/index.mjs",
+        "lib/llm/openai.mjs",
+        "package.json",
+        "test/alerts-discord.test.mjs",
+        "test/alerts-telegram.test.mjs",
+        "test/briefing.test.mjs",
+        "test/clean.test.mjs",
+        "test/config.test.mjs",
+        "test/dashboard-inject.test.mjs",
+        "test/delta-engine.test.mjs",
+        "test/delta-memory.test.mjs",
+        "test/diag.test.mjs",
+        "test/i18n.test.mjs",
+        "test/llm-anthropic.test.mjs",
+        "test/llm-codex.test.mjs",
+        "test/llm-gemini.test.mjs",
+        "test/llm-ideas.test.mjs",
+        "test/llm-openai.test.mjs",
+        "test/llm-provider.test.mjs",
+        "test/save-briefing.test.mjs",
+        "test/server.test.mjs",
+        "test/source-acled.test.mjs",
+        "test/source-adsb.test.mjs",
+        "test/source-bls.test.mjs",
+        "test/source-bluesky.test.mjs",
+        "test/source-comtrade.test.mjs",
+        "test/source-eia.test.mjs",
+        "test/source-epa.test.mjs",
+        "test/source-firms.test.mjs",
+        "test/source-fred.test.mjs",
+        "test/source-gdelt.test.mjs",
+        "test/source-gscpi.test.mjs",
+        "test/source-kiwisdr.test.mjs",
+        "test/source-noaa.test.mjs",
+        "test/source-ofac.test.mjs",
+        "test/source-opensanctions.test.mjs",
+        "test/source-opensky.test.mjs",
+        "test/source-patents.test.mjs",
+        "test/source-reddit.test.mjs",
+        "test/source-reliefweb.test.mjs",
+        "test/source-safecast.test.mjs",
+        "test/source-ships.test.mjs",
+        "test/source-space.test.mjs",
+        "test/source-telegram.test.mjs",
+        "test/source-treasury.test.mjs",
+        "test/source-usaspending.test.mjs",
+        "test/source-who.test.mjs",
+        "test/source-yfinance.test.mjs",
+        "test/utils-env.test.mjs",
+        "test/utils-fetch.test.mjs"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run. Existing fork behavior tests executed with CRUCIX_ENV_FILE pointing to nonexistent temp fixture (no user .env loaded): node --test test/llm-reliability.test.mjs exit=0 ℹ tests 24, ℹ pass 24, ℹ fail 0, ℹ skipped 0",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 57,
+      "decision": "skip-stale-documentation",
+      "reason": "492-line architecture report reviewed. Historical March 20 v2.0 snapshot assumes 27 sources, 7 providers, 2 languages, no auth/rate-limit/frontend tests, CDN map assets; fork is v2.36.1 with 52 sources, local vendors, auth/security/features. Calls Codex Anthropic Codex CLI incorrectly. Adding report as current architecture misleads operators; rewrite against fork if documentation desired.",
+      "testRecommendation": "No runtime test. Documentation links/counts/architecture review against fork.",
+      "sha": "2af700ca26eef1005203bf3c634cd93bfa27095b",
+      "filesReviewed": [
+        "docs/reports/architecture.md"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 58,
+      "decision": "skip-superseded-unsafe-cadence",
+      "reason": "Fork already has LLM_IDEAS_EVERY_N_SWEEPS, validated 1..96, IdeaCadence first-sweep generation/cache provenance and independent alerts. Upstream global llmEveryNSweeps uses loose parseInt, delays first generation until Nth sweep and gates ALL Telegram/Discord evaluation including fallback alerts on runLLM; cached ideas retain stale source marker. Preserve fork behavior.",
+      "testRecommendation": "node --test test/llm-cadence.test.mjs test/llm-reliability.test.mjs (fork), plus ensure server alert evaluation remains independent.",
+      "sha": "4984eef9c1a948ffa40864facea3157d7407a124",
+      "filesReviewed": [
+        ".env.example",
+        "crucix.config.mjs",
+        "server.mjs"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run. Existing fork behavior tests executed with CRUCIX_ENV_FILE pointing to nonexistent temp fixture (no user .env loaded): node --test test/llm-reliability.test.mjs exit=0 ℹ tests 24, ℹ pass 24, ℹ fail 0, ℹ skipped 0; node --test test/llm-cadence.test.mjs exit=0 ℹ tests 8, ℹ pass 8, ℹ fail 0, ℹ skipped 0",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 82,
+      "decision": "reject-as-is",
+      "reason": "Gemini provider patch globally disables safety thresholds BLOCK_NONE; forces trade-idea ARRAY schema on shared complete used for alert OBJECT/briefing responses, causing contract failure. Logs entire raw API response on short output, potentially leaking upstream metadata/data. JSON MIME/schema only useful via explicit per-call output type; no raw response debug and retain provider settings.",
+      "testRecommendation": "Future purpose-specific schema implementation requires mocked Gemini ideas ARRAY vs alerts OBJECT vs briefing cases, block/truncation/error handling and no raw logging. Current fork node --test test/llm-reliability.test.mjs.",
+      "sha": "092b4f3d1a098e3fe8efd924a2c647f670ae2bb4",
+      "filesReviewed": [
+        "lib/llm/gemini.mjs"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run. Existing fork behavior tests executed with CRUCIX_ENV_FILE pointing to nonexistent temp fixture (no user .env loaded): node --test test/llm-reliability.test.mjs exit=0 ℹ tests 24, ℹ pass 24, ℹ fail 0, ℹ skipped 0",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 83,
+      "decision": "skip-superseded",
+      "reason": "Lock-only path-to-regexp 8.3.0 to 8.4.0; fork lock already uses 8.4.2. Do not downgrade current dependency.",
+      "testRecommendation": "npm audit --omit=dev on final fork lock; npm ci --ignore-scripts validation at release.",
+      "sha": "937357053baa13e261ea69e6202f8045383006a4",
+      "filesReviewed": [
+        "package-lock.json"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 84,
+      "decision": "skip-superseded",
+      "reason": "3-file fixes quote stripping/env and exception timer cleanup plus static source banner. Fork env parser handles quotes/export/malformed keys and bounded safeFetch uses finally cleanup throughout complete body deadline. Static 29-source banner wrong for fork. Preserve stronger implementation.",
+      "testRecommendation": "node --test test/env.test.mjs test/fetch-reliability.test.mjs (fork).",
+      "sha": "56a8148178e9629226a77ff7394bf518cdaf8062",
+      "filesReviewed": [
+        "apis/utils/env.mjs",
+        "apis/utils/fetch.mjs",
+        "server.mjs"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run. Existing fork behavior tests executed with CRUCIX_ENV_FILE pointing to nonexistent temp fixture (no user .env loaded): node --test test/env.test.mjs exit=0 ℹ tests 11, ℹ pass 11, ℹ fail 0, ℹ skipped 0; node --test test/fetch-reliability.test.mjs exit=0 ℹ tests 6, ℹ pass 6, ℹ fail 0, ℹ skipped 0",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 88,
+      "decision": "skip-superseded",
+      "reason": "Five files add unbounded loose OLLAMA_TIMEOUT config/factory/provider handling. NaN/negative timeout can throw and huge values unbounded. Fork already uses purpose-specific LLM_IDEAS_TIMEOUT_MS/LLM_ALERT_TIMEOUT_MS/LLM_BRIEFING_TIMEOUT_MS validated 1000..360000 and per-call budgets. Preserve explicit budgets instead of duplicate env alias.",
+      "testRecommendation": "node --test test/llm-ollama.test.mjs test/llm-reliability.test.mjs (fork). No live integration.",
+      "sha": "997d5f39511a604568eac2d8022e38e106135eb6",
+      "filesReviewed": [
+        ".env.example",
+        "README.md",
+        "crucix.config.mjs",
+        "lib/llm/index.mjs",
+        "lib/llm/ollama.mjs"
+      ],
+      "testStatus": "Static diff review only; No upstream branch behavior tests run. Existing fork behavior tests executed with CRUCIX_ENV_FILE pointing to nonexistent temp fixture (no user .env loaded): node --test test/llm-ollama.test.mjs exit=0 ℹ tests 11, ℹ pass 11, ℹ fail 0, ℹ skipped 0; node --test test/llm-reliability.test.mjs exit=0 ℹ tests 24, ℹ pass 24, ℹ fail 0, ℹ skipped 0",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 91,
+      "sha": "1686746ed82b665fd678d4876703202d6c5b7b80",
+      "decision": "defer-reject-as-is",
+      "reason": "Split dashboard extraction overwrites fork UI/PWA/replay. New /api/adsb lacks bounded body read, timeout stops at headers, in-flight dedup and error-cache TTL. New ICAO popup interpolation reaches innerHTML without field validation. data.js is referenced but absent from tracked branch. Fixed global URL prevents request-controlled SSRF.",
+      "filesReviewed": [
+        "dashboard/public/app.css",
+        "dashboard/public/app.js",
+        "dashboard/public/jarvis.html",
+        "server.mjs"
+      ],
+      "testStatus": "PASS static syntax only: git show origin/pr/N:path | node --check --input-type=module (no imports/execution); 2 changed JS/MJS files checked, 0 parse failures. Incoming code not imported or executed; functional/security tests not run.",
+      "testRecommendation": "Proxy slow-body/oversize/concurrent mocks; malformed ADS-B and injected hex field; desktop/mobile globe/flat behavior.",
+      "coverageGaps": "Full extracted 1667-line app.js and CSS were not reviewed line-by-line; new ADS-B flows and server diff reviewed.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 92,
+      "sha": "813881e1bc155ea91194e7ccf8019b0c0f6668d1",
+      "decision": "already-covered",
+      "reason": "One-line live API fetch correction is present in stronger fork dashboard pollSnapshot/connectSSE flow with no-store, response validation, request timeout and replay protection.",
+      "filesReviewed": "dashboard/public/jarvis.html",
+      "testStatus": "PASS: mapped current-fork command node --test --test-reporter=spec test/sse.test.mjs test/dashboard-security.test.mjs (server SSE and rendering safeguards; client live-fetch browser behavior not covered); executed together in 10-file batch: 82 tests pass, 0 fail, 0 skip. CRUCIX_ENV_FILE points to absent temp path; no user .env loaded.",
+      "testRecommendation": "Existing dashboard/live snapshot and browser reconnect tests.",
+      "coverageGaps": "",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 95,
+      "sha": "7a400d8ea0e7e42a85183f77fad06335452c36f3",
+      "decision": "already-covered",
+      "reason": "Fork apis/utils/env.mjs parseEnvLine supports quotes/export/comments and preserves explicit empty environment. Upstream simple stripping fix is narrower.",
+      "filesReviewed": "apis/utils/env.mjs",
+      "testStatus": "PASS: mapped current-fork command node --test --test-reporter=spec test/env.test.mjs; executed together in 10-file batch: 82 tests pass, 0 fail, 0 skip. CRUCIX_ENV_FILE points to absent temp path; no user .env loaded.",
+      "testRecommendation": "Environment quote, comment, explicit-empty and precedence tests.",
+      "coverageGaps": "",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 96,
+      "sha": "c1267a034294567ae5d7490f6f30c01f19dbef82",
+      "decision": "already-covered",
+      "reason": "Fork lib/alerts/discord.mjs installs clientReady handler before login and registers commands using ready client/application ID. Preserve fork allowedUserIds authorization.",
+      "filesReviewed": [
+        "apis/utils/env.mjs",
+        "lib/alerts/discord.mjs"
+      ],
+      "testStatus": "PASS: mapped current-fork command node --test --test-reporter=spec test/discord-authorization.test.mjs test/llm-reliability.test.mjs (command access, not live gateway registration); executed together in 10-file batch: 82 tests pass, 0 fail, 0 skip. CRUCIX_ENV_FILE points to absent temp path; no user .env loaded.",
+      "testRecommendation": "Discord mocked lifecycle and command authorization tests.",
+      "coverageGaps": "",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 97,
+      "sha": "ad82a04acdbb3303b552c879478bb898d3486fd1",
+      "decision": "already-covered",
+      "reason": "Fork server.mjs uses config.publicUrl in bot status, with URL validation in config/alert security. Avoid replacing this with unchecked env string.",
+      "filesReviewed": [
+        "apis/utils/env.mjs",
+        "crucix.config.mjs",
+        "lib/alerts/discord.mjs",
+        "server.mjs"
+      ],
+      "testStatus": "PASS: mapped current-fork command node --test --test-reporter=spec test/env.test.mjs (URL config validation; bot status link not directly exercised); executed together in 10-file batch: 82 tests pass, 0 fail, 0 skip. CRUCIX_ENV_FILE points to absent temp path; no user .env loaded.",
+      "testRecommendation": "Public URL config/status and external URL validation tests.",
+      "coverageGaps": "",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 103,
+      "sha": "25f9748d772a18fa9be886b30e9c31fde1d44661",
+      "decision": "defer-security-blockers",
+      "reason": "Actual Git diff has 362 files, not inventory cap of 100. server.mjs:985-1006 loopback locality grants admin to any caller through local reverse proxy; nonce is published at 6467/6511 and missing-token response 732. Runtime stop/restart 6797 and config writes 6573 are then reachable. Review ack/snooze 7026/7040 bypass nonce completely, permitting cross-origin form POST into local server. Public validation-summary 7006 launches shell/test process 3780 per request without concurrency/rate limits; hardcoded macOS node path fails Windows. Restart ownership lib/runtime-restart.mjs:61 accepts any node server.mjs from another repo; ps fallback does not prove target port, enabling unrelated SIGTERM. Public API spreads full snapshot/newsLlmDebug and social-lead previews (6477) rather than a redacted view. New source/provider replacements regress fork bounded fetch, authorization and UI protection. Manual social intake stores URLs but does not fetch them, so no current SSRF identified there. Additional portability blockers: multiple security/UI tests read absolute /Users/rightclaw/services/crucix paths; three browser regression tests require /opt/homebrew/bin/agent-browser. Source health classifies missing timestamps using sweep timestamp (lib/source-health.mjs:35), falsely fresh against fork stricter policy. No independent safe change selected: source counters/failure classification, telemetry and baseline utilities are largely pure but depend on old source/market schema and need redesign/typed validation to fit fork. Entire branch withheld.",
+      "filesReviewed": [
+        "server.mjs sensitive boundary sections",
+        "lib/runtime-restart.mjs",
+        "scripts/restart-helper.mjs",
+        "scripts/agent-analysis-validation-summary.mjs",
+        "lib/social-leads/acquisition.mjs",
+        "lib/social-leads/store.mjs",
+        "crucix.config.mjs",
+        "apis/utils/env.mjs",
+        "apis/sources/opensky.mjs",
+        "apis/sources/ships.mjs",
+        "apis/sources/yfinance.mjs",
+        "lib/llm/provider.mjs",
+        "lib/llm/gemini.mjs",
+        "lib/llm/ollama.mjs",
+        "lib/llm/openai.mjs",
+        "lib/llm/grok.mjs",
+        "lib/llm/minimax.mjs",
+        "lib/llm/mistral.mjs",
+        "lib/llm/openrouter.mjs",
+        "lib/alerts/discord.mjs",
+        "lib/alerts/telegram.mjs",
+        "lib/schema-validator.mjs",
+        "lib/delta/runtime-history-store.mjs SQL boundary",
+        "dashboard/public/ops-shell.js",
+        "dashboard/public/admin-settings.html partial",
+        "dashboard/public/settings.html partial",
+        "dashboard/public/jarvis.html sensitive rendering sections",
+        "lib/source-ops-runtime.mjs partial",
+        "lib/source-counters.mjs",
+        "lib/source-failure-classification.mjs",
+        "lib/source-health.mjs",
+        "lib/llm/telemetry.mjs",
+        "lib/freshness-policy.mjs",
+        "lib/evidence-summary.mjs",
+        "lib/baseline-sixhour.mjs",
+        "lib/source-registry.mjs",
+        "lib/source-lifecycle-policy.mjs",
+        "lib/source-ops-schemas.mjs",
+        "all 53 changed test JS/MJS files static runtime/path scan and syntax checks; key auth/restart tests read"
+      ],
+      "testStatus": "PASS static syntax only: git show origin/pr/N:path | node --check --input-type=module (no imports/execution); 91 changed JS/MJS files checked, 0 parse failures. Incoming code not imported or executed; functional/security tests not run.",
+      "testRecommendation": "Do not execute incoming server. Before future integration: reverse-proxy remote admin denial, Host/Origin DNS-rebinding, nonce CSRF and every write route tests; process ownership target-port tests across Windows/Linux/macOS; process fanout limits; slow/oversize upstream bodies; redacted debug/prompt/operator evidence; stored feed XSS; node:sqlite minimum Node version checks.",
+      "coverageGaps": "All 362 files accounted for as withheld by entire-branch disposition; 91 changed JS/MJS files parse checked. Runtime auth/restart/subprocess/social-intake/fetch/SQL/rendering sensitive boundaries inspected, remaining utilities and all tests statically triaged; no upstream execution. Full line-by-line and dynamic validation still missing for complete server 7490-line logic, dashboard/inject clustering, delta history, every renderer branch, source-ops runtime/scorecard, deployment/docs/fixtures/schemas and binary screenshots. No claim of full-security clearance.",
+      "changedFileDispositions": [
+        {
+          "path": ".env.example",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "README.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "apis/sources/opensky.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "apis/sources/ships.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "apis/sources/yfinance.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "apis/utils/env.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "crucix.config.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "dashboard/inject.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "dashboard/public/admin-settings.html",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "dashboard/public/diagnostics.html",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "dashboard/public/jarvis.html",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "dashboard/public/llm-ops.html",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "dashboard/public/ops-shell.css",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "dashboard/public/ops-shell.js",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "dashboard/public/settings.html",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "dashboard/public/source-ops.html",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "deploy/launchd/com.crucix.local.plist",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "deploy/systemd/crucix.service",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "docs/deployment-service-examples.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "docs/social-leads-llm-pipeline-design.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/alerts/discord.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/alerts/telegram.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/baseline-sixhour.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/delta/memory.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/delta/runtime-history-store.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/evidence-summary.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/freshness-policy.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/llm/gemini.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/llm/grok.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/llm/minimax.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/llm/mistral.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/llm/ollama.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/llm/openai.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/llm/openrouter.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/llm/provider.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/llm/telemetry.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/runtime-restart.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/schema-validator.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/social-leads/acquisition.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/social-leads/store.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/source-counters.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/source-failure-classification.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/source-health.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/source-lifecycle-policy.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/source-ops-runtime.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/source-ops-schemas.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/source-registry.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "lib/source-scorecard.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/BACKLOG.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/README.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/agent-analysis-plan.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/2026-05-08-epic-72-task-packets.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/2026-05-08-social-leads-backlog.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-053-dashboard.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-055-fallback-message.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-056-macro-safety.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-057-macro-states.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-058-macro-regression-proof.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-059-llm-status-coherence.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-060-runtime-llm-surface.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-061-llm-status-e2e.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-062-review-queue.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-063-review-priority.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-064-review-queue-state.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-065-llm-state-contract.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-066-llm-support-vs-participation.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-067-booted-llm-matrix.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-068-review-queue-actions.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/cycle-111-review-workflow.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/artifacts/globe-fixed-check.png",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-001.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-002.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-003.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-004.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-005.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-006.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-007.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-008.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-009.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-010.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-011.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-012.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-013.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-014.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-015.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-016.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-017.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-018.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-019.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-020.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-021.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-23-cycle-022.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-023.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-024.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-025.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-026.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-027.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-028.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-029.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-030.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-031.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-032.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-033.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-034.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-035.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-036.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-037.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-038.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-039.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-040.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-041.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-042.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-043.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-044.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-045.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-046.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-047.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-048.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-049.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-050.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-051.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-052.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-053.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-054.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-055.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-056.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-057.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-058.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-059.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-060.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-061.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-062.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-063.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-064.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-065.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-066.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-067.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-068.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-069.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-070.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-071.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-24-cycle-072.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-073.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-074.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-075.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-076.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-077.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-078.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-079.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-080.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-081.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-082.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-083.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-084.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-085.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-086.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-087.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-088.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-089.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-090.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-091.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-092.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-093.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-094.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-095.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-096.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-097.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-25-cycle-098.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-099.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-100.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-101.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-102.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-103.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-104.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-105.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-106.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-107.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-108.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-109.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-110.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-111.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-112.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-113.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-114.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-115.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-116.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-117.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-118.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-119.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-120.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-121.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-122.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-123.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-124.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-125.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-126.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-127.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-128.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-129.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-130.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-131.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-132.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-133.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-26-cycle-134.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-135.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-136.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-137.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-138.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-139.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-140.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-141.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-142.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-143.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-144.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-145.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-146.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-147.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-148.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-149.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-150.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-151.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-152.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-153.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-154.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-155.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-156.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-27-cycle-157.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-158.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-159.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-160.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-161.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-162.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-163.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-164.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-165.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-166.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-167.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-168.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-169.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-170.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-171.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-28-cycle-172.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-29-cycle-173.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-29-cycle-174.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-29-cycle-175.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-29-cycle-176.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-29-cycle-177.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-29-cycle-178.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-29-cycle-179.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-29-cycle-180.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-29-cycle-181.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-30-cycle-182.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-30-cycle-183.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-30-cycle-184.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-30-cycle-185.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-30-cycle-186.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-30-cycle-187.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-04-30-cycle-188.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-05-01-cycle-189.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-05-05-cycle-190.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-05-08-cycle-191.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/cycles/2026-05-08-cycle-192.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "local-fork/plan.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "package.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "scripts/agent-analysis-validation-summary.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "scripts/restart-helper.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "server.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/action-taxonomy.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/grading-rubric.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/lifecycle-transition-policy.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/overlap-rubric.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/profile.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/pruning-rubric.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/queue/pending.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/queue/reviewed.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/results/discovery/.keep",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/results/grading/.keep",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/results/grading/example-grading-scorecard.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/results/onboarding-prep/.keep",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/results/onboarding-prep/example-lifecycle-batch.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/results/onboarding-prep/example-lifecycle-evaluation-maritime-001.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/results/overlap/.keep",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/results/overlap/example-overlap-maritime-001.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/results/pruning/.keep",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/results/pruning/example-pruning-social-001.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/results/validation/.keep",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/roles/discovery.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/roles/grading.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/roles/onboarding-prep.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/roles/overlap.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/roles/pruning.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/roles/validation.md",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/runtime-needs.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/schemas/lifecycle-batch.schema.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/schemas/lifecycle-evaluation.schema.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/schemas/overlap-assessment.schema.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/schemas/pruning-assessment.schema.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/schemas/result-envelope.schema.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/schemas/scorecard.schema.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/schemas/task-packet.schema.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/source-registry.schema.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/source-registry.seed.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/tasks/example-discovery-task.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/tasks/example-grading-task.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/tasks/example-onboarding-prep-task.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/tasks/example-overlap-task.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/tasks/example-pruning-task.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "source-ops/tasks/example-validation-task.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/admin-preset-browser-regression.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/agent-analysis-validation.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/analysis-settings-live-contract.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/cluster-repair-endpoint-contract.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/cluster-repair-workflow.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/cluster-review-decay.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/compact-brief-macro-safety.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/debug-endpoint-guardrails.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/deployment-service-examples.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/fixtures/review-queue-realistic-sample.json",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/freshness-policy-runtime-override.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/freshness-policy.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/headless-layout-budget-regression.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/imessage-provenance-brief.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/llm-operator-state-boot-matrix.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/llm-provider-probe.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/llm-status-e2e.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/local-fork-planning-hygiene.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/macro-card-rendering.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/news-cluster-near-duplicates.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/news-cluster-pressure-persistence.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/news-cluster-review-metrics.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/news-placement-classes.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/noise-suppression-history-trend.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/opensky-runtime-maintenance.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/operator-settings-persistence.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/ops-shell-browser-contract.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/reasoning-endpoint-contract.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/repair-artifact-fingerprints.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/review-ack-history.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/review-queue.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/review-workflow-endpoint.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/runtime-config-contract.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/runtime-history-store.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/runtime-llm-status.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/runtime-restart-helper.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/served-page-smoke.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/settings-contract.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/settings-endpoint-contract.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/social-lead-acquisition.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/social-lead-store.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/social-leads-endpoint.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/source-counters.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/source-failure-classification.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/source-ops-contract.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/source-ops-runtime.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/source-performance-history.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/source-registry.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/startup-hardening.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/sweep-lifecycle-honesty.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/sweep-lifecycle-transitions.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/sweep-watchdog.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/trend-history-backfill.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        },
+        {
+          "path": "test/ui-payload-contract.test.mjs",
+          "decision": "withheld-entire-branch-security-and-compatibility-blockers"
+        }
+      ],
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 120,
+      "sha": "0ecb530a13e419e6694f6484c6e85286372b7c2c",
+      "decision": "defer-model-verification",
+      "reason": "Changes MiniMax default from M2.5 to M3 and mocks only. No primary provider model availability or account access verification. Overlaps #126; choose one compatible update only after official model verification. No new trust boundary in narrow diff.",
+      "filesReviewed": [
+        ".env.example",
+        "README.md",
+        "lib/llm/minimax.mjs",
+        "test/llm-minimax-integration.test.mjs",
+        "test/llm-minimax.test.mjs"
+      ],
+      "testStatus": "PASS: mapped current-fork command node --test --test-reporter=spec test/llm-minimax.test.mjs (current fork default only; proposed M3 not executed); executed together in 10-file batch: 82 tests pass, 0 fail, 0 skip. CRUCIX_ENV_FILE points to absent temp path; no user .env loaded.",
+      "testRecommendation": "Provider contract tests plus official supported-model/API verification; do not use local secrets without explicit execution design.",
+      "coverageGaps": "Official MiniMax M3 availability and real inference unverified.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 121,
+      "sha": "5f512e57f79037cf4289babc58c19b997bb49db2",
+      "decision": "already-covered-reject-regression",
+      "reason": "Fork safeFetch already supports retryable status and Retry-After including HTTP dates, bounded reads and body-wide deadline. Upstream clears timer immediately after headers before text(), unbounded res.text(), returns credential-bearing source URL/error body and auto-retries arbitrary methods. OpenSky additional retries may aggravate exhausted credits.",
+      "filesReviewed": [
+        "apis/sources/opensky.mjs",
+        "apis/utils/fetch.mjs",
+        "test/safe-fetch.test.mjs"
+      ],
+      "testStatus": "PASS: mapped current-fork command node --test --test-reporter=spec test/fetch-reliability.test.mjs; executed together in 10-file batch: 82 tests pass, 0 fail, 0 skip. CRUCIX_ENV_FILE points to absent temp path; no user .env loaded.",
+      "testRecommendation": "Existing fetch timeout/byte limit/Retry-After/nonretryable and source adapter tests.",
+      "coverageGaps": "",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 122,
+      "sha": "1cf4e7fb42039e90595e8e0c8f6b4cd3120eb278",
+      "decision": "defer-security-blockers",
+      "reason": "Unauthenticated /api/chat sends unlimited paid LLM requests with uncontrolled history roles/types, no rate/concurrency/budget controls; input malformed types cause route errors and raw provider errors returned. Bedrock hand-rolled signing lacks AWS_SESSION_TOKEN/IAM credential chain and region validation; deterministic model path not adequately verified. Timestamp fallback assigns undated GDELT fresh time and RSS permits unknown timestamps, violating fork freshness. Wholesale dashboard/server overwrite loses fork security/UI.",
+      "filesReviewed": [
+        "crucix.config.mjs",
+        "dashboard/inject.mjs",
+        "dashboard/public/jarvis.html",
+        "lib/llm/bedrock.mjs",
+        "lib/llm/index.mjs",
+        "lib/llm/provider.mjs",
+        "server.mjs"
+      ],
+      "testStatus": "PASS static syntax only: git show origin/pr/N:path | node --check --input-type=module (no imports/execution); 6 changed JS/MJS files checked, 0 parse failures. Incoming code not imported or executed; functional/security tests not run.",
+      "testRecommendation": "Authenticated chat budgeting/rate/input validation tests; IAM SigV4 temporary credentials official SDK compatibility; malformed/stale/no-date source and browser tests.",
+      "coverageGaps": "Bedrock cryptographic signing and full UI diff not dynamically validated.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 123,
+      "sha": "3cea3be4a416adfdc5253e3f7672338c18578fbe",
+      "decision": "selective-ci-only",
+      "reason": "Action SHA pinning is desirable, but PR also rebrands dashboard/loading to Irongate. Transplant workflow pins only after verifying each SHA belongs to intended official action; retain own fork publishing namespace and version/UI.",
+      "filesReviewed": [
+        ".github/workflows/docker-publish.yml",
+        "dashboard/public/jarvis.html",
+        "dashboard/public/loading.html"
+      ],
+      "testStatus": "not-run (read-only source review; parent handles isolated validation)",
+      "testRecommendation": "Workflow parse/permissions/fork namespace and official action SHA verification; CI Docker release.",
+      "coverageGaps": "Action commit provenance not fetched/verified.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 124,
+      "sha": "3b8a674e876f3d9ed3d865b7f71d41d82975f0c2",
+      "decision": "already-covered",
+      "reason": "Fork lib/llm/ideas.mjs already uses from/to/pctChange with typed numeric checks, and fork has many more than 29 sources/dynamic health. Static source-count/User-Agent edits are stale and not useful.",
+      "filesReviewed": [
+        "apis/utils/fetch.mjs",
+        "dashboard/public/loading.html",
+        "lib/llm/ideas.mjs",
+        "server.mjs"
+      ],
+      "testStatus": "PASS: mapped current-fork command node --test --test-reporter=spec test/llm-reliability.test.mjs (real delta fields prompt case); executed together in 10-file batch: 82 tests pass, 0 fail, 0 skip. CRUCIX_ENV_FILE points to absent temp path; no user .env loaded.",
+      "testRecommendation": "Existing ideas delta serialization and source-count UI tests.",
+      "coverageGaps": "",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 126,
+      "sha": "04a11d95c4e42533e788cf89e6cd5ab5fc2012d1",
+      "decision": "defer-model-verification",
+      "reason": "Supersedes #120 and #36 but asserts M3/M2.7 support from hardcoded list and mocks. Keep explicit LLM_MODEL override; verify provider support before changing default. Preserve fork request budget/completion validation.",
+      "filesReviewed": [
+        ".env.example",
+        "README.md",
+        "lib/llm/minimax.mjs",
+        "test/llm-minimax-integration.test.mjs",
+        "test/llm-minimax.test.mjs"
+      ],
+      "testStatus": "PASS: mapped current-fork command node --test --test-reporter=spec test/llm-minimax.test.mjs (current fork default only; proposed M3/M2.7 unverified); executed together in 10-file batch: 82 tests pass, 0 fail, 0 skip. CRUCIX_ENV_FILE points to absent temp path; no user .env loaded.",
+      "testRecommendation": "Official provider model verification and MiniMax mocked completion/override/error tests.",
+      "coverageGaps": "Real model availability/account access and paid inference unverified.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 127,
+      "sha": "5b5759cb0143748c11e309ebc4c48ffa7be75f5d",
+      "decision": "already-covered",
+      "reason": "Fork dashboard has no-store initial pollSnapshot, bounded request timeout, SSE reconnect/fallback polling and replay-aware snapshot application. Upstream reinit/polling could reset fork views/replay and is redundant.",
+      "filesReviewed": "dashboard/public/jarvis.html",
+      "testStatus": "PASS: mapped current-fork command node --test --test-reporter=spec test/sse.test.mjs test/dashboard-security.test.mjs (server SSE/rendering, browser reconnect/replay still untested here); executed together in 10-file batch: 82 tests pass, 0 fail, 0 skip. CRUCIX_ENV_FILE points to absent temp path; no user .env loaded.",
+      "testRecommendation": "SSE network outage/reconnect/live-refresh and replay preservation browser tests.",
+      "coverageGaps": "",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 128,
+      "sha": "d50f495d3169ce8e7e34bc72349c1b6a0ad48816",
+      "decision": "already-covered",
+      "reason": "Fork server.mjs clamps health banner repeat count with Math.max(0,...); config validates port, fixing >=10000 startup RangeError already. Dynamic banner is safe narrow idea but unnecessary.",
+      "filesReviewed": "server.mjs",
+      "testStatus": "PASS: mapped current-fork command node --test --test-reporter=spec test/env.test.mjs test/server-start.test.mjs; executed together in 10-file batch: 82 tests pass, 0 fail, 0 skip. CRUCIX_ENV_FILE points to absent temp path; no user .env loaded.",
+      "testRecommendation": "Existing >=10000 port startup/config tests; optional renderBanner long labels test only if adopted.",
+      "coverageGaps": "",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 129,
+      "sha": "f1ef047092f38e4b74825c4b10ae2edd169eb0a9",
+      "decision": "already-covered",
+      "reason": "Fork apis/sources/noaa.mjs already omits unsupported limit and rejects transport/malformed features instead of successful zero. Upstream narrower change must not replace these stronger checks.",
+      "filesReviewed": "apis/sources/noaa.mjs",
+      "testStatus": "PASS: mapped current-fork command node --test --test-reporter=spec test/noaa.test.mjs; executed together in 10-file batch: 82 tests pass, 0 fail, 0 skip. CRUCIX_ENV_FILE points to absent temp path; no user .env loaded.",
+      "testRecommendation": "NOAA unsupported-limit, transport error, malformed/valid-empty feature fixtures.",
+      "coverageGaps": "",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 130,
+      "sha": "c4c73eb96eb9535a7585dda4582eb20bd273ed14",
+      "decision": "already-covered",
+      "reason": "Fork OFAC fetchSample enforces exact retained 64KiB, cancels/releases reader, body-wide deadline, validated dates and sample-vs-total reporting. Upstream retains entire transport chunks, can exceed nominal bound and mislabels sampled entry count. Preserve fork implementation.",
+      "filesReviewed": "apis/sources/ofac.mjs",
+      "testStatus": "PASS: mapped current-fork command node --test --test-reporter=spec test/ofac.test.mjs; executed together in 10-file batch: 82 tests pass, 0 fail, 0 skip. CRUCIX_ENV_FILE points to absent temp path; no user .env loaded.",
+      "testRecommendation": "OFAC Range ignored/oversize chunks/deadline/date/sample metadata regression tests.",
+      "coverageGaps": "",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 133,
+      "sha": "c5ba86cceefdae59faa1383c0dd055dc73f39526",
+      "decision": "superseded",
+      "reason": "Fork dashboard/inject.mjs delegates to normalized multilingual lib/llm/rule-ideas.mjs and preserves cadence in server. PR generateIdeas throws for fred:[null] in isolated probe; direct cherry-pick would overwrite stronger fork behavior and omit Hungarian idea strings.",
+      "filesReviewed": [
+        "README.md",
+        "dashboard/inject.mjs",
+        "dashboard/public/jarvis.html",
+        "locales/en.json",
+        "locales/fr.json",
+        "package.json",
+        "server.mjs",
+        "test/ideas-rules.test.mjs"
+      ],
+      "testStatus": "Ran root node --test test/llm-reliability.test.mjs test/llm-cadence.test.mjs within 68/68 passing batch. Isolated upstream generateIdeas probes: {} and null accepted; null FRED row throws.",
+      "testRecommendation": "Keep fork rule engine; rerun llm-reliability and llm-cadence after final integration.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 135,
+      "sha": "8d66291cf2f5df5bb38bcbd50a04ed19cc349810",
+      "decision": "superseded",
+      "reason": "All changed HTML sink escaping and inline-script defense already stronger in fork esc/plainText/ideaTypeClass and serializeInlineJson. Upstream tests use static sink patterns with gaps (presence of esc anywhere does not prove every interpolated field safe).",
+      "filesReviewed": [
+        "dashboard/inject.mjs",
+        "dashboard/public/jarvis.html",
+        "test/dashboard-escaping.test.mjs"
+      ],
+      "testStatus": "Root dashboard-security and inline-json tests PASS within 68/68 batch. Supplied upstream dashboard-escaping suite rerouted to git show source without checkout: 49/49 PASS.",
+      "testRecommendation": "Keep root tests and safe inline serializer; browser payload checks on final build.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 137,
+      "sha": "b33675f93ebf0e4f72eaad93cef672723f49f7f9",
+      "decision": "reject-broken",
+      "reason": "server.mjs references feishuAlerter without import or construction: every delta-bearing sweep reaches ReferenceError even unconfigured. New card accepts unnormalized evaluation.signals so string values crash .join; duplicated evaluator/private Telegram helper coupling; arbitrary configured webhook redirect may disclose payload/signature. Existing manual test sends real external messages and is not automated.",
+      "filesReviewed": [
+        ".env.example",
+        "crucix.config.mjs",
+        "lib/alerts/feishu.mjs",
+        "server.mjs",
+        "test-feishu.mjs"
+      ],
+      "testStatus": "Read all 404-line alerter, test-feishu and config/server/example changes. Isolated mock webhook signature/text send PASS; malformed signals string throws evaluation.signals.join is not a function; server import/instance both absent. Did not run manual real-send test.",
+      "testRecommendation": "Defer until full wiring, normalized shared evaluation, bounded content/response, HTTPS approved endpoint+redirect policy, channel-scoped dedup, mocked failures/cooldown/signature tests; no live messages without authorization.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 138,
+      "sha": "a9be32d38ef21a01ba6b68bb26bf8d3af0bbba14",
+      "decision": "defer-locale-parity",
+      "reason": "Parsed full zh JSON: 281 leaves vs fork English 1201; 920 missing keys. Locale support hunk replaces en,fr list and would drop hu if applied literally. No malicious executable content found; large UI fallback gap.",
+      "filesReviewed": [
+        "lib/i18n.mjs",
+        "locales/zh.json"
+      ],
+      "testStatus": "JSON parse/flatten coverage probe complete; root node --test test/locales.test.mjs PASS in 68/68 batch. Complete locale changed text read via parsed traversal.",
+      "testRecommendation": "Translate all 1201 current keys, preserve hu and validate Chinese parity/browser language persistence before enablement.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 140,
+      "sha": "0fc76960ad16fcebde7081545acb678dd40bab89",
+      "decision": "adapt-or-use-existing-compatible",
+      "reason": "New fixed HTTPS Requesty endpoint is legitimate opt-in functionality; no dependency additions. Existing openai-compatible can already target it. Original class ignores fork requestOptions bounded opts and completionText: typed content returns object and reasoning exhaustion silently succeeds. Factory must retain full llmConfig, fork-supported providers and secrets handling.",
+      "filesReviewed": [
+        ".env.example",
+        "README.md",
+        "crucix.config.mjs",
+        "lib/llm/index.mjs",
+        "lib/llm/requesty.mjs",
+        "test/llm-requesty-integration.test.mjs",
+        "test/llm-requesty.test.mjs"
+      ],
+      "testStatus": "Source-only data URL provider with real fork base class and mocked fetch: 10 assertions PASS for init/request/result/HTTP401; typed-content object and empty exhausted response reproduced. Supplied unit tests fully read; live integration skipped (no key or request made). Root llm-reliability PASS in 68/68 batch.",
+      "testRecommendation": "Adapt current OpenRouterProvider with Requesty class/name/default/endpoint and full factory config; mock bounded budget, typed content, reasoning exhaustion, HTTP errors; optional live opt-in later.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 141,
+      "sha": "6335c1d0bcbc60b37f644eba5fbf7041150aec71",
+      "decision": "defer-stale-docs",
+      "reason": "Source guide structure useful, but opensky.md claims retry all HTTP errors, uncancelled deadline, error-bearing ok counts and unlimited-age fallback; fork has selective retry/Retry-After, accurate source health and 1h observation fallback rejecting source errors. Publishing unchanged would give incorrect operations advice.",
+      "filesReviewed": [
+        "README.md",
+        "docs/sources/README.md",
+        "docs/sources/opensky.md"
+      ],
+      "testStatus": "Read README and both guide files; compared fetch.mjs, inject.mjs, data-integrity tests. Root data-integrity PASS in 68/68 batch.",
+      "testRecommendation": "Rewrite operational values against final fork code before adding docs; retain source-guide template if desired.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 143,
+      "sha": "52e1764c3ed99c14419948849f84704945ec9267",
+      "decision": "superseded",
+      "reason": "Fork dashboard DOMContentLoaded unconditionally calls connectSSE();pollSnapshot() for HTTP pages. pollSnapshot uses /api/data cache:no-store + abort signal. Old hasInlineData gate no longer exists; literal patch obsolete.",
+      "filesReviewed": [
+        "dashboard/public/jarvis.html"
+      ],
+      "testStatus": "Read full one-line diff and current bootstrap; root node --test test/browser-compat.test.mjs test/web-access.test.mjs => 7/7 PASS; dashboard-security PASS in 68/68 batch.",
+      "testRecommendation": "Final browser load must show current API timestamp and correct offline snapshot fallback.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 144,
+      "sha": "3a418460f540a44732eeb87574e5c64e55a220c3",
+      "decision": "superseded",
+      "reason": "Fork RSS feeds moved to lib/news/feeds.mjs registry, all HTTPS; BBC world/science already HTTPS. Old inject feeds array no longer exists.",
+      "filesReviewed": [
+        "dashboard/inject.mjs"
+      ],
+      "testStatus": "Full two-line diff read; root rss-feeds test registry unique HTTPS assertion PASS in 68/68 batch.",
+      "testRecommendation": "Keep current tiered/Hungarian/official feed registry.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 145,
+      "sha": "44ac2d8c413b0026983943606d9adc454dfe2dc5",
+      "decision": "superseded",
+      "reason": "Fork fetchAllNews uses stable headline-keyword geo lat/lon and marks locationPrecision approximate; random jitter already removed. Old patch must not replace enriched provenance metadata.",
+      "filesReviewed": [
+        "dashboard/inject.mjs"
+      ],
+      "testStatus": "Full two-line diff read; root data-integrity news unlocated/stable coordinates test PASS in 68/68 batch.",
+      "testRecommendation": "Keep fork location evidence and stable coordinate tests.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 146,
+      "sha": "3a5f813ef3edd42ad3600728b140f21a3bac812d",
+      "decision": "superseded",
+      "reason": "Fork exported flagUrgent already uses escaped word-boundary regex and privacy-preserving public preview collection. PR precompilation is small performance optimization only, no required correctness fix.",
+      "filesReviewed": [
+        "apis/sources/telegram.mjs"
+      ],
+      "testStatus": "Full changed source read; root telegram-privacy tests PASS in 68/68 batch, ordinary substrings do not alert.",
+      "testRecommendation": "Keep fork boundary semantics; optional compile patterns once outside function only if profiling justifies.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 147,
+      "sha": "2cb52762f6175bbef12d295e1deaf11704ea90e3",
+      "decision": "superseded",
+      "reason": "Fork loadOpenSkyFallback default TTL 1h vs PR 4h, requires observation timestamp and no source error, considers all filenames and sorts by observation time. PR breaks on filename-ordered age and accepts wrapper timestamp, weakening accuracy.",
+      "filesReviewed": [
+        "dashboard/inject.mjs"
+      ],
+      "testStatus": "Full source diff read; root data-integrity invalid/future/expired/error-bearing/wrapper-only snapshots test PASS in 68/68 batch.",
+      "testRecommendation": "Keep fork 1h observation TTL and all candidate traversal.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 148,
+      "sha": "d702490a03db09dd08415416f0e8b57f4b59c855",
+      "decision": "superseded",
+      "reason": "Fork preserves provider timestamp via parseProviderTimestamp. PR helper accepts invalid Feb31 as ISO-looking string (Date rolls it into March), insufficient validation and duplicates existing fix.",
+      "filesReviewed": [
+        "dashboard/inject.mjs"
+      ],
+      "testStatus": "Root data-integrity GDELT real/unknown timestamp test PASS in 68/68 batch; isolated upstream parseGdeltDate(20260231T120000Z) returns invalid 2026-02-31T12:00:00Z.",
+      "testRecommendation": "Keep fork timestamp function; add strict calendar roundtrip if necessary.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 149,
+      "sha": "e1bcd3bc893f4734740737e3c9ca7d503d3183ab",
+      "decision": "superseded",
+      "reason": "Fork already retains every unlocated story with unknown provenance, no coordinates, and marker validation. PR retains arbitrary regional source label, loses other unmatched stories and reintroduces random jitter unless combined with #145.",
+      "filesReviewed": [
+        "dashboard/inject.mjs",
+        "dashboard/public/jarvis.html"
+      ],
+      "testStatus": "Full inject and globe/flat diff read; root data-integrity news accuracy PASS in 68/68 batch.",
+      "testRecommendation": "Keep fork unlocated feed items, strict marker coordinates and provenance metadata.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 150,
+      "sha": "12e55549288b1e9a43c63bd29ba48edc496a1756",
+      "decision": "superseded-weaker-security",
+      "reason": "Fork escaping and inline serializer are stronger. This PR leaves unescaped idea.type class attribute, raw numeric/string interpolation and z.region; JSON comment escape <backslash!-- is JavaScript-only invalid JSON. #135 covers more sinks but fork already hardens them.",
+      "filesReviewed": [
+        "dashboard/inject.mjs",
+        "dashboard/public/jarvis.html"
+      ],
+      "testStatus": "Full 35 source changes read; root dashboard-security and inline-json PASS in 68/68 batch including hostile idea.type attribute test.",
+      "testRecommendation": "Do not replace fork HTML/helpers/serializer; keep current hostile payload tests and final browser validation.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 151,
+      "sha": "8812006e0480f4f621f960d2384a4bbaefff22e2",
+      "decision": "superseded",
+      "reason": "Fork zoom handler already uses display:block at every zoom level; fix is present and enriched marker behavior should remain.",
+      "filesReviewed": [
+        "dashboard/public/jarvis.html"
+      ],
+      "testStatus": "Full one-line patch and fork zoom handler read; root browser-compat PASS in 7/7 batch. No actual browser pan exercised by this agent.",
+      "testRecommendation": "Final browser QA pan/zoom flat map at k=1 and higher verifies labels remain.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 152,
+      "sha": "7f6037d785e1b43ee498a67345b780f75f7d5d47",
+      "decision": "superseded",
+      "reason": "Fork fetchQuote already returns symbol/name errors for absent chart data and invalid price; collect additionally preserves symbols[index] on rejection. PR only handles missing result and is weaker.",
+      "filesReviewed": [
+        "apis/sources/yfinance.mjs"
+      ],
+      "testStatus": "Full one-line patch and fork source read; root data-integrity Yahoo HTML/error identity/no fabricated price test PASS in 68/68 batch.",
+      "testRecommendation": "Keep current identity-preserving errors and numeric validation.",
+      "repository": "calesthio/Crucix"
+    },
+    {
+      "number": 153,
+      "sha": "f4f6cc64b8727b2e6f8cfa2cb56c7e8dad56c9cc",
+      "decision": "superseded-weaker-ideas",
+      "reason": "Duplicate of #133 intent; fork already resolved in normalized multilingual rule engine and cadence. Original null input throws and string-valued curve crashes toFixed; upstream UI drops disabled label without complete locale additions.",
+      "filesReviewed": [
+        "dashboard/inject.mjs",
+        "dashboard/public/jarvis.html",
+        "server.mjs"
+      ],
+      "testStatus": "Root llm-reliability and llm-cadence PASS in 68/68 batch; isolated upstream probes reproduce null input, null FRED row and string spread throws.",
+      "testRecommendation": "Keep fork engine/cadence; do not mix duplicate fallback paths.",
+      "repository": "calesthio/Crucix"
+    }
+  ]
+}

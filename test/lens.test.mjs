@@ -335,7 +335,7 @@ const lensWindow = lens => { const { window } = realm(); window.CrucixLens = { g
 
 test('the maps draw only the located live rows of the active lens', () => {
   const rows = [{ source: 'GDACS', title: 'flood', lat: 1, lon: 2 }, { source: 'IMF-PortWatch', title: 'port', lat: 3, lon: 4 }, { source: 'EMSC', title: 'quake', lat: 5, lon: 6 }];
-  const markerRows = window => { const lensMatchesSource = helper('lensMatchesSource', { window }); return helper('lensMarkerRows', { window, lensMatchesSource, D: { liveSources: [], earthquakes: [] }, CrucixLiveSources: { markerRows: () => rows } }); };
+  const markerRows = window => { const lensMatchesSource = helper('lensMatchesSource', { window }); return helper('lensMarkerRows', { window, lensMatchesSource, D: { liveSources: [], earthquakes: [] }, CrucixLiveSources: { aisVessels:()=>[], markerRows: () => rows } }); };
   assert.deepEqual(markerRows(lensWindow('hazards'))().map(row => row.title), ['flood', 'quake']);
   assert.deepEqual(markerRows(lensWindow('supply'))().map(row => row.title), ['port']);
   assert.deepEqual(markerRows(lensWindow('all'))().map(row => row.title), ['flood', 'port', 'quake']);
@@ -414,7 +414,7 @@ function focusPage() {
   doc.querySelector = selector => (selector === '.live-sources-panel' ? { set outerHTML(_value) { redraw(); } } : null);
   doc.querySelectorAll = selector => doc.buttons.filter(node => selector === '[' + node.name + ']');
   const context = vm.createContext({ document: doc, window: {}, D: { liveSources: [{ source: 'GDACS' }] }, t, liveExpirySignature: '', flatG: null, plotMarkers() {}, buildSourceHealthPanel: () => '',
-    currentSnapshot: () => ({ events: [] }), CrucixLiveSources: { state: () => 'ok', observations: () => [], renderPanel: () => '<div class="live-sources-panel"></div>' },
+    currentSnapshot: () => ({ events: [] }), CrucixLiveSources: { aisVessels:()=>[], state: () => 'ok', observations: () => [], renderPanel: () => '<div class="live-sources-panel"></div>' },
     renderTopbar() {}, renderMapVisibility() {}, renderLeftRail() {}, renderLower() {}, renderRight: redraw, isFixedModuleVisible: () => false });
   for (const name of ['keepLiveFocus', 'refreshLiveFreshness', 'rerenderDashboard']) {
     const start = html.indexOf(`\nfunction ${name}(`); assert.ok(start > 0, name);
