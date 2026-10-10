@@ -207,6 +207,14 @@ npm run cli -- -A
 # Átfogó jelentés minden területről egymás után
 npm run cli -- -a
 
+# Időablak szerinti történeti lekérdezések (History & Time Windows):
+npm run cli -- --earthquakes --since 14d    # Az elmúlt 2 hét rögzített földrengései
+npm run cli -- -c market --since 7d         # Az elmúlt 7 nap piaci és predikciós mozgásai
+npm run cli -- --alerts --since 14d         # Az elmúlt 2 hét riasztási előzményei
+npm run cli -- -q "Trump" --since 14d       # Keresés a szalagcímekben az elmúlt 2 hétből
+npm run cli -- -c cyber -d 14               # Kiberbiztonsági események az elmúlt 14 napban
+npm run cli -- --history --from 2026-09-26  # Események adott kezdődátumtól
+
 # Teljes adatgyűjtési sweep futtatása a terminálban háttérszerver nélkül
 npm run cli -- --sweep
 

@@ -56,6 +56,25 @@ test('cli parseArgs: recognizes history flags', () => {
   assert.equal(parseArgs(['--history', '-l', '20']).limit, 20);
 });
 
+test('cli parseArgs: recognizes time window flags', () => {
+  const o1 = parseArgs(['--since', '14d']);
+  assert.equal(o1.since, '14d');
+  assert.equal(o1.sinceMs, 14 * 86400 * 1000);
+  assert.ok(o1.from);
+
+  const o2 = parseArgs(['--window', '2w']);
+  assert.equal(o2.since, '2w');
+  assert.equal(o2.sinceMs, 14 * 86400 * 1000);
+
+  const o3 = parseArgs(['-d', '7']);
+  assert.equal(o3.since, '7d');
+  assert.equal(o3.sinceMs, 7 * 86400 * 1000);
+
+  const o4 = parseArgs(['--from', '2026-09-26', '--to', '2026-10-10']);
+  assert.equal(o4.from, '2026-09-26');
+  assert.equal(o4.to, '2026-10-10');
+});
+
 test('cli parseArgs: recognizes data flags', () => {
   assert.equal(parseArgs(['-b']).brief, true);
   assert.equal(parseArgs(['--brief']).brief, true);

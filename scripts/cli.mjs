@@ -32,6 +32,22 @@ const thermalFile = join(runsDir, 'intelligence', 'thermal.json');
 const sweepsFile = join(runsDir, 'sweeps', 'index.json');
 const hotMemoryFile = join(runsDir, 'memory', 'hot.json');
 
+function parseDurationMs(str) {
+  if (!str) return null;
+  const s = String(str).trim().toLowerCase();
+  const match = s.match(/^(\d+(?:\.\d+)?)\s*(m|min|h|hour|hours|d|day|days|w|week|weeks|y|year|years)?$/);
+  if (match) {
+    const val = parseFloat(match[1]);
+    const unit = match[2] || 'd';
+    if (unit === 'm' || unit === 'min') return val * 60 * 1000;
+    if (unit === 'h' || unit === 'hour' || unit === 'hours') return val * 3600 * 1000;
+    if (unit === 'd' || unit === 'day' || unit === 'days') return val * 86400 * 1000;
+    if (unit === 'w' || unit === 'week' || unit === 'weeks') return val * 7 * 86400 * 1000;
+    if (unit === 'y' || unit === 'year' || unit === 'years') return val * 365 * 86400 * 1000;
+  }
+  return null;
+}
+
 function parseArgs(argv = process.argv.slice(2)) {
   const args = argv;
   const opts = {
@@ -40,6 +56,10 @@ function parseArgs(argv = process.argv.slice(2)) {
     source: null,
     country: null,
     limit: 10,
+    since: null,
+    sinceMs: null,
+    from: null,
+    to: null,
     listCategories: false,
     listCountries: false,
     listFeeds: false,
@@ -97,6 +117,25 @@ function parseArgs(argv = process.argv.slice(2)) {
     } else if (arg === '-l' || arg === '--limit') {
       const num = parseInt(args[++i], 10);
       if (!isNaN(num) && num > 0) opts.limit = num;
+    } else if (arg === '--since' || arg === '--window') {
+      const val = args[++i];
+      opts.since = val;
+      const ms = parseDurationMs(val);
+      if (ms) {
+        opts.sinceMs = ms;
+        opts.from = new Date(Date.now() - ms).toISOString().slice(0, 10);
+      }
+    } else if (arg === '--days' || arg === '-d') {
+      const num = parseInt(args[++i], 10);
+      if (!isNaN(num) && num > 0) {
+        opts.since = `${num}d`;
+        opts.sinceMs = num * 86400 * 1000;
+        opts.from = new Date(Date.now() - opts.sinceMs).toISOString().slice(0, 10);
+      }
+    } else if (arg === '--from') {
+      opts.from = args[++i];
+    } else if (arg === '--to') {
+      opts.to = args[++i];
     } else if (arg === '--categories' || arg === '--kinds') {
       opts.listCategories = true;
     } else if (arg === '--countries' || arg === '--world-countries') {
@@ -234,6 +273,12 @@ Hírek és Eseményarchívum (History):
   --live                           Aktuális sweep élő hírszalagjának (news ticker) mutatása
   --json                           Nyers JSON kimenet (más scriptekhez vagy AI csővezetékhez)
 
+Időtartam és Dátumszűrés:
+  --since <időtartam>, --window    Időablak szűrés (pl. 14d, 2w, 7d, 48h, 24h)
+  -d, --days <napok>               Szűrés az elmúlt N nap eseményeire (pl. -d 14 vagy --days 7)
+  --from <YYYY-MM-DD>              Kezdő dátum szerinti szűrés (pl. 2026-09-26)
+  --to <YYYY-MM-DD>                Záró dátum szerinti szűrés (pl. 2026-10-10)
+
 Szerver nélküli (Standalone / Offline) futtatás & Adatgyűjtő mód:
   --no-server, --standalone, -S    Közvetlen lemezes / offline futás (nem csatlakozik a web szerverhez).
                                    Kizárólag a helyi lemezen lévő archívumból és gyorsítótárból dolgozik.
@@ -257,6 +302,10 @@ Példák:
   npm run cli -- --risk UA                   # Ukrajna részletes kockázati profilja
   npm run cli -- --cyber                     # Kiberbiztonsági sebezhetőségek (CISA KEV)
   npm run cli -- --alerts                    # Riasztások és fenyegetettségi szint
+  npm run cli -- -c earthquake --since 14d   # Az elmúlt 2 hét földrengései
+  npm run cli -- -c market --since 7d        # Az elmúlt hét piaci mozgásai
+  npm run cli -- --alerts --since 14d        # Az elmúlt 2 hét riasztásai
+  npm run cli -- -q "Trump" --since 14d      # Szöveges keresés az elmúlt 2 hét híreiben
   npm run cli -- --country JP --no-server    # Japán hírek a helyi RSS gyorsítótárból
   npm run cli -- --collector                 # Folyamatos terminálos adatgyűjtő ciklus (15 percenként sweep)
   npm run cli -- --serve                     # Crucix backend szerver indítása böngésző felnyitás NÉLKÜL
@@ -664,7 +713,28 @@ function showMetals(synData, opts) {
 }
 
 function showAlerts(alertsData, opts) {
-  const allList = alertsData.alerts || [];
+  let allList = alertsData.alerts || [];
+  if (opts.sinceMs) {
+    const cutoff = Date.now() - opts.sinceMs;
+    allList = allList.filter(a => {
+      const t = a.lastSeenAt || a.firstSeenAt || (a.resolvedAt ? a.resolvedAt : null);
+      return t && t >= cutoff;
+    });
+  } else if (opts.from) {
+    const fromMs = Date.parse(opts.from);
+    allList = allList.filter(a => {
+      const t = a.lastSeenAt || a.firstSeenAt || (a.resolvedAt ? a.resolvedAt : null);
+      return t && t >= fromMs;
+    });
+  }
+  if (opts.to) {
+    const toMs = Date.parse(opts.to) + 86400 * 1000;
+    allList = allList.filter(a => {
+      const t = a.lastSeenAt || a.firstSeenAt || (a.resolvedAt ? a.resolvedAt : null);
+      return t && t <= toMs;
+    });
+  }
+
   const activeList = allList.filter(a => a.state === 'active');
   const items = (opts.allAlerts ? allList : (activeList.length > 0 ? activeList : allList)).slice(0, opts.limit);
 
@@ -674,7 +744,8 @@ function showAlerts(alertsData, opts) {
   }
 
   const modeLabel = alertsData.isFromApi ? '[API]' : '[STANDALONE / NO-SERVER]';
-  console.log(`\n=== Crucix Riasztások ${modeLabel} (Aktív: ${activeList.length} db, Összes: ${allList.length} db) ===\n`);
+  const timeDesc = opts.since ? ` [Elmúlt ${opts.since}]` : (opts.from ? ` [${opts.from}${opts.to ? ' - ' + opts.to : ''}]` : '');
+  console.log(`\n=== Crucix Riasztások ${modeLabel}${timeDesc} (Aktív: ${activeList.length} db, Összes: ${allList.length} db) ===\n`);
 
   if (items.length === 0) {
     console.log(`✅ Nincs aktív riasztás.`);
@@ -1198,9 +1269,13 @@ async function main() {
 
   // 6. Earthquakes & Disasters
   if (opts.earthquakes) {
-    const synData = await getSynthesizedData(opts);
-    showEarthquakes(synData, opts);
-    return;
+    if (opts.since || opts.from) {
+      opts.category = 'earthquake';
+    } else {
+      const synData = await getSynthesizedData(opts);
+      showEarthquakes(synData, opts);
+      return;
+    }
   }
   if (opts.thermal) {
     const synData = await getSynthesizedData(opts);
@@ -1442,6 +1517,8 @@ async function main() {
       if (opts.category) params.set('kind', opts.category);
       if (opts.search) params.set('q', opts.search);
       if (opts.source) params.set('source', opts.source);
+      if (opts.from) params.set('from', opts.from);
+      if (opts.to) params.set('to', opts.to);
       params.set('limit', String(opts.limit));
 
       const apiRes = await fetchHttp(`/api/history?${params.toString()}`);
@@ -1508,6 +1585,29 @@ async function main() {
         (r.summary || '').toLowerCase().includes(qLow)
       );
     }
+    if (opts.sinceMs) {
+      const cutoff = Date.now() - opts.sinceMs;
+      records = records.filter(r => {
+        const timeVal = r.lastSeenAt || r.publishedAt || r.firstSeenAt || r.collectedAt;
+        const t = Date.parse(timeVal);
+        return !isNaN(t) && t >= cutoff;
+      });
+    } else if (opts.from) {
+      const fromMs = Date.parse(opts.from);
+      records = records.filter(r => {
+        const timeVal = r.lastSeenAt || r.publishedAt || r.firstSeenAt || r.collectedAt;
+        const t = Date.parse(timeVal);
+        return !isNaN(t) && t >= fromMs;
+      });
+    }
+    if (opts.to) {
+      const toMs = Date.parse(opts.to) + 86400 * 1000;
+      records = records.filter(r => {
+        const timeVal = r.lastSeenAt || r.publishedAt || r.firstSeenAt || r.collectedAt;
+        const t = Date.parse(timeVal);
+        return !isNaN(t) && t <= toMs;
+      });
+    }
     records = records.slice(0, opts.limit);
   }
 
@@ -1518,8 +1618,9 @@ async function main() {
 
   const titlePrefix = opts.category ? `Kategória: [${opts.category}]` : 'Minden kategória';
   const filterDesc = opts.search ? ` | Keresés: "${opts.search}"` : '';
+  const timeDesc = opts.since ? ` | Időtartam: elmúlt ${opts.since}` : (opts.from ? ` | Időtartam: ${opts.from}${opts.to ? ' - ' + opts.to : ''}` : '');
   const serverLabel = opts.noServer ? ' [STANDALONE / NO-SERVER]' : (isFromApi ? ' [API]' : ' [OFFLINE]');
-  console.log(`\n=== Crucix Események (${titlePrefix}${filterDesc})${serverLabel} — Találatok: ${records.length} ===\n`);
+  console.log(`\n=== Crucix Események (${titlePrefix}${filterDesc}${timeDesc})${serverLabel} — Találatok: ${records.length} ===\n`);
 
   if (records.length === 0) {
     console.log(`Nincs találat a megadott feltételekre.`);
