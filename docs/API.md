@@ -110,7 +110,7 @@ Not available when `RISK_ENABLED=false` (404). These routes take no query parame
 
 | Endpoint | Returns |
 |----------|---------|
-| `GET /api/countries` | Countries with a score above 0, highest first (≤ 100): `{version, at, total, countries: [{iso3, name, score, change24h, coverage, convergence}]}` |
+| `GET /api/countries` | Countries with a score above 0, highest first (≤ 100): `{version, at, total, countries: [{iso3, name, displayName, score, change24h, coverage, convergence}]}` (`name` is the English gazetteer name, `displayName` the name in `CRUCIX_LANG`) |
 | `GET /api/countries/:iso3` | One country: score, components with weights, score series, VIEWS and INFORM inputs, last 20 records, linked countries. `iso3` = ISO 3166-1 alpha-3, upper case. |
 | `GET /api/predictions` | The prediction journal: `{calibration, recent}` |
 | `POST /api/briefing` | A cited briefing for `{"scope": "global"}` or an ISO3 code. Same-origin only (it can call the LLM), body ≤ 1 KB. |

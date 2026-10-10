@@ -89,7 +89,7 @@ let riskLatest = null; // the last successful step: {at, scores, inputs}
 // Never throws: on a failure the snapshot goes on without `risk` and /api/health says 'unavailable'.
 function recordRisk(snapshot, raw) {
   if (!riskStore) return;
-  const result = runRiskStep({ store: riskStore, journal: riskJournal, keywords: riskKeywords, thermal: riskThermal, snapshot, raw, now: Date.now() });
+  const result = runRiskStep({ store: riskStore, journal: riskJournal, keywords: riskKeywords, thermal: riskThermal, snapshot, raw, now: Date.now(), language: currentLanguage });
   riskStatus = result.ok ? 'ok' : 'unavailable';
   if (result.ok) riskLatest = result;
 }
@@ -358,14 +358,14 @@ installIntelligenceRoutes(app, { getSnapshot: () => freshLiveSnapshot(currentDat
 if (riskStore) {
   const briefing = createBriefingService({ provider: llmProvider, language: currentLanguage, store: riskStore, history,
     getSnapshot: () => currentData, getScores: () => riskLatest?.scores ?? null });
-  installRiskRoutes(app, { store: riskStore, journal: riskJournal, getSnapshot: () => currentData, getState: () => riskLatest, history, briefing,
+  installRiskRoutes(app, { store: riskStore, journal: riskJournal, getSnapshot: () => currentData, getState: () => riskLatest, history, briefing, language: currentLanguage,
     security: { publicUrl: config.alerts.publicUrl, allowedHosts: config.alerts.allowedHosts } });
 }
 // After an operator action the dashboards get the new summary; the next /api/data and page load carry it too.
 installAlertRoutes(app, { engine: alertEngine, getSnapshot: () => freshLiveSnapshot(currentData), onChange: (summary, newIds) => {
   if (currentData) currentData.alerts = summary;
   broadcast({ type: 'alerts', data: summary, newIds });
-}, security: { publicUrl: config.alerts.publicUrl, allowedHosts: config.alerts.allowedHosts } });
+}, security: { publicUrl: config.alerts.publicUrl, allowedHosts: config.alerts.allowedHosts }, language: currentLanguage });
 installSweepRoutes(app, { archive: sweepArchive, getCurrent: () => currentData });
 
 function archivedSweepCount() {

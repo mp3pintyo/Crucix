@@ -147,7 +147,20 @@
     "rules": "RÈGLES",
     "noRuleSignals": "Aucun signal ne remplit les règles dans cette collecte",
     "cached": "Conservées d’une collecte précédente",
-    "generated": "Générées"
+    "generated": "Générées",
+    "type_LONG": "LONG",
+    "type_SHORT": "SHORT",
+    "type_HEDGE": "COUVERTURE",
+    "type_WATCH": "À SURVEILLER",
+    "type_AVOID": "À ÉVITER",
+    "confidence_HIGH": "ÉLEVÉE",
+    "confidence_MEDIUM": "MOYENNE",
+    "confidence_LOW": "FAIBLE",
+    "confidenceBadge": "confiance {level}",
+    "horizon_Intraday": "Intrajournalier",
+    "horizon_Days": "Jours",
+    "horizon_Weeks": "Semaines",
+    "horizon_Months": "Mois"
   },
   "ioda": {
     "countries": "Pays",
@@ -189,7 +202,36 @@
     "noChanges": "Aucun changement depuis le dernier scan",
     "changes": "Changements",
     "critical": "Critiques",
-    "new": "NOUVEAU"
+    "new": "NOUVEAU",
+    "labels": {
+      "vix": "VIX",
+      "hy_spread": "Écart high yield",
+      "10y2y": "Écart 10 ans–2 ans",
+      "wti": "Pétrole WTI",
+      "brent": "Pétrole Brent",
+      "natgas": "Gaz naturel",
+      "gold": "Or",
+      "silver": "Argent",
+      "unemployment": "Chômage",
+      "fed_funds": "Taux des Fed funds",
+      "10y_yield": "Rendement à 10 ans",
+      "usd_index": "Indice USD",
+      "mortgage": "Prêt immobilier à 30 ans",
+      "urgent_posts": "Posts OSINT urgents",
+      "thermal_total": "Détections thermiques",
+      "air_total": "Activité aérienne",
+      "who_alerts": "Alertes OMS",
+      "conflict_events": "Événements de conflit",
+      "conflict_fatalities": "Victimes de conflit",
+      "sdr_online": "Récepteurs SDR",
+      "news_count": "Articles d’actualité",
+      "sources_ok": "Sources OK",
+      "nuke_anomaly": "Anomalie nucléaire"
+    },
+    "reasons": {
+      "tg_urgent": "Nouveau post OSINT urgent",
+      "nuke_anomaly": "Anomalie nucléaire détectée"
+    }
   },
   "metrics": {
     "wtiCrude": "Pétrole WTI",
@@ -209,7 +251,7 @@
     "wti5day": "WTI 5 JOURS",
     "indexes": "INDICES",
     "crypto": "CRYPTO",
-    "energyMacro": "ÉNERGIE + MACRO",
+    "energyMacro": "ÉNERGIE + MÉTAUX + MACRO",
     "vsPrior": "vs précédent",
     "ecbRate": "Taux BCE",
     "eurusd": "EUR/USD",
@@ -548,6 +590,39 @@
       "retry": "Réessayer",
       "unavailable": "Les règles ne sont disponibles que sur le tableau de bord en direct",
       "confirmDelete": "Supprimer cette règle ?"
+    },
+    "errors": {
+      "boolean": "doit être vrai ou faux",
+      "integerRange": "doit être un entier de {min} à {max}",
+      "finite": "doit être un nombre fini",
+      "numberRange": "doit être un nombre de {min} à {max}",
+      "oneOf": "doit être l’une des valeurs suivantes : {list}",
+      "metricKey": "doit être une clé de métrique connue",
+      "string": "doit être une chaîne de caractères",
+      "notEmpty": "ne doit pas être vide",
+      "maxLength": "doit comporter au plus {max} caractères",
+      "controlChars": "ne doit pas contenir de caractères de contrôle",
+      "idPattern": "doit comporter de 1 à 40 caractères parmi a-z, 0-9 et -",
+      "list": "doit être une liste",
+      "maxEntries": "doit comporter au plus {max} entrées",
+      "plainString": "doit être une simple chaîne de caractères",
+      "eventKind": "doit être un type d’événement en minuscules, comme conflict ou space-weather",
+      "object": "doit être un objet",
+      "plainObject": "doit être un objet simple",
+      "symbolKeys": "ne doit pas avoir de clés de type symbole",
+      "unknownField": "n’est pas un champ connu",
+      "plainData": "doit contenir des données simples",
+      "required": "est obligatoire",
+      "clearAtMost": "doit être au plus égal au seuil",
+      "clearAtLeast": "doit être au moins égal au seuil",
+      "maxBelowMin": "ne doit pas être inférieur à params.minLevel",
+      "kindsTooFew": "exige au moins autant d’entrées différentes dans params.kinds",
+      "idMismatch": "doit correspondre à l’identifiant de règle du chemin",
+      "scopeEventOnly": "n’est autorisé que sur les règles d’événement",
+      "builtinFixed": "ne peut pas être modifié sur une règle intégrée",
+      "userRuleLimit": "{max} règles personnalisées au maximum",
+      "builtinDelete": "Les règles intégrées ne peuvent pas être supprimées ; désactivez-les plutôt",
+      "noSuchRule": "Règle introuvable"
     }
   },
   "discord": {
@@ -1337,5 +1412,185 @@
     "groupSoftware": "Logiciels",
     "source": "source",
     "button": "Sources de données"
+  },
+  "export": {
+    "title": "Rapport Crucix de sources publiques",
+    "summary": "{exported} enregistrements exportés sur {total} correspondants. {scope} Généré le {generatedAt}. Filtres de la requête : {filters}. Le contexte de sources publiques et les contrôles de traçabilité n’établissent ni la véracité des affirmations ni une corroboration indépendante.",
+    "truncated": "Tronqué : l’export est limité à {cap} enregistrements ou à la page de résultats fournie.",
+    "complete": "Ensemble complet des résultats fournis.",
+    "empty": "Aucun événement correspondant.",
+    "related": "Rapports liés : {list}",
+    "unknownHost": "hôte de la source inconnu",
+    "scopeNote": "Portée et limites de l’export",
+    "reportName": "Export de contexte Crucix de sources publiques",
+    "relatedNote": "Rapport lié ; pas une corroboration indépendante",
+    "contextOnly": "Contexte de sources publiques uniquement ; ni indicateur cyber ni menace avérée."
+  },
+  "glossary": {
+    "kicker": "Guide des signaux",
+    "title": "Ce que les signaux veulent vraiment dire",
+    "sub": "Interprétation en clair, pourquoi c’est important et ce qu’il ne faut pas en déduire.",
+    "close": "Fermer le guide des signaux",
+    "foot": "Ce sont des aides à l’interprétation, pas des conclusions. Un jugement plus solide vient de la corroboration entre plusieurs couches, pas d’un signal isolé.",
+    "meaning": "Signification",
+    "matters": "Pourquoi c’est important",
+    "notMeaning": "Ne prouve pas",
+    "example": "Exemple",
+    "category": {
+      "air": "Aérien",
+      "thermal": "Thermique",
+      "maritime": "Maritime",
+      "signals": "Signaux",
+      "radiation": "Rayonnement",
+      "macro": "Macro",
+      "health": "Santé",
+      "platform": "Plateforme"
+    },
+    "items": {
+      "noCallsign": {
+        "term": "Sans indicatif",
+        "meaning": "OpenSky a reçu une trace d’aéronef sans indicatif ni identifiant de vol exploitable dans cet enregistrement.",
+        "matters": "Utile comme signal d’opacité. Une concentration d’indicatifs manquants peut traduire des métadonnées de transpondeur incomplètes ou un trafic moins transparent.",
+        "notMeaning": "Pas une preuve, à elle seule, d’activité militaire, clandestine ou hostile.",
+        "example": "Mer de Chine méridionale : Sans indicatif 6 sur 152 signifie que 6 traces de ce théâtre n’avaient pas d’indicatif exploitable dans le flux."
+      },
+      "highAltitude": {
+        "term": "Haute altitude",
+        "meaning": "Aéronefs au-dessus de 12 000 mètres, soit environ 39 000 pieds, dans l’instantané OpenSky actuel.",
+        "matters": "Distingue le trafic de croisière des mouvements locaux ou régionaux à plus basse altitude.",
+        "notMeaning": "Ni un score de danger, ni quelque chose d’inhabituel en soi. Les avions de ligne y volent couramment.",
+        "example": "Haute altitude 2 signifie que seuls 2 aéronefs suivis dans cette zone étaient au-dessus du seuil de croisière lors de cet instantané."
+      },
+      "topCountries": {
+        "term": "Principaux pays",
+        "meaning": "Les valeurs origin_country d’OpenSky les plus fréquentes parmi les aéronefs de cette zone.",
+        "matters": "Utile pour comprendre à grands traits la composition du trafic qui traverse un théâtre.",
+        "notMeaning": "Ni l’identité de qui contrôle l’aéronef en ce moment, ni un indicateur direct de propriété militaire.",
+        "example": "Chine (61), Philippines (39), Taïwan (17) signifie que c’étaient les principaux pays d’immatriculation dans l’instantané."
+      },
+      "frp": {
+        "term": "FRP",
+        "meaning": "Puissance radiative du feu (Fire Radiative Power) : l’intensité d’un point chaud FIRMS précis, mesurée en mégawatts.",
+        "matters": "Une FRP plus élevée indique généralement un feu plus chaud, plus étendu ou plus énergique à cet endroit précis.",
+        "notMeaning": "Ni l’intensité de toute la région, ni une preuve automatique d’activité de conflit.",
+        "example": "Soudan / Corne de l’Afrique : FRP 92,3 MW décrit ce seul point chaud, tandis que Total 1 451 décrit le nombre de détections de toute la région."
+      },
+      "totalDetections": {
+        "term": "Détections totales",
+        "meaning": "Le nombre total de détections thermiques FIRMS dans l’ensemble de la zone régionale pour le scan en cours.",
+        "matters": "Utile pour repérer des foyers d’incendie inhabituellement actifs, surtout comparés aux niveaux de référence historiques ou à l’activité nocturne.",
+        "notMeaning": "Ni le décompte du seul point cliqué sur la carte, ni forcément un nombre de conflits.",
+        "example": "Total 1 451 signifie que toute la zone Soudan / Corne de l’Afrique comptait 1 451 détections lors de ce scan."
+      },
+      "nightDetections": {
+        "term": "Détections nocturnes",
+        "meaning": "Détections thermiques marquées comme nocturnes dans la zone régionale FIRMS plus large.",
+        "matters": "La chaleur nocturne peut être plus notable, car il s’agit moins probablement de brûlages diurnes de routine.",
+        "notMeaning": "Pas un indicateur direct de combats. Il faut encore le contexte du lieu, du niveau de référence et de sources concordantes.",
+        "example": "Nuit 140 signifie que 140 des 1 451 détections régionales étaient nocturnes lors de ce scan."
+      },
+      "chokepoint": {
+        "term": "Point stratégique",
+        "meaning": "Un corridor ou passage maritime stratégique où les flux commerciaux et énergétiques peuvent être retardés, détournés ou interrompus.",
+        "matters": "Ces nœuds comptent car une perturbation à cet endroit peut affecter dans le monde entier les coûts de transport, les délais de transit et les prix des matières premières.",
+        "notMeaning": "Pas la preuve qu’une perturbation est en cours. C’est un lieu de surveillance stratégique.",
+        "example": "Bab el-Mandeb ou le détroit d’Ormuz comptent parce que les flux maritimes et énergétiques s’y concentrent."
+      },
+      "sdrReceiver": {
+        "term": "Récepteur SDR",
+        "meaning": "Un récepteur radio logiciel (SDR) accessible publiquement dans une région d’intérêt ou à proximité.",
+        "matters": "Une couverture dense de récepteurs offre davantage de moyens de surveiller les communications ou l’activité radio d’un théâtre.",
+        "notMeaning": "Pas en soi une preuve d’émissions hostiles ou d’une menace. C’est une couche d’observation et de surveillance.",
+        "example": "Le nombre de SDR en mer de Chine méridionale indique combien de récepteurs KiwiSDR publics sont disponibles dans cette zone ou à proximité."
+      },
+      "cpm": {
+        "term": "CPM",
+        "meaning": "Coups par minute d’une source de surveillance radiologique, utilisés ici pour l’état radiologique relatif d’un site.",
+        "matters": "Utile pour repérer des écarts par rapport à la plage normale du site ou comparer des mesures successives.",
+        "notMeaning": "Pas un verdict de sécurité à lui seul. L’interprétation dépend du niveau de référence local et de la tendance, pas du seul chiffre brut.",
+        "example": "Un site à 33 CPM peut être normal si le niveau de fond habituel de cet endroit est du même ordre."
+      },
+      "hySpread": {
+        "term": "Spread HY",
+        "meaning": "L’écart de crédit des obligations à haut rendement, présenté ici comme indicateur de tension à partir des données de crédit de la FRED.",
+        "matters": "Quand les écarts se creusent, les marchés intègrent généralement davantage de tension sur le crédit et des conditions financières plus strictes.",
+        "notMeaning": "Pas une prévision de récession à lui seul. C’est un signal de tension parmi d’autres.",
+        "example": "Un spread HY en hausse, avec un VIX plus élevé et des actions plus faibles, forme un schéma risk-off plus marqué que le HY seul."
+      },
+      "vix": {
+        "term": "VIX",
+        "meaning": "L’indice de volatilité du CBOE, couramment utilisé comme jauge de peur ou de volatilité implicite du marché.",
+        "matters": "Un VIX plus élevé signifie souvent davantage de volatilité attendue sur les actions et un positionnement plus défensif.",
+        "notMeaning": "Ni une prévision directe de krach, ni un indicateur géopolitique à lui seul.",
+        "example": "Un VIX au-dessus de 20 avec des spreads HY qui se creusent est un schéma de tension plus fort que le VIX seul."
+      },
+      "gscpi": {
+        "term": "GSCPI",
+        "meaning": "L’indice de pression sur les chaînes d’approvisionnement mondiales (Global Supply Chain Pressure Index), un indicateur large de tension logistique.",
+        "matters": "Il aide à traduire les perturbations géopolitiques ou météorologiques en pression probable sur le transport, les stocks et les prix.",
+        "notMeaning": "Ni un prix de marché en direct, ni un score de chaîne d’approvisionnement propre à une entreprise.",
+        "example": "Un GSCPI plus élevé rend plus probable qu’un choc sur une route ou sur l’énergie se propage en pression générale sur les coûts."
+      },
+      "whoAlert": {
+        "term": "Alerte OMS",
+        "meaning": "Une actualité Disease Outbreak News de l’OMS ou un bulletin lié à une épidémie remonté dans la couche santé.",
+        "matters": "Utile pour suivre des épidémies qui pourraient affecter les voyages, les chaînes d’approvisionnement, la situation humanitaire ou les conditions d’activité régionales.",
+        "notMeaning": "Ni une déclaration de pandémie, ni automatiquement une gravité élevée.",
+        "example": "Une alerte OMS dans une région très portuaire compte davantage si elle recoupe des signaux de transport maritime, de contrôles aux frontières ou d’instabilité locale."
+      },
+      "sweepDelta": {
+        "term": "Changements",
+        "meaning": "Le résumé des changements entre le scan actuel et le précédent, avec les signaux nouveaux, en hausse et en baisse.",
+        "matters": "Utile pour voir ce qui a changé récemment sans relire tout le tableau de bord.",
+        "notMeaning": "Pas un modèle de risque complet. C’est une couche de tendance au-dessus des signaux bruts.",
+        "example": "Un delta marqué risk-off avec plusieurs éléments nouveaux et en hausse signifie que le dernier scan a nettement dégradé l’ensemble des signaux."
+      }
+    }
+  },
+  "popup": {
+    "aircraftTracked": "{count} aéronefs suivis",
+    "aircraft": "{count} aéronefs",
+    "noCallsign": "Sans indicatif",
+    "highAltitude": "Haute altitude",
+    "highAlt": "Haute alt.",
+    "top": "Principaux",
+    "firmsSatellite": "Satellite FIRMS",
+    "thermal": "Thermique",
+    "region": "Région",
+    "total": "Total",
+    "night": "Nuit",
+    "maritimeIntel": "Renseignement maritime",
+    "maritime": "Maritime",
+    "radiationMonitoring": "Surveillance radiologique",
+    "radiation": "Rayonnement",
+    "status": "Statut",
+    "anomaly": "ANOMALIE",
+    "normal": "Normal",
+    "avgCpm": "CPM moyen",
+    "readings": "Mesures",
+    "kiwiNetwork": "Réseau KiwiSDR",
+    "zone": "Zone",
+    "inZone": "{count} dans la zone",
+    "views": "{count} vues",
+    "global": "Mondial",
+    "notAvailable": "n.d.",
+    "news": "ACTU {source}",
+    "epaMonitor": "Moniteur de rayonnement EPA",
+    "state": "État",
+    "stationApprox": "Station spatiale (approx.)",
+    "orbitalEstimate": "Position orbitale estimée",
+    "lat": "Lat",
+    "lon": "Lon",
+    "reports": "{count} rapports",
+    "gdeltDefault": "Détection mondiale d’événements",
+    "fatalities": "{count} victimes",
+    "acledData": "Données de conflit ACLED",
+    "date": "Date",
+    "corridor": "{from} ↔ {to} : {count} aéronefs",
+    "globeLoading": "Initialisation du globe 3D",
+    "zoomIn": "Zoom avant",
+    "zoomOut": "Zoom arrière",
+    "toggleFlights": "Afficher/masquer les routes aériennes",
+    "visualsHelp": "Réduire les effets visuels et démarrer en mode plat sur mobile"
   }
 }

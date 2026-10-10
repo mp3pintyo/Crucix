@@ -457,9 +457,9 @@ body.low-perf .ticker-wrap::-webkit-scrollbar-thumb{background:rgba(100,240,200,
           <div class="map-legend" id="mapLegend"></div>
           <div class="map-hint" id="mapHint">SCROLL TO ZOOM · DRAG TO PAN</div>
           <div class="map-controls">
-            <button class="map-ctrl-btn" onclick="mapZoom(1.5)" title="Zoom in">+</button>
-            <button class="map-ctrl-btn" onclick="mapZoom(0.67)" title="Zoom out">&minus;</button>
-            <button class="map-ctrl-btn map-toggle" id="flightToggle" onclick="toggleFlights()" title="Toggle flight routes">&#9992;</button>
+            <button class="map-ctrl-btn" onclick="mapZoom(1.5)" title="Zoom in" data-tip="popup.zoomIn">+</button>
+            <button class="map-ctrl-btn" onclick="mapZoom(0.67)" title="Zoom out" data-tip="popup.zoomOut">&minus;</button>
+            <button class="map-ctrl-btn map-toggle" id="flightToggle" onclick="toggleFlights()" title="Toggle flight routes" data-tip="popup.toggleFlights">&#9992;</button>
             <button class="map-ctrl-btn" id="creditsToggle" onclick="toggleCredits()" title="Data credits" aria-haspopup="dialog" aria-expanded="false">&copy;</button>
             <button class="map-ctrl-btn map-toggle off" id="basemapToggle" onclick="toggleBasemap()" title="Daily satellite image on the globe" aria-pressed="false">&#9788;</button>
           </div>
@@ -779,6 +779,7 @@ function resetDashboardLayout(){
 let dashboardLayout = loadDashboardLayout();
 const signalGuideItems = [
   {
+    id:'noCallsign', cat:'air',
     term:'No Callsign',
     category:'Air',
     meaning:'OpenSky received an aircraft track without a usable callsign or flight ID in that record.',
@@ -787,6 +788,7 @@ const signalGuideItems = [
     example:'South China Sea: No Callsign 6 of 152 means 6 tracks in that theater had no usable callsign in the feed.'
   },
   {
+    id:'highAltitude', cat:'air',
     term:'High Altitude',
     category:'Air',
     meaning:'Aircraft above 12,000 meters, roughly 39,000 feet, in the current OpenSky snapshot.',
@@ -795,6 +797,7 @@ const signalGuideItems = [
     example:'High Altitude 2 means only 2 tracked aircraft in that hotspot were above the cruise threshold at that snapshot.'
   },
   {
+    id:'topCountries', cat:'air',
     term:'Top Countries',
     category:'Air',
     meaning:'The most common OpenSky origin_country values among aircraft in that hotspot.',
@@ -803,6 +806,7 @@ const signalGuideItems = [
     example:'China (61), Philippines (39), Taiwan (17) means those were the top registered origin countries in the snapshot.'
   },
   {
+    id:'frp', cat:'thermal',
     term:'FRP',
     category:'Thermal',
     meaning:'Fire Radiative Power. This is the intensity of one specific FIRMS hotspot, measured in megawatts.',
@@ -811,6 +815,7 @@ const signalGuideItems = [
     example:'Sudan / Horn of Africa: FRP 92.3 MW describes that one hotspot, while Total 1,451 describes the entire regional detection count.'
   },
   {
+    id:'totalDetections', cat:'thermal',
     term:'Total Detections',
     category:'Thermal',
     meaning:'The total number of FIRMS thermal detections in the entire region bucket for the current sweep.',
@@ -819,6 +824,7 @@ const signalGuideItems = [
     example:'Total 1,451 means the whole Sudan / Horn of Africa bucket had 1,451 detections in that sweep.'
   },
   {
+    id:'nightDetections', cat:'thermal',
     term:'Night Detections',
     category:'Thermal',
     meaning:'Thermal detections tagged as occurring at night inside the broader FIRMS region bucket.',
@@ -827,6 +833,7 @@ const signalGuideItems = [
     example:'Night 140 means 140 of the 1,451 regional detections were nighttime detections in that sweep.'
   },
   {
+    id:'chokepoint', cat:'maritime',
     term:'Chokepoint',
     category:'Maritime',
     meaning:'A strategic maritime corridor or passage where trade and energy flows can be delayed, diverted, or disrupted.',
@@ -835,6 +842,7 @@ const signalGuideItems = [
     example:'Bab el-Mandeb or the Strait of Hormuz matter because shipping and energy flows concentrate there.'
   },
   {
+    id:'sdrReceiver', cat:'signals',
     term:'SDR Receiver',
     category:'Signals',
     meaning:'A publicly reachable software-defined radio receiver in or near a region of interest.',
@@ -843,6 +851,7 @@ const signalGuideItems = [
     example:'South China Sea SDR count means publicly accessible KiwiSDR receivers are available in or near that zone.'
   },
   {
+    id:'cpm', cat:'radiation',
     term:'CPM',
     category:'Radiation',
     meaning:'Counts per minute from a radiation monitoring source, used here for relative radiation status at a site.',
@@ -851,6 +860,7 @@ const signalGuideItems = [
     example:'A site reading 33 CPM can be normal if that location’s usual background level is in the same range.'
   },
   {
+    id:'hySpread', cat:'macro',
     term:'HY Spread',
     category:'Macro',
     meaning:'High-yield credit spread, shown here as a stress proxy from FRED credit data.',
@@ -859,6 +869,7 @@ const signalGuideItems = [
     example:'A rising HY Spread alongside higher VIX and weaker equities is a stronger risk-off pattern than HY alone.'
   },
   {
+    id:'vix', cat:'macro',
     term:'VIX',
     category:'Macro',
     meaning:'The CBOE Volatility Index, commonly used as a market-implied fear or volatility gauge.',
@@ -867,6 +878,7 @@ const signalGuideItems = [
     example:'VIX above 20 with widening HY spreads is a stronger stress pattern than VIX alone.'
   },
   {
+    id:'gscpi', cat:'macro',
     term:'GSCPI',
     category:'Macro',
     meaning:'The Global Supply Chain Pressure Index, a broad indicator of global supply-chain strain.',
@@ -875,6 +887,7 @@ const signalGuideItems = [
     example:'A higher GSCPI makes route or energy shocks more likely to spill into broader cost pressure.'
   },
   {
+    id:'whoAlert', cat:'health',
     term:'WHO Alert',
     category:'Health',
     meaning:'A WHO Disease Outbreak News item or outbreak-related bulletin surfaced in the health layer.',
@@ -883,6 +896,7 @@ const signalGuideItems = [
     example:'A WHO alert in a port-heavy region matters more if it overlaps shipping, border controls, or local instability signals.'
   },
   {
+    id:'sweepDelta', cat:'platform',
     term:'Sweep Delta',
     category:'Platform',
     meaning:'The change summary between the current sweep and the previous one, including new, escalated, and de-escalated signals.',
@@ -914,7 +928,7 @@ function shouldStartFlat(){
   return lowPerfMode || isWeakMobileDevice();
 }
 
-function setMapLoading(show, text='Initializing 3D Globe'){
+function setMapLoading(show, text=t('popup.globeLoading','Initializing 3D Globe')){
   const overlay = document.getElementById('mapLoading');
   const label = document.getElementById('mapLoadingText');
   if(!overlay || !label) return;
@@ -927,7 +941,7 @@ function togglePerfMode(){
   writePreference('crucix_low_perf', String(lowPerfMode));
   document.body.classList.toggle('low-perf', lowPerfMode);
   const perfStatus = document.getElementById('perfStatus');
-  if(perfStatus) perfStatus.textContent = lowPerfMode ? 'LITE' : 'FULL';
+  if(perfStatus) perfStatus.textContent = lowPerfMode ? t('dashboard.visualsLite','LITE') : t('dashboard.visualsFull','FULL');
   if(globe){
     globe.controls().autoRotate = !lowPerfMode && !reducedMotion;
     globe.arcDashAnimateTime(lowPerfMode || reducedMotion ? 0 : 2000);
@@ -940,6 +954,7 @@ function togglePerfMode(){
 }
 
 function renderMapVisibility(){
+  localizeTooltips();
   const mapStack = document.getElementById('mapStack');
   const mapRegionBar = document.getElementById('mapRegionBar');
   const showMap = isFixedModuleVisible('map');
@@ -969,7 +984,7 @@ function rerenderDashboard(forceMapRefresh=false){
 // === TOPBAR ===
 function getRegionControlsMarkup(){
   return ['world','americas','europe','middleEast','asiaPacific','africa'].map(r=>
-    `<button class="region-btn ${r===currentRegion?'active':''}" data-region="${r}" onclick="setRegion('${r}')">${r==='middleEast'?'MIDDLE EAST':r==='asiaPacific'?'ASIA PACIFIC':r.toUpperCase()}</button>`
+    `<button class="region-btn ${r===currentRegion?'active':''}" data-region="${r}" onclick="setRegion('${r}')">${t('regions.'+r,r==='middleEast'?'Middle East':r==='asiaPacific'?'Asia Pacific':r).toUpperCase()}</button>`
   ).join('');
 }
 
@@ -1000,7 +1015,7 @@ function renderTopbar(){
     </div>
     ${mobile && showRegionControls ? `<div class="top-center">${getRegionControlsMarkup()}</div>` : ''}
     <div class="top-right">
-      <button class="meta-pill perf-pill" onclick="togglePerfMode()" title="Reduce visual effects and start mobile in flat mode">${t('dashboard.visuals','VISUALS')} <span class="v" id="perfStatus">${lowPerfMode?t('dashboard.visualsLite','LITE'):t('dashboard.visualsFull','FULL')}</span></button>
+      <button class="meta-pill perf-pill" onclick="togglePerfMode()" title="${esc(t('popup.visualsHelp','Reduce visual effects and start mobile in flat mode'))}">${t('dashboard.visuals','VISUALS')} <span class="v" id="perfStatus">${lowPerfMode?t('dashboard.visualsLite','LITE'):t('dashboard.visualsFull','FULL')}</span></button>
       <span class="meta-pill">${t('dashboard.sweep','SWEEP')} <span class="v">${(D.meta.totalDurationMs/1000).toFixed(1)}s</span></span>
       <span class="meta-pill">${d} <span class="v">${timeStr}</span></span>
       <span class="meta-pill">${t('dashboard.sources','SOURCES')} <span class="v">${D.meta.sourcesOk}/${D.meta.sourcesQueried}</span></span>
@@ -1074,7 +1089,7 @@ function buildNuclearWatchPanel(){
   const live=D.nuke.filter(s=>s.n>0);
   const allNormal=live.length>0&&live.every(s=>!s.anom);
   const windText=s=>s.wind&&Number.isFinite(s.wind.ms)?' · <span title="'+esc(t('nuclear.windNote','Modelled current 10 m wind, not a dispersion forecast'))+'">&#10148; '+esc(s.wind.dir||'')+' '+s.wind.ms.toFixed(1)+' m/s</span>':'';
-  const nukeHtml=D.nuke.map(s=>`<div class="site-row"><span>${esc(s.site)}</span><span class="site-val">${s.n>0?(s.cpm?.toFixed(1)||'--')+' CPM'+(s.last?' · '+esc(getAge(s.last)):''):'No data'}${windText(s)}</span></div>`).join('');
+  const nukeHtml=D.nuke.map(s=>`<div class="site-row"><span>${esc(s.site)}</span><span class="site-val">${s.n>0?(s.cpm?.toFixed(1)||'--')+' CPM'+(s.last?' · '+esc(getAge(s.last)):''):t('nuclear.noData','No data')}${windText(s)}</span></div>`).join('');
   return `<div class="g-panel">
     <div class="sec-head"><h3>${t('panels.nuclearWatch','Nuclear Watch')}</h3><span class="badge">${t('badges.radiation','RADIATION')}</span></div>
     <div class="nuke-ok">${!live.length?t('status.noNuclear','No radiation readings in this snapshot'):allNormal?'&#9679; '+t('nuclear.allSitesNormal','ALL SITES NORMAL'):'&#9888; '+t('nuclear.anomalyDetected','ANOMALY DETECTED')}</div>
@@ -1107,7 +1122,7 @@ function buildSpaceWatchPanel(){
     ${D.space ? `
       <div class="econ-row"><span class="elabel">New Objects (30d)</span><span class="eval" style="color:var(--accent2)">${D.space.totalNewObjects||0}</span></div>
       <div class="econ-row"><span class="elabel">Military Sats</span><span class="eval">${D.space.militarySats||0}</span></div>
-      <div class="econ-row"><span class="elabel">Starlink</span><span class="eval">${D.space.constellations?.starlink||0}</span></div>
+      <div class="econ-row"><span class="elabel">${t('metrics.starlink','Starlink')}</span><span class="eval">${D.space.constellations?.starlink||0}</span></div>
       <div class="econ-row"><span class="elabel">OneWeb</span><span class="eval">${D.space.constellations?.oneweb||0}</span></div>
       ${D.space.iss ? `<div class="econ-row"><span class="elabel">ISS</span><span class="eval" style="color:var(--accent)">ALT ${((D.space.iss.apogee+D.space.iss.perigee)/2).toFixed(0)} km</span></div>` : ''}
       ${Object.entries(D.space.militaryByCountry||{}).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([c,n])=>`<div class="econ-row"><span class="elabel" style="padding-left:8px">${esc(c)}</span><span class="eval" style="font-size:10px">${esc(n)} mil sats</span></div>`).join('')}
@@ -1189,16 +1204,16 @@ function buildMacroMarketsPanel(){
   const fmtMarketPrice = (price) => price != null ? `$${price.toLocaleString(undefined,{maximumFractionDigits:2})}` : '--';
   const dayMove = (pct) => pct != null ? `${pct>=0?'+':''}${pct}% today` : '';
   const metrics=[
-    {l:'WTI Crude',v:`$${D.energy.wti}`,s:'$/bbl',p:70},
-    {l:'Brent',v:`$${D.energy.brent}`,s:'$/bbl',p:75},
-    {l:'Nat Gas',v:`$${D.energy.natgas||'--'}`,s:'$/MMBtu',p:30},
-    {l:'Gold',v:fmtMarketPrice(metals.gold),s:dayMove(metals.goldChangePct)||'COMEX proxy',p:58},
-    {l:'Silver',v:fmtMarketPrice(metals.silver),s:dayMove(metals.silverChangePct)||'COMEX proxy',p:54},
-    {l:'VIX',v:vixVal?vixVal.toFixed(1):'--',s:vixChg||'volatility index',p:vixVal?Math.min(vixVal*2.5,100):30},
-    {l:'Fed Funds',v:ff?`${ff.value}%`:'--',s:ff?.date||'',p:36},
-    {l:'GSCPI',v:gscpi?gscpi.value.toFixed(2):'--',s:gscpi?.interpretation||'',p:49},
-    {l:'CPI MoM',v:cpi?`+${cpi.momChangePct?.toFixed(2)}%`:'--',s:cpi?.date||'',p:37},
-    {l:'Unemployment',v:ue?`${ue.value}%`:'--',s:ue?`${ue.momChange>0?'+':''}${ue.momChange} vs prior`:'',p:44},
+    {l:t('metrics.wtiCrude','WTI Crude'),v:`$${D.energy.wti}`,s:'$/bbl',p:70},
+    {l:t('metrics.brent','Brent'),v:`$${D.energy.brent}`,s:'$/bbl',p:75},
+    {l:t('metrics.natGas','Nat Gas'),v:`$${D.energy.natgas||'--'}`,s:'$/MMBtu',p:30},
+    {l:t('alerts.rules.metric.gold','Gold'),v:fmtMarketPrice(metals.gold),s:dayMove(metals.goldChangePct)||'COMEX proxy',p:58},
+    {l:t('alerts.rules.metric.silver','Silver'),v:fmtMarketPrice(metals.silver),s:dayMove(metals.silverChangePct)||'COMEX proxy',p:54},
+    {l:t('metrics.vix','VIX'),v:vixVal?vixVal.toFixed(1):'--',s:vixChg||'volatility index',p:vixVal?Math.min(vixVal*2.5,100):30},
+    {l:t('metrics.fedFunds','Fed Funds'),v:ff?`${ff.value}%`:'--',s:ff?.date||'',p:36},
+    {l:t('metrics.gscpi','GSCPI'),v:gscpi?gscpi.value.toFixed(2):'--',s:gscpi?.interpretation||'',p:49},
+    {l:t('metrics.cpiMom','CPI MoM'),v:cpi?`+${cpi.momChangePct?.toFixed(2)}%`:'--',s:cpi?.date||'',p:37},
+    {l:t('metrics.unemployment','Unemployment'),v:ue?`${ue.value}%`:'--',s:ue?`${ue.momChange>0?'+':''}${ue.momChange} ${t('metrics.vsPrior','vs prior')}`:'',p:44},
   ];
   metrics[0] = {...metrics[0], spark: D.energy.wtiRecent, sparkUp: false};
   metrics[3] = {...metrics[3], spark: metals.goldRecent, sparkUp: (metals.goldChangePct ?? 0) >= 0};
@@ -1208,18 +1223,20 @@ function buildMacroMarketsPanel(){
   const hasMarkets = indexCards || cryptoCards;
   return `<div class="g-panel lp-macro">
     <div class="sec-head"><h3>${t('panels.macroMarkets','Macro + Markets')}</h3><span class="badge">${mkt.timestamp?t('badges.live','LIVE'):t('badges.delayed','DELAYED')}</span></div>
-    ${hasMarkets?`<div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">INDEXES</div><div class="metrics-row">${indexCards}</div></div><div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">CRYPTO</div><div class="metrics-row">${cryptoCards}</div></div>`:''}
-    <div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">ENERGY + METALS + MACRO</div><div class="metrics-row">${metrics.map(m=>{const sparkSvg = m.spark ? mkSparkSvg(m.spark, m.sparkUp) : ''; return `<div class="mc"><div class="ml">${esc(m.l)}</div><span class="mv">${esc(m.v)}${sparkSvg}</span><span class="ms">${esc(m.s)}</span><div class="mbar"><span style="width:${m.p}%"></span></div></div>`;}).join('')}</div></div>
-    <div style="margin-top:6px"><div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:4px">WTI 5-DAY</div><div class="spark">${sparkHtml}</div></div>
+    ${hasMarkets?`<div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">${t('metrics.indexes','INDEXES')}</div><div class="metrics-row">${indexCards}</div></div><div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">${t('metrics.crypto','CRYPTO')}</div><div class="metrics-row">${cryptoCards}</div></div>`:''}
+    <div style="margin-bottom:8px"><div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-bottom:4px;letter-spacing:1px">${t('metrics.energyMacro','ENERGY + METALS + MACRO')}</div><div class="metrics-row">${metrics.map(m=>{const sparkSvg = m.spark ? mkSparkSvg(m.spark, m.sparkUp) : ''; return `<div class="mc"><div class="ml">${esc(m.l)}</div><span class="mv">${esc(m.v)}${sparkSvg}</span><span class="ms">${esc(m.s)}</span><div class="mbar"><span style="width:${m.p}%"></span></div></div>`;}).join('')}</div></div>
+    <div style="margin-top:6px"><div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:4px">${t('metrics.wti5day','WTI 5-DAY')}</div><div class="spark">${sparkHtml}</div></div>
   </div>`;
 }
 
 function buildTradeIdeasPanel(){
   const hasIdeas = D.ideas && D.ideas.length > 0;
-  const ideasHtml = hasIdeas ? (D.ideas||[]).map(idea=>`<div class="idea-card"><span class="idea-type ${ideaTypeClass(idea.type)}">${esc((idea.type||'').toUpperCase())}</span>${idea.ticker ? `<span class="idea-horizon">${esc(idea.ticker)}</span>` : ''}${idea.horizon ? `<span class="idea-horizon">${esc(idea.horizon)}</span>` : ''}<span class="idea-conf">${esc(idea.confidence)} confidence</span><div class="idea-title">${esc(idea.title)}</div><div class="idea-text">${esc(idea.text||idea.rationale||'')}</div>${idea.risk ? `<div class="idea-text" style="color:var(--warn);margin-top:3px">Risk: ${esc(idea.risk)}</div>` : ''}</div>`).join('') : `<div style="padding:20px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:11px"><div style="font-size:24px;margin-bottom:8px;opacity:0.3">&#9888;</div><div>LLM NOT CONFIGURED</div><div style="font-size:9px;margin-top:6px;opacity:0.6">Set LLM_PROVIDER + credentials in .env to enable AI-powered trade ideas</div></div>`;
+  // The label of an idea's type / confidence / horizon enum: only the display is translated, the stored value and the CSS class stay the enum.
+  const ideaLabel = (group,value) => value ? t('ideas.'+group+'_'+value,String(value)) : '';
+  const ideasHtml = hasIdeas ? (D.ideas||[]).map(idea=>`<div class="idea-card"><span class="idea-type ${ideaTypeClass(idea.type)}">${esc(ideaLabel('type',(idea.type||'').toUpperCase()))}</span>${idea.ticker ? `<span class="idea-horizon">${esc(idea.ticker)}</span>` : ''}${idea.horizon ? `<span class="idea-horizon">${esc(ideaLabel('horizon',idea.horizon))}</span>` : ''}<span class="idea-conf">${esc(t('ideas.confidenceBadge','{level} confidence').split('{level}').join(ideaLabel('confidence',idea.confidence)))}</span><div class="idea-title">${esc(idea.title)}</div><div class="idea-text">${esc(idea.text||idea.rationale||'')}</div>${idea.risk ? `<div class="idea-text" style="color:var(--warn);margin-top:3px">${t('ideas.risk','Risk')}: ${esc(idea.risk)}</div>` : ''}</div>`).join('') : `<div style="padding:20px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:11px"><div style="font-size:24px;margin-bottom:8px;opacity:0.3">&#9888;</div><div>${t('ideas.llmNotConfigured','LLM NOT CONFIGURED')}</div><div style="font-size:9px;margin-top:6px;opacity:0.6">${t('ideas.llmHelp','Set LLM_PROVIDER + credentials in .env to enable AI-powered trade ideas')}</div></div>`;
   const sourceLabel=D.ideasSource==='llm'?t('ideas.aiEnhanced','AI ENHANCED'):D.ideasSource==='rules'?t('ideas.rules','RULES'):D.ideasSource==='disabled'?t('ideas.llmOff','LLM OFF'):t('ideas.pending','PENDING');
   const emptyHtml=D.ideasSource==='rules'?`<div class="empty-state">${t('ideas.noRuleSignals','No qualifying rule signals in this sweep')}</div>`:ideasHtml;
-  return `<div class="g-panel lp-ideas"><div class="sec-head"><h3>${t('panels.tradeIdeas','Leverageable Ideas')}</h3><span class="ideas-src ${D.ideasSource==='llm'?'llm':'static'}">${sourceLabel}</span></div>${D.ideasGeneratedAt?`<div class="ideas-age">${esc(D.ideasCached?t('ideas.cached','Preserved from an earlier sweep'):t('ideas.generated','Generated'))} · ${esc(getAge(D.ideasGeneratedAt))}</div>`:''}${hasIdeas?ideasHtml:emptyHtml}<div class="disclosure">FOR INFORMATIONAL PURPOSES ONLY. This is not financial advice, a recommendation to buy or sell any security, or a solicitation of any kind. All signal-based observations are derived from publicly available OSINT data and should not be relied upon for investment decisions. Consult a licensed financial advisor before making any investment. Past performance does not guarantee future results.</div></div>`;
+  return `<div class="g-panel lp-ideas"><div class="sec-head"><h3>${t('panels.tradeIdeas','Leverageable Ideas')}</h3><span class="ideas-src ${D.ideasSource==='llm'?'llm':'static'}">${sourceLabel}</span></div>${D.ideasGeneratedAt?`<div class="ideas-age">${esc(D.ideasCached?t('ideas.cached','Preserved from an earlier sweep'):t('ideas.generated','Generated'))} · ${esc(getAge(D.ideasGeneratedAt))}</div>`:''}${hasIdeas?ideasHtml:emptyHtml}<div class="disclosure">${t('ideas.disclosure','FOR INFORMATIONAL PURPOSES ONLY. This is not financial advice, a recommendation to buy or sell any security, or a solicitation of any kind. All signal-based observations are derived from publicly available OSINT data and should not be relied upon for investment decisions. Consult a licensed financial advisor before making any investment. Past performance does not guarantee future results.')}</div></div>`;
 }
 
 function buildCrossSourceSignalsPanel(){
@@ -1229,13 +1246,13 @@ function buildCrossSourceSignalsPanel(){
 
 function buildSignalCorePanel(){
   const signalMetrics=[
-    {l:'Incident Tempo',v:D.tg.urgent.length,p:70},
-    {l:'Air Theaters',v:D.air.length,p:60},
-    {l:'Thermal Spikes',v:D.thermal.reduce((s,t)=>s+t.hc,0),p:80},
-    {l:'SDR Nodes',v:D.sdr.total,p:92},
-    {l:'Internet Outages',v:D.ioda?.activeEvents||0,p:Math.min(100,((D.ioda?.countries?.length||0)*12)+((D.ioda?.activeEvents||0)*10))},
-    {l:'Chokepoints',v:D.chokepoints.length,p:50},
-    {l:'WHO Alerts',v:D.who.length,p:40},
+    {l:t('signalMetrics.incidentTempo','Incident Tempo'),v:D.tg.urgent.length,p:70},
+    {l:t('signalMetrics.airTheaters','Air Theaters'),v:D.air.length,p:60},
+    {l:t('signalMetrics.thermalSpikes','Thermal Spikes'),v:D.thermal.reduce((s,t)=>s+t.hc,0),p:80},
+    {l:t('signalMetrics.sdrNodes','SDR Nodes'),v:D.sdr.total,p:92},
+    {l:t('panels.internetOutages','Internet Outages'),v:D.ioda?.activeEvents||0,p:Math.min(100,((D.ioda?.countries?.length||0)*12)+((D.ioda?.activeEvents||0)*10))},
+    {l:t('signalMetrics.chokepoints','Chokepoints'),v:D.chokepoints.length,p:50},
+    {l:t('signalMetrics.whoAlerts','WHO Alerts'),v:D.who.length,p:40},
     {l:'Supp Health',v:(D.supplementalHealth||[]).length,p:36}
   ];
   return `<div class="g-panel right-core"><div class="sec-head"><h3>${t('panels.signalCore','Signal Core')}</h3><span class="badge">${t('badges.hotMetrics','HOT METRICS')}</span></div>${signalMetrics.map(s=>`<div class="sm"><span class="sml">${s.l}</span><div class="smb"><span style="width:${s.p}%"></span></div><span class="smv">${s.v}</span></div>`).join('')}</div>`;
@@ -1253,7 +1270,7 @@ function buildInternetOutagesPanel(){
 
 function buildHealthAlertsPanel(){
   const whoRows=(D.who||[]).slice(0,10).map((w,i)=>{
-    const sev=(w.severity||'monitor').toUpperCase();
+    const sev=t('intelligence.severity_'+(w.severity||'monitor'),w.severity||'monitor').toUpperCase();
     const sevColor=w.severity==='critical'?'var(--warn)':w.severity==='high'?'#ffb74d':w.severity==='elevated'?'#b2ff59':'var(--dim)';
     const link=safeExternalUrl(w.url);
     return `<div class="signal-row"><strong>#${i+1} <span style="color:${sevColor}">${esc(sev)}</span> ${w.region?`· ${esc(w.region)}`:''}</strong><p>${cleanText(w.title||'')}</p><div style="display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px"><span>${getAge(w.date)}</span><span>score ${w.score||0}</span>${link?`<a href="${esc(link)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent2);text-decoration:none">WHO</a>`:''}</div>${(w.emergencyEvent||w.whoRegionCode)?`<div style="margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--dim)">${cleanText([w.emergencyEvent,w.whoRegionCode].filter(Boolean).join(' · '))}</div>`:''}</div>`;
@@ -1263,12 +1280,22 @@ function buildHealthAlertsPanel(){
 
 function buildSupplementalHealthPanel(){
   const supplementalRows=(D.supplementalHealth||[]).slice(0,10).map((w,i)=>{
-    const sev=(w.severity||'monitor').toUpperCase();
+    const sev=t('intelligence.severity_'+(w.severity||'monitor'),w.severity||'monitor').toUpperCase();
     const sevColor=w.severity==='critical'?'var(--warn)':w.severity==='high'?'#ffb74d':w.severity==='elevated'?'#b2ff59':'var(--dim)';
     const link=safeExternalUrl(w.url);
     return `<div class="signal-row"><strong>#${i+1} <span style="color:${sevColor}">${esc(sev)}</span> ${w.region?`· ${esc(w.region)}`:''}</strong><p>${cleanText(w.title||'')}</p><div style="display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px"><span>${getAge(w.date)}</span><span>score ${w.score||0}</span>${link?`<a href="${esc(link)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent2);text-decoration:none">OPEN</a>`:''}</div>${w.source?`<div style="margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--dim)">${cleanText(w.source)}</div>`:''}</div>`;
   }).join('') || `<div style="padding:12px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:10px">No supplemental health alerts</div>`;
   return `<div class="g-panel right-health-supp"><div class="sec-head"><h3>Supplemental Health</h3><span class="badge">RELIEFWEB/HDX ${Math.min((D.supplementalHealth||[]).length,10)}</span></div>${supplementalRows}</div>`;
+}
+
+// A delta signal's words in the page language. The engine's labels and reasons are English constants that also feed the bots, the
+// alert titles and the archive, so they are looked up here by the signal key (delta.labels.* / delta.reasons.*), the stored text being
+// the fallback. A source_degradation reason carries its numbers only in the stored sentence, so it stays as stored.
+function deltaText(s){
+  const key=typeof s?.key==='string'?s.key:'',stored=String(s?.reason||s?.label||key);
+  const id=key.startsWith('tg_urgent:')?'tg_urgent':/^[a-z0-9_]{1,40}$/.test(key)&&key!=='source_degradation'?key:'';
+  if(!id)return stored;
+  return t((s.reason?'delta.reasons.':'delta.labels.')+id,stored);
 }
 
 function buildSweepDeltaPanel(){
@@ -1277,22 +1304,24 @@ function buildSweepDeltaPanel(){
   const hasDelta = ds.totalChanges > 0;
   const dirEmoji = {'risk-off':'&#9650;','risk-on':'&#9660;','mixed':'&#9670;'}[ds.direction]||'&#9670;';
   const dirClass = {'risk-off':'up','risk-on':'down','mixed':''}[ds.direction]||'';
+  // the engine's hyphenated directions are not locale keys; the header's dashboard.* labels already translate them
+  const dirKey = {'risk-off':'dashboard.riskOff','risk-on':'dashboard.riskOn','mixed':'dashboard.mixed'}[ds.direction];
   const escalated = (delta.signals?.escalated || []).slice(0,6);
   const deescalated = (delta.signals?.deescalated || []).slice(0,4);
   const newSigs = (delta.signals?.new || []).slice(0,4);
   const deltaRows = [];
-  for(const s of newSigs) deltaRows.push(`<div class="delta-row new"><span class="delta-badge new">NEW</span><span class="delta-label">${esc(s.reason||s.label||s.key)}</span></div>`);
+  for(const s of newSigs) deltaRows.push(`<div class="delta-row new"><span class="delta-badge new">${t('delta.new','NEW')}</span><span class="delta-label">${esc(deltaText(s))}</span></div>`);
   for(const s of escalated){
     const sev = s.severity==='critical'?'style="color:var(--warn);font-weight:600"':s.severity==='high'?'style="color:#ffab40"':'';
     const val = s.pctChange!==undefined?`${s.pctChange>0?'+':''}${s.pctChange}%`:`${s.change>0?'+':''}${s.change}`;
-    deltaRows.push(`<div class="delta-row"><span class="delta-badge up">&#9650;</span><span class="delta-label" ${sev}>${esc(s.label)}</span><span class="delta-val">${esc(s.from)}→${esc(s.to)} (${val})</span></div>`);
+    deltaRows.push(`<div class="delta-row"><span class="delta-badge up">&#9650;</span><span class="delta-label" ${sev}>${esc(deltaText(s))}</span><span class="delta-val">${esc(s.from)}→${esc(s.to)} (${val})</span></div>`);
   }
   for(const s of deescalated){
     const val = s.pctChange!==undefined?`${s.pctChange}%`:`${s.change}`;
-    deltaRows.push(`<div class="delta-row"><span class="delta-badge down">&#9660;</span><span class="delta-label">${esc(s.label||s.key)}</span><span class="delta-val">${esc(s.from)}→${esc(s.to)} (${val})</span></div>`);
+    deltaRows.push(`<div class="delta-row"><span class="delta-badge down">&#9660;</span><span class="delta-label">${esc(deltaText(s))}</span><span class="delta-val">${esc(s.from)}→${esc(s.to)} (${val})</span></div>`);
   }
   const deltaHtml = hasDelta ? deltaRows.join('') : `<div style="padding:12px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:10px">${t('delta.noChanges','No changes since last sweep')}</div>`;
-  return `<div class="g-panel right-delta"><div class="sec-head"><h3>${t('panels.sweepDelta','Sweep Delta')}</h3><span class="badge ${dirClass}">${dirEmoji} ${ds.direction?t('delta.'+ds.direction,ds.direction.toUpperCase()):t('delta.baseline','BASELINE')}</span></div>${hasDelta?`<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;font-family:var(--mono);font-size:10px"><span style="color:var(--dim)">${t('delta.changes','Changes')}: <span style="color:var(--accent)">${ds.totalChanges}</span></span><span style="color:var(--dim)">${t('delta.critical','Critical')}: <span style="color:${ds.criticalChanges>0?'var(--warn)':'var(--dim)'}">${ds.criticalChanges||0}</span></span>${ds.signalBreakdown?`<span style="color:var(--dim)">${t('delta.new','New')}: <span style="color:#4dd0e1">${ds.signalBreakdown.new}</span> &#8593;${ds.signalBreakdown.escalated} &#8595;${ds.signalBreakdown.deescalated}</span>`:''}</div>`:''}<div class="delta-list">${deltaHtml}</div></div>`;
+  return `<div class="g-panel right-delta"><div class="sec-head"><h3>${t('panels.sweepDelta','Sweep Delta')}</h3><span class="badge ${dirClass}">${dirEmoji} ${ds.direction?t(dirKey||'delta.'+ds.direction,ds.direction.toUpperCase()):t('delta.baseline','BASELINE')}</span></div>${hasDelta?`<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;font-family:var(--mono);font-size:10px"><span style="color:var(--dim)">${t('delta.changes','Changes')}: <span style="color:var(--accent)">${ds.totalChanges}</span></span><span style="color:var(--dim)">${t('delta.critical','Critical')}: <span style="color:${ds.criticalChanges>0?'var(--warn)':'var(--dim)'}">${ds.criticalChanges||0}</span></span>${ds.signalBreakdown?`<span style="color:var(--dim)">${t('delta.new','New')}: <span style="color:#4dd0e1">${ds.signalBreakdown.new}</span> &#8593;${ds.signalBreakdown.escalated} &#8595;${ds.signalBreakdown.deescalated}</span>`:''}</div>`:''}<div class="delta-list">${deltaHtml}</div></div>`;
 }
 
 function buildPanelHtml(panelId, zone){
@@ -1368,7 +1397,7 @@ function initMap(){
     setMapLoading(false);
     return;
   }
-  setMapLoading(true, 'Initializing 3D Globe');
+  setMapLoading(true);
   requestAnimationFrame(() => {
     try {
       initGlobe();
@@ -1593,6 +1622,17 @@ function plotFlatSites(data){
   });
 }
 
+// The words of the map popups and tooltips: t() with the {name} slots filled in. Source names (ACLED, FIRMS, KiwiSDR, NOAA/NWS, EPA)
+// stay in the texts: showPopup pairs a popup with its event by them. (Some marker callbacks below name a thermal row `t`, so they
+// call this helper instead of t.)
+function tFill(path,fallback,values={}){
+  let text=t(path,fallback);
+  for(const [name,value] of Object.entries(values))text=text.split('{'+name+'}').join(String(value));
+  return text;
+}
+// A WHO / ReliefWeb severity word for a popup, like the health panels show it.
+function severityWord(value){return t('intelligence.severity_'+(value||'monitor'),value||'monitor').toUpperCase()}
+
 function plotMarkers(){
   if(!globe) return;
   const points = [];
@@ -1606,8 +1646,8 @@ function plotMarkers(){
       lat:c.lat, lng:c.lon, size:0.25+a.total/200, alt:0.015,
       color:'rgba(100,240,200,0.8)', type:'air', priority:1,
       label: a.region.replace(' Region','')+' '+a.total,
-      popHead: a.region, popMeta: 'Air Activity',
-      popText: `${a.total} aircraft tracked<br>No callsign: ${a.noCallsign}<br>High altitude: ${a.highAlt}<br>Top: ${a.top.slice(0,3).map(t=>t[0]+' ('+t[1]+')').join(', ')}`
+      popHead: a.region, popMeta: tFill('layers.airActivity','Air Activity'),
+      popText: `${tFill('popup.aircraftTracked','{count} aircraft tracked',{count:a.total})}<br>${tFill('popup.noCallsign','No callsign')}: ${a.noCallsign}<br>${tFill('popup.highAltitude','High altitude')}: ${a.highAlt}<br>${tFill('popup.top','Top')}: ${a.top.slice(0,3).map(t=>t[0]+' ('+t[1]+')').join(', ')}`
     });
     labels.push({type:'air', lat:c.lat, lng:c.lon+2, text:a.region.replace(' Region','')+' '+a.total, size:0.35, color:'rgba(106,138,130,0.8)'});
   });
@@ -1619,8 +1659,8 @@ function plotMarkers(){
       points.push({
         lat:f.lat, lng:f.lon, size:0.12+Math.min(f.frp/200,0.3), alt:0.008,
         color:tone?tone.color:'rgba(255,95,99,0.7)', type:'thermal', priority:3,
-        popHead:'Thermal Detection', popMeta:'FIRMS Satellite',
-        popText:`Region: ${t.region}<br>FRP: ${f.frp.toFixed(1)} MW<br>Total: ${t.det.toLocaleString()}<br>Night: ${t.night.toLocaleString()}`+(tone?`<br>${esc(t('risk.thermalTitle','Thermal escalation'))}: ${esc(t(tone.key,tone.label))}`:'')+(f.site?`<br>${esc(t('infra.onSite','On or beside a mapped military area'))}: ${esc(f.site)}`:'')
+        popHead:tFill('map.thermalDetection','Thermal Detection'), popMeta:tFill('popup.firmsSatellite','FIRMS Satellite'),
+        popText:`${tFill('popup.region','Region')}: ${t.region}<br>FRP: ${f.frp.toFixed(1)} MW<br>${tFill('popup.total','Total')}: ${t.det.toLocaleString()}<br>${tFill('popup.night','Night')}: ${t.night.toLocaleString()}`+(tone?`<br>${esc(tFill('risk.thermalTitle','Thermal escalation'))}: ${esc(tFill(tone.key,tone.label))}`:'')+(f.site?`<br>${esc(tFill('infra.onSite','On or beside a mapped military area'))}: ${esc(f.site)}`:'')
       });
     });
   });
@@ -1630,7 +1670,7 @@ function plotMarkers(){
     points.push({
       lat:cp.lat, lng:cp.lon, size:0.35, alt:0.02,
       color:'rgba(179,136,255,0.8)', type:'maritime', priority:1,
-      popHead:cp.label, popMeta:'Maritime Intelligence', popText:cp.note
+      popHead:cp.label, popMeta:tFill('popup.maritimeIntel','Maritime Intelligence'), popText:cp.note
     });
     labels.push({type:'maritime', lat:cp.lat, lng:cp.lon+1.5, text:cp.label, size:0.3, color:'rgba(179,136,255,0.6)'});
   });
@@ -1642,8 +1682,8 @@ function plotMarkers(){
     points.push({
       lat:c.lat, lng:c.lon, size:0.3, alt:0.012,
       color: n.anom ? 'rgba(255,95,99,0.9)' : 'rgba(255,224,130,0.8)', type:'nuke', priority:2,
-      popHead:n.site, popMeta:'Radiation Monitoring',
-      popText:`Status: ${n.anom?'ANOMALY':'Normal'}<br>Avg CPM: ${n.cpm?.toFixed(1)||'No data'}<br>Readings: ${n.n}`+(n.wind&&Number.isFinite(n.wind.ms)?`<br>${esc(t('nuclear.windToward','Wind blows toward'))}: ${esc(n.wind.dir||'')} · ${n.wind.ms.toFixed(1)} m/s`:'')
+      popHead:n.site, popMeta:tFill('popup.radiationMonitoring','Radiation Monitoring'),
+      popText:`${tFill('popup.status','Status')}: ${n.anom?tFill('popup.anomaly','ANOMALY'):tFill('popup.normal','Normal')}<br>${tFill('popup.avgCpm','Avg CPM')}: ${n.cpm?.toFixed(1)||tFill('nuclear.noData','No data')}<br>${tFill('popup.readings','Readings')}: ${n.n}`+(n.wind&&Number.isFinite(n.wind.ms)?`<br>${esc(t('nuclear.windToward','Wind blows toward'))}: ${esc(n.wind.dir||'')} · ${n.wind.ms.toFixed(1)} m/s`:'')
     });
   });
 
@@ -1653,8 +1693,8 @@ function plotMarkers(){
       points.push({
         lat:r.lat, lng:r.lon, size:0.15, alt:0.005,
         color:'rgba(68,204,255,0.6)', type:'sdr', priority:3,
-        popHead:'SDR Receiver', popMeta:'KiwiSDR Network',
-        popText:`${r.name}<br>Zone: ${z.region}<br>${z.count} in zone`
+        popHead:tFill('map.sdrReceiver','SDR Receiver'), popMeta:tFill('popup.kiwiNetwork','KiwiSDR Network'),
+        popText:`${r.name}<br>${tFill('popup.zone','Zone')}: ${z.region}<br>${tFill('popup.inZone','{count} in zone',{count:z.count})}`
       });
     });
   });
@@ -1666,7 +1706,7 @@ function plotMarkers(){
     points.push({
       lat:o.lat, lng:o.lon, size:0.3, alt:0.018,
       color:'rgba(255,184,76,0.8)', type:'osint', priority:2,
-      popHead:(post.channel||'').toUpperCase(), popMeta:`${post.views?.toLocaleString()||'?'} views`,
+      popHead:(post.channel||'').toUpperCase(), popMeta:tFill('popup.views','{count} views',{count:post.views?.toLocaleString()||'?'}),
       popText:cleanText(post.text?.substring(0,200)||'')
     });
   });
@@ -1674,20 +1714,20 @@ function plotMarkers(){
   // === WHO health alerts (green) ===
   D.who.slice(0,10).forEach(w=>{
     if(w.lat==null || w.lon==null) return;
-    const sev=(w.severity||'monitor').toUpperCase();
+    const sev=severityWord(w.severity);
     points.push({
       lat:w.lat, lng:w.lon, size:w.markerSize||0.25, alt:0.01,
       color:'rgba(105,240,174,0.7)', type:'health', priority:2,
-      popHead:w.title, popMeta:`WHO ${esc(sev)} · ${w.region||'Global'} · ${getAge(w.date)}`, popText:w.summary||w.response||w.overview||''
+      popHead:w.title, popMeta:`WHO ${esc(sev)} · ${w.region||tFill('popup.global','Global')} · ${getAge(w.date)}`, popText:w.summary||w.response||w.overview||''
     });
   });
   (D.supplementalHealth||[]).slice(0,10).forEach(w=>{
     if(w.lat==null || w.lon==null) return;
-    const sev=(w.severity||'monitor').toUpperCase();
+    const sev=severityWord(w.severity);
     points.push({
       lat:w.lat, lng:w.lon, size:w.markerSize||0.2, alt:0.008,
       color:'rgba(155,231,177,0.78)', type:'healthSupplemental', priority:3,
-      popHead:w.title, popMeta:`${esc(w.source||'ReliefWeb/HDX')} · ${esc(sev)} · ${w.region||'Global'} · ${getAge(w.date)}`, popText:(w.countries||[]).join(', ')||''
+      popHead:w.title, popMeta:`${esc(w.source||'ReliefWeb/HDX')} · ${esc(sev)} · ${w.region||tFill('popup.global','Global')} · ${getAge(w.date)}`, popText:(w.countries||[]).join(', ')||''
     });
   });
 
@@ -1699,7 +1739,7 @@ function plotMarkers(){
       color:c.activeCount>0?'rgba(77,208,225,0.88)':'rgba(77,208,225,0.65)', type:'ioda', priority:2,
       popHead:`${c.country} · ${t('map.internetOutage','Internet Outage')}`,
       popMeta:`IODA · ${c.eventCount} ${t('ioda.events','Events').toLowerCase()} · ${t('ioda.active','ACTIVE')} ${c.activeCount}`,
-      popText:`${t('ioda.score','Score')}: ${Math.round(c.overallScore)}<br>${t('ioda.topDatasource','Top datasource')}: ${c.topDatasource||'overall'}<br>${t('ioda.lastStart','Last start')}: ${c.lastStart?getAge(c.lastStart):'n/a'}`
+      popText:`${t('ioda.score','Score')}: ${Math.round(c.overallScore)}<br>${t('ioda.topDatasource','Top datasource')}: ${c.topDatasource||'overall'}<br>${t('ioda.lastStart','Last start')}: ${c.lastStart?getAge(c.lastStart):tFill('popup.notAvailable','n/a')}`
     });
   });
 
@@ -1709,7 +1749,7 @@ function plotMarkers(){
     points.push({
       lat:n.lat, lng:n.lon, size:0.2, alt:0.008,
       color:'rgba(129,212,250,0.7)', type:'news', priority:3,
-      popHead:n.source+' NEWS', popMeta:n.region+' · '+getAge(n.date),
+      popHead:tFill('popup.news','{source} NEWS',{source:n.source}), popMeta:n.region+' · '+getAge(n.date),
       popText:cleanText(n.title)
     });
   });
@@ -1730,8 +1770,8 @@ function plotMarkers(){
     points.push({
       lat:s.lat, lng:s.lon, size:0.18, alt:0.006,
       color:'rgba(205,220,57,0.7)', type:'radiation', priority:3,
-      popHead:'RadNet: '+s.location, popMeta:'EPA Radiation Monitor',
-      popText:`${s.analyte||'--'}: ${s.result||'--'} ${s.unit||''}<br>State: ${s.state}`
+      popHead:'RadNet: '+s.location, popMeta:tFill('popup.epaMonitor','EPA Radiation Monitor'),
+      popText:`${s.analyte||'--'}: ${s.result||'--'} ${s.unit||''}<br>${tFill('popup.state','State')}: ${s.state}`
     });
   });
 
@@ -1740,8 +1780,8 @@ function plotMarkers(){
     points.push({
       lat:s.lat, lng:s.lon, size:0.4, alt:0.04,
       color:'rgba(255,255,255,0.95)', type:'space', priority:1,
-      popHead:s.name, popMeta:'Space Station (approx.)',
-      popText:`Orbital position estimate<br>Lat: ${s.lat}° Lon: ${s.lon}°`
+      popHead:s.name, popMeta:tFill('popup.stationApprox','Space Station (approx.)'),
+      popText:`${tFill('popup.orbitalEstimate','Orbital position estimate')}<br>${tFill('popup.lat','Lat')}: ${s.lat}° ${tFill('popup.lon','Lon')}: ${s.lon}°`
     });
     labels.push({type:'space', lat:s.lat, lng:s.lon+3, text:s.name.split('(')[0].trim(), size:0.35, color:'rgba(255,255,255,0.7)'});
   });
@@ -1751,8 +1791,8 @@ function plotMarkers(){
     points.push({
       lat:g.lat, lng:g.lon, size:0.15+Math.min(g.count/50,0.2), alt:0.007,
       color:'rgba(100,149,237,0.6)', type:'gdelt', priority:3,
-      popHead:'GDELT Event', popMeta:g.count+' reports',
-      popText:g.name||'Global event detection'
+      popHead:tFill('map.gdeltEvent','GDELT Event'), popMeta:tFill('popup.reports','{count} reports',{count:g.count}),
+      popText:g.name||tFill('popup.gdeltDefault','Global event detection')
     });
   });
 
@@ -1764,7 +1804,7 @@ function plotMarkers(){
     popText:earthquakeDescription(q)
   }));
   const conflictEvents=(D.acled?.deadliestEvents||[]).filter(e=>hasCoordinates(e.lat,e.lon));
-  conflictEvents.forEach(e=>points.push({lat:e.lat,lng:e.lon,size:0.25,alt:0.01,color:'rgba(255,120,80,0.8)',type:'conflict',priority:1,popHead:e.type||'Conflict',popMeta:'ACLED',popText:`${e.fatalities} fatalities\n${e.location}, ${e.country}`}));
+  conflictEvents.forEach(e=>points.push({lat:e.lat,lng:e.lon,size:0.25,alt:0.01,color:'rgba(255,120,80,0.8)',type:'conflict',priority:1,popHead:e.type||tFill('map.conflict','Conflict'),popMeta:'ACLED',popText:`${tFill('popup.fatalities','{count} fatalities',{count:e.fatalities})}\n${e.location}, ${e.country}`}));
   if(groupNews)for(const cluster of visibleEventClusters())points.push({lat:cluster.lat,lng:cluster.lon,size:.4,alt:.015,color:'rgba(129,212,250,0.9)',type:'news',priority:1,cluster,popHead:t('intelligence.cluster','Grouped reports'),popMeta:cluster.count+' '+t('badges.items','ITEMS')});
   const infra=infraData();
   if(infra&&isMarkerTypeVisible('base'))infra.bases.forEach(b=>points.push({lat:b.lat,lng:b.lon,size:0.2,alt:0.012,color:baseColor(b),type:'base',priority:2,popHead:b.name,popMeta:t('infra.base','Military base'),popText:window.CrucixInfrastructure.baseText(b,infraSay)}));
@@ -1785,8 +1825,8 @@ function plotMarkers(){
       maxR: Math.max(2, Math.min(6, 1 + logFatal)),
       speed: 1.5 + Math.random(),
       period: 600 + Math.random()*600,
-      popHead: e.type || 'CONFLICT', popMeta: 'ACLED Conflict Data',
-      popText: `${e.fatalities} fatalities<br>${e.location}, ${e.country}<br>Date: ${e.date}`
+      popHead: e.type || tFill('map.conflict','Conflict').toUpperCase(), popMeta: tFill('popup.acledData','ACLED Conflict Data'),
+      popText: `${tFill('popup.fatalities','{count} fatalities',{count:e.fatalities})}<br>${e.location}, ${e.country}<br>${tFill('popup.date','Date')}: ${e.date}`
     };
   });
   globe.ringsData(isMarkerTypeVisible('conflict')&&!reducedMotion?conflictRings:[]);
@@ -1820,7 +1860,7 @@ function plotMarkers(){
       arcs.push({
         startLat:from.lat, startLng:from.lon, endLat:to.lat, endLng:to.lon,
         color, stroke:Math.max(0.3, Math.min(1.2, traffic/120)),
-        label:`${from.region} ↔ ${to.region}: ${traffic} aircraft`
+        label:tFill('popup.corridor','{from} ↔ {to}: {count} aircraft',{from:from.region,to:to.region,count:traffic})
       });
     }
   }
@@ -2016,7 +2056,7 @@ function toggleMapMode(){
     else { flatG.selectAll('*').remove(); drawFlatMap(); }
   } else {
     flatEl.style.display = 'none';
-    setMapLoading(true, 'Initializing 3D Globe');
+    setMapLoading(true);
     requestAnimationFrame(() => {
       try {
         initGlobe();
@@ -2106,7 +2146,7 @@ function plotFlatMarkers(){
     D.air.forEach((a,i)=>{
       const c=airCoords[i];if(!c)return;
       const g=addPt(c.lat,c.lon,4+a.total/40,'rgba(100,240,200,0.7)','rgba(100,240,200,0.3)',
-        ev=>showPopup(ev,a.region,`${a.total} aircraft<br>No callsign: ${a.noCallsign}<br>High alt: ${a.highAlt}`,'Air Activity'),1);
+        ev=>showPopup(ev,a.region,`${tFill('popup.aircraft','{count} aircraft',{count:a.total})}<br>${tFill('popup.noCallsign','No callsign')}: ${a.noCallsign}<br>${tFill('popup.highAlt','High alt')}: ${a.highAlt}`,tFill('layers.airActivity','Air Activity')),1);
       if(g) g.append('text').attr('class','marker-label').attr('x',10).attr('y',3).attr('fill','var(--dim)').attr('font-size','9px').attr('font-family','var(--mono)').text(a.region.replace(' Region','')+' '+a.total);
     });
   }
@@ -2115,7 +2155,7 @@ function plotFlatMarkers(){
   D.thermal.forEach(t=>t.fires.forEach(f=>{
     const tone=thermalTone(f.lat,f.lon);
     addPt(f.lat,f.lon,2+Math.min(f.frp/50,5),tone?tone.color:'rgba(255,95,99,0.6)',tone?tone.halo:'rgba(255,95,99,0.2)',
-      ev=>showPopup(ev,'Thermal',`${t.region}<br>FRP: ${f.frp.toFixed(1)} MW`+(tone?`<br>${esc(t('risk.thermalTitle','Thermal escalation'))}: ${esc(t(tone.key,tone.label))}`:'')+(f.site?`<br>${esc(t('infra.onSite','On or beside a mapped military area'))}: ${esc(f.site)}`:''),'FIRMS'),3);
+      ev=>showPopup(ev,tFill('popup.thermal','Thermal'),`${t.region}<br>FRP: ${f.frp.toFixed(1)} MW`+(tone?`<br>${esc(tFill('risk.thermalTitle','Thermal escalation'))}: ${esc(tFill(tone.key,tone.label))}`:'')+(f.site?`<br>${esc(tFill('infra.onSite','On or beside a mapped military area'))}: ${esc(f.site)}`:''),'FIRMS'),3);
   }));
   // Chokepoints
   flatMarkerType='maritime';
@@ -2123,33 +2163,33 @@ function plotFlatMarkers(){
     if(!hasCoordinates(cp.lat,cp.lon)||!isMarkerTypeVisible('maritime'))return;
     const[x,y]=proj([cp.lon,cp.lat]);
     const g=mg.append('g').attr('transform',`translate(${x},${y})`).style('cursor','pointer').attr('data-priority',1).attr('data-layer',flatMarkerType)
-      .on('click',ev=>{ev.stopPropagation();showPopup(ev,cp.label,cp.note,'Maritime')});
+      .on('click',ev=>{ev.stopPropagation();showPopup(ev,cp.label,cp.note,tFill('popup.maritime','Maritime'))});
     g.append('rect').attr('x',-4).attr('y',-4).attr('width',8).attr('height',8).attr('fill','rgba(179,136,255,0.7)').attr('stroke','rgba(179,136,255,0.3)').attr('stroke-width',0.5).attr('transform','rotate(45)');
     g.append('text').attr('class','marker-label').attr('x',8).attr('y',3).attr('fill','var(--dim)').attr('font-size','8px').attr('font-family','var(--mono)').text(cp.label);
   });
   // Nuclear
   flatMarkerType='nuke';
   const nukeCoords=[{lat:47.5,lon:34.6},{lat:51.4,lon:30.1},{lat:28.8,lon:50.9},{lat:39.8,lon:125.8},{lat:37.4,lon:141},{lat:31.0,lon:35.1}];
-  D.nuke.forEach((n,i)=>{const c=nukeCoords[i];if(!c)return;addPt(c.lat,c.lon,4,'rgba(255,224,130,0.7)','rgba(255,224,130,0.3)',ev=>showPopup(ev,n.site,`CPM: ${n.cpm?.toFixed(1)||'--'}`+(n.wind&&Number.isFinite(n.wind.ms)?`<br>${esc(t('nuclear.windToward','Wind blows toward'))}: ${esc(n.wind.dir||'')} · ${n.wind.ms.toFixed(1)} m/s`:''),'Radiation'),2)});
+  D.nuke.forEach((n,i)=>{const c=nukeCoords[i];if(!c)return;addPt(c.lat,c.lon,4,'rgba(255,224,130,0.7)','rgba(255,224,130,0.3)',ev=>showPopup(ev,n.site,`CPM: ${n.cpm?.toFixed(1)||'--'}`+(n.wind&&Number.isFinite(n.wind.ms)?`<br>${esc(t('nuclear.windToward','Wind blows toward'))}: ${esc(n.wind.dir||'')} · ${n.wind.ms.toFixed(1)} m/s`:''),tFill('popup.radiation','Radiation')),2)});
   // SDR
   flatMarkerType='sdr';
   D.sdr.zones.forEach(z=>z.receivers.forEach(r=>{addPt(r.lat,r.lon,2.5,'rgba(68,204,255,0.5)','rgba(68,204,255,0.2)',ev=>showPopup(ev,'SDR',`${r.name}<br>${z.region}`,'KiwiSDR'),3)}));
   // OSINT
   flatMarkerType='osint';
   const osintGeo=[{lat:45,lon:41,idx:0},{lat:48,lon:37,idx:1},{lat:48.5,lon:37.5,idx:2},{lat:45,lon:40.2,idx:3},{lat:50.6,lon:36.6,idx:5},{lat:48.5,lon:35,idx:6}];
-  osintGeo.forEach(o=>{const p=D.tg.urgent[o.idx];if(!p)return;addPt(o.lat,o.lon,4,'rgba(255,184,76,0.7)','rgba(255,184,76,0.3)',ev=>showPopup(ev,(p.channel||'').toUpperCase(),cleanText(p.text?.substring(0,200)||''),`${p.views||'?'} views`),2)});
+  osintGeo.forEach(o=>{const p=D.tg.urgent[o.idx];if(!p)return;addPt(o.lat,o.lon,4,'rgba(255,184,76,0.7)','rgba(255,184,76,0.3)',ev=>showPopup(ev,(p.channel||'').toUpperCase(),cleanText(p.text?.substring(0,200)||''),tFill('popup.views','{count} views',{count:p.views||'?'})),2)});
   // WHO
   flatMarkerType='health';
-  D.who.slice(0,10).forEach(w=>{if(w.lat==null||w.lon==null)return;addPt(w.lat,w.lon,w.severity==='critical'?4.8:w.severity==='high'?4.2:3.6,'rgba(105,240,174,0.6)','rgba(105,240,174,0.2)',ev=>showPopup(ev,w.title,w.summary||w.response||w.overview||'',`WHO ${(w.severity||'monitor').toUpperCase()} · ${w.region||'Global'}`),2)});
+  D.who.slice(0,10).forEach(w=>{if(w.lat==null||w.lon==null)return;addPt(w.lat,w.lon,w.severity==='critical'?4.8:w.severity==='high'?4.2:3.6,'rgba(105,240,174,0.6)','rgba(105,240,174,0.2)',ev=>showPopup(ev,w.title,w.summary||w.response||w.overview||'',`WHO ${severityWord(w.severity)} · ${w.region||tFill('popup.global','Global')}`),2)});
   // Supplemental health
   flatMarkerType='healthSupplemental';
-  (D.supplementalHealth||[]).slice(0,10).forEach(w=>{if(w.lat==null||w.lon==null)return;addPt(w.lat,w.lon,w.severity==='critical'?4.2:w.severity==='high'?3.8:3.3,'rgba(155,231,177,0.68)','rgba(155,231,177,0.22)',ev=>showPopup(ev,w.title,(w.countries||[]).join(', ')||'',`${esc(w.source||'ReliefWeb/HDX')} · ${(w.severity||'monitor').toUpperCase()}`),3)});
+  (D.supplementalHealth||[]).slice(0,10).forEach(w=>{if(w.lat==null||w.lon==null)return;addPt(w.lat,w.lon,w.severity==='critical'?4.2:w.severity==='high'?3.8:3.3,'rgba(155,231,177,0.68)','rgba(155,231,177,0.22)',ev=>showPopup(ev,w.title,(w.countries||[]).join(', ')||'',`${esc(w.source||'ReliefWeb/HDX')} · ${severityWord(w.severity)}`),3)});
   // IODA internet outages
   flatMarkerType='ioda';
   (D.ioda?.countries||[]).forEach(c=>{if(c.lat==null||c.lon==null)return;addPt(c.lat,c.lon,3.2+Math.min((c.overallScore||0)/2500,2.2)+(c.activeCount>0?0.8:0),'rgba(77,208,225,0.72)','rgba(77,208,225,0.26)',ev=>showPopup(ev,`${c.country} · ${t('map.internetOutage','Internet Outage')}`,`${t('ioda.events','Events')}: ${c.eventCount}<br>${t('ioda.active','ACTIVE')}: ${c.activeCount}<br>${t('ioda.score','Score')}: ${Math.round(c.overallScore)}`,`IODA · ${c.topDatasource||'overall'}`),2)});
   // News
   flatMarkerType='news';
-  (D.news||[]).forEach(n=>{if(!isGroupedNews(n))addPt(n.lat,n.lon,3,'rgba(129,212,250,0.6)','rgba(129,212,250,0.2)',ev=>showPopup(ev,n.source+' NEWS',cleanText(n.title),n.region),3)});
+  (D.news||[]).forEach(n=>{if(!isGroupedNews(n))addPt(n.lat,n.lon,3,'rgba(129,212,250,0.6)','rgba(129,212,250,0.2)',ev=>showPopup(ev,tFill('popup.news','{source} NEWS',{source:n.source}),cleanText(n.title),n.region),3)});
   if(groupNews)for(const cluster of visibleEventClusters()){
     const marker=addPt(cluster.lat,cluster.lon,8,'rgba(129,212,250,0.85)','rgba(129,212,250,0.4)',()=>CrucixIntelligence.openCluster(cluster),1);
     if(marker){marker.attr('data-cluster-id',cluster.id).attr('role','button').attr('tabindex',0).attr('aria-label',t('intelligence.cluster','Grouped reports')+' '+cluster.count).on('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();CrucixIntelligence.openCluster(cluster);}});marker.append('text').attr('text-anchor','middle').attr('dy','.35em').attr('fill','#020408').attr('font-size','9px').text(cluster.count);}
@@ -2171,19 +2211,19 @@ function plotFlatMarkers(){
   // Space stations
   flatMarkerType='space';
   (D.space?.stationPositions||[]).forEach(s=>{
-    const g=addPt(s.lat,s.lon,5,'rgba(255,255,255,0.9)','rgba(255,255,255,0.4)',ev=>showPopup(ev,s.name,'Orbital position estimate','Space Station'),1);
+    const g=addPt(s.lat,s.lon,5,'rgba(255,255,255,0.9)','rgba(255,255,255,0.4)',ev=>showPopup(ev,s.name,tFill('popup.orbitalEstimate','Orbital position estimate'),tFill('map.spaceStation','Space Station')),1);
     if(g) g.append('text').attr('class','marker-label').attr('x',8).attr('y',3).attr('fill','rgba(255,255,255,0.7)').attr('font-size','8px').attr('font-family','var(--mono)').text(s.name.split('(')[0].trim());
   });
   // GDELT geo events
   flatMarkerType='gdelt';
-  (D.gdelt?.geoPoints||[]).forEach(g=>{addPt(g.lat,g.lon,2.5,'rgba(100,149,237,0.5)','rgba(100,149,237,0.2)',ev=>showPopup(ev,'GDELT Event',g.name||'','GDELT · '+g.count+' reports'),3)});
+  (D.gdelt?.geoPoints||[]).forEach(g=>{addPt(g.lat,g.lon,2.5,'rgba(100,149,237,0.5)','rgba(100,149,237,0.2)',ev=>showPopup(ev,tFill('map.gdeltEvent','GDELT Event'),g.name||'','GDELT · '+tFill('popup.reports','{count} reports',{count:g.count})),3)});
   // ACLED
   flatMarkerType='conflict';
   (D.acled?.deadliestEvents||[]).filter(e=>hasCoordinates(e.lat,e.lon)&&isMarkerTypeVisible('conflict')).forEach(e=>{
     const[x,y]=proj([e.lon,e.lat]);if(!x||!y)return;
     const r=Math.max(4,Math.min(14,2+Math.log2(Math.max(e.fatalities,1))*1.5));
     const g=mg.append('g').attr('transform',`translate(${x},${y})`).style('cursor','pointer').attr('data-priority',1).attr('data-layer',flatMarkerType)
-      .on('click',ev=>{ev.stopPropagation();showPopup(ev,e.type||'CONFLICT',`${e.fatalities} fatalities<br>${e.location}, ${e.country}`,'ACLED')});
+      .on('click',ev=>{ev.stopPropagation();showPopup(ev,e.type||tFill('map.conflict','Conflict').toUpperCase(),`${tFill('popup.fatalities','{count} fatalities',{count:e.fatalities})}<br>${e.location}, ${e.country}`,'ACLED')});
     g.append('circle').attr('class','conflict-ring marker-circle').attr('r',r).attr('data-base-r',r).attr('fill','none').attr('stroke','rgba(255,120,80,0.7)').attr('stroke-width',1.5);
     g.append('circle').attr('r',r*0.4).attr('fill','rgba(255,120,80,0.3)');
   });
@@ -2284,7 +2324,7 @@ function safeExternalUrl(raw){if(typeof raw!=='string'||!raw.trim())return null;
 // === BOOT SEQUENCE ===
 function runBoot(){
   if(reducedMotion || typeof gsap==='undefined'){document.getElementById('boot').style.display='none';document.getElementById('main').style.opacity='1';return;}
-  const acledStatus = D.acled?.totalEvents > 0 ? `<span class="ok">${D.acled.totalEvents} EVENTS</span>` : '<span style="color:var(--warn)">DEGRADED</span>';
+  const acledStatus = D.acled?.totalEvents > 0 ? `<span class="ok">${D.acled.totalEvents} ${t('boot.events','EVENTS')}</span>` : `<span style="color:var(--warn)">${t('boot.degraded','DEGRADED')}</span>`;
   const lines=[
     {text:t('boot.initializing','INITIALIZING CRUCIX ENGINE'),delay:0},
     {text:t('boot.connecting','CONNECTING {count} OSINT SOURCES...').replace('{count}',D.meta.sourcesQueried),delay:400},
@@ -2504,21 +2544,40 @@ function buildOsintPanel(panelClass='', maxHeight=260){
     overlay.setAttribute('aria-hidden','true');overlay.inert=true;
   }
 
+// The Signal Guide in the page language: glossary.* for the dialog's own words, glossary.items.<id>.<field> per entry, the English of
+// signalGuideItems as the fallback (test/i18n-display.test.mjs keeps it equal to locales/en.json).
 function renderGlossary(){
   const body = document.getElementById('glossaryBody');
   if(!body) return;
-  body.innerHTML = signalGuideItems.map(item => `
+  const say=(key,fallback)=>t('glossary.'+key,fallback);
+  const overlay=document.getElementById('glossaryOverlay');
+  for(const [selector,key,fallback] of [['.glossary-kicker','kicker','Signal Guide'],['.glossary-title','title','What the signals actually mean'],
+    ['.glossary-sub','sub','Plain-English interpretation, why it matters, and what you should not infer from it.'],
+    ['.glossary-foot','foot','Treat these as interpretation guides, not conclusions. Stronger judgments should come from corroboration across multiple layers, not from a single signal viewed in isolation.']]){
+    const node=overlay?.querySelector(selector);if(node)node.textContent=say(key,fallback);
+  }
+  overlay?.querySelector('.glossary-close')?.setAttribute('aria-label',say('close','Close signal guide'));
+  const line=(key,fallback,text)=>`<div class="glossary-line"><span class="glossary-label">${esc(say(key,fallback))}</span>${esc(text)}</div>`;
+  body.innerHTML = signalGuideItems.map(item => {
+    const field=name=>say('items.'+item.id+'.'+name,item[name]);
+    return `
     <div class="glossary-card">
       <div class="glossary-term">
-        <strong>${item.term}</strong>
-        <span class="glossary-tag">${item.category}</span>
+        <strong>${esc(field('term'))}</strong>
+        <span class="glossary-tag">${esc(say('category.'+item.cat,item.category))}</span>
       </div>
-      <div class="glossary-line"><span class="glossary-label">Meaning</span>${item.meaning}</div>
-      <div class="glossary-line"><span class="glossary-label">Why it matters</span>${item.matters}</div>
-      <div class="glossary-line"><span class="glossary-label">Not proof of</span>${item.notMeaning}</div>
-      <div class="glossary-line"><span class="glossary-label">Example</span>${item.example}</div>
+      ${line('meaning','Meaning',field('meaning'))}
+      ${line('matters','Why it matters',field('matters'))}
+      ${line('notMeaning','Not proof of',field('notMeaning'))}
+      ${line('example','Example',field('example'))}
     </div>
-  `).join('');
+  `;}).join('');
+}
+
+// The static tooltips of the page (the map buttons): the English title is the fallback of the data-tip key. Run with the map's
+// render (renderMapVisibility), so it is in place before the map shows.
+function localizeTooltips(){
+  for(const node of document.querySelectorAll('[data-tip]'))node.title=t(node.getAttribute('data-tip'),node.title);
 }
 
 function openGlossary(){

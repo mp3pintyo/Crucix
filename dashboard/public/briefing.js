@@ -7,7 +7,7 @@
   // The answer is labelled "AI-generated from the cited records" or "Rule-based summary"; the model's text is plain text (escaped here).
   // mount(options):
   //   t(key, fallback), locale   the page's text (group `briefing`, `risk.replayNote`) and time locale
-  //   getScopes()       [{iso3, name}] of the scope list (the page's D.risk.top)
+  //   getScopes()       [{iso3, name, displayName?}] of the scope list (the page's D.risk.top); displayName is shown when present
   //   postJson(url, body)  -> Promise<object>; a rejection may carry .status (default: fetch, same-origin, JSON, 120 s timeout)
   //   isReplay()        a sweep replay holds the page: the briefing reads the live store, so Generate is off and the note says why
   //   openEvent(id)     opens a record (default CrucixIntelligence.openEvent)
@@ -83,7 +83,7 @@
   function scopes(){
     let list=[];
     try{list=typeof opts.getScopes==='function'?opts.getScopes():[];}catch(error){log(error);}
-    return (Array.isArray(list)?list:[]).filter(item=>isObject(item)&&typeof item.iso3==='string'&&ISO3.test(item.iso3)).slice(0,MAX_SCOPES).map(item=>({iso3:item.iso3,name:plain(item.name,120)||item.iso3}));
+    return (Array.isArray(list)?list:[]).filter(item=>isObject(item)&&typeof item.iso3==='string'&&ISO3.test(item.iso3)).slice(0,MAX_SCOPES).map(item=>({iso3:item.iso3,name:plain(item.displayName,120)||plain(item.name,120)||item.iso3}));
   }
   function options(preset){
     const list=scopes();

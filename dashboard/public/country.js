@@ -152,7 +152,7 @@
   }
   function linked(list){
     const rows=(Array.isArray(list)?list:[]).filter(item=>isObject(item)&&typeof item.iso3==='string'&&ISO3.test(item.iso3)).slice(0,8)
-      .map(item=>`<li><button type="button" class="cs-link" data-country-open="${item.iso3}">${esc(text(item.name,120)||item.iso3)} <span class="cs-n">${esc(say('linkedCount',{count:Number.isSafeInteger(item.count)?item.count:0}))}</span></button></li>`);
+      .map(item=>`<li><button type="button" class="cs-link" data-country-open="${item.iso3}">${esc(text(item.displayName,120)||text(item.name,120)||item.iso3)} <span class="cs-n">${esc(say('linkedCount',{count:Number.isSafeInteger(item.count)?item.count:0}))}</span></button></li>`);
     return `<section class="cs-sec" aria-labelledby="cs-linked"><h3 id="cs-linked">${esc(say('linked'))}</h3>${rows.length?`<ul class="cs-links">${rows.join('')}</ul>`:`<p class="cs-calm">${esc(say('linkedNone'))}</p>`}</section>`;
   }
   /** The sheet's markup for one /api/countries/:iso3 answer (pure; every dynamic string escaped). */
@@ -208,7 +208,7 @@
     try{markup=isObject(data)&&data.iso3===iso3?render(data):'';}catch(error){log(error);markup='';}
     busy(false);
     if(!markup){nodes.status.textContent=say('error');return false;}
-    nodes.title.textContent=(text(data.name,120)||iso3)+' · '+iso3;
+    nodes.title.textContent=(text(data.displayName,120)||text(data.name,120)||iso3)+' · '+iso3;
     nodes.body.innerHTML=markup;nodes.body.scrollTop=0;
     return true;
   }

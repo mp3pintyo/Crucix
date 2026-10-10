@@ -147,7 +147,20 @@
     "rules": "RULES",
     "noRuleSignals": "No qualifying rule signals in this sweep",
     "cached": "Preserved from an earlier sweep",
-    "generated": "Generated"
+    "generated": "Generated",
+    "type_LONG": "LONG",
+    "type_SHORT": "SHORT",
+    "type_HEDGE": "HEDGE",
+    "type_WATCH": "WATCH",
+    "type_AVOID": "AVOID",
+    "confidence_HIGH": "HIGH",
+    "confidence_MEDIUM": "MEDIUM",
+    "confidence_LOW": "LOW",
+    "confidenceBadge": "{level} confidence",
+    "horizon_Intraday": "Intraday",
+    "horizon_Days": "Days",
+    "horizon_Weeks": "Weeks",
+    "horizon_Months": "Months"
   },
   "ioda": {
     "countries": "Countries",
@@ -189,7 +202,36 @@
     "noChanges": "No changes since last sweep",
     "changes": "Changes",
     "critical": "Critical",
-    "new": "NEW"
+    "new": "NEW",
+    "labels": {
+      "vix": "VIX",
+      "hy_spread": "HY Spread",
+      "10y2y": "10Y-2Y Spread",
+      "wti": "WTI Crude",
+      "brent": "Brent Crude",
+      "natgas": "Natural Gas",
+      "gold": "Gold",
+      "silver": "Silver",
+      "unemployment": "Unemployment",
+      "fed_funds": "Fed Funds Rate",
+      "10y_yield": "10Y Yield",
+      "usd_index": "USD Index",
+      "mortgage": "30Y Mortgage",
+      "urgent_posts": "Urgent OSINT Posts",
+      "thermal_total": "Thermal Detections",
+      "air_total": "Air Activity",
+      "who_alerts": "WHO Alerts",
+      "conflict_events": "Conflict Events",
+      "conflict_fatalities": "Conflict Fatalities",
+      "sdr_online": "SDR Receivers",
+      "news_count": "News Items",
+      "sources_ok": "Sources OK",
+      "nuke_anomaly": "Nuclear Anomaly"
+    },
+    "reasons": {
+      "tg_urgent": "New urgent OSINT post",
+      "nuke_anomaly": "Nuclear anomaly detected"
+    }
   },
   "metrics": {
     "wtiCrude": "WTI Crude",
@@ -209,7 +251,7 @@
     "wti5day": "WTI 5-DAY",
     "indexes": "INDEXES",
     "crypto": "CRYPTO",
-    "energyMacro": "ENERGY + MACRO",
+    "energyMacro": "ENERGY + METALS + MACRO",
     "vsPrior": "vs prior",
     "ecbRate": "ECB Rate",
     "eurusd": "EUR/USD",
@@ -548,6 +590,39 @@
       "retry": "Retry",
       "unavailable": "Rules are only available on the live dashboard",
       "confirmDelete": "Delete this rule?"
+    },
+    "errors": {
+      "boolean": "must be true or false",
+      "integerRange": "must be an integer from {min} to {max}",
+      "finite": "must be a finite number",
+      "numberRange": "must be a number from {min} to {max}",
+      "oneOf": "must be one of {list}",
+      "metricKey": "must be a known metric key",
+      "string": "must be a string",
+      "notEmpty": "must not be empty",
+      "maxLength": "must be at most {max} characters",
+      "controlChars": "must not contain control characters",
+      "idPattern": "must be 1-40 characters of a-z, 0-9 and -",
+      "list": "must be a list",
+      "maxEntries": "must have at most {max} entries",
+      "plainString": "must be a plain string",
+      "eventKind": "must be a lowercase event kind such as conflict or space-weather",
+      "object": "must be an object",
+      "plainObject": "must be a plain object",
+      "symbolKeys": "must not have symbol keys",
+      "unknownField": "is not a known field",
+      "plainData": "must be plain data",
+      "required": "is required",
+      "clearAtMost": "must be at most the threshold value",
+      "clearAtLeast": "must be at least the threshold value",
+      "maxBelowMin": "must not be below params.minLevel",
+      "kindsTooFew": "needs at least that many different entries in params.kinds",
+      "idMismatch": "must match the rule id in the path",
+      "scopeEventOnly": "is only allowed on event rules",
+      "builtinFixed": "cannot be changed on a built-in rule",
+      "userRuleLimit": "At most {max} user rules",
+      "builtinDelete": "Built-in rules cannot be deleted; disable them instead",
+      "noSuchRule": "No such rule"
     }
   },
   "discord": {
@@ -1337,5 +1412,185 @@
     "groupSoftware": "Software",
     "source": "source",
     "button": "Data credits"
+  },
+  "export": {
+    "title": "Crucix public-source report",
+    "summary": "Exported {exported} of {total} matching records. {scope} Generated {generatedAt}. Query filters: {filters}. Public-source context and traceability checks do not establish the truth of claims or independent corroboration.",
+    "truncated": "Truncated: export is limited to {cap} records or the supplied result page.",
+    "complete": "Complete supplied result set.",
+    "empty": "No matching events.",
+    "related": "Related reports: {list}",
+    "unknownHost": "unknown source host",
+    "scopeNote": "Export scope and limitations",
+    "reportName": "Crucix public-source context export",
+    "relatedNote": "Related report; not independent corroboration",
+    "contextOnly": "Public-source context only; not a cyber indicator or an asserted threat."
+  },
+  "glossary": {
+    "kicker": "Signal Guide",
+    "title": "What the signals actually mean",
+    "sub": "Plain-English interpretation, why it matters, and what you should not infer from it.",
+    "close": "Close signal guide",
+    "foot": "Treat these as interpretation guides, not conclusions. Stronger judgments should come from corroboration across multiple layers, not from a single signal viewed in isolation.",
+    "meaning": "Meaning",
+    "matters": "Why it matters",
+    "notMeaning": "Not proof of",
+    "example": "Example",
+    "category": {
+      "air": "Air",
+      "thermal": "Thermal",
+      "maritime": "Maritime",
+      "signals": "Signals",
+      "radiation": "Radiation",
+      "macro": "Macro",
+      "health": "Health",
+      "platform": "Platform"
+    },
+    "items": {
+      "noCallsign": {
+        "term": "No Callsign",
+        "meaning": "OpenSky received an aircraft track without a usable callsign or flight ID in that record.",
+        "matters": "Useful as an opacity signal. A cluster of missing callsigns can indicate incomplete transponder metadata or less transparent traffic.",
+        "notMeaning": "Not proof of military, covert, or hostile activity on its own.",
+        "example": "South China Sea: No Callsign 6 of 152 means 6 tracks in that theater had no usable callsign in the feed."
+      },
+      "highAltitude": {
+        "term": "High Altitude",
+        "meaning": "Aircraft above 12,000 meters, roughly 39,000 feet, in the current OpenSky snapshot.",
+        "matters": "Separates cruise-level traffic from lower-altitude local or regional movement.",
+        "notMeaning": "Not a danger score and not inherently unusual. Commercial jets commonly operate here.",
+        "example": "High Altitude 2 means only 2 tracked aircraft in that hotspot were above the cruise threshold at that snapshot."
+      },
+      "topCountries": {
+        "term": "Top Countries",
+        "meaning": "The most common OpenSky origin_country values among aircraft in that hotspot.",
+        "matters": "Useful for understanding the rough composition of traffic flowing through a theater.",
+        "notMeaning": "Not who is controlling the aircraft right now and not a direct indicator of military ownership.",
+        "example": "China (61), Philippines (39), Taiwan (17) means those were the top registered origin countries in the snapshot."
+      },
+      "frp": {
+        "term": "FRP",
+        "meaning": "Fire Radiative Power. This is the intensity of one specific FIRMS hotspot, measured in megawatts.",
+        "matters": "Higher FRP usually means a hotter, larger, or more energetic fire event at that exact point.",
+        "notMeaning": "Not the intensity of the whole region and not automatic proof of conflict activity.",
+        "example": "Sudan / Horn of Africa: FRP 92.3 MW describes that one hotspot, while Total 1,451 describes the entire regional detection count."
+      },
+      "totalDetections": {
+        "term": "Total Detections",
+        "meaning": "The total number of FIRMS thermal detections in the entire region bucket for the current sweep.",
+        "matters": "Useful for spotting unusually active fire clusters, especially when compared with historical baselines or night activity.",
+        "notMeaning": "Not a count for the single map point you clicked and not necessarily a conflict count.",
+        "example": "Total 1,451 means the whole Sudan / Horn of Africa bucket had 1,451 detections in that sweep."
+      },
+      "nightDetections": {
+        "term": "Night Detections",
+        "meaning": "Thermal detections tagged as occurring at night inside the broader FIRMS region bucket.",
+        "matters": "Nighttime heat can be more noteworthy because it is less likely to be routine daytime land burning.",
+        "notMeaning": "Not a direct combat indicator. It still needs context from location, baseline, and corroborating sources.",
+        "example": "Night 140 means 140 of the 1,451 regional detections were nighttime detections in that sweep."
+      },
+      "chokepoint": {
+        "term": "Chokepoint",
+        "meaning": "A strategic maritime corridor or passage where trade and energy flows can be delayed, diverted, or disrupted.",
+        "matters": "These nodes matter because a disruption here can affect shipping costs, transit times, and commodity pricing globally.",
+        "notMeaning": "Not proof that disruption is happening now. It is a strategic watch location.",
+        "example": "Bab el-Mandeb or the Strait of Hormuz matter because shipping and energy flows concentrate there."
+      },
+      "sdrReceiver": {
+        "term": "SDR Receiver",
+        "meaning": "A publicly reachable software-defined radio receiver in or near a region of interest.",
+        "matters": "Dense receiver coverage can give you more ability to monitor communications or signal activity in a theater.",
+        "notMeaning": "Not evidence of hostile emissions or a threat by itself. It is an observation and monitoring layer.",
+        "example": "South China Sea SDR count means publicly accessible KiwiSDR receivers are available in or near that zone."
+      },
+      "cpm": {
+        "term": "CPM",
+        "meaning": "Counts per minute from a radiation monitoring source, used here for relative radiation status at a site.",
+        "matters": "Useful for spotting anomalies against the site’s normal range or comparing consecutive readings.",
+        "notMeaning": "Not a direct safety verdict on its own. Interpretation depends on local baseline and trend, not the raw number alone.",
+        "example": "A site reading 33 CPM can be normal if that location’s usual background level is in the same range."
+      },
+      "hySpread": {
+        "term": "HY Spread",
+        "meaning": "High-yield credit spread, shown here as a stress proxy from FRED credit data.",
+        "matters": "When spreads widen, markets are usually pricing more credit stress and tighter financial conditions.",
+        "notMeaning": "Not a recession call by itself. It is one stress signal among many.",
+        "example": "A rising HY Spread alongside higher VIX and weaker equities is a stronger risk-off pattern than HY alone."
+      },
+      "vix": {
+        "term": "VIX",
+        "meaning": "The CBOE Volatility Index, commonly used as a market-implied fear or volatility gauge.",
+        "matters": "Higher VIX often means more expected equity volatility and more defensive market positioning.",
+        "notMeaning": "Not a direct forecast of a crash and not a geopolitical indicator by itself.",
+        "example": "VIX above 20 with widening HY spreads is a stronger stress pattern than VIX alone."
+      },
+      "gscpi": {
+        "term": "GSCPI",
+        "meaning": "The Global Supply Chain Pressure Index, a broad indicator of global supply-chain strain.",
+        "matters": "It helps translate geopolitical or weather disruptions into likely pressure on shipping, inventory, and pricing.",
+        "notMeaning": "Not a live market price and not a company-specific supply-chain score by itself.",
+        "example": "A higher GSCPI makes route or energy shocks more likely to spill into broader cost pressure."
+      },
+      "whoAlert": {
+        "term": "WHO Alert",
+        "meaning": "A WHO Disease Outbreak News item or outbreak-related bulletin surfaced in the health layer.",
+        "matters": "Useful for watching outbreaks that could affect travel, supply chains, humanitarian stress, or regional operating conditions.",
+        "notMeaning": "Not a pandemic declaration and not automatically high severity.",
+        "example": "A WHO alert in a port-heavy region matters more if it overlaps shipping, border controls, or local instability signals."
+      },
+      "sweepDelta": {
+        "term": "Sweep Delta",
+        "meaning": "The change summary between the current sweep and the previous one, including new, escalated, and de-escalated signals.",
+        "matters": "Useful for spotting what changed recently instead of re-reading the full dashboard from scratch.",
+        "notMeaning": "Not a full risk model. It is a directional change layer on top of the raw signals.",
+        "example": "A delta marked risk-off with several new and escalated items means the latest sweep materially worsened the signal mix."
+      }
+    }
+  },
+  "popup": {
+    "aircraftTracked": "{count} aircraft tracked",
+    "aircraft": "{count} aircraft",
+    "noCallsign": "No callsign",
+    "highAltitude": "High altitude",
+    "highAlt": "High alt",
+    "top": "Top",
+    "firmsSatellite": "FIRMS Satellite",
+    "thermal": "Thermal",
+    "region": "Region",
+    "total": "Total",
+    "night": "Night",
+    "maritimeIntel": "Maritime Intelligence",
+    "maritime": "Maritime",
+    "radiationMonitoring": "Radiation Monitoring",
+    "radiation": "Radiation",
+    "status": "Status",
+    "anomaly": "ANOMALY",
+    "normal": "Normal",
+    "avgCpm": "Avg CPM",
+    "readings": "Readings",
+    "kiwiNetwork": "KiwiSDR Network",
+    "zone": "Zone",
+    "inZone": "{count} in zone",
+    "views": "{count} views",
+    "global": "Global",
+    "notAvailable": "n/a",
+    "news": "{source} NEWS",
+    "epaMonitor": "EPA Radiation Monitor",
+    "state": "State",
+    "stationApprox": "Space Station (approx.)",
+    "orbitalEstimate": "Orbital position estimate",
+    "lat": "Lat",
+    "lon": "Lon",
+    "reports": "{count} reports",
+    "gdeltDefault": "Global event detection",
+    "fatalities": "{count} fatalities",
+    "acledData": "ACLED Conflict Data",
+    "date": "Date",
+    "corridor": "{from} ↔ {to}: {count} aircraft",
+    "globeLoading": "Initializing 3D Globe",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "toggleFlights": "Toggle flight routes",
+    "visualsHelp": "Reduce visual effects and start mobile in flat mode"
   }
 }
