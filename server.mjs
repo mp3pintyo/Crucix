@@ -41,6 +41,9 @@ import { attachAlertSummary, runAlertStep } from './lib/alerts/sweep.mjs';
 import { SweepArchive } from './lib/sweeps/archive.mjs';
 import { installSweepRoutes } from './lib/sweeps/routes.mjs';
 import { archiveSweep } from './lib/sweeps/step.mjs';
+import { WORLD_FEEDS, getFeedsByCountry } from './apis/utils/news-feeds.mjs';
+import { parseFeed } from './apis/utils/rss.mjs';
+import { getWorldNewsByCountry, getWorldNews, getBalancedWorldNews, getWorldRssStats, startWorldRssScheduler } from './lib/world-rss-runner.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = __dirname;
@@ -404,6 +407,87 @@ app.get('/api/locales', (req, res) => {
   });
 });
 
+// API: world news country catalog
+app.get('/api/news/countries', (req, res) => {
+  const byCountry = new Map();
+  for (const f of WORLD_FEEDS) {
+    if (!f.country) continue;
+    if (!byCountry.has(f.country)) byCountry.set(f.country, { code: f.country, feeds: [] });
+    byCountry.get(f.country).feeds.push({ source: f.source, url: f.url, lang: f.lang });
+  }
+  res.json({
+    totalCountries: byCountry.size,
+    totalFeeds: WORLD_FEEDS.length,
+    countries: Array.from(byCountry.values()).sort((a, b) => a.code.localeCompare(b.code)),
+  });
+});
+
+// API: fetch on-demand live or cached news for a country
+app.get('/api/news/country/:code', async (req, res) => {
+  const code = (req.params.code || '').trim().toUpperCase();
+  const feeds = getFeedsByCountry(code);
+  if (!feeds.length) return res.status(404).json({ error: `Country ${code} not found in world feeds catalog` });
+
+  const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 50);
+  const forceLive = req.query.live === 'true';
+
+  // Return from 30-min background cache if available and not forced live
+  if (!forceLive) {
+    const cached = getWorldNewsByCountry(code);
+    if (cached && cached.length > 0) {
+      return res.json({
+        country: code,
+        cached: true,
+        totalSources: feeds.length,
+        returned: Math.min(cached.length, limit),
+        items: cached.slice(0, limit),
+      });
+    }
+  }
+
+  try {
+    const results = await Promise.allSettled(
+      feeds.map(async f => {
+        const fetchRes = await fetch(f.url, {
+          signal: AbortSignal.timeout(6000),
+          headers: { 'User-Agent': 'Mozilla/5.0 (Crucix Intelligence Reader)' },
+        });
+        if (!fetchRes.ok) throw new Error(`HTTP ${fetchRes.status}`);
+        const text = await fetchRes.text();
+        return parseFeed(text).map(item => ({
+          source: f.source,
+          title: item.title,
+          url: item.link,
+          date: item.date,
+          country: f.country,
+          lang: f.lang,
+        }));
+      })
+    );
+    const items = results.filter(r => r.status === 'fulfilled').flatMap(r => r.value);
+    items.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+    res.json({
+      country: code,
+      cached: false,
+      totalSources: feeds.length,
+      returned: Math.min(items.length, limit),
+      items: items.slice(0, limit),
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// API: cached world news status and top feeds
+app.get('/api/news/world', (req, res) => {
+  const stats = getWorldRssStats();
+  const limit = Math.min(Math.max(Number(req.query.limit) || 20, 1), 100);
+  res.json({
+    stats,
+    items: getWorldNews(limit),
+  });
+});
+
 // After the last /api route: JSON for what a route could not answer itself (a broken percent-encoding in an id, an escaped error).
 installApiErrorHandler(app);
 
@@ -427,6 +511,43 @@ app.get('/events', (req, res) => {
 
 function broadcast(data) {
   broadcastEvent(sseClients, data);
+}
+
+function safeIsoDate(raw) {
+  if (!raw) return new Date().toISOString();
+  const ms = Date.parse(raw);
+  return Number.isFinite(ms) ? new Date(ms).toISOString() : new Date().toISOString();
+}
+
+function enrichNewsFeed(synthesized) {
+  try {
+    const cachedWorldNews = getBalancedWorldNews(12);
+    if (!cachedWorldNews || !cachedWorldNews.length) return;
+    const existingUrls = new Set((synthesized.newsFeed || []).map(n => n.url).filter(Boolean));
+    const existingTitles = new Set((synthesized.newsFeed || []).map(n => (n.headline || '').substring(0, 40).toLowerCase()));
+    for (const item of cachedWorldNews) {
+      const titleKey = (item.title || '').substring(0, 40).toLowerCase();
+      if (existingUrls.has(item.url) || existingTitles.has(titleKey)) continue;
+      const iso = safeIsoDate(item.date);
+      synthesized.newsFeed.push({
+        headline: item.title,
+        source: item.source,
+        type: 'rss',
+        timestamp: iso,
+        publishedAt: iso,
+        region: item.country || 'Global',
+        urgent: false,
+        url: item.url,
+        tier: item.tier || 3,
+        lang: item.lang,
+        country: item.country,
+      });
+      existingUrls.add(item.url);
+      existingTitles.add(titleKey);
+    }
+  } catch (err) {
+    console.warn('[NewsFeed] Enrich error:', err.message);
+  }
 }
 
 // === Sweep Cycle ===
@@ -454,6 +575,7 @@ async function runSweepCycle() {
     // 3. Synthesize into dashboard format
     console.log('[Crucix] Synthesizing dashboard data...');
     const synthesized = await synthesize(rawData);
+    enrichNewsFeed(synthesized);
 
     // Calculate against the prior run; persist only after ideas have been resolved.
     const previous = memory.getLastRun();
@@ -560,6 +682,7 @@ async function start() {
       // news, and the sweep behind runs/latest.json was archived when it ran - except on the first start after the upgrade to a
       // version with an archive, when that sweep ran before there was one. The initial sweep below is then the first one stored.
       attachAlertSummary(data, alertEngine);
+      enrichNewsFeed(data);
       currentData = data;
       lastSweepTime = data.meta?.timestamp || null;
       console.log('[Crucix] Loaded existing data from runs/latest.json — dashboard ready instantly');
@@ -576,6 +699,9 @@ async function start() {
 
     // Schedule recurring sweeps
     setInterval(runSweepCycle, config.refreshIntervalMinutes * 60 * 1000);
+
+    // Start 30-minute background world RSS runner (539 feeds)
+    startWorldRssScheduler(30);
   });
 }
 

@@ -88,10 +88,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .regime-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(255,95,99,0.3);color:#ffd8d9;background:rgba(255,95,99,0.08)}
 .regime-chip .blink{width:6px;height:6px;border-radius:50%;background:var(--danger);box-shadow:0 0 8px var(--danger);animation:pulse-blink 1.5s ease-in-out infinite}
 @keyframes pulse-blink{0%,100%{opacity:1}50%{opacity:0.3}}
-.top-center{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.region-btn{border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--dim);font-family:var(--mono);font-size:11px;padding:6px 12px;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:all 0.2s}
-.region-btn:hover{border-color:var(--accent);color:var(--text)}
-.region-btn.active{color:#03140d;background:var(--accent);border-color:var(--accent)}
+.top-center{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.region-btn{border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--dim);font-family:var(--mono);font-size:11px;padding:5px 9px;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.region-btn:hover{border-color:var(--accent);color:var(--text);background:rgba(100,240,200,0.05)}
+.region-btn.active{color:#03140d;background:var(--accent);border-color:var(--accent);font-weight:600}
+.region-picker-wrap{display:inline-flex;align-items:center;gap:6px;margin-left:auto;padding-left:8px;border-left:1px solid rgba(100,240,200,0.15)}
+.region-picker-label{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap}
+.region-country-select{background:rgba(4,16,20,0.92);border:1px solid var(--border);color:var(--accent);font-family:var(--mono);font-size:11px;padding:4px 8px;letter-spacing:0.04em;outline:none;cursor:pointer;max-width:210px;text-overflow:ellipsis;transition:all 0.2s}
+.region-country-select:hover,.region-country-select:focus{border-color:var(--accent);box-shadow:0 0 8px rgba(100,240,200,0.2)}
+.region-country-select option{background:#041410;color:var(--text);font-family:var(--mono)}
+.region-country-select optgroup{background:#020a08;color:var(--accent);font-family:var(--mono);font-weight:bold}
 .top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;max-width:100%}
 .meta-pill{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:0.06em;padding:5px 10px;border:1px solid var(--border)}
 .meta-pill .v{color:var(--text);font-weight:500}
@@ -137,7 +143,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 /* CENTER: MAP */
 .map-stack{display:flex;flex-direction:column;gap:10px}
 .map-stack.hidden{display:none}
-.map-region-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--border);background:var(--panel);backdrop-filter:blur(20px)}
+.map-region-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 12px;border:1px solid var(--border);background:var(--panel);backdrop-filter:blur(20px)}
 .map-container{height:clamp(420px,56vh,680px);min-height:420px;max-height:680px;flex:0 0 auto;border:1px solid var(--border);background:radial-gradient(ellipse at center,rgba(4,12,20,1),rgba(2,4,8,1));position:relative;overflow:hidden}
 #globeViz{width:100%;height:100%;cursor:grab}
 #globeViz:active{cursor:grabbing}
@@ -383,6 +389,8 @@ body.low-perf .ticker-wrap::-webkit-scrollbar-thumb{background:rgba(100,240,200,
   .topbar{padding:10px 12px}
   .top-left,.top-center,.top-right{width:100%}
   .top-center{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .top-center .region-picker-wrap{grid-column:1 / -1;width:100%;margin-left:0;border-left:none;border-top:1px solid rgba(100,240,200,0.15);padding-left:0;padding-top:6px;display:flex}
+  .top-center .region-country-select{flex:1;max-width:none}
   .map-region-bar{display:none}
   .top-right{gap:6px ; flex-wrap: wrap; justify-content: center;}
   .region-btn,.meta-pill,.alert-badge,.guide-btn{font-size:10px}
@@ -538,6 +546,7 @@ let reducedMotion = !!motionPreference?.matches;
 let lowPerfMode = readPreference('crucix_low_perf') === 'true';
 let isFlat = shouldStartFlat();
 let currentRegion = 'world';
+let currentCountry = '';
 let flatSvg, flatProjection, flatPath, flatG, flatZoom, flatW, flatH;
 const dashboardZones = ['left','center1','center2','center3','right'];
 const dashboardDefaultZones = {
@@ -893,11 +902,93 @@ const signalGuideItems = [
 ];
 const regionPOV = {
   world: { lat: 20, lng: 20, altitude: 1.8 },
-  americas: { lat: 35, lng: -95, altitude: 1.0 },
-  europe: { lat: 50, lng: 15, altitude: 1.0 },
-  middleEast: { lat: 28, lng: 45, altitude: 1.1 },
-  asiaPacific: { lat: 25, lng: 110, altitude: 1.2 },
-  africa: { lat: 5, lng: 20, altitude: 1.2 }
+  americas: { lat: 20, lng: -85, altitude: 1.25 },
+  northAmerica: { lat: 45, lng: -100, altitude: 0.95 },
+  latinAmerica: { lat: -15, lng: -65, altitude: 1.15 },
+  europe: { lat: 50, lng: 15, altitude: 0.9 },
+  easternEurope: { lat: 51, lng: 35, altitude: 0.8 },
+  middleEast: { lat: 28, lng: 45, altitude: 0.95 },
+  africa: { lat: 5, lng: 20, altitude: 1.25 },
+  asiaPacific: { lat: 25, lng: 110, altitude: 1.3 },
+  centralAsia: { lat: 42, lng: 68, altitude: 0.85 },
+  southAsia: { lat: 22, lng: 78, altitude: 0.85 },
+  eastAsia: { lat: 34, lng: 120, altitude: 0.9 },
+  seAsia: { lat: 10, lng: 108, altitude: 0.95 },
+  oceania: { lat: -25, lng: 135, altitude: 1.2 }
+};
+
+const REGION_DEFINITIONS = [
+  { id: 'world', label: 'WORLD' },
+  { id: 'americas', label: 'AMERICAS' },
+  { id: 'northAmerica', label: 'NORTH AMERICA' },
+  { id: 'latinAmerica', label: 'LATIN AMERICA' },
+  { id: 'europe', label: 'EUROPE' },
+  { id: 'easternEurope', label: 'EASTERN EUROPE' },
+  { id: 'middleEast', label: 'MIDDLE EAST' },
+  { id: 'africa', label: 'AFRICA' },
+  { id: 'asiaPacific', label: 'ASIA PACIFIC' },
+  { id: 'centralAsia', label: 'CENTRAL ASIA' },
+  { id: 'southAsia', label: 'SOUTH ASIA' },
+  { id: 'eastAsia', label: 'EAST ASIA' },
+  { id: 'seAsia', label: 'SE ASIA' },
+  { id: 'oceania', label: 'OCEANIA' }
+];
+
+const COUNTRY_TABLE = [
+  ['AF','AFG','Afghanistan'],['AL','ALB','Albania'],['DZ','DZA','Algeria'],['AD','AND','Andorra'],['AO','AGO','Angola'],
+  ['AG','ATG','Antigua and Barbuda'],['AR','ARG','Argentina'],['AM','ARM','Armenia'],['AU','AUS','Australia'],['AT','AUT','Austria'],
+  ['AZ','AZE','Azerbaijan'],['BS','BHS','Bahamas'],['BH','BHR','Bahrain'],['BD','BGD','Bangladesh'],['BB','BRB','Barbados'],
+  ['BY','BLR','Belarus'],['BE','BEL','Belgium'],['BZ','BLZ','Belize'],['BJ','BEN','Benin'],['BT','BTN','Bhutan'],
+  ['BO','BOL','Bolivia'],['BA','BIH','Bosnia and Herzegovina'],['BW','BWA','Botswana'],['BR','BRA','Brazil'],['BN','BRN','Brunei'],
+  ['BG','BGR','Bulgaria'],['BF','BFA','Burkina Faso'],['BI','BDI','Burundi'],['CV','CPV','Cabo Verde'],['KH','KHM','Cambodia'],
+  ['CM','CMR','Cameroon'],['CA','CAN','Canada'],['CF','CAF','Central African Republic'],['TD','TCD','Chad'],['CL','CHL','Chile'],
+  ['CN','CHN','China'],['CO','COL','Colombia'],['KM','COM','Comoros'],['CG','COG','Congo'],['CD','COD','DR Congo'],
+  ['CR','CRI','Costa Rica'],['CI','CIV',"Côte d'Ivoire"],['HR','HRV','Croatia'],['CU','CUB','Cuba'],['CY','CYP','Cyprus'],
+  ['CZ','CZE','Czechia'],['DK','DNK','Denmark'],['DJ','DJI','Djibouti'],['DM','DMA','Dominica'],['DO','DOM','Dominican Republic'],
+  ['EC','ECU','Ecuador'],['EG','EGY','Egypt'],['SV','SLV','El Salvador'],['GQ','GNQ','Equatorial Guinea'],['ER','ERI','Eritrea'],
+  ['EE','EST','Estonia'],['SZ','SWZ','Eswatini'],['ET','ETH','Ethiopia'],['FJ','FJI','Fiji'],['FI','FIN','Finland'],
+  ['FR','FRA','France'],['GA','GAB','Gabon'],['GM','GMB','Gambia'],['GE','GEO','Georgia'],['DE','DEU','Germany'],
+  ['GH','GHA','Ghana'],['GR','GRC','Greece'],['GL','GRL','Greenland'],['GD','GRD','Grenada'],['GT','GTM','Guatemala'],
+  ['GN','GIN','Guinea'],['GW','GNB','Guinea-Bissau'],['GY','GUY','Guyana'],['HT','HTI','Haiti'],['HN','HND','Honduras'],
+  ['HK','HKG','Hong Kong'],['HU','HUN','Hungary'],['IS','ISL','Iceland'],['IN','IND','India'],['ID','IDN','Indonesia'],
+  ['IR','IRN','Iran'],['IQ','IRQ','Iraq'],['IE','IRL','Ireland'],['IL','ISR','Israel'],['IT','ITA','Italy'],
+  ['JM','JAM','Jamaica'],['JP','JPN','Japan'],['JO','JOR','Jordan'],['KZ','KAZ','Kazakhstan'],['KE','KEN','Kenya'],
+  ['KP','PRK','North Korea'],['KR','KOR','South Korea'],['KW','KWT','Kuwait'],['KG','KGZ','Kyrgyzstan'],['LA','LAO','Laos'],
+  ['LV','LVA','Latvia'],['LB','LBN','Lebanon'],['LS','LSO','Lesotho'],['LR','LBR','Liberia'],['LY','LBY','Libya'],
+  ['LT','LTU','Lithuania'],['LU','LUX','Luxembourg'],['MG','MDG','Madagascar'],['MW','MWI','Malawi'],['MY','MYS','Malaysia'],
+  ['MV','MDV','Maldives'],['ML','MLI','Mali'],['MT','MLT','Malta'],['MR','MRT','Mauritania'],['MU','MUS','Mauritius'],
+  ['MX','MEX','Mexico'],['MD','MDA','Moldova'],['MC','MCO','Monaco'],['MN','MNG','Mongolia'],['ME','MNE','Montenegro'],
+  ['MA','MAR','Morocco'],['MZ','MOZ','Mozambique'],['MM','MMR','Myanmar'],['NA','NAM','Namibia'],['NP','NPL','Nepal'],
+  ['NL','NLD','Netherlands'],['NZ','NZL','New Zealand'],['NI','NIC','Nicaragua'],['NE','NER','Niger'],['NG','NGA','Nigeria'],
+  ['MK','MKD','North Macedonia'],['NO','NOR','Norway'],['OM','OMN','Oman'],['PK','PAK','Pakistan'],['PS','PSE','Palestine'],
+  ['PA','PAN','Panama'],['PG','PNG','Papua New Guinea'],['PY','PRY','Paraguay'],['PE','PER','Peru'],['PH','PHL','Philippines'],
+  ['PL','POL','Poland'],['PT','PRT','Portugal'],['PR','PRI','Puerto Rico'],['QA','QAT','Qatar'],['RO','ROU','Romania'],
+  ['RU','RUS','Russia'],['RW','RWA','Rwanda'],['SA','SAU','Saudi Arabia'],['SN','SEN','Senegal'],['RS','SRB','Serbia'],
+  ['SL','SLE','Sierra Leone'],['SG','SGP','Singapore'],['SK','SVK','Slovakia'],['SI','SVN','Slovenia'],['SO','SOM','Somalia'],
+  ['ZA','ZAF','South Africa'],['SS','SSD','South Sudan'],['ES','ESP','Spain'],['LK','LKA','Sri Lanka'],['SD','SDN','Sudan'],
+  ['SR','SUR','Suriname'],['SE','SWE','Sweden'],['CH','CHE','Switzerland'],['SY','SYR','Syria'],['TW','TWN','Taiwan'],
+  ['TJ','TJK','Tajikistan'],['TZ','TZA','Tanzania'],['TH','THA','Thailand'],['TL','TLS','Timor-Leste'],['TG','TGO','Togo'],
+  ['TT','TTO','Trinidad and Tobago'],['TN','TUN','Tunisia'],['TR','TUR','Türkiye'],['TM','TKM','Turkmenistan'],['UG','UGA','Uganda'],
+  ['UA','UKR','Ukraine'],['AE','ARE','United Arab Emirates'],['GB','GBR','United Kingdom'],['US','USA','United States'],
+  ['UY','URY','Uruguay'],['UZ','UZB','Uzbekistan'],['VE','VEN','Venezuela'],['VN','VNM','Vietnam'],['YE','YEM','Yemen'],
+  ['ZM','ZMB','Zambia'],['ZW','ZWE','Zimbabwe'],['XK','XKX','Kosovo']
+];
+
+const COUNTRY_NAMES = Object.fromEntries(COUNTRY_TABLE.map(r => [r[0], r[2]]));
+const ISO3_TO_ISO2 = Object.fromEntries(COUNTRY_TABLE.map(r => [r[1], r[0]]));
+
+const COUNTRY_COORDINATES = {
+  US:[38.9,-77.0],CA:[56.1,-106.3],MX:[23.6,-102.5],BR:[-14.2,-51.9],AR:[-38.4,-63.6],
+  GB:[55.4,-3.4],FR:[46.6,2.2],DE:[51.2,10.4],IT:[41.9,12.6],ES:[40.5,-3.7],
+  UA:[48.4,31.2],RU:[61.5,105.3],PL:[51.9,19.1],HU:[47.2,19.5],RO:[45.9,24.9],
+  GR:[39.1,21.8],TR:[38.9,35.2],IL:[31.0,34.8],PS:[31.9,35.2],IR:[32.4,53.7],
+  IQ:[33.2,43.7],SA:[23.9,45.1],SY:[34.8,38.9],LB:[33.8,35.8],YE:[15.5,48.5],
+  EG:[26.8,30.8],ZA:[-30.5,22.9],NG:[9.1,8.7],KE:[-0.0,37.9],ET:[9.1,40.5],
+  CN:[35.8,104.2],JP:[36.2,138.2],KR:[35.9,127.7],KP:[40.3,127.5],TW:[23.7,121.0],
+  IN:[20.6,78.9],PK:[30.4,69.3],BD:[23.7,90.3],AF:[33.9,67.7],KZ:[48.0,66.9],
+  UZ:[41.4,64.6],ID:[-0.8,113.9],VN:[14.0,108.3],TH:[15.9,101.0],PH:[12.9,121.8],
+  AU:[-25.3,133.8],NZ:[-40.9,174.9],SG:[1.3,103.8],MY:[4.2,101.9],SE:[60.1,18.6],
+  NO:[60.5,8.5],FI:[61.9,25.7],NL:[52.1,5.3],CH:[46.8,8.2],AT:[47.5,14.5]
 };
 
 if(lowPerfMode) document.body.classList.add('low-perf');
@@ -968,9 +1059,42 @@ function rerenderDashboard(forceMapRefresh=false){
 
 // === TOPBAR ===
 function getRegionControlsMarkup(){
-  return ['world','americas','europe','middleEast','asiaPacific','africa'].map(r=>
-    `<button class="region-btn ${r===currentRegion?'active':''}" data-region="${r}" onclick="setRegion('${r}')">${r==='middleEast'?'MIDDLE EAST':r==='asiaPacific'?'ASIA PACIFIC':r.toUpperCase()}</button>`
+  const btns = REGION_DEFINITIONS.map(r =>
+    `<button class="region-btn ${r.id === currentRegion ? 'active' : ''}" data-region="${r.id}" onclick="setRegion('${r.id}')">${esc(r.label)}</button>`
   ).join('');
+
+  const counts = new Map();
+  for (const n of (D.newsFeed || [])) {
+    if (n.country && /^[A-Z]{2}$/.test(n.country)) {
+      counts.set(n.country, (counts.get(n.country) || 0) + 1);
+    }
+  }
+
+  const activeCodes = Array.from(counts.keys()).sort((a,b)=>(COUNTRY_NAMES[a]||a).localeCompare(COUNTRY_NAMES[b]||b));
+  const activeOpts = activeCodes.map(code => {
+    const name = COUNTRY_NAMES[code] || code;
+    const count = counts.get(code);
+    return `<option value="${code}" ${currentCountry === code ? 'selected' : ''}>[${code}] ${esc(name)} (${count})</option>`;
+  }).join('');
+
+  const otherCodes = Object.keys(COUNTRY_NAMES).filter(c => !counts.has(c)).sort((a,b)=>(COUNTRY_NAMES[a]||a).localeCompare(COUNTRY_NAMES[b]||b));
+  const otherOpts = otherCodes.map(code => {
+    const name = COUNTRY_NAMES[code] || code;
+    return `<option value="${code}" ${currentCountry === code ? 'selected' : ''}>[${code}] ${esc(name)}</option>`;
+  }).join('');
+
+  const picker = `
+    <div class="region-picker-wrap">
+      <label for="countrySelector" class="region-picker-label">${t('dashboard.countryLabel','COUNTRY')}</label>
+      <select id="countrySelector" class="region-country-select" onchange="setCountry(this.value)">
+        <option value="">${t('status.allCountries','ALL COUNTRIES')}</option>
+        ${activeCodes.length ? `<optgroup label="${t('status.activeNewsCountries','WITH ACTIVE HEADLINES')} (${activeCodes.length})">${activeOpts}</optgroup>` : ''}
+        <optgroup label="${t('status.globalRegistry','GLOBAL REGISTRY')} (${otherCodes.length})">${otherOpts}</optgroup>
+      </select>
+    </div>
+  `;
+
+  return btns + picker;
 }
 
 function renderRegionControls(){
@@ -1118,14 +1242,159 @@ function buildSpaceWatchPanel(){
 
 function tickerTags(n){
   let out='';
+  if(typeof n.country==='string'&&/^[A-Z]{2}$/.test(n.country))out+='<span class="tk-tag" style="color:#81d4fa;border-color:rgba(129,212,250,0.35)" title="Country: '+esc(n.country)+'">'+n.country+'</span>';
   if(Number.isInteger(n.tier)&&n.tier>=1&&n.tier<=4)out+='<span class="tk-tag t'+n.tier+'" title="'+esc(t('ticker.tier','Source tier')+' '+n.tier+'/4. '+t('ticker.tierHelp',''))+'">T'+n.tier+'</span>';
   if(typeof n.lang==='string'&&/^[a-z]{2}$/.test(n.lang))out+='<span class="tk-tag" title="'+esc(t('ticker.language','Headline language'))+'">'+n.lang.toUpperCase()+'</span>';
   if(n.state===true)out+='<span class="tk-tag st" title="'+esc(t('ticker.state','State-owned or state-funded outlet'))+'">STATE</span>';
   return out;
 }
 
+const REGION_COUNTRY_CODES = {
+  world: new Set(),
+  americas: new Set(['US','CA','MX','BR','AR','CL','CO','VE','PE','EC','BO','PY','UY','GY','SR','CU','DO','HT','JM','PA','CR','NI','HN','SV','GT','BZ','TT','BS','BB','LC','VC','GD','AG','KN','DM','PR','GL','AW','CW','SX','BM','PM']),
+  northAmerica: new Set(['US','CA','GL','BM','PM']),
+  latinAmerica: new Set(['MX','BR','AR','CL','CO','VE','PE','EC','BO','PY','UY','GY','SR','CU','DO','HT','JM','PA','CR','NI','HN','SV','GT','BZ','TT','BS','BB','LC','VC','GD','AG','KN','DM','PR','AW','CW','SX']),
+  europe: new Set(['HU','DE','FR','GB','UA','PL','IT','ES','PT','NL','BE','CH','AT','SE','NO','FI','DK','IE','GR','CZ','RO','BG','SK','HR','RS','BA','ME','MK','AL','SI','EE','LV','LT','BY','MD','IS','LU','XK','RU','MT','CY','AD','MC','SM','LI','VA']),
+  easternEurope: new Set(['UA','RU','BY','MD','PL','RO','BG','SK','CZ','HU','RS','BA','ME','MK','AL','SI','HR','EE','LV','LT','GE','AM','AZ','XK']),
+  middleEast: new Set(['IL','PS','SY','LB','JO','IQ','IR','SA','YE','OM','AE','QA','KW','BH','TR','AM','AZ','GE','CY']),
+  africa: new Set(['DZ','AO','BJ','BW','BF','BI','CV','CM','CF','TD','KM','CG','CD','CI','DJ','EG','GQ','ER','SZ','ET','GA','GM','GH','GN','GW','KE','LS','LR','LY','MG','MW','ML','MR','MU','MA','MZ','NA','NE','NG','RW','ST','SN','SC','SL','SO','ZA','SS','SD','TZ','TG','TN','UG','ZM','ZW']),
+  centralAsia: new Set(['KZ','UZ','TM','TJ','KG','AF','MN']),
+  southAsia: new Set(['IN','PK','BD','LK','NP','BT','MV','AF']),
+  eastAsia: new Set(['CN','TW','JP','KR','KP','MN','HK','MO']),
+  seAsia: new Set(['VN','TH','MY','SG','ID','PH','MM','KH','LA','BN','TL']),
+  oceania: new Set(['AU','NZ','PG','FJ','SB','VU','WS','TO','KI','TV','NR','PW','FM','MH']),
+  asiaPacific: new Set(['AF','BD','BT','BN','KH','CN','FJ','IN','ID','JP','KZ','KI','KP','KR','KG','LA','MY','MV','MH','FM','MN','MM','NR','NP','NZ','PK','PW','PG','PH','WS','SG','SB','LK','TJ','TH','TL','TO','TM','TV','UZ','VU','VN','AU','TW'])
+};
+
+function newsItemMatchesRegion(n, reg){
+  if(!reg || reg === 'world') return true;
+  // If country code is known, it is authoritative:
+  if(n.country && /^[A-Z]{2}$/.test(n.country)) {
+    return Boolean(REGION_COUNTRY_CODES[reg]?.has(n.country));
+  }
+  const regTxt = (n.region || '').toLowerCase();
+  const srcTxt = (n.source || '').toLowerCase();
+  const headTxt = (n.headline || n.title || '').toLowerCase();
+
+  if(reg === 'africa') {
+    return regTxt.includes('africa') || srcTxt.includes('africa') || srcTxt.includes('rfi') ||
+      /\b(africa|african|sudan|ethiopia|congo|nigeria|kenya|somalia|libya|egypt|algeria|morocco|ghana|angola|mozambique|sahel|zimbabwe|uganda)\b/i.test(headTxt);
+  }
+  if(reg === 'europe') {
+    return regTxt.includes('europe') || regTxt.includes('ukraine') || regTxt.includes('russia') || regTxt.includes('baltic') || regTxt.includes('hungary') ||
+      srcTxt.includes('dw') || srcTxt.includes('france') || srcTxt.includes('euronews') || srcTxt.includes('telex') || srcTxt.includes('index') || srcTxt.includes('hvg') || srcTxt.includes('444') || srcTxt.includes('portfolio') || srcTxt.includes('atv') || srcTxt.includes('meduza') || srcTxt.includes('err') ||
+      /\b(europe|european|ukraine|russia|germany|france|britain|uk|poland|hungary|baltic|balkans|brussels|london|paris|berlin|kyiv|moscow)\b/i.test(headTxt);
+  }
+  if(reg === 'easternEurope') {
+    return regTxt.includes('eastern europe') || regTxt.includes('ukraine') || regTxt.includes('russia') || regTxt.includes('baltic') || regTxt.includes('balkans') ||
+      srcTxt.includes('meduza') || srcTxt.includes('kyiv') || srcTxt.includes('err') ||
+      /\b(ukraine|russia|kyiv|moscow|belarus|minsk|balkans|serbia|belgrade|poland|warsaw|moldova|romania|baltic|estonia|latvia|lithuania|caucasus|georgia|zelensky|putin)\b/i.test(headTxt);
+  }
+  if(reg === 'middleEast') {
+    return regTxt.includes('middle east') || regTxt.includes('gulf') || regTxt.includes('israel') || regTxt.includes('gaza') || regTxt.includes('iran') || regTxt.includes('iraq') || regTxt.includes('syria') || regTxt.includes('yemen') || regTxt.includes('turkey') ||
+      srcTxt.includes('jazeera') || srcTxt.includes('jerusalem') || srcTxt.includes('daily sabah') || srcTxt.includes('the national') ||
+      /\b(israel|gaza|palestine|lebanon|beirut|tehran|iran|iraq|baghdad|yemen|houthi|riyadh|saudi|syria|damascus|ankara|jerusalem)\b/i.test(headTxt);
+  }
+  if(reg === 'americas') {
+    return regTxt.includes('america') || regTxt.includes('caribbean') || regTxt.includes('united states') ||
+      srcTxt.includes('nyt americas') || srcTxt.includes('mercopress') || srcTxt.includes('mexico') || srcTxt.includes('npr') ||
+      /\b(us|usa|united states|biden|trump|congress|pentagon|brazil|mexico|argentina|venezuela|colombia|caribbean|havana|caracas)\b/i.test(headTxt);
+  }
+  if(reg === 'northAmerica') {
+    return regTxt.includes('north america') || regTxt.includes('united states') || regTxt.includes('canada') ||
+      srcTxt.includes('nyt') || srcTxt.includes('npr') || srcTxt.includes('washington') ||
+      /\b(us|usa|united states|biden|trump|congress|pentagon|white house|canada|ottawa|greenland)\b/i.test(headTxt);
+  }
+  if(reg === 'latinAmerica') {
+    return regTxt.includes('latin') || regTxt.includes('south america') || regTxt.includes('central america') || regTxt.includes('caribbean') ||
+      srcTxt.includes('mercopress') ||
+      /\b(brazil|mexico|argentina|venezuela|colombia|peru|chile|cuba|caribbean|havana|caracas|buenos aires|sao paulo|panama|ecuador|bolivia)\b/i.test(headTxt);
+  }
+  if(reg === 'asiaPacific') {
+    return regTxt.includes('asia') || regTxt.includes('pacific') || regTxt.includes('taiwan') || regTxt.includes('korean') || regTxt.includes('china') || regTxt.includes('india') || regTxt.includes('pakistan') ||
+      srcTxt.includes('sbs') || srcTxt.includes('cna') || srcTxt.includes('the hindu') || srcTxt.includes('indian express') || srcTxt.includes('dawn') || srcTxt.includes('diplomat') || srcTxt.includes('abc australia') ||
+      /\b(china|beijing|taiwan|taipei|japan|tokyo|korea|seoul|pyongyang|india|delhi|pakistan|islamabad|philippines|manila|australia)\b/i.test(headTxt);
+  }
+  if(reg === 'centralAsia') {
+    return regTxt.includes('central asia') ||
+      /\b(kazakhstan|astana|uzbekistan|tashkent|turkmenistan|ashgabat|tajikistan|dushanbe|kyrgyzstan|bishkek|afghanistan|kabul|mongolia)\b/i.test(headTxt);
+  }
+  if(reg === 'southAsia') {
+    return regTxt.includes('south asia') || regTxt.includes('india') || regTxt.includes('pakistan') ||
+      srcTxt.includes('the hindu') || srcTxt.includes('indian express') || srcTxt.includes('dawn') ||
+      /\b(india|delhi|mumbai|modi|pakistan|islamabad|lahore|bangladesh|dhaka|sri lanka|colombo|nepal|kathmandu)\b/i.test(headTxt);
+  }
+  if(reg === 'eastAsia') {
+    return regTxt.includes('east asia') || regTxt.includes('china') || regTxt.includes('taiwan') || regTxt.includes('japan') || regTxt.includes('korea') ||
+      srcTxt.includes('cna') || srcTxt.includes('scmp') ||
+      /\b(china|beijing|shanghai|taiwan|taipei|japan|tokyo|korea|seoul|pyongyang|hong kong|xi jinping)\b/i.test(headTxt);
+  }
+  if(reg === 'seAsia') {
+    return regTxt.includes('southeast asia') || regTxt.includes('asean') ||
+      /\b(vietnam|hanoi|thailand|bangkok|singapore|malaysia|kuala lumpur|indonesia|jakarta|philippines|manila|myanmar|burma|cambodia|laos)\b/i.test(headTxt);
+  }
+  if(reg === 'oceania') {
+    return regTxt.includes('oceania') || regTxt.includes('australia') || regTxt.includes('pacific') ||
+      srcTxt.includes('abc australia') || srcTxt.includes('sbs') ||
+      /\b(australia|canberra|sydney|melbourne|new zealand|wellington|fiji|papua new guinea|pacific islands)\b/i.test(headTxt);
+  }
+  return false;
+}
+
+function rankNewsItem(a, b, reg){
+  // In WORLD mode, prioritize Tier 1 first (official/wires), then Tier 2, Tier 3, Tier 4
+  if (!reg || reg === 'world') {
+    const aTier = Number.isInteger(a.tier) && a.tier >= 1 ? a.tier : (a.urgent ? 1 : 3);
+    const bTier = Number.isInteger(b.tier) && b.tier >= 1 ? b.tier : (b.urgent ? 1 : 3);
+    if(aTier !== bTier) return aTier - bTier;
+  } else {
+    // In regional mode, Tier 1 / urgent is still prioritized first if present
+    const aIsT1 = a.tier === 1 || a.urgent;
+    const bIsT1 = b.tier === 1 || b.urgent;
+    if (aIsT1 && !bIsT1) return -1;
+    if (!aIsT1 && bIsT1) return 1;
+  }
+  // Within same category: newest timestamp first
+  const aTime = a.timestamp ? Date.parse(a.timestamp) || 0 : 0;
+  const bTime = b.timestamp ? Date.parse(b.timestamp) || 0 : 0;
+  return bTime - aTime;
+}
+
 function buildNewsTickerPanel(){
-  const feed = (D.newsFeed || []).slice(0, 20);
+  const isSpecificRegion = currentRegion && currentRegion !== 'world';
+  let feed;
+  if(currentCountry){
+    const matching = (D.newsFeed || []).filter(n => n.country === currentCountry);
+    matching.sort((a, b) => {
+      const aTime = a.timestamp ? Date.parse(a.timestamp) || 0 : 0;
+      const bTime = b.timestamp ? Date.parse(b.timestamp) || 0 : 0;
+      return bTime - aTime;
+    });
+    feed = matching.slice(0, 50);
+  } else if(isSpecificRegion){
+    const matching = (D.newsFeed || []).filter(n => newsItemMatchesRegion(n, currentRegion));
+    matching.sort((a, b) => rankNewsItem(a, b, currentRegion));
+    // Diverse country representation: max 3 headlines per country so one country cannot crowd out the region
+    const countryCounts = new Map();
+    const diverse = [];
+    const overflow = [];
+    const MAX_PER_COUNTRY = 3;
+    for (const item of matching) {
+      const c = item.country || 'OTHER';
+      const count = countryCounts.get(c) || 0;
+      if (count < MAX_PER_COUNTRY) {
+        diverse.push(item);
+        countryCounts.set(c, count + 1);
+      } else {
+        overflow.push(item);
+      }
+    }
+    feed = [...diverse, ...overflow].slice(0, 50);
+  } else {
+    feed = (D.newsFeed || []).slice();
+    feed.sort((a, b) => rankNewsItem(a, b, 'world'));
+    feed = feed.slice(0, 50);
+  }
   const srcClass = s => {
     if (!s) return 'other';
     const sl = s.toLowerCase();
@@ -1151,8 +1420,13 @@ function buildNewsTickerPanel(){
     return `<div class="tk-card ${n.urgent?'urgent':''} ${n.url||event?'clickable':''}"${urlAttr}${eventAttr}><span class="tk-src ${sc}">${esc((n.source||'NEWS').substring(0,12))}</span>${tickerTags(n)}<span class="tk-time">${age}</span><div class="tk-head">${cleanText(n.headline||'')}</div>${event?'<span class="tk-link">&#9432;</span>':n.url?'<span class="tk-link">&#8599;</span>':''}</div>`;
   }).join('');
   const tickerDuration = Math.max(20, feed.length * 2.5);
+  const filterLabel = currentCountry
+    ? ` · [${currentCountry}] ${(COUNTRY_NAMES[currentCountry] || currentCountry).toUpperCase()}`
+    : (isSpecificRegion
+      ? ` · ${(REGION_DEFINITIONS.find(r => r.id === currentRegion)?.label || currentRegion).toUpperCase()}`
+      : '');
   return `<div class="g-panel lp-ticker" style="display:flex;flex-direction:column">
-    <div class="sec-head"><h3>${t('panels.newsTicker','Live News Ticker')}</h3><span class="badge">${feed.length} ${t('badges.items','ITEMS')}</span></div>
+    <div class="sec-head"><h3>${t('panels.newsTicker','Live News Ticker')}${esc(filterLabel)}</h3><span class="badge">${feed.length} ${t('badges.items','ITEMS')}</span></div>
     <div class="ticker-wrap" style="--ticker-duration:${tickerDuration}s">
       <div class="ticker-track">${tickerCards||`<div class="empty-state">${t('status.noNews','No headlines available in this snapshot')}</div>`}${lowPerfMode || reducedMotion ? '' : tickerCards}</div>
     </div>
@@ -1709,7 +1983,7 @@ function plotMarkers(){
     points.push({
       lat:n.lat, lng:n.lon, size:0.2, alt:0.008,
       color:'rgba(129,212,250,0.7)', type:'news', priority:3,
-      popHead:n.source+' NEWS', popMeta:n.region+' · '+getAge(n.date),
+      popHead:(n.country ? '['+n.country+'] ' : '')+n.source+' NEWS', popMeta:n.region+' · '+getAge(n.date),
       popText:cleanText(n.title)
     });
   });
@@ -1995,8 +2269,20 @@ updateBasemapButton();
 
 // === FLAT/GLOBE TOGGLE ===
 const flatRegionBounds = {
-  world:[[-180,-60],[180,80]], americas:[[-130,10],[-60,55]], europe:[[-12,34],[45,72]],
-  middleEast:[[24,10],[65,45]], asiaPacific:[[60,-12],[180,55]], africa:[[-20,-36],[55,38]]
+  world: [[-180,-60],[180,80]],
+  americas: [[-130,-56],[-35,72]],
+  northAmerica: [[-140,20],[-50,72]],
+  latinAmerica: [[-115,-56],[-34,30]],
+  europe: [[-12,34],[45,72]],
+  easternEurope: [[18,40],[55,68]],
+  middleEast: [[24,10],[65,45]],
+  africa: [[-20,-36],[55,38]],
+  asiaPacific: [[60,-12],[180,55]],
+  centralAsia: [[45,35],[90,55]],
+  southAsia: [[60,5],[95,38]],
+  eastAsia: [[95,18],[145,50]],
+  seAsia: [[90,-12],[140,25]],
+  oceania: [[110,-48],[180,0]]
 };
 
 function toggleMapMode(){
@@ -2066,6 +2352,16 @@ function drawFlatMap(){
     if(version!==flatDrawVersion)return;
     if(!world){document.getElementById('mapHint').textContent=t('status.mapUnavailable','Map background unavailable · signal points retained');return;}
     const countries=topojson.feature(world,world.objects.countries);
+    if(countries?.features && d3?.geoCentroid){
+      for(const feat of countries.features){
+        const iso3=window.CrucixRisk?.shapeIso3?.(feat.id,feat.properties?.name);
+        const iso2=ISO3_TO_ISO2[iso3];
+        if(iso2&&!COUNTRY_COORDINATES[iso2]){
+          const[lon,lat]=d3.geoCentroid(feat);
+          if(Number.isFinite(lat)&&Number.isFinite(lon))COUNTRY_COORDINATES[iso2]=[Math.round(lat*10)/10,Math.round(lon*10)/10];
+        }
+      }
+    }
     flatG.selectAll('.world-geometry').remove();
     const base=flatG.insert('g',':first-child').attr('class','world-geometry');
     // A country shape opens its country sheet (risk.js resolves the shape's ISO numeric id as the server does; country.js says why it is
@@ -2149,7 +2445,7 @@ function plotFlatMarkers(){
   (D.ioda?.countries||[]).forEach(c=>{if(c.lat==null||c.lon==null)return;addPt(c.lat,c.lon,3.2+Math.min((c.overallScore||0)/2500,2.2)+(c.activeCount>0?0.8:0),'rgba(77,208,225,0.72)','rgba(77,208,225,0.26)',ev=>showPopup(ev,`${c.country} · ${t('map.internetOutage','Internet Outage')}`,`${t('ioda.events','Events')}: ${c.eventCount}<br>${t('ioda.active','ACTIVE')}: ${c.activeCount}<br>${t('ioda.score','Score')}: ${Math.round(c.overallScore)}`,`IODA · ${c.topDatasource||'overall'}`),2)});
   // News
   flatMarkerType='news';
-  (D.news||[]).forEach(n=>{if(!isGroupedNews(n))addPt(n.lat,n.lon,3,'rgba(129,212,250,0.6)','rgba(129,212,250,0.2)',ev=>showPopup(ev,n.source+' NEWS',cleanText(n.title),n.region),3)});
+  (D.news||[]).forEach(n=>{if(!isGroupedNews(n))addPt(n.lat,n.lon,3,'rgba(129,212,250,0.6)','rgba(129,212,250,0.2)',ev=>showPopup(ev,(n.country ? '['+n.country+'] ' : '')+n.source+' NEWS',cleanText(n.title),n.region),3)});
   if(groupNews)for(const cluster of visibleEventClusters()){
     const marker=addPt(cluster.lat,cluster.lon,8,'rgba(129,212,250,0.85)','rgba(129,212,250,0.4)',()=>CrucixIntelligence.openCluster(cluster),1);
     if(marker){marker.attr('data-cluster-id',cluster.id).attr('role','button').attr('tabindex',0).attr('aria-label',t('intelligence.cluster','Grouped reports')+' '+cluster.count).on('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();CrucixIntelligence.openCluster(cluster);}});marker.append('text').attr('text-anchor','middle').attr('dy','.35em').attr('fill','#020408').attr('font-size','9px').text(cluster.count);}
@@ -2226,11 +2522,16 @@ const _origMapZoom = mapZoom;
 
 function setRegion(r){
   currentRegion = r;
+  currentCountry = '';
+  const sel = document.getElementById('countrySelector');
+  if(sel) sel.value = '';
   document.querySelectorAll('.region-btn').forEach(b=>b.classList.toggle('active',b.dataset.region===r));
   closePopup();
+  renderLower();
   if(isFlat && flatSvg && flatZoom){
     if(r==='world'){flatSvg.transition().duration(750).call(flatZoom.transform,d3.zoomIdentity);return;}
     const bounds=flatRegionBounds[r];
+    if(!bounds) return;
     const p0=flatProjection(bounds[0]),p1=flatProjection(bounds[1]);if(!p0||!p1)return;
     const dx=Math.abs(p1[0]-p0[0]),dy=Math.abs(p1[1]-p0[1]);
     const cx=(p0[0]+p1[0])/2,cy=(p0[1]+p1[1])/2;
@@ -2239,6 +2540,46 @@ function setRegion(r){
   } else {
     const pov=regionPOV[r]||regionPOV.world;
     globe.pointOfView(pov,1000);
+  }
+}
+
+function setCountry(c){
+  currentCountry = c || '';
+  const sel = document.getElementById('countrySelector');
+  if(sel) sel.value = currentCountry;
+
+  if(!currentCountry){
+    setRegion(currentRegion || 'world');
+    return;
+  }
+
+  // Find parent region for this country
+  const priorityRegions = ['easternEurope', 'eastAsia', 'seAsia', 'southAsia', 'centralAsia', 'northAmerica', 'latinAmerica', 'middleEast', 'europe', 'africa', 'oceania', 'asiaPacific', 'americas'];
+  for(const reg of priorityRegions){
+    if(REGION_COUNTRY_CODES[reg]?.has(currentCountry)){
+      currentRegion = reg;
+      break;
+    }
+  }
+
+  document.querySelectorAll('.region-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.region === currentRegion);
+  });
+
+  closePopup();
+  renderLower();
+
+  const coords = COUNTRY_COORDINATES[currentCountry];
+  if(coords){
+    if(isFlat && flatSvg && flatZoom){
+      const p = flatProjection([coords[1], coords[0]]);
+      if(p){
+        const scale = 3.8;
+        flatSvg.transition().duration(750).call(flatZoom.transform, d3.zoomIdentity.translate(flatW/2 - scale*p[0], flatH/2 - scale*p[1]).scale(scale));
+      }
+    } else if(globe){
+      globe.pointOfView({ lat: coords[0], lng: coords[1], altitude: 0.55 }, 1000);
+    }
   }
 }
 

@@ -1,0 +1,251 @@
+﻿country_code,country,region,un195,verified_native,verified_english,selected,status,native_sources,external_sources,english_search_fallback
+AF,Afghanistan,Asia,True,7,4,4,english_native,Khaama Press; Amu TV; Ariana News; Bakhtar News Agency,,https://news.google.com/rss/search?q=%22Afghanistan%22&hl=en-US&gl=US&ceid=US%3Aen
+AL,Albania,Europe,True,7,1,1,english_native,Tirana Times,,https://news.google.com/rss/search?q=%22Albania%22&hl=en-US&gl=US&ceid=US%3Aen
+DZ,Algeria,Africa,True,7,0,4,local_native,Le Matin d'Algérie; AL24 News; Algérie 360; El Khabar,,https://news.google.com/rss/search?q=%22Algeria%22&hl=en-US&gl=US&ceid=US%3Aen
+AS,American Samoa,Oceania,False,1,1,1,english_native,Samoa News,,https://news.google.com/rss/search?q=%22American+Samoa%22&hl=en-US&gl=US&ceid=US%3Aen
+AD,Andorra,Europe,True,4,0,4,local_native,Ara Andorra; Bondia; Diari d'Andorra; El Periòdic d'Andorra,,https://news.google.com/rss/search?q=%22Andorra%22&hl=en-US&gl=US&ceid=US%3Aen
+AO,Angola,Africa,True,2,0,2,local_native,Folha 8; Rádio Nacional de Angola (RNA),,https://news.google.com/rss/search?q=%22Angola%22&hl=en-US&gl=US&ceid=US%3Aen
+AI,Anguilla,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Anguilla%22&hl=en-US&gl=US&ceid=US%3Aen
+AQ,Antarctica,,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Antarctica%22&hl=en-US&gl=US&ceid=US%3Aen
+AG,Antigua & Barbuda,Americas,True,3,3,3,english_native,ABS TV Radio Antigua & Barbuda; Antigua.news; Antiguan Herald,CANA Caribbean News Online,https://news.google.com/rss/search?q=%22Antigua+%26+Barbuda%22&hl=en-US&gl=US&ceid=US%3Aen
+AR,Argentina,Americas,True,10,1,1,english_native,Buenos Aires Times,,https://news.google.com/rss/search?q=%22Argentina%22&hl=en-US&gl=US&ceid=US%3Aen
+AM,Armenia,Asia,True,5,2,2,english_native,EVN Report; Mediamax,,https://news.google.com/rss/search?q=%22Armenia%22&hl=en-US&gl=US&ceid=US%3Aen
+AW,Aruba,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Aruba%22&hl=en-US&gl=US&ceid=US%3Aen
+AU,Australia,Oceania,True,7,7,5,english_native,ABC Australia; SBS Australia; ABC Australia; 7NEWS; PerthNow,,https://news.google.com/rss/search?q=%22Australia%22&hl=en-US&gl=US&ceid=US%3Aen
+AT,Austria,Europe,True,10,1,1,english_native,The Local Austria,,https://news.google.com/rss/search?q=%22Austria%22&hl=en-US&gl=US&ceid=US%3Aen
+AZ,Azerbaijan,Asia,True,6,1,1,english_native,Trend News Agency,,https://news.google.com/rss/search?q=%22Azerbaijan%22&hl=en-US&gl=US&ceid=US%3Aen
+BS,Bahamas,Americas,True,6,6,5,english_native,Bahamas Press; Bahamas Spectator; Eyewitness News; Our News; The Tribune,,https://news.google.com/rss/search?q=%22Bahamas%22&hl=en-US&gl=US&ceid=US%3Aen
+BH,Bahrain,Asia,True,4,1,1,english_native,Biz Bahrain,,https://news.google.com/rss/search?q=%22Bahrain%22&hl=en-US&gl=US&ceid=US%3Aen
+BD,Bangladesh,Asia,True,2,0,2,local_native,Banglanews24.com; Prothom Alo,,https://news.google.com/rss/search?q=%22Bangladesh%22&hl=en-US&gl=US&ceid=US%3Aen
+BB,Barbados,Americas,True,4,4,4,english_native,Caribbean Broadcasting Corporation (CBC); Barbados Today; Nation News; The Barbados Advocate,,https://news.google.com/rss/search?q=%22Barbados%22&hl=en-US&gl=US&ceid=US%3Aen
+BY,Belarus,Europe,True,5,0,4,local_native,Belapan; Belsat TV; Hazeta Slonimskaya; Neg.by,,https://news.google.com/rss/search?q=%22Belarus%22&hl=en-US&gl=US&ceid=US%3Aen
+BE,Belgium,Europe,True,11,2,2,english_native,EU Reporter; The Bulletin,,https://news.google.com/rss/search?q=%22Belgium%22&hl=en-US&gl=US&ceid=US%3Aen
+BZ,Belize,Americas,True,3,3,3,english_native,Amandala; Ambergris Today; Channel 5 Belize,,https://news.google.com/rss/search?q=%22Belize%22&hl=en-US&gl=US&ceid=US%3Aen
+BJ,Benin,Africa,True,9,0,4,local_native,24 Heures au Bénin; Benin Site; Fraternité; L'économiste du Bénin,,https://news.google.com/rss/search?q=%22Benin%22&hl=en-US&gl=US&ceid=US%3Aen
+BM,Bermuda,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Bermuda%22&hl=en-US&gl=US&ceid=US%3Aen
+BT,Bhutan,Asia,True,5,5,5,english_native,Bhutan Broadcasting Service; Business Bhutan; Daily Bhutan; Daily Bhutan Times; The Bhutanese,,https://news.google.com/rss/search?q=%22Bhutan%22&hl=en-US&gl=US&ceid=US%3Aen
+BO,Bolivia,Americas,True,4,0,4,local_native,ATB Digital; Agencia Boliviana de Información; El Deber; Opinión,,https://news.google.com/rss/search?q=%22Bolivia%22&hl=en-US&gl=US&ceid=US%3Aen
+BA,Bosnia,Europe,True,8,1,1,english_native,Sarajevo Times,,https://news.google.com/rss/search?q=%22Bosnia%22&hl=en-US&gl=US&ceid=US%3Aen
+BW,Botswana,Africa,True,4,4,4,english_native,Sunday Standard; The Botswana Gazette; The Voice; Weekend Post,,https://news.google.com/rss/search?q=%22Botswana%22&hl=en-US&gl=US&ceid=US%3Aen
+BV,Bouvet Island,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Bouvet+Island%22&hl=en-US&gl=US&ceid=US%3Aen
+BR,Brazil,Americas,True,6,0,4,local_native,CNN Brasil; Canaltech; Exame; GloboNews,,https://news.google.com/rss/search?q=%22Brazil%22&hl=en-US&gl=US&ceid=US%3Aen
+IO,British Indian Ocean Territory,Africa,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22British+Indian+Ocean+Territory%22&hl=en-US&gl=US&ceid=US%3Aen
+VG,British Virgin Islands,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22British+Virgin+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+BN,Brunei,Asia,True,3,3,3,english_native,Biz Brunei; The Bruneian; The Scoop,,https://news.google.com/rss/search?q=%22Brunei%22&hl=en-US&gl=US&ceid=US%3Aen
+BG,Bulgaria,Europe,True,10,1,1,english_native,Novinite.com (Sofia News Agency),,https://news.google.com/rss/search?q=%22Bulgaria%22&hl=en-US&gl=US&ceid=US%3Aen
+BF,Burkina Faso,Africa,True,3,0,3,local_native,Burkina24; LeFaso.net; Le Pays,Africanews (Burkina Faso section),https://news.google.com/rss/search?q=%22Burkina+Faso%22&hl=en-US&gl=US&ceid=US%3Aen
+BI,Burundi,Africa,True,4,1,1,english_native,Burundi Times,,https://news.google.com/rss/search?q=%22Burundi%22&hl=en-US&gl=US&ceid=US%3Aen
+KH,Cambodia,Asia,True,7,1,1,english_native,CamboJA News,,https://news.google.com/rss/search?q=%22Cambodia%22&hl=en-US&gl=US&ceid=US%3Aen
+CM,Cameroon,Africa,True,3,0,3,local_native,CameroonOnline.org; Journal du Cameroun; Le Jour,,https://news.google.com/rss/search?q=%22Cameroon%22&hl=en-US&gl=US&ceid=US%3Aen
+CA,Canada,Americas,True,3,1,1,english_native,Global News,,https://news.google.com/rss/search?q=%22Canada%22&hl=en-US&gl=US&ceid=US%3Aen
+CV,Cape Verde,Africa,True,3,0,3,local_native,Notícias do Norte; A Nação; Expresso das Ilhas,,https://news.google.com/rss/search?q=%22Cape+Verde%22&hl=en-US&gl=US&ceid=US%3Aen
+BQ,Caribbean Netherlands,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Caribbean+Netherlands%22&hl=en-US&gl=US&ceid=US%3Aen
+KY,Cayman Islands,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Cayman+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+CF,Central African Republic,Africa,True,1,0,1,local_native,Radio Ndeke Luka,,https://news.google.com/rss/search?q=%22Central+African+Republic%22&hl=en-US&gl=US&ceid=US%3Aen
+TD,Chad,Africa,True,5,0,4,local_native,Journal du Tchad; Le Pays; Le Tchadanthropus-tribune; Office National des Médias Audiovisuels (ONAMA),,https://news.google.com/rss/search?q=%22Chad%22&hl=en-US&gl=US&ceid=US%3Aen
+CL,Chile,Americas,True,4,0,4,local_native,La Prensa Austral; La Tercera; Ciperchile; La Discusión,,https://news.google.com/rss/search?q=%22Chile%22&hl=en-US&gl=US&ceid=US%3Aen
+CN,China,Asia,True,2,1,1,english_native,CGTN,,https://news.google.com/rss/search?q=%22China%22&hl=en-US&gl=US&ceid=US%3Aen
+CX,Christmas Island,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Christmas+Island%22&hl=en-US&gl=US&ceid=US%3Aen
+CC,Cocos Islands,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Cocos+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+CO,Colombia,Americas,True,7,2,2,english_native,The City Paper Bogotá; colombiareports.,,https://news.google.com/rss/search?q=%22Colombia%22&hl=en-US&gl=US&ceid=US%3Aen
+KM,Comoros,Africa,True,2,0,2,local_native,Habari Za Comores; Habari Za Comores,,https://news.google.com/rss/search?q=%22Comoros%22&hl=en-US&gl=US&ceid=US%3Aen
+CK,Cook Islands,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Cook+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+CR,Costa Rica,Americas,True,8,2,2,english_native,Q Costa Rica; The Costa Rica News,,https://news.google.com/rss/search?q=%22Costa+Rica%22&hl=en-US&gl=US&ceid=US%3Aen
+HR,Croatia,Europe,True,10,0,4,local_native,24sata; Dubrovački vjesnik; Glas Slavonije; Index.hr,,https://news.google.com/rss/search?q=%22Croatia%22&hl=en-US&gl=US&ceid=US%3Aen
+CU,Cuba,Americas,True,4,0,4,local_native,Bohemia; Escambray; Juventud Rebelde; Radio Rebelde,,https://news.google.com/rss/search?q=%22Cuba%22&hl=en-US&gl=US&ceid=US%3Aen
+CW,Curaçao,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Cura%C3%A7ao%22&hl=en-US&gl=US&ceid=US%3Aen
+CY,Cyprus,Asia,True,5,1,1,english_native,Cyprus Mail,,https://news.google.com/rss/search?q=%22Cyprus%22&hl=en-US&gl=US&ceid=US%3Aen
+CZ,Czechia,Europe,True,3,2,2,english_native,Expats.cz; Prague Morning,,https://news.google.com/rss/search?q=%22Czechia%22&hl=en-US&gl=US&ceid=US%3Aen
+CI,Côte d’Ivoire,Africa,True,2,0,2,local_native,Linfodrome; Radiodiffusion Télévision Ivoirienne (RTI),,https://news.google.com/rss/search?q=%22C%C3%B4te+d%E2%80%99Ivoire%22&hl=en-US&gl=US&ceid=US%3Aen
+CD,Democratic Republic of the Congo,Africa,True,2,0,2,local_native,Le Potentiel; RTNC,,https://news.google.com/rss/search?q=%22Democratic+Republic+of+the+Congo%22&hl=en-US&gl=US&ceid=US%3Aen
+DK,Denmark,Europe,True,1,1,1,english_native,The Local Denmark,,https://news.google.com/rss/search?q=%22Denmark%22&hl=en-US&gl=US&ceid=US%3Aen
+DJ,Djibouti,Africa,True,3,0,3,local_native,Radiodiffusion Télévision de Djibouti (RTD); DjibNet; La Voix de Djibouti,,https://news.google.com/rss/search?q=%22Djibouti%22&hl=en-US&gl=US&ceid=US%3Aen
+DM,Dominica,Americas,True,1,1,1,english_native,Dominica News,,https://news.google.com/rss/search?q=%22Dominica%22&hl=en-US&gl=US&ceid=US%3Aen
+DO,Dominican Republic,Americas,True,6,0,4,local_native,AlMomento.net; Antena 7; Color Visión; Diario Libre,,https://news.google.com/rss/search?q=%22Dominican+Republic%22&hl=en-US&gl=US&ceid=US%3Aen
+EC,Ecuador,Americas,True,8,0,4,local_native,El Comercio; Crónica; Diario Extra; El Diario,,https://news.google.com/rss/search?q=%22Ecuador%22&hl=en-US&gl=US&ceid=US%3Aen
+EG,Egypt,Africa,True,3,1,1,english_native,Egypt Independent,,https://news.google.com/rss/search?q=%22Egypt%22&hl=en-US&gl=US&ceid=US%3Aen
+SV,El Salvador,Americas,True,6,0,4,local_native,ContraPunto; Diario Co Latino; El Metropolitano Digital; El Salvador Times,,https://news.google.com/rss/search?q=%22El+Salvador%22&hl=en-US&gl=US&ceid=US%3Aen
+GQ,Equatorial Guinea,Africa,True,1,0,1,local_native,AHORAEG Guinea Ecuatorial,,https://news.google.com/rss/search?q=%22Equatorial+Guinea%22&hl=en-US&gl=US&ceid=US%3Aen
+ER,Eritrea,Africa,True,2,2,2,english_native,Awate.com; Setit,,https://news.google.com/rss/search?q=%22Eritrea%22&hl=en-US&gl=US&ceid=US%3Aen
+EE,Estonia,Europe,True,9,1,1,english_native,ERR News,,https://news.google.com/rss/search?q=%22Estonia%22&hl=en-US&gl=US&ceid=US%3Aen
+SZ,Eswatini,Africa,True,1,1,1,english_native,Eswatini Broadcasting and Information Services (EBIS),,https://news.google.com/rss/search?q=%22Eswatini%22&hl=en-US&gl=US&ceid=US%3Aen
+ET,Ethiopia,Africa,True,3,3,3,english_native,Addis Fortune; Ethiopia Insight; Ethiopia Observer,,https://news.google.com/rss/search?q=%22Ethiopia%22&hl=en-US&gl=US&ceid=US%3Aen
+FK,Falkland Islands,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Falkland+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+FO,Faroe Islands,Europe,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Faroe+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+FJ,Fiji,Oceania,True,3,3,3,english_native,FBC News; Islands Business; Pacific Islands News Association (PINA),,https://news.google.com/rss/search?q=%22Fiji%22&hl=en-US&gl=US&ceid=US%3Aen
+FI,Finland,Europe,True,8,1,1,english_native,Yleisradio (Yle),,https://news.google.com/rss/search?q=%22Finland%22&hl=en-US&gl=US&ceid=US%3Aen
+FR,France,Europe,True,11,6,5,english_native,Euronews; France 24; RFI; Le Monde English; Le Monde English International,,https://news.google.com/rss/search?q=%22France%22&hl=en-US&gl=US&ceid=US%3Aen
+GF,French Guiana,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22French+Guiana%22&hl=en-US&gl=US&ceid=US%3Aen
+PF,French Polynesia,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22French+Polynesia%22&hl=en-US&gl=US&ceid=US%3Aen
+TF,French Southern Territories,Africa,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22French+Southern+Territories%22&hl=en-US&gl=US&ceid=US%3Aen
+GA,Gabon,Africa,True,6,0,4,local_native,Agence Gabonaise de Presse (AGP); Direct Infos Gabon; Gabon Actu; Gabonreview,,https://news.google.com/rss/search?q=%22Gabon%22&hl=en-US&gl=US&ceid=US%3Aen
+GM,Gambia,Africa,True,5,5,5,english_native,The Standard; Foroyaa; Kerr Fatou; The Point; What's On Gambia,,https://news.google.com/rss/search?q=%22Gambia%22&hl=en-US&gl=US&ceid=US%3Aen
+GE,Georgia,Asia,True,1,1,1,english_native,Civil.ge,,https://news.google.com/rss/search?q=%22Georgia%22&hl=en-US&gl=US&ceid=US%3Aen
+DE,Germany,Europe,True,11,3,3,english_native,DW; DW News; Der Spiegel English,,https://news.google.com/rss/search?q=%22Germany%22&hl=en-US&gl=US&ceid=US%3Aen
+GH,Ghana,Africa,True,8,8,5,english_native,Accra Mail; EnewsGhana; Ghana Business News; Ghanaian Times; MyJoyOnline,,https://news.google.com/rss/search?q=%22Ghana%22&hl=en-US&gl=US&ceid=US%3Aen
+GI,Gibraltar,Europe,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Gibraltar%22&hl=en-US&gl=US&ceid=US%3Aen
+GR,Greece,Europe,True,10,0,4,local_native,Capital.gr; ERT News; Eleftheros Typos; Ethnos,The National Herald,https://news.google.com/rss/search?q=%22Greece%22&hl=en-US&gl=US&ceid=US%3Aen
+GL,Greenland,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Greenland%22&hl=en-US&gl=US&ceid=US%3Aen
+GD,Grenada,Americas,True,2,2,2,english_native,NOW Grenada; WEE FM Radio Grenada,,https://news.google.com/rss/search?q=%22Grenada%22&hl=en-US&gl=US&ceid=US%3Aen
+GP,Guadeloupe,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Guadeloupe%22&hl=en-US&gl=US&ceid=US%3Aen
+GU,Guam,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Guam%22&hl=en-US&gl=US&ceid=US%3Aen
+GT,Guatemala,Americas,True,7,0,4,local_native,Agencia Guatemalteca de Noticias; Chapin TV; Emisoras Unidas; Prensa Comunitaria,,https://news.google.com/rss/search?q=%22Guatemala%22&hl=en-US&gl=US&ceid=US%3Aen
+GG,Guernsey,Europe,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Guernsey%22&hl=en-US&gl=US&ceid=US%3Aen
+GN,Guinea,Africa,True,4,0,4,local_native,Guinee360.com; Guinee7.com; GuineeTime.com; Visionguinee.info,,https://news.google.com/rss/search?q=%22Guinea%22&hl=en-US&gl=US&ceid=US%3Aen
+GW,Guinea-Bissau,Africa,True,1,0,1,local_native,Agência de Notícias da Guiné (ANG),,https://news.google.com/rss/search?q=%22Guinea-Bissau%22&hl=en-US&gl=US&ceid=US%3Aen
+GY,Guyana,Americas,True,5,5,5,english_native,Demerara Waves Online News; Guyana Chronicle; Guyana Times; INews Guyana; Kaieteur News,,https://news.google.com/rss/search?q=%22Guyana%22&hl=en-US&gl=US&ceid=US%3Aen
+HT,Haiti,Americas,True,4,0,4,local_native,Haïti Liberté; Haïti Progrès; Hebdo24; Juno7,The Haitian Times,https://news.google.com/rss/search?q=%22Haiti%22&hl=en-US&gl=US&ceid=US%3Aen
+HM,Heard & McDonald Islands,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Heard+%26+McDonald+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+HN,Honduras,Americas,True,8,0,4,local_native,Confidencial HN; Contexto HN; Criterio.hn; El Libertador,,https://news.google.com/rss/search?q=%22Honduras%22&hl=en-US&gl=US&ceid=US%3Aen
+HK,Hong Kong,Asia,False,3,0,3,local_native,Headline Daily; RTHK News; i-CABLE News,,https://news.google.com/rss/search?q=%22Hong+Kong%22&hl=en-US&gl=US&ceid=US%3Aen
+HU,Hungary,Europe,True,13,1,10,english_native,24.hu; 444.hu; ATV; HVG; Index.hu; Portfolio.hu; Telex; The Budapest Times; Budapester Zeitung; Népszava,,https://news.google.com/rss/search?q=%22Hungary%22&hl=en-US&gl=US&ceid=US%3Aen
+IS,Iceland,Europe,True,6,2,2,english_native,IceNews; The Reykjavík Grapevine,,https://news.google.com/rss/search?q=%22Iceland%22&hl=en-US&gl=US&ceid=US%3Aen
+IN,India,Asia,True,10,10,5,english_native,Indian Express; The Hindu; Hindustan Times; Indian Express; The Hindu,,https://news.google.com/rss/search?q=%22India%22&hl=en-US&gl=US&ceid=US%3Aen
+ID,Indonesia,Asia,True,1,0,1,local_native,Media Indonesia,,https://news.google.com/rss/search?q=%22Indonesia%22&hl=en-US&gl=US&ceid=US%3Aen
+IR,Iran,Asia,True,13,2,2,english_native,Mehr News Agency; Tehran Times,Radiofarda.com; Voice of America - Iran; WAN-IFRA.ORG News,https://news.google.com/rss/search?q=%22Iran%22&hl=en-US&gl=US&ceid=US%3Aen
+IQ,Iraq,Asia,True,9,1,1,english_native,Iraqi News,,https://news.google.com/rss/search?q=%22Iraq%22&hl=en-US&gl=US&ceid=US%3Aen
+IE,Ireland,Europe,True,4,4,4,english_native,Donegal Daily; Irish Examiner; The42.ie; TheJournal.ie,,https://news.google.com/rss/search?q=%22Ireland%22&hl=en-US&gl=US&ceid=US%3Aen
+IM,Isle of Man,Europe,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Isle+of+Man%22&hl=en-US&gl=US&ceid=US%3Aen
+IL,Israel,Asia,True,7,4,4,english_native,Jerusalem Post; Times of Israel; Arutz Sheva (Israel National News); Israel Hayom,,https://news.google.com/rss/search?q=%22Israel%22&hl=en-US&gl=US&ceid=US%3Aen
+IT,Italy,Europe,True,9,1,1,english_native,The Local Italy,,https://news.google.com/rss/search?q=%22Italy%22&hl=en-US&gl=US&ceid=US%3Aen
+JM,Jamaica,Americas,True,3,3,3,english_native,Jamaicans.com; McKoysNews; The Jamaica Star,,https://news.google.com/rss/search?q=%22Jamaica%22&hl=en-US&gl=US&ceid=US%3Aen
+JP,Japan,Asia,True,7,4,4,english_native,The Japan Times; Japan Wire by Kyodo News; Nikkei Asia; Japan Forward,,https://news.google.com/rss/search?q=%22Japan%22&hl=en-US&gl=US&ceid=US%3Aen
+JE,Jersey,Europe,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Jersey%22&hl=en-US&gl=US&ceid=US%3Aen
+JO,Jordan,Asia,True,3,1,1,english_native,Jordan News,,https://news.google.com/rss/search?q=%22Jordan%22&hl=en-US&gl=US&ceid=US%3Aen
+KZ,Kazakhstan,Asia,True,6,1,1,english_native,The Astana Times,,https://news.google.com/rss/search?q=%22Kazakhstan%22&hl=en-US&gl=US&ceid=US%3Aen
+KE,Kenya,Africa,True,11,10,5,english_native,Business Daily Africa; K24 TV; KBC (Kenya Broadcasting Corporation); KTN News; NTV Kenya,,https://news.google.com/rss/search?q=%22Kenya%22&hl=en-US&gl=US&ceid=US%3Aen
+KI,Kiribati,Oceania,True,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Kiribati%22&hl=en-US&gl=US&ceid=US%3Aen
+XK,Kosovo,Europe,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Kosovo%22&hl=en-US&gl=US&ceid=US%3Aen
+KW,Kuwait,Asia,True,3,1,1,english_native,Times Kuwait,,https://news.google.com/rss/search?q=%22Kuwait%22&hl=en-US&gl=US&ceid=US%3Aen
+KG,Kyrgyzstan,Asia,True,7,1,1,english_native,Akipress,,https://news.google.com/rss/search?q=%22Kyrgyzstan%22&hl=en-US&gl=US&ceid=US%3Aen
+LA,Laos,Asia,True,6,1,1,english_native,Laotian Times,,https://news.google.com/rss/search?q=%22Laos%22&hl=en-US&gl=US&ceid=US%3Aen
+LV,Latvia,Europe,True,11,1,1,english_native,LSM Latvia,,https://news.google.com/rss/search?q=%22Latvia%22&hl=en-US&gl=US&ceid=US%3Aen
+LB,Lebanon,Asia,True,6,4,4,english_native,Naharnet; The961; Ya Libnan; National News Agency (NNA),,https://news.google.com/rss/search?q=%22Lebanon%22&hl=en-US&gl=US&ceid=US%3Aen
+LS,Lesotho,Africa,True,2,2,2,english_native,The Reporter; Public Eye,,https://news.google.com/rss/search?q=%22Lesotho%22&hl=en-US&gl=US&ceid=US%3Aen
+LR,Liberia,Africa,True,2,2,2,english_native,Global News Network (GNN Liberia); FrontPage Africa,,https://news.google.com/rss/search?q=%22Liberia%22&hl=en-US&gl=US&ceid=US%3Aen
+LY,Libya,Africa,True,7,3,3,english_native,Libya Herald; Libyan Express; The Libya Update,,https://news.google.com/rss/search?q=%22Libya%22&hl=en-US&gl=US&ceid=US%3Aen
+LI,Liechtenstein,Europe,True,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Liechtenstein%22&hl=en-US&gl=US&ceid=US%3Aen
+LT,Lithuania,Europe,True,9,1,1,english_native,The Baltic Times,,https://news.google.com/rss/search?q=%22Lithuania%22&hl=en-US&gl=US&ceid=US%3Aen
+LU,Luxembourg,Europe,True,6,0,4,local_native,Le Quotidien; Luxemburger Wort; Lëtzebuerger Gemengen; Lëtzebuerger Journal,,https://news.google.com/rss/search?q=%22Luxembourg%22&hl=en-US&gl=US&ceid=US%3Aen
+MO,Macao,Asia,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Macao%22&hl=en-US&gl=US&ceid=US%3Aen
+MG,Madagascar,Africa,True,4,1,1,english_native,NewsMada,,https://news.google.com/rss/search?q=%22Madagascar%22&hl=en-US&gl=US&ceid=US%3Aen
+MW,Malawi,Africa,True,6,6,5,english_native,Malawi Broadcasting Corporation; Malawi Nyasa Times; Malawi Voice; Malawi24; Maravi Express,,https://news.google.com/rss/search?q=%22Malawi%22&hl=en-US&gl=US&ceid=US%3Aen
+MY,Malaysia,Asia,True,8,5,5,english_native,New Straits Times; Daily Express; Malay Mail; MalaysiaNow; The Borneo Post,,https://news.google.com/rss/search?q=%22Malaysia%22&hl=en-US&gl=US&ceid=US%3Aen
+MV,Maldives,Asia,True,6,3,3,english_native,Maldives Independent; Maldives Voice; PSM News,,https://news.google.com/rss/search?q=%22Maldives%22&hl=en-US&gl=US&ceid=US%3Aen
+ML,Mali,Africa,True,5,0,4,local_native,Bamada.net; Journal du Mali; Mali Tribune; Mali24,,https://news.google.com/rss/search?q=%22Mali%22&hl=en-US&gl=US&ceid=US%3Aen
+MT,Malta,Europe,True,4,3,3,english_native,Gozo News; Lovin Malta; The Shift News,,https://news.google.com/rss/search?q=%22Malta%22&hl=en-US&gl=US&ceid=US%3Aen
+MH,Marshall Islands,Oceania,True,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Marshall+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+MQ,Martinique,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Martinique%22&hl=en-US&gl=US&ceid=US%3Aen
+MR,Mauritania,Africa,True,7,1,1,english_native,AMI (Agence Mauritanienne d'Information),,https://news.google.com/rss/search?q=%22Mauritania%22&hl=en-US&gl=US&ceid=US%3Aen
+MU,Mauritius,Africa,True,6,1,1,english_native,Mauritius Times,,https://news.google.com/rss/search?q=%22Mauritius%22&hl=en-US&gl=US&ceid=US%3Aen
+YT,Mayotte,Africa,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Mayotte%22&hl=en-US&gl=US&ceid=US%3Aen
+MX,Mexico,Americas,True,13,5,5,english_native,Mexico News Daily; Banderas News; Cabo News Today; Gringo Gazette; Vallarta Daily,,https://news.google.com/rss/search?q=%22Mexico%22&hl=en-US&gl=US&ceid=US%3Aen
+FM,Micronesia,Oceania,True,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Micronesia%22&hl=en-US&gl=US&ceid=US%3Aen
+MD,Moldova,Europe,True,3,0,3,local_native,NewsMaker; TV8; UNIMEDIA,,https://news.google.com/rss/search?q=%22Moldova%22&hl=en-US&gl=US&ceid=US%3Aen
+MC,Monaco,Europe,True,1,1,1,english_native,Monaco Life,,https://news.google.com/rss/search?q=%22Monaco%22&hl=en-US&gl=US&ceid=US%3Aen
+MN,Mongolia,Asia,True,2,1,1,english_native,News.MN,,https://news.google.com/rss/search?q=%22Mongolia%22&hl=en-US&gl=US&ceid=US%3Aen
+ME,Montenegro,Europe,True,4,0,4,local_native,Adria TV; Borba; Dan; Vijesti,,https://news.google.com/rss/search?q=%22Montenegro%22&hl=en-US&gl=US&ceid=US%3Aen
+MS,Montserrat,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Montserrat%22&hl=en-US&gl=US&ceid=US%3Aen
+MA,Morocco,Africa,True,8,1,1,english_native,Morocco World News,,https://news.google.com/rss/search?q=%22Morocco%22&hl=en-US&gl=US&ceid=US%3Aen
+MZ,Mozambique,Africa,True,5,2,2,english_native,Club of Mozambique; Zitamar News,,https://news.google.com/rss/search?q=%22Mozambique%22&hl=en-US&gl=US&ceid=US%3Aen
+MM,Myanmar,Asia,True,6,5,5,english_native,Burma News International (BNI); Frontier Myanmar; Myanmar Now; Kachin News Group; Radio Free Asia (RFA) - Myanmar Service,,https://news.google.com/rss/search?q=%22Myanmar%22&hl=en-US&gl=US&ceid=US%3Aen
+NA,Namibia,Africa,True,4,4,4,english_native,Namibia Economist; New Era; The Namibian; Windhoek Observer,,https://news.google.com/rss/search?q=%22Namibia%22&hl=en-US&gl=US&ceid=US%3Aen
+NR,Nauru,Oceania,True,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Nauru%22&hl=en-US&gl=US&ceid=US%3Aen
+NP,Nepal,Asia,True,11,3,3,english_native,Nepali Times; The Annapurna Express; The Rising Nepal,,https://news.google.com/rss/search?q=%22Nepal%22&hl=en-US&gl=US&ceid=US%3Aen
+NL,Netherlands,Europe,True,12,3,3,english_native,Bellingcat; DutchNews.nl; NL Times,,https://news.google.com/rss/search?q=%22Netherlands%22&hl=en-US&gl=US&ceid=US%3Aen
+NC,New Caledonia,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22New+Caledonia%22&hl=en-US&gl=US&ceid=US%3Aen
+NZ,New Zealand,Oceania,True,8,8,5,english_native,RNZ Pacific; Stuff NZ; BusinessDesk; Farmers Weekly; Newsroom,,https://news.google.com/rss/search?q=%22New+Zealand%22&hl=en-US&gl=US&ceid=US%3Aen
+NI,Nicaragua,Americas,True,6,0,4,local_native,Artículo 66; Canal 2 (Televicentro); Canal 6 Nicaragua; Confidencial,,https://news.google.com/rss/search?q=%22Nicaragua%22&hl=en-US&gl=US&ceid=US%3Aen
+NE,Niger,Africa,True,4,0,4,local_native,Agence Nigérienne de Presse (ANP); Journal du niger.com; Niger Inter; Studio Kalangou,,https://news.google.com/rss/search?q=%22Niger%22&hl=en-US&gl=US&ceid=US%3Aen
+NG,Nigeria,Africa,True,10,10,5,english_native,Premium Times; Sahara Reporters; The Punch; Vanguard News; Business Day,,https://news.google.com/rss/search?q=%22Nigeria%22&hl=en-US&gl=US&ceid=US%3Aen
+NU,Niue,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Niue%22&hl=en-US&gl=US&ceid=US%3Aen
+NF,Norfolk Island,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Norfolk+Island%22&hl=en-US&gl=US&ceid=US%3Aen
+KP,North Korea,Asia,True,0,0,0,external_only,,Choson Sinbo; North Korea - Daily NK; North Korea - NK News,https://news.google.com/rss/search?q=%22North+Korea%22&hl=en-US&gl=US&ceid=US%3Aen
+MK,North Macedonia,Europe,True,2,0,2,local_native,Makfax; Nova Makedonija,,https://news.google.com/rss/search?q=%22North+Macedonia%22&hl=en-US&gl=US&ceid=US%3Aen
+MP,Northern Mariana Islands,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Northern+Mariana+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+NO,Norway,Europe,True,8,2,2,english_native,NewsInEnglish.no; The Local Norway,,https://news.google.com/rss/search?q=%22Norway%22&hl=en-US&gl=US&ceid=US%3Aen
+OM,Oman,Asia,True,2,1,1,english_native,The Arabian Stories,,https://news.google.com/rss/search?q=%22Oman%22&hl=en-US&gl=US&ceid=US%3Aen
+PK,Pakistan,Asia,True,7,6,5,english_native,Dawn; Express Tribune; Pakistan Observer; The Frontier Post; The Nation,,https://news.google.com/rss/search?q=%22Pakistan%22&hl=en-US&gl=US&ceid=US%3Aen
+PW,Palau,Oceania,True,1,1,1,english_native,Island Times,,https://news.google.com/rss/search?q=%22Palau%22&hl=en-US&gl=US&ceid=US%3Aen
+PS,Palestine,Asia,True,7,1,1,english_native,Palestine News Network,,https://news.google.com/rss/search?q=%22Palestine%22&hl=en-US&gl=US&ceid=US%3Aen
+PA,Panama,Americas,True,5,1,1,english_native,Newsroom Panama,,https://news.google.com/rss/search?q=%22Panama%22&hl=en-US&gl=US&ceid=US%3Aen
+PG,Papua New Guinea,Oceania,True,4,4,4,english_native,Business Advantage PNG; Inside PNG; Papua New Guinea Today; The PNG Bulletin,,https://news.google.com/rss/search?q=%22Papua+New+Guinea%22&hl=en-US&gl=US&ceid=US%3Aen
+PY,Paraguay,Americas,True,6,1,1,english_native,The Paraguay Post,,https://news.google.com/rss/search?q=%22Paraguay%22&hl=en-US&gl=US&ceid=US%3Aen
+PE,Peru,Americas,True,5,0,4,local_native,Caretas; El Popular; La República; Perú21,,https://news.google.com/rss/search?q=%22Peru%22&hl=en-US&gl=US&ceid=US%3Aen
+PH,Philippines,Asia,True,4,3,3,english_native,Rappler; The Philippine Star; Interaksyon,,https://news.google.com/rss/search?q=%22Philippines%22&hl=en-US&gl=US&ceid=US%3Aen
+PN,Pitcairn,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Pitcairn%22&hl=en-US&gl=US&ceid=US%3Aen
+PL,Poland,Europe,True,3,1,1,english_native,Notes from Poland,,https://news.google.com/rss/search?q=%22Poland%22&hl=en-US&gl=US&ceid=US%3Aen
+PT,Portugal,Europe,True,10,0,4,local_native,CNN Portugal; Correio da Manhã; Diário de Coimbra; Diário de Notícias,,https://news.google.com/rss/search?q=%22Portugal%22&hl=en-US&gl=US&ceid=US%3Aen
+PR,Puerto Rico,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Puerto+Rico%22&hl=en-US&gl=US&ceid=US%3Aen
+QA,Qatar,Asia,True,5,3,3,english_native,Al Jazeera; Doha News; Qatar Department of Foreign Media Affairs,,https://news.google.com/rss/search?q=%22Qatar%22&hl=en-US&gl=US&ceid=US%3Aen
+CG,Republic of the Congo,Africa,True,3,0,3,local_native,CongoPage; Journal de Brazza; Les Dépêches de Brazzaville,Jeune Afrique,https://news.google.com/rss/search?q=%22Republic+of+the+Congo%22&hl=en-US&gl=US&ceid=US%3Aen
+RO,Romania,Europe,True,10,1,1,english_native,Romania Insider,,https://news.google.com/rss/search?q=%22Romania%22&hl=en-US&gl=US&ceid=US%3Aen
+RU,Russia,Europe,True,13,4,4,english_native,Meduza; Moscow Times; RT International; TASS,,https://news.google.com/rss/search?q=%22Russia%22&hl=en-US&gl=US&ceid=US%3Aen
+RW,Rwanda,Africa,True,4,1,1,english_native,Taarifa Rwanda,,https://news.google.com/rss/search?q=%22Rwanda%22&hl=en-US&gl=US&ceid=US%3Aen
+RE,Réunion,Africa,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22R%C3%A9union%22&hl=en-US&gl=US&ceid=US%3Aen
+WS,Samoa,Oceania,True,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Samoa%22&hl=en-US&gl=US&ceid=US%3Aen
+SM,San Marino,Europe,True,4,0,4,local_native,Giornale.sm; Libertas.sm; San Marino Fixing; San Marino RTV,,https://news.google.com/rss/search?q=%22San+Marino%22&hl=en-US&gl=US&ceid=US%3Aen
+SA,Saudi Arabia,Asia,True,2,0,2,local_native,Al-Watan; Asharq Al-Awsat,,https://news.google.com/rss/search?q=%22Saudi+Arabia%22&hl=en-US&gl=US&ceid=US%3Aen
+SN,Senegal,Africa,True,8,0,4,local_native,Agence de Presse Senegalaise (APS); Dakaractu; Le Soleil; Leral.net,,https://news.google.com/rss/search?q=%22Senegal%22&hl=en-US&gl=US&ceid=US%3Aen
+RS,Serbia,Europe,True,4,0,4,local_native,B92; Blic; Večernje novosti; N1 Info,,https://news.google.com/rss/search?q=%22Serbia%22&hl=en-US&gl=US&ceid=US%3Aen
+SC,Seychelles,Africa,True,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Seychelles%22&hl=en-US&gl=US&ceid=US%3Aen
+SL,Sierra Leone,Africa,True,2,2,2,english_native,Cocorioko; The Calabash Newspaper,,https://news.google.com/rss/search?q=%22Sierra+Leone%22&hl=en-US&gl=US&ceid=US%3Aen
+SG,Singapore,Asia,True,5,3,3,english_native,CNA; CNA Latest News; The Independent Singapore,,https://news.google.com/rss/search?q=%22Singapore%22&hl=en-US&gl=US&ceid=US%3Aen
+SX,Sint Maarten,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Sint+Maarten%22&hl=en-US&gl=US&ceid=US%3Aen
+SK,Slovakia,Europe,True,4,0,4,local_native,Denník N; Hospodárske noviny; Sme; TA3,,https://news.google.com/rss/search?q=%22Slovakia%22&hl=en-US&gl=US&ceid=US%3Aen
+SI,Slovenia,Europe,True,4,0,4,local_native,Delo; Dnevnik; RTV Slovenija; Slovenske novice,,https://news.google.com/rss/search?q=%22Slovenia%22&hl=en-US&gl=US&ceid=US%3Aen
+SB,Solomon Islands,Oceania,True,1,1,1,english_native,Solomon Times,,https://news.google.com/rss/search?q=%22Solomon+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+SO,Somalia,Africa,True,13,6,5,english_native,Horn Observer; Somali Dispatch; Somali Guardian; Somaliland Standard; The Somali Digest,,https://news.google.com/rss/search?q=%22Somalia%22&hl=en-US&gl=US&ceid=US%3Aen
+ZA,South Africa,Africa,True,8,8,5,english_native,Daily Maverick; GroundUp; IOL; Moneyweb; SABC News,,https://news.google.com/rss/search?q=%22South+Africa%22&hl=en-US&gl=US&ceid=US%3Aen
+GS,South Georgia & South Sandwich Islands,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22South+Georgia+%26+South+Sandwich+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+KR,South Korea,Asia,True,9,3,3,english_native,The Korea Herald; The Korea Times; Yonhap News,,https://news.google.com/rss/search?q=%22South+Korea%22&hl=en-US&gl=US&ceid=US%3Aen
+SS,South Sudan,Africa,True,5,5,5,english_native,Catholic Radio Network; Eye Radio; Radio Tamazuj; Sudans Post; The Juba Mirror,,https://news.google.com/rss/search?q=%22South+Sudan%22&hl=en-US&gl=US&ceid=US%3Aen
+ES,Spain,Europe,True,9,1,1,english_native,El País English,,https://news.google.com/rss/search?q=%22Spain%22&hl=en-US&gl=US&ceid=US%3Aen
+LK,Sri Lanka,Asia,True,3,3,3,english_native,ITN News; Lanka Business Online; The Island,,https://news.google.com/rss/search?q=%22Sri+Lanka%22&hl=en-US&gl=US&ceid=US%3Aen
+BL,St. Barthélemy,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22St.+Barth%C3%A9lemy%22&hl=en-US&gl=US&ceid=US%3Aen
+SH,St. Helena,Africa,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22St.+Helena%22&hl=en-US&gl=US&ceid=US%3Aen
+KN,St. Kitts & Nevis,Americas,True,5,5,5,english_native,NevisPages.com; SKN News; The St. Kitts-Nevis Observer; Voice of Nevis (VON Radio); ZIZ Broadcasting Corporation,,https://news.google.com/rss/search?q=%22St.+Kitts+%26+Nevis%22&hl=en-US&gl=US&ceid=US%3Aen
+LC,St. Lucia,Americas,True,3,3,3,english_native,Liberty FM; St Lucia Times; The Voice of Saint Lucia,,https://news.google.com/rss/search?q=%22St.+Lucia%22&hl=en-US&gl=US&ceid=US%3Aen
+MF,St. Martin,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22St.+Martin%22&hl=en-US&gl=US&ceid=US%3Aen
+PM,St. Pierre & Miquelon,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22St.+Pierre+%26+Miquelon%22&hl=en-US&gl=US&ceid=US%3Aen
+VC,St. Vincent & Grenadines,Americas,True,4,4,4,english_native,NBC Radio; Searchlight; St Vincent Times; iWitness News,,https://news.google.com/rss/search?q=%22St.+Vincent+%26+Grenadines%22&hl=en-US&gl=US&ceid=US%3Aen
+SD,Sudan,Africa,True,7,1,1,english_native,Dabanga,,https://news.google.com/rss/search?q=%22Sudan%22&hl=en-US&gl=US&ceid=US%3Aen
+SR,Suriname,Americas,True,7,0,4,local_native,Dagblad Suriname; De Ware Tijd; GFC Nieuws; Key News Suriname,,https://news.google.com/rss/search?q=%22Suriname%22&hl=en-US&gl=US&ceid=US%3Aen
+SJ,Svalbard & Jan Mayen,Europe,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Svalbard+%26+Jan+Mayen%22&hl=en-US&gl=US&ceid=US%3Aen
+SE,Sweden,Europe,True,10,1,1,english_native,The Local Sweden,,https://news.google.com/rss/search?q=%22Sweden%22&hl=en-US&gl=US&ceid=US%3Aen
+CH,Switzerland,Europe,True,5,2,2,english_native,The Local Switzerland; Le News,,https://news.google.com/rss/search?q=%22Switzerland%22&hl=en-US&gl=US&ceid=US%3Aen
+SY,Syria,Asia,True,4,2,2,english_native,Syria Direct; The Syrian Observer,,https://news.google.com/rss/search?q=%22Syria%22&hl=en-US&gl=US&ceid=US%3Aen
+ST,São Tomé & Príncipe,Africa,True,4,0,4,local_native,Jornal Tropical; Rádio Somos Todos Primos (RSTP); STP-Press; Téla Nón,,https://news.google.com/rss/search?q=%22S%C3%A3o+Tom%C3%A9+%26+Pr%C3%ADncipe%22&hl=en-US&gl=US&ceid=US%3Aen
+TW,Taiwan,Asia,False,5,1,1,english_native,Taipei Times,,https://news.google.com/rss/search?q=%22Taiwan%22&hl=en-US&gl=US&ceid=US%3Aen
+TJ,Tajikistan,Asia,True,5,1,1,english_native,Times of Central Asia,,https://news.google.com/rss/search?q=%22Tajikistan%22&hl=en-US&gl=US&ceid=US%3Aen
+TZ,Tanzania,Africa,True,7,3,3,english_native,Daily News; TanzaniaInvest; The Chanzo,,https://news.google.com/rss/search?q=%22Tanzania%22&hl=en-US&gl=US&ceid=US%3Aen
+TH,Thailand,Asia,True,6,2,2,english_native,Bangkok Post; The Thaiger,,https://news.google.com/rss/search?q=%22Thailand%22&hl=en-US&gl=US&ceid=US%3Aen
+TL,Timor-Leste,Asia,True,1,1,1,english_native,The Dili Weekly,,https://news.google.com/rss/search?q=%22Timor-Leste%22&hl=en-US&gl=US&ceid=US%3Aen
+TG,Togo,Africa,True,3,0,3,local_native,27avril.com; Togotopnews; Togo‑Presse,,https://news.google.com/rss/search?q=%22Togo%22&hl=en-US&gl=US&ceid=US%3Aen
+TK,Tokelau,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Tokelau%22&hl=en-US&gl=US&ceid=US%3Aen
+TO,Tonga,Oceania,True,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Tonga%22&hl=en-US&gl=US&ceid=US%3Aen
+TT,Trinidad & Tobago,Americas,True,1,1,1,english_native,CNC3,,https://news.google.com/rss/search?q=%22Trinidad+%26+Tobago%22&hl=en-US&gl=US&ceid=US%3Aen
+TN,Tunisia,Africa,True,4,0,4,local_native,African Manager; Al Chourouk (الشروق); La Presse de Tunisie; Mosaique FM,,https://news.google.com/rss/search?q=%22Tunisia%22&hl=en-US&gl=US&ceid=US%3Aen
+TM,Turkmenistan,Asia,True,6,1,1,english_native,News Central Asia,,https://news.google.com/rss/search?q=%22Turkmenistan%22&hl=en-US&gl=US&ceid=US%3Aen
+TC,Turks & Caicos Islands,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Turks+%26+Caicos+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+TV,Tuvalu,Oceania,True,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Tuvalu%22&hl=en-US&gl=US&ceid=US%3Aen
+TR,Türkiye,Asia,True,9,2,2,english_native,Daily Sabah; Daily Sabah,,https://news.google.com/rss/search?q=%22T%C3%BCrkiye%22&hl=en-US&gl=US&ceid=US%3Aen
+UM,U.S. Outlying Islands,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22U.S.+Outlying+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+VI,U.S. Virgin Islands,Americas,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22U.S.+Virgin+Islands%22&hl=en-US&gl=US&ceid=US%3Aen
+UG,Uganda,Africa,True,8,8,5,english_native,Business Focus; Daily Express; Eagle Online; Red Pepper; The Independent (Uganda),,https://news.google.com/rss/search?q=%22Uganda%22&hl=en-US&gl=US&ceid=US%3Aen
+UA,Ukraine,Europe,True,10,3,3,english_native,Kyiv Post; The Kyiv Independent; Ukrainska Pravda (English),,https://news.google.com/rss/search?q=%22Ukraine%22&hl=en-US&gl=US&ceid=US%3Aen
+AE,United Arab Emirates,Asia,True,9,7,5,english_native,The National; Dubai Chronicle; Emirates 24/7; Gulf Today; Khaleej Times,Iran Herald,https://news.google.com/rss/search?q=%22United+Arab+Emirates%22&hl=en-US&gl=US&ceid=US%3Aen
+GB,United Kingdom,Europe,True,5,5,5,english_native,BBC; Guardian; Financial Times; Asharq Al-Awsat; The Guardian International,,https://news.google.com/rss/search?q=%22United+Kingdom%22&hl=en-US&gl=US&ceid=US%3Aen
+US,United States,Americas,True,18,12,5,english_native,NPR; Washington Post World; NPR; Albany Herald; Axios,,https://news.google.com/rss/search?q=%22United+States%22&hl=en-US&gl=US&ceid=US%3Aen
+UY,Uruguay,Americas,True,5,0,4,local_native,El País; Brecha; El Telégrafo; La Diaria,,https://news.google.com/rss/search?q=%22Uruguay%22&hl=en-US&gl=US&ceid=US%3Aen
+UZ,Uzbekistan,Asia,True,5,1,1,english_native,Uzbekistan National News Agency (UzA),,https://news.google.com/rss/search?q=%22Uzbekistan%22&hl=en-US&gl=US&ceid=US%3Aen
+VU,Vanuatu,Oceania,True,1,1,1,english_native,Vanuatu Daily Post,,https://news.google.com/rss/search?q=%22Vanuatu%22&hl=en-US&gl=US&ceid=US%3Aen
+VA,Vatican City,Europe,True,1,1,1,english_native,Vatican News,,https://news.google.com/rss/search?q=%22Vatican+City%22&hl=en-US&gl=US&ceid=US%3Aen
+VE,Venezuela,Americas,True,8,1,1,english_native,Venezuela Analysis,,https://news.google.com/rss/search?q=%22Venezuela%22&hl=en-US&gl=US&ceid=US%3Aen
+VN,Vietnam,Asia,True,6,1,1,english_native,Vietnam News,,https://news.google.com/rss/search?q=%22Vietnam%22&hl=en-US&gl=US&ceid=US%3Aen
+WF,Wallis & Futuna,Oceania,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Wallis+%26+Futuna%22&hl=en-US&gl=US&ceid=US%3Aen
+EH,Western Sahara,Africa,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22Western+Sahara%22&hl=en-US&gl=US&ceid=US%3Aen
+YE,Yemen,Asia,True,7,1,1,english_native,Al-Masirah TV,,https://news.google.com/rss/search?q=%22Yemen%22&hl=en-US&gl=US&ceid=US%3Aen
+ZM,Zambia,Africa,True,4,4,4,english_native,Lusaka Star; Mwebantu; News Diggers!; Zambian Mining News Magazine,,https://news.google.com/rss/search?q=%22Zambia%22&hl=en-US&gl=US&ceid=US%3Aen
+ZW,Zimbabwe,Africa,True,2,2,2,english_native,Bulawayo24 News; DailyNews,,https://news.google.com/rss/search?q=%22Zimbabwe%22&hl=en-US&gl=US&ceid=US%3Aen
+AX,Åland Islands,Europe,False,0,0,0,gap,,,https://news.google.com/rss/search?q=%22%C3%85land+Islands%22&hl=en-US&gl=US&ceid=US%3Aen

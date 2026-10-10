@@ -349,7 +349,7 @@ async function fetchRSS(url, source, meta = {}) {
     const items = [];
     for (const item of parseFeed(response.rawText)) {
       const link = sanitizeExternalUrl(item.link);
-      if (item.title !== source) items.push({ title: item.title, date: item.date, source, url: link || undefined, ...(meta.tier ? { tier: meta.tier } : {}), ...(meta.lang && meta.lang !== 'en' ? { lang: meta.lang } : {}), ...(meta.state ? { state: true } : {}) });
+      if (item.title !== source) items.push({ title: item.title, date: item.date, source, url: link || undefined, ...(meta.tier ? { tier: meta.tier } : {}), ...(meta.lang && meta.lang !== 'en' ? { lang: meta.lang } : {}), ...(meta.state ? { state: true } : {}), ...(meta.country ? { country: meta.country } : {}) });
     }
     return items.slice(0, MAX_PER_FEED);
   } catch (e) {
@@ -361,7 +361,7 @@ async function fetchRSS(url, source, meta = {}) {
 const REGIONAL_NEWS_SOURCES = ['MercoPress', 'Indian Express', 'The Hindu', 'SBS Australia'];
 // Newest headlines taken from one feed (some feeds list 300) and the size of the selection that reaches the dashboard.
 const MAX_PER_FEED = 15;
-const NEWS_LIMIT = 60;
+const NEWS_LIMIT = 100;
 const PER_SOURCE_LIMIT = 5;
 
 // `customFeeds` takes [url, source] pairs (tests, local overrides); the default is the tiered registry.
@@ -392,7 +392,9 @@ export async function fetchAllNews(customFeeds) {
         ...(item.tier ? { tier: item.tier } : {}),
         ...(item.lang ? { lang: item.lang } : {}),
         ...(item.state ? { state: true } : {}),
+        ...(item.country ? { country: item.country } : {}),
         ...(geo ? { lat: geo.lat, lon: geo.lon, region: geo.region, locationMethod: 'headline-keyword', locationPrecision: 'approximate' }
+          : (item.country && iodaCountryGeo[item.country]) ? { lat: iodaCountryGeo[item.country][0], lon: iodaCountryGeo[item.country][1], region: iodaCountryGeo[item.country][2], locationMethod: 'source-country', locationPrecision: 'approximate' }
           : { region: 'Global', locationMethod: 'unknown' }),
       });
   }
@@ -426,6 +428,7 @@ export async function fetchAllNews(customFeeds) {
     pushUnique(item);
     counts.set(item.source, (counts.get(item.source) || 0) + 1);
   }
+  selected.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
   return selected.slice(0, NEWS_LIMIT);
 }
 
@@ -826,6 +829,7 @@ export function buildNewsFeed(rssNews, gdeltData, tgUrgent, tgTop) {
       headline: n.title, source: n.source, type: 'rss',
       timestamp: sourceTimestamp(n.date), publishedAt: sourceTimestamp(n.date), region: n.region, urgent: false, url: sanitizeExternalUrl(n.url),
       ...(n.tier ? { tier: n.tier } : {}), ...(n.lang ? { lang: n.lang } : {}), ...(n.state ? { state: true } : {}),
+      ...(n.country ? { country: n.country } : {}),
       lat: n.lat, lon: n.lon, locationMethod: n.locationMethod || 'unknown', locationPrecision: n.locationPrecision || 'unknown'
     });
   }
@@ -880,7 +884,8 @@ export function buildNewsFeed(rssNews, gdeltData, tgUrgent, tgTop) {
     recent.filter(item => item.source === source).slice(0, 2).forEach(pushUnique);
   }
   recent.forEach(pushUnique);
-  return selected.slice(0, 50);
+  selected.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+  return selected.slice(0, 100);
 }
 
 // === CLI Mode: inject into HTML file ===
