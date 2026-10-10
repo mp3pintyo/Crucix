@@ -1,10 +1,12 @@
 // Public RIPE RIS routing snapshots, collected at 00:00, 08:00 and 16:00 UTC.
 // https://stat.ripe.net/docs/data-api/api-endpoints/routing-status
+// A snapshot is published some time after it is taken, so the freshness ceiling (POLICIES.RIPEstat)
+// is the 8 h cadence plus a margin for that lag and the 30 min cache, still well under two cadences.
 import { safeFetch } from '../utils/fetch.mjs';
-import { providerTime, freshness, freshResult, unavailableResult } from '../utils/freshness.mjs';
+import { POLICIES, providerTime, freshness, freshResult, unavailableResult } from '../utils/freshness.mjs';
 
 const SOURCE = 'RIPEstat';
-const MAX_AGE = 8 * 3600000;
+const MAX_AGE = POLICIES[SOURCE].maxAgeMs;
 const CACHE_MS = 30 * 60000;
 const cache = new Map();
 const REQUEST = Object.freeze({ timeout: 10000, retries: 0, maxBytes: 2 * 1024 * 1024 });

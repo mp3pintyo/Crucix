@@ -3,7 +3,7 @@ export const POLICIES = Object.freeze({
   Meteoalarm: { maxAgeMs: 3*HOUR, observationMaxAgeMs: 48*HOUR },
   GDACS: { maxAgeMs: 6*HOUR, observationMaxAgeMs: 72*HOUR },
   'NOAA-SWPC': { maxAgeMs: HOUR }, ECB: { maxAgeMs: 120*HOUR },
-  'NASA-EONET': { maxAgeMs: 72*HOUR }, RIPEstat: { maxAgeMs: 8*HOUR },
+  'NASA-EONET': { maxAgeMs: 72*HOUR }, RIPEstat: { maxAgeMs: 12*HOUR },
   'FIRST-EPSS': { maxAgeMs: 48*HOUR }, 'MET-Norway': { maxAgeMs: 8*HOUR },
   OONI: { maxAgeMs: 24*HOUR },
   'IMF-PortWatch': { maxAgeMs: 240*HOUR, observationMaxAgeMs: 240*HOUR },

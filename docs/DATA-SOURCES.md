@@ -82,7 +82,7 @@ All 29 feeds are free and require no API key. The **Current public data** panel 
 | NOAA SWPC | Current R/S/G scales; zero means no active alert | 1h |
 | ECB | Daily EUR/HUF, USD, GBP, CHF reference rates | 5 days for weekends/holidays; date precision |
 | NASA EONET | Open natural events, latest Point geometry worldwide | 72h |
-| RIPEstat | AS5483 routing visibility; 00/08/16 UTC snapshots | 8h |
+| RIPEstat | AS5483 routing visibility; 00/08/16 UTC snapshots | 12h (8h cadence + publication lag); 30 min cache |
 | FIRST EPSS | Daily estimates for 20 CVEs first scored in the last 7 days | 48h; predictions, not confirmed exploitation |
 | MET Norway | Budapest model forecast, separate target/validity times | Model 8h; target within 1h of now and valid interval |
 | OONI | Five recent public HU web-connectivity measurements | 24h; samples, not country-wide conclusions |
