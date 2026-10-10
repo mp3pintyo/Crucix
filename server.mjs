@@ -2,6 +2,8 @@
 // Crucix Intelligence Engine — Dev Server
 // Serves the Jarvis dashboard, runs sweep cycle, pushes live updates via SSE
 
+// First import: lib/i18n.mjs fixes the language at module evaluation, which an earlier import reaches before crucix.config.mjs.
+import './apis/utils/env.mjs';
 import express from 'express';
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { dirname, join, resolve } from 'path';

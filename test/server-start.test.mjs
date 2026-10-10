@@ -52,3 +52,37 @@ test('real server starts on a five-digit port with isolated runtime data', { tim
   }
   assert.fail(`Server failed to become ready: ${logs}`);
 });
+
+test('CRUCIX_LANG from the .env file sets the server language', { timeout: 15000 }, async t => {
+  const probe = createServer();
+  await new Promise(resolve => probe.listen(0, '127.0.0.1', resolve));
+  const port = probe.address().port;
+  await new Promise(resolve => probe.close(resolve));
+  const directory = mkdtempSync(join(tmpdir(), 'crucix-server-'));
+  const envFile = join(directory, 'lang.env');
+  writeFileSync(envFile, 'CRUCIX_LANG=hu\n');
+  const env = { ...process.env, CRUCIX_ENV_FILE: envFile, RUNS_DIR: join(directory, 'runs'), PORT: String(port), HOST: '127.0.0.1',
+    NO_AUTO_OPEN: '1', AUTH_USER: '', AUTH_PASSWORD: '', LLM_PROVIDER: '', TELEGRAM_BOT_TOKEN: '',
+    DISCORD_BOT_TOKEN: '', DISCORD_WEBHOOK_URL: '', TELEGRAM_OSINT_ENABLED: 'false', LANGUAGE: 'en', LANG: 'en_US.UTF-8' };
+  delete env.CRUCIX_LANG;
+  const child = spawn(process.execPath, ['--import', new URL('./fixtures/block-network.mjs', import.meta.url).href, 'server.mjs'], {
+    cwd: new URL('..', import.meta.url), windowsHide: true, env, stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  let logs = '';
+  child.stdout.on('data', chunk => logs += chunk);
+  child.stderr.on('data', chunk => logs += chunk);
+  t.after(async () => {
+    const stopped = new Promise(resolve => child.once('exit', resolve));
+    if (child.exitCode === null) { child.kill(); await stopped; }
+    rmSync(directory, { recursive: true, force: true });
+  });
+  for (let i = 0; i < 100; i++) {
+    let locales;
+    try { locales = await (await fetch(`http://127.0.0.1:${port}/api/locales`)).json(); }
+    catch { await new Promise(resolve => setTimeout(resolve, 50)); continue; }
+    assert.equal(locales.current, 'hu');
+    assert.equal((await (await fetch(`http://127.0.0.1:${port}/api/health`)).json()).language, 'hu');
+    return;
+  }
+  assert.fail(`Server failed to become ready: ${logs}`);
+});
