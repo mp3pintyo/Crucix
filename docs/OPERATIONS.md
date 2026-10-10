@@ -46,6 +46,17 @@ TRADE_IDEAS_LANG=hu
 
 Dockerben a localhost a konténert jelenti; Docker Desktopon a hostszolgáltatás címe például `http://host.docker.internal:8080/v1`. A modell szerverének ténylegesen elérhető címen kell hallgatnia. `OLLAMA_BASE_URL` a külön Ollama adapterhez tartozik.
 
+Saját Anthropic Messages API-végpont (gateway, router) az `anthropic` providerrel:
+
+```dotenv
+LLM_PROVIDER=anthropic
+ANTHROPIC_BASE_URL=http://127.0.0.1:8082
+ANTHROPIC_AUTH_TOKEN=<a-router-tokenje>
+LLM_MODEL=<a-route-modellneve>
+```
+
+Az `ANTHROPIC_AUTH_TOKEN` `Authorization: Bearer` fejlécként megy ki az `x-api-key` helyett; a `LLM_API_KEY` és ez közül csak az egyik adható meg. A végpontnak streaming nélküli kérésre egyetlen JSON-választ kell adnia; a thinking blokkokat a provider kihagyja.
+
 Groq is a generic adapterrel konfigurálható: `LLM_BASE_URL=https://api.groq.com/openai/v1`, `LLM_API_KEY` és az accountban elérhető `LLM_MODEL`. Ezt a [Groq hivatalos OpenAI compatibility dokumentációja](https://console.groq.com/docs/openai) támogatja; nincs szükség a #47 PR teljes crypto/UI csomagjára. Éles Groq modellhívást az audit nem végzett. Más compatible szolgáltatóhoz az endpointot, authot és modellnevet külön kell ellenőrizni.
 
 A timeout és tokenkeret a `.env.example` hat `LLM_*_TIMEOUT_MS` / `LLM_*_MAX_TOKENS` változójával állítható. A nagyobb timeout nem javítja az üres thinking-only választ: a válasz ellenőrzést kap, és szabályötletek jelennek meg hiba esetén. A `LLM_IDEAS_EVERY_N_SWEEPS` ritkítja a modellhívást; a cache megtartja az eredeti időt, a delta-riasztás minden sweepben működik.

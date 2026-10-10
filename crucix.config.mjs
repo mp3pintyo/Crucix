@@ -122,6 +122,8 @@ export default {
     model: process.env.LLM_MODEL || null,
     baseUrl: process.env.OLLAMA_BASE_URL || null,
     compatibleBaseUrl: process.env.LLM_BASE_URL || null,
+    anthropicBaseUrl: process.env.ANTHROPIC_BASE_URL || null,
+    anthropicAuthToken: process.env.ANTHROPIC_AUTH_TOKEN || null,
     reasoningEffort: process.env.OLLAMA_REASONING_EFFORT || null,
     ideasMaxTokens: envInteger('LLM_IDEAS_MAX_TOKENS', 4096, 128, 16384),
     ideasTimeoutMs: envInteger('LLM_IDEAS_TIMEOUT_MS', 90000, 1000, 360000),

@@ -5,6 +5,7 @@ import { createLLMProvider } from '../lib/llm/index.mjs';
 import { GeminiProvider } from '../lib/llm/gemini.mjs';
 import { OllamaProvider } from '../lib/llm/ollama.mjs';
 import { OpenAICompatibleProvider, chatCompletionsUrl } from '../lib/llm/openai-compatible.mjs';
+import { AnthropicProvider, messagesUrl } from '../lib/llm/anthropic.mjs';
 import { normalizeIdeas, parseIdeasResponse } from '../lib/llm/idea-schema.mjs';
 import { compactSweepForLLM, generateLLMIdeas, ideasSystemPrompt } from '../lib/llm/ideas.mjs';
 import { generateRuleBasedIdeas, resolveIdeas } from '../lib/llm/rule-ideas.mjs';
@@ -105,6 +106,47 @@ test('Ollama thinking budget exhaustion is explicit, optional effort is preserve
 test('compatible provider accepts a supplied key and typed text parts, excluding reasoning', async t => {
   mockResponse(t, { choices: [{ message: { content: [{ type: 'reasoning', text: 'hidden' }, { type: 'text', text: 'answer' }] }, finish_reason: 'stop' }] }, (_url, opts) => assert.equal(opts.headers.Authorization, 'Bearer synthetic-key'));
   assert.equal((await new OpenAICompatibleProvider({ apiKey: 'synthetic-key' }).complete('s', 'u')).text, 'answer');
+});
+
+test('Anthropic URL supports origin, /v1 and full endpoint, and keeps the Anthropic API by default', () => {
+  assert.equal(messagesUrl(), 'https://api.anthropic.com/v1/messages');
+  for (const path of ['', '/', '/v1', '/v1/', '/v1/messages']) assert.equal(messagesUrl(`http://127.0.0.1:8082${path}`), 'http://127.0.0.1:8082/v1/messages');
+  assert.equal(messagesUrl('https://example.test/gateway/v1'), 'https://example.test/gateway/v1/messages');
+  for (const url of ['file:///tmp/model', 'localhost:8082', 'https://user:pass@example.test', 'https://example.test/?key=secret', 'https://example.test/#x']) {
+    assert.throws(() => messagesUrl(url), /ANTHROPIC_BASE_URL/);
+  }
+});
+
+test('Anthropic provider sends x-api-key to the Anthropic API unless a base URL and bearer token are configured', async t => {
+  const requests = [];
+  let timeout;
+  t.mock.method(AbortSignal, 'timeout', ms => { timeout = ms; return new AbortController().signal; });
+  mockResponse(t, { content: [{ type: 'text', text: 'answer' }], stop_reason: 'end_turn', usage: { input_tokens: 7, output_tokens: 3 } }, (url, opts) => requests.push({ url, headers: opts.headers, body: JSON.parse(opts.body) }));
+  const config = { compatibleBaseUrl: 'http://127.0.0.1:1234', baseUrl: 'http://127.0.0.1:11435', model: 'route-model' };
+  const result = await createLLMProvider({ ...config, provider: 'anthropic', apiKey: 'synthetic-key' }).complete('system', 'data', { maxTokens: 800, timeout: 90000 });
+  assert.equal(timeout, 90000);
+  const routed = createLLMProvider({ ...config, provider: 'anthropic', anthropicBaseUrl: 'http://127.0.0.1:8082', anthropicAuthToken: 'router-token' });
+  assert.equal(routed.isConfigured, true);
+  await routed.complete('system', 'data');
+  assert.equal(requests[0].url, 'https://api.anthropic.com/v1/messages');
+  assert.equal(requests[0].headers['x-api-key'], 'synthetic-key');
+  assert.equal(requests[0].headers.Authorization, undefined);
+  assert.equal(requests[0].headers['anthropic-version'], '2023-06-01');
+  assert.deepEqual(requests[0].body, { model: 'route-model', max_tokens: 800, system: 'system', messages: [{ role: 'user', content: 'data' }] });
+  assert.deepEqual([result.text, result.finishReason, result.usage], ['answer', 'end_turn', { inputTokens: 7, outputTokens: 3 }]);
+  assert.equal(requests[1].url, 'http://127.0.0.1:8082/v1/messages');
+  assert.equal(requests[1].headers.Authorization, 'Bearer router-token');
+  assert.equal(requests[1].headers['x-api-key'], undefined);
+  assert.throws(() => createLLMProvider({ provider: 'anthropic', apiKey: 'synthetic-key', anthropicAuthToken: 'router-token' }), /not both/);
+  assert.equal(createLLMProvider({ provider: 'anthropic', anthropicBaseUrl: 'http://127.0.0.1:8082' }).isConfigured, false);
+});
+
+test('Anthropic provider joins text blocks after thinking and reports a thinking-only exhausted response', async t => {
+  mockResponse(t, { content: [{ type: 'thinking', thinking: 'private reasoning' }, { type: 'text', text: 'ans' }, { type: 'redacted_thinking', data: 'x' }, { type: 'text', text: 'wer' }], stop_reason: 'end_turn' });
+  assert.equal((await new AnthropicProvider({ apiKey: 'synthetic-key' }).complete('s', 'u')).text, 'answer');
+  t.mock.restoreAll();
+  mockResponse(t, { content: [{ type: 'thinking', thinking: 'still thinking' }], stop_reason: 'max_tokens' });
+  await assert.rejects(new AnthropicProvider({ apiKey: 'synthetic-key' }).complete('s', 'u'), /max_tokens/);
 });
 
 test('OpenAI-format providers surface exhausted reasoning instead of a silent empty success', async t => {
