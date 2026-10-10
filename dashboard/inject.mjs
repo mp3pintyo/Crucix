@@ -14,6 +14,7 @@ import { openBrowser } from '../lib/open-browser.mjs';
 import { inlineJson } from '../lib/html.mjs';
 import { safeFetch } from '../apis/utils/fetch.mjs';
 import { parseFeed } from '../apis/utils/rss.mjs';
+import { vesselName, mmsiOf } from '../apis/utils/ais-collector.mjs';
 import { NEWS_FEEDS, feedBySource, HUNGARIAN_SOURCES, OFFICIAL_SOURCES } from '../apis/utils/news-feeds.mjs';
 import config from '../crucix.config.mjs';
 import { createLLMProvider } from '../lib/llm/index.mjs';
@@ -519,6 +520,16 @@ export async function synthesize(data, options = {}) {
   const chokepoints = Object.values(data.sources.Maritime?.chokepoints || {}).map(c => ({
     label: c.label || c.name, note: c.note || '', lat: c.lat || 0, lon: c.lon || 0
   }));
+  // Live AIS vessels (Maritime with AISSTREAM_API_KEY): markers of the maritime layer only, on purpose never live rows, events or history.
+  // Structured fields only: the dashboard words them in its language (jarvis.html aisVesselText). The name was sanitised by the source;
+  // it is checked again here (the same AIS text allowlist), since runs/latest.json is read back from disk. A marker needs a name or a valid MMSI.
+  const aisKey = value => typeof value === 'string' && /^[a-z_]{1,40}$/.test(value) ? value : null;
+  const aisVessels = (data.sources.Maritime?.status === 'ok' && Array.isArray(data.sources.Maritime.vessels) ? data.sources.Maritime.vessels.slice(0, 89) : [])
+    .filter(v => v && Number.isFinite(v.lat) && Number.isFinite(v.lon) && Math.abs(v.lat) <= 90 && Math.abs(v.lon) <= 180)
+    .map(v => ({ name: vesselName(v.name), mmsi: mmsiOf(v.mmsi),
+      area: aisKey(v.area), speedKn: Number.isFinite(v.speedKn) && v.speedKn >= 0 && v.speedKn < 102.3 ? v.speedKn : null, vesselType: aisKey(v.vesselType),
+      lastSeen: typeof v.lastSeen === 'string' && v.lastSeen.length <= 30 && Number.isFinite(Date.parse(v.lastSeen)) ? new Date(v.lastSeen).toISOString() : null, lat: v.lat, lon: v.lon }))
+    .filter(v => v.name || v.mmsi !== null);
   // Modelled current wind at each site (Open-Meteo-Wind), matched by the site's label; absent when that source did not answer fresh.
   const windAt = new Map(data.sources['Open-Meteo-Wind']?.status === 'ok' ? (data.sources['Open-Meteo-Wind'].observations || []).map(o => [o.place, o]) : []);
   const nuke = (data.sources.Safecast?.sites || []).map(s => {
@@ -775,7 +786,7 @@ export async function synthesize(data, options = {}) {
   const news = allNews.filter(n => Number.isFinite(n.lat) && Number.isFinite(n.lon));
 
   const V2 = {
-    meta: data.crucix, air, thermal, tSignals, chokepoints, nuke, nukeSignals, liveSources, cyclones,
+    meta: data.crucix, air, thermal, tSignals, chokepoints, aisVessels, nuke, nukeSignals, liveSources, cyclones,
     airMeta: {
       fallback: Boolean(airFallback),
       liveTotal: sumAirHotspots(liveAirHotspots),

@@ -181,7 +181,7 @@ async function startServer(t, { env = {}, prepare } = {}) {
     env: { ...process.env, CRUCIX_ENV_FILE: envFile, RUNS_DIR: runs, PORT: String(port), HOST: '127.0.0.1',
       NO_AUTO_OPEN: '1', AUTH_USER: '', AUTH_PASSWORD: '', LLM_PROVIDER: '', TELEGRAM_BOT_TOKEN: '',
       DISCORD_BOT_TOKEN: '', DISCORD_WEBHOOK_URL: '', TELEGRAM_OSINT_ENABLED: 'false',
-      ALERT_NTFY_URL: '', ALERT_WEBHOOK_URL: '', ...env },
+      ALERT_NTFY_URL: '', ALERT_WEBHOOK_URL: '', AISSTREAM_API_KEY: '', ...env },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   let logs = '';

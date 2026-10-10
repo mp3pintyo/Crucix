@@ -1,7 +1,7 @@
 (function (window, document) {
   'use strict';
   const DB = 'crucix-offline-v1', MAX_BYTES = 5 * 1024 * 1024;
-  const KEYS = ['meta','air','airMeta','thermal','tSignals','chokepoints','nuke','nukeSignals','sdr','earthquakes','ioda','tg','who','supplementalHealth','fred','energy','metals','bls','treasury','gscpi','defense','noaa','epa','acled','gdelt','space','health','news','markets','ideas','ideasSource','ideasCached','delta','newsFeed','events','liveSources','alerts','changes','risk'];
+  const KEYS = ['meta','air','airMeta','thermal','tSignals','chokepoints','aisVessels','nuke','nukeSignals','sdr','earthquakes','ioda','tg','who','supplementalHealth','fred','energy','metals','bls','treasury','gscpi','defense','noaa','epa','acled','gdelt','space','health','news','markets','ideas','ideasSource','ideasCached','delta','newsFeed','events','liveSources','alerts','changes','risk'];
   let options = {}, enabled = false, storedAt = null, cachedView = false, error = '', registration = null, installPrompt = null, initialized = false;
   const t = (key, fallback) => options.t?.('pwa.' + key, fallback) || fallback;
   const el = (tag, text) => { const node = document.createElement(tag); if (text) node.textContent = text; return node; };

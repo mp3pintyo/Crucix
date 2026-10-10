@@ -33,6 +33,7 @@ export const POLICIES = Object.freeze({
   Regulators: { maxAgeMs: 168*HOUR, observationMaxAgeMs: 336*HOUR },
   'Eurostat-HU': { maxAgeMs: 2160*HOUR, observationMaxAgeMs: 4320*HOUR },
   'Launch-Library': { maxAgeMs: 12*HOUR, observationMaxAgeMs: 720*HOUR },
+  Maritime: { maxAgeMs: 25*60000, observationMaxAgeMs: 25*60000 },
 });
 
 // Never use collection time as a replacement for a missing provider date.
