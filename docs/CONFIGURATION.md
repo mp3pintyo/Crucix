@@ -74,13 +74,14 @@ These three unlock the most valuable economic and satellite data. Each takes abo
 
 ### LLM Provider (optional, for AI-enhanced ideas)
 
-Set `LLM_PROVIDER` to one of: `anthropic`, `openai`, `gemini`, `codex`, `openrouter`, `minimax`, `mistral`, `grok`, `ollama`, `openai-compatible`
+Set `LLM_PROVIDER` to one of: `anthropic`, `openai`, `gemini`, `cursor`, `codex`, `openrouter`, `minimax`, `mistral`, `grok`, `ollama`, `openai-compatible`
 
 | Provider | Key Required | Default Model |
 |----------|-------------|---------------|
 | `anthropic` | `LLM_API_KEY` | claude-sonnet-4-6 |
 | `openai` | `LLM_API_KEY` | gpt-5.4 |
 | `gemini` | `LLM_API_KEY` | gemini-3.1-pro |
+| `cursor` | `CURSOR_API_KEY` or `CURSOR_API_TOKEN` | cursor-fast |
 | `openrouter` | `LLM_API_KEY` | openrouter/auto |
 | `codex` | None (uses `~/.codex/auth.json`) | first listed model of your account (gpt-6.1-sol) |
 | `minimax` | `LLM_API_KEY` | MiniMax-M2.5 |
@@ -128,12 +129,50 @@ Crucix still works with zero API keys. Most of the 71 sources need no authentica
 | Script | Command | Description |
 |--------|---------|-------------|
 | `npm run dev` | `node --trace-warnings server.mjs` | Start dashboard with auto-refresh |
+| `npm run cli` | `node scripts/cli.mjs` | Crucix intelligence CLI (query markets, alerts, OSINT, feeds, offline/online) |
+| `npm run status` | `node scripts/status.mjs` | Quick server health and operational status check in terminal |
 | `npm run sweep` | `node apis/briefing.mjs` | Run a single sweep, output JSON to stdout |
+| `npm run benchmark:rss` | `node scripts/benchmark-world-rss.mjs` | Benchmark parallel speed and latency of 539 world RSS feeds |
 | `npm run inject` | `node dashboard/inject.mjs` | Inject latest data into static HTML |
 | `npm run brief:save` | `node apis/save-briefing.mjs` | Run sweep + save timestamped JSON |
 | `npm run diag` | `node diag.mjs` | Run diagnostics (Node version, imports, port check) |
 | `npm test` | `node --test test/*.test.mjs` | Local regressions using mocks/fixtures |
 | `npm run check` | `node scripts/check.mjs` | JavaScript syntax and locale checks |
+
+### Command Line Interface (CLI)
+
+The CLI (`scripts/cli.mjs`) works seamlessly **both with a running dev server and completely standalone / offline (`--no-server`, direct disk fallback)**.
+
+```bash
+# Executive briefing & market overview
+npm run cli -- -b                    # Executive briefing (markets, VIX, oil, gold, quakes, OSINT)
+npm run cli -- -m                    # Stock indexes, bond rates, crypto, commodities
+npm run cli -- --energy              # WTI, Brent crude, natural gas, EIA inventory
+npm run cli -- --metals              # Gold and silver spot prices
+npm run cli -- -a                    # All-in-one comprehensive intelligence report
+
+# Geopolitics, risk and alerts
+npm run cli -- --risk                # Top geopolitical risk countries (0–100 index)
+npm run cli -- --risk UA             # Detailed risk profile for Ukraine (or PAN, USA, IL)
+npm run cli -- -A                    # Active alerts and threat level
+npm run cli -- --predictions         # Prediction markets (Manifold, Polymarket)
+
+# Physical, maritime and airspace monitoring
+npm run cli -- --earthquakes         # Recent earthquakes (USGS / EMSC) with tsunami flags
+npm run cli -- --thermal -l 5        # NASA FIRMS satellite fire hotspots & FRP intensity
+npm run cli -- --chokepoints         # Strategic maritime chokepoints (Hormuz, Suez, Malacca)
+npm run cli -- --cyber               # CISA KEV actively exploited vulnerabilities & ThreatFox
+
+# World news catalog (195 countries, 539 outlets)
+npm run cli -- --countries           # List all 195 covered countries and feed counts
+npm run cli -- --country JP          # Latest news for Japan (cached or live network fallback)
+npm run cli -- --feeds DE            # List registered outlets for Germany
+
+# Standalone / Serverless execution
+npm run cli -- --no-server -b        # Force direct disk reading without web server
+npm run cli -- -S -c cyber -l 5      # 5 cyber events in offline mode
+npm run cli -- --sweep               # Run a complete data collection sweep in terminal
+```
 
 ---
 
@@ -145,8 +184,9 @@ All settings are in `.env` with sensible defaults:
 |----------|---------|-------------|
 | `PORT` | `3117` | Dashboard server port |
 | `REFRESH_INTERVAL_MINUTES` | `15` | Auto-refresh interval |
-| `LLM_PROVIDER` | disabled | `anthropic`, `openai`, `gemini`, `codex`, `openrouter`, `minimax`, `mistral`, `ollama`, `grok`, `openai-compatible` |
+| `LLM_PROVIDER` | disabled | `anthropic`, `openai`, `gemini`, `cursor`, `codex`, `openrouter`, `minimax`, `mistral`, `ollama`, `grok`, `openai-compatible` |
 | `LLM_API_KEY` | — | API key (not needed for codex/local Ollama; optional for a local compatible server) |
+| `CURSOR_API_KEY` | — | API key/token for Cursor LLM provider (`LLM_PROVIDER=cursor`) |
 | `LLM_MODEL` | per-provider default | Override model selection |
 | `TELEGRAM_BOT_TOKEN` | disabled | For Telegram alerts + bot commands |
 | `TELEGRAM_CHAT_ID` | — | Your Telegram chat ID |

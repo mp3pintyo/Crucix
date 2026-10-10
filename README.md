@@ -92,6 +92,9 @@ cp .env.example .env
 
 # 4. Start the dashboard
 npm run dev
+
+# Or query intelligence directly from the terminal (no browser or server needed)
+npm run cli -- -b
 ```
 
 > **If `npm run dev` fails silently** (exits with no output), run Node directly instead:
@@ -139,11 +142,12 @@ A self-contained Jarvis-style HUD with:
 - **Shared layer controls** across both views (22 layers): fire, air, radiation, maritime references, SDR, OSINT, health, inferred news, conflict, internet outages, weather, earthquakes, natural events, space stations, GNSS interference, cyclone forecast tracks and cones, orbital launches and (off by default) oil and gas pipelines, military bases, mapped military areas, data centres and dams. Located live records take the colour of their layer
 - **Globe basemap button** — night lights or the daily NASA GIBS satellite image of yesterday; the **©** button lists the credits and licences of what is on screen
 - **Animated 3D flight corridor arcs** between air traffic hotspots and global hubs
-- **Region filters** (World, Americas, Europe, Middle East, Asia Pacific, Africa) — rotates the globe or zooms the flat map
+- **14 Geopolitical Region filters & Country selector** — 14 regions (`World`, `Americas`, `North America`, `Latin America`, `Europe`, `Eastern Europe`, `Middle East`, `Africa`, `Asia Pacific`, `Central Asia`, `South Asia`, `East Asia`, `Southeast Asia`, `Oceania`) plus an interactive country dropdown showing active story counts (e.g. `[UA] Ukraine (8)`) with targeted zoom
 - **Live market data** — indexes, crypto, energy, commodities via Yahoo Finance (no API key needed)
 - **Risk gauges** — VIX, high-yield spread, supply chain pressure index
 - **OSINT feed** — English-language posts from 17 Telegram intelligence channels (expandable)
-- **News ticker** — merged RSS + GDELT headlines + Telegram posts, auto-scrolling. 52 RSS feeds carry a source tier (T1 official or wire … T4 aggregator, a ranking of the source, not of the headline), a language tag and a state-funded tag; seven Hungarian outlets are included (v2.18)
+- **News ticker & World RSS catalog** — merged RSS + GDELT headlines + Telegram posts, auto-scrolling with newest-first ordering and diversity capping. Supported by a 539-feed world RSS catalog covering 195 countries with a 30-minute background runner
+- **Command Line Interface (CLI)** — query briefing, markets, risk, earthquakes, thermal hotspots, and news directly in the terminal via `npm run cli` (works with the server or standalone/offline via `--no-server`)
 - **Sweep delta** — live panel showing what changed since last sweep (new signals, escalations, de-escalations with severity)
 - **Cross-source signals** — correlated intelligence across satellite, economic, conflict, and social domains
 - **Nuclear watch** — recent (72 h) radiation readings from Safecast, shown with their age, the modelled current wind at each site (Open-Meteo; not a dispersion forecast), plus EPA RadNet when reachable

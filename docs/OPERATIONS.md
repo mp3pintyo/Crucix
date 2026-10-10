@@ -159,6 +159,78 @@ A 27 helyi vendor fájl forrása, licence, mérete és SHA-256 hash-e a `dashboa
 
 Valódi böngészős reprodukálás: külön terminálban `node test/fixtures/dashboard-server.mjs`, majd opcionális Playwright 1.62.1 telepítéssel `node scripts/browser-qa.mjs`, `QA_PHASE=all` mellett `node scripts/intelligence-ui-qa.mjs` (fázisai: detail, history, profiles, inspector, live, alerts, structure), végül `node scripts/pwa-qa.mjs`. PowerShellben `$env:QA_PHASE='all'`; a `PLAYWRIGHT_MODULE` egy meglévő modul könyvtárára is mutathat. Ezek kizárólag a localhost:3199 fixture-t használják, operátori konfiguráció nélkül. A teljes [jegyzőkönyv](audit/intelligence-workspace-verification.md) és [megvalósítási jegyzék](audit/intelligence-workspace-implementation.md) tartalmazza az eredményeket.
 
+## Parancssori felület (CLI) és szerver nélküli (Standalone / Offline) üzemmód
+
+A Crucix nemcsak böngészős felületen és botokon keresztül használható, hanem teljes értékű terminálos hírszerzési eszközként is a `scripts/cli.mjs` segítségével.
+
+A CLI kétféle módban képes működni:
+1. **Szerverhez kapcsolódva (alapértelmezett):** Ha fut a helyi Crucix szerver (`http://localhost:3117`), a CLI az API végpontokból kérdezi le az adatokat.
+2. **Szerver nélküli (Standalone / Offline, `--no-server`, `-S`):** Nem igényel futó web szervert! Közvetlenül a helyi lemezen lévő archívumból (`runs/latest.json`, `runs/intelligence/history.json`, `runs/intelligence/countries.json`, `runs/world-rss-cache.json`, `runs/alerts/alerts.json`) dolgozik, vagy közvetlen RSS hálózati letöltést hajt végre.
+
+### Főbb CLI parancsok
+
+```bash
+# Vezetői intelligencia összefoglaló (Briefing)
+npm run cli -- -b
+
+# Pénzügyi piacok, részvényindexek, VIX, kötvényhozamok, kriptovaluták
+npm run cli -- -m
+
+# Energiapiac: WTI és Brent kőolaj, Földgáz árak, EIA készletek
+npm run cli -- --energy
+
+# Nemesfémek: Arany és Ezüst uncia árak, napi változások
+npm run cli -- --metals
+
+# Földrengések (USGS/EMSC) magnitúdóval és szökőár veszélyjelzéssel
+npm run cli -- --earthquakes
+
+# NASA FIRMS műholdas hőtérkép és tűzpontok FRP intenzitással
+npm run cli -- --thermal -l 5
+
+# Geopolitikai országkockázati rangsor (Top kockázatos országok)
+npm run cli -- --risk
+
+# Egy adott ország részletes kockázati profilja (pl. Ukrajna, Panama)
+npm run cli -- --risk UA
+npm run cli -- --risk PAN
+
+# Kiberbiztonság: CISA KEV aktívan kihasznált sebezhetőségek és ThreatFox
+npm run cli -- --cyber
+
+# Stratégiai tengeri fojtópontok (Hormuz, Szuez, Malakka, Panama)
+npm run cli -- --chokepoints
+
+# Riasztások és védelmi szint
+npm run cli -- -A
+
+# Átfogó jelentés minden területről egymás után
+npm run cli -- -a
+
+# Teljes adatgyűjtési sweep futtatása a terminálban háttérszerver nélkül
+npm run cli -- --sweep
+
+# Garantált szerver nélküli, közvetlen lemezes futás
+npm run cli -- --no-server -b
+npm run cli -- -S -c cyber -l 5
+
+# Gyors szerverállapot ellenőrzés
+npm run status
+```
+
+## Világ Hírforrás Motor (World RSS, 539 feed) és Geopolitikai Régiók
+
+A korábbi hírcsatornák mellett a Crucix egy 195 országot lefedő, 539 hitelesített nemzeti médiumból álló globális RSS motort kapott (`data/world-rss/` és `lib/world-rss-runner.mjs`).
+
+- **30 perces háttérütemező:** A szerver a háttérben párhuzamos lekérésekkel gyűjti az összes ország vezető lapjait, és a `runs/world-rss-cache.json` fájlban tárolja a híreket.
+- **REST API:**
+  - `GET /api/news/countries` — Az összes támogatott ország és médium listája.
+  - `GET /api/news/country/:code` — Egy adott ország (pl. `HU`, `DE`, `JP`, `BR`, `UA`) hírei a gyorsítótárból vagy friss letöltéssel (`?live=true`).
+  - `GET /api/news/world` — Globálisan kiegyensúlyozott hírfolyam diverzitási kvótával (max. 2 hír országonként).
+- **14 Geopolitikai Régióválasztó:** A korábbi 6 kontinens helyett 14 geopolitikai régió választható a felső vezérlősávon:
+  `World`, `Americas`, `North America`, `Latin America`, `Europe`, `Eastern Europe`, `Middle East`, `Africa`, `Asia Pacific`, `Central Asia`, `South Asia`, `East Asia`, `Southeast Asia`, `Oceania`. Mindegyikhez dedikált 3D földgömb POV koordináta és 2D síktérkép bounding box tartozik.
+- **Interaktív országválasztó:** A felső sávban lévő legördülő menü automatikusan megjeleníti az összes olyan országot, amelyből friss hír érkezett (pl. `[UA] Ukraine (8)`). Kiválasztásakor a térkép és a földgömb közvetlenül az ország koordinátáira zoomol, a hírszalag pedig az adott ország legfrissebb híreire szűr.
+
 ## Ellenőrzés és támogatási adatok
 
 `npm run check`, `npm test`, `npm audit --omit=dev`. Hibajegyhez Node-verzió, OS, indítási mód, sanitized hibaüzenet, érintett forrás és snapshot-idő szükséges. A teljes `.env`, botqueue, üzleti adatok vagy kulcsot tartalmazó URL helyett csak a szükséges, kitakart részletet add meg.
