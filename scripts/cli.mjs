@@ -7,9 +7,11 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import http from 'node:http';
+import { pathToFileURL } from 'node:url';
 import config from '../crucix.config.mjs';
 import { WORLD_FEEDS, getFeedsByCountry, searchWorldFeeds } from '../apis/utils/news-feeds.mjs';
 import { parseFeed } from '../apis/utils/rss.mjs';
+import { loadWorldRssCache, getWorldNewsByCountry, getWorldNews } from '../lib/world-rss-runner.mjs';
 
 const port = config.port || 3117;
 const host = config.host === '0.0.0.0' ? '127.0.0.1' : (config.host || '127.0.0.1');
@@ -17,8 +19,8 @@ const runsDir = config.runsDir || join(process.cwd(), 'runs');
 const historyFile = join(runsDir, 'intelligence', 'history.json');
 const latestFile = join(runsDir, 'latest.json');
 
-function parseArgs() {
-  const args = process.argv.slice(2);
+function parseArgs(argv = process.argv.slice(2)) {
+  const args = argv;
   const opts = {
     category: null,
     search: null,
@@ -32,6 +34,8 @@ function parseArgs() {
     live: false,
     json: false,
     help: false,
+    noServer: false,
+    sweep: false,
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -64,6 +68,10 @@ function parseArgs() {
       opts.live = true;
     } else if (arg === '--json') {
       opts.json = true;
+    } else if (arg === '--no-server' || arg === '--standalone' || arg === '--offline' || arg === '--direct' || arg === '-S') {
+      opts.noServer = true;
+    } else if (arg === '--sweep' || arg === '--run-sweep') {
+      opts.sweep = true;
     } else if (!arg.startsWith('-') && !opts.category && !opts.country) {
       // Shortcut: if 2 chars and uppercase, treat as country code (e.g. `npm run cli HU`)
       if (/^[a-zA-Z]{2}$/.test(arg)) {
@@ -94,19 +102,24 @@ Alapvető szűrők:
   --live                           Aktuális sweep élő hírszalagjának (news ticker) mutatása
   --json                           Nyers JSON kimenet (más scriptekhez vagy AI csővezetékhez)
 
+Szerver nélküli (Standalone / Offline) futtatás:
+  --no-server, --standalone, -S    Közvetlen lemezes / offline futás (nem csatlakozik a web szerverhez).
+                                   Kizárólag a helyi lemezen lévő archívumból és gyorsítótárból dolgozik.
+  --offline, --direct              A --no-server szinonimái
+  --sweep, --run-sweep             Egyszeri elemzési sweep futtatása a terminálban háttérszerver nélkül.
+
 Világ Hírforrás Katalógus (191+ ország, 539 médium):
   --countries                      Összes támogatott ország és médiumaik számának listázása
   --feeds [ISO kód]                Egy adott országban elérhető médiumok listája (pl. --feeds DE)
   --search-feeds <név>             Médium keresése a világkatalógusban (pl. --search-feeds "Spiegel")
 
 Példák:
-  npm run cli -- --countries                 # Összes ország áttekintése
-  npm run cli -- --country JP                # Japán vezető lapjainak élő hírei
-  npm run cli -- --country DE -l 5           # Német lapok legfrissebb 5 híre
-  npm run cli -- --feeds FR                  # Franciaországban regisztrált médiumok
-  npm run cli -- -c cyber -l 5               # Legutóbbi 5 kibervédelmi incidens
-  npm run cli -- -q "Ukraine"                # Ukrajnával kapcsolatos események
-  npm run cli -- --live -l 10                # Utolsó sweep élő hírei
+  npm run cli -- --no-server                 # Események lekérése közvetlenül a lemezről (szerver nélkül)
+  npm run cli -- -S -c cyber -l 5            # 5 kiber incidens szerverkapcsolat nélkül
+  npm run cli -- --country JP --no-server    # Japán hírek a helyi RSS gyorsítótárból
+  npm run cli -- --live --no-server          # Élő hírszalag közvetlen lemezes módban
+  npm run cli -- --sweep                     # Teljes adatgyűjtési ciklus futtatása szerver nélkül
+  npm run cli -- --countries                 # Összes támogatott ország áttekintése
 `);
 }
 
@@ -202,6 +215,24 @@ async function main() {
     return;
   }
 
+  // 0. Standalone sweep execution without server
+  if (opts.sweep) {
+    console.log('\n🚀 Egyszeri intelligencia sweep futtatása háttérszerver nélkül...');
+    const { fullBriefing } = await import('../apis/briefing.mjs');
+    const rawData = await fullBriefing();
+    if (opts.json) {
+      console.log(JSON.stringify(rawData, null, 2));
+      return;
+    }
+    console.log(`\n=== Crucix Sweep Sikeresen Befejeződött ===`);
+    console.log(`⏱️  Futási idő:          ${(rawData.crucix.totalDurationMs / 1000).toFixed(1)} mp`);
+    console.log(`📡 Források állapota:    ${rawData.crucix.sourcesOk}/${rawData.crucix.sourcesQueried} aktív`);
+    if (rawData.crucix.sourcesFailed > 0) console.log(`❌ Sikertelen források:  ${rawData.crucix.sourcesFailed}`);
+    if (rawData.crucix.sourcesStale > 0)  console.log(`⏳ Elavult források:    ${rawData.crucix.sourcesStale}`);
+    console.log('');
+    return;
+  }
+
   // 1. List all countries in world feeds catalog
   if (opts.listCountries) {
     const byCountry = new Map();
@@ -257,16 +288,48 @@ async function main() {
 
   // 3. Country-specific live feed query
   if (opts.country && (!opts.category || opts.category === 'news')) {
-    console.log(`\n📡 Élő hírek lekérése a(z) [${opts.country}] ország vezető lapjaiból...`);
-    const liveItems = await fetchCountryLive(opts.country, opts.limit);
+    let items = [];
+    let fromCache = false;
 
-    if (liveItems.length > 0) {
+    // Try server API first if running and not in no-server mode
+    if (!opts.noServer && !opts.live) {
+      try {
+        const apiRes = await fetchHttp(`/api/news/country/${opts.country}`);
+        if (apiRes && Array.isArray(apiRes.items)) {
+          items = apiRes.items;
+          fromCache = Boolean(apiRes.cached);
+        }
+      } catch {
+        // Fallback to local
+      }
+    }
+
+    // Direct local world RSS cache lookup
+    if (items.length === 0 && !opts.live) {
+      loadWorldRssCache();
+      const cached = getWorldNewsByCountry(opts.country);
+      if (cached && cached.length) {
+        items = cached.slice(0, opts.limit);
+        fromCache = true;
+      }
+    }
+
+    // Direct live RSS fetch if requested or if not in cache
+    if (items.length === 0 || opts.live) {
+      console.log(`\n📡 Élő hírek lekérése a(z) [${opts.country}] ország forrásaiból (közvetlen hálózati letöltés)...`);
+      items = await fetchCountryLive(opts.country, opts.limit);
+      fromCache = false;
+    }
+
+    if (items.length > 0) {
       if (opts.json) {
-        console.log(JSON.stringify(liveItems, null, 2));
+        console.log(JSON.stringify(items, null, 2));
         return;
       }
-      console.log(`\n=== Crucix Élő Hírek [${opts.country}] — ${liveItems.length} friss hír ===\n`);
-      liveItems.forEach((item, idx) => {
+      const modeLabel = fromCache ? '30 perces gyorsítótár' : 'élő letöltés';
+      const serverLabel = opts.noServer ? ' [STANDALONE / NO-SERVER]' : '';
+      console.log(`\n=== Crucix Hírek [${opts.country}] (${items.length} db, ${modeLabel})${serverLabel} ===\n`);
+      items.forEach((item, idx) => {
         const time = item.date ? formatAge(item.date) : '';
         const lang = item.lang ? `[${item.lang.toUpperCase()}] ` : '';
         console.log(`${idx + 1}. [${item.source}] ${lang}${item.title}  ${time}`);
@@ -275,72 +338,98 @@ async function main() {
       console.log('');
       return;
     } else {
-      console.log(`⚠️ Nem sikerült élő feedet letölteni ehhez a kódhoz: ${opts.country}. Ellenőrzöm a helyi adatbázist...`);
+      console.log(`⚠️ Nem sikerült hírforrást találni ehhez a kódhoz: ${opts.country}. Ellenőrzöm az archívumot...`);
     }
   }
 
   // 4. Live ticker mode
   if (opts.live) {
     let liveData = null;
-    try {
-      liveData = await fetchHttp('/api/data');
-    } catch {
+    if (!opts.noServer) {
+      try {
+        liveData = await fetchHttp('/api/data');
+      } catch {
+        liveData = loadLiveFromDisk();
+      }
+    } else {
       liveData = loadLiveFromDisk();
     }
 
-    if (!liveData || (!liveData.newsFeed && !liveData.news)) {
-      console.error('❌ Nincs elérhető aktuális hír. (Futott már le sweep?)');
+    let items = (liveData?.newsFeed || liveData?.news || []);
+    if (!items.length) {
+      // Standalone fallback: read from world RSS cache
+      loadWorldRssCache();
+      const cached = getWorldNews(opts.limit);
+      if (cached && cached.length) {
+        items = cached.map(c => ({
+          source: c.source,
+          headline: c.title,
+          timestamp: c.date,
+          url: c.url,
+          country: c.country,
+        }));
+      }
+    }
+
+    if (!items.length) {
+      console.error('❌ Nincs elérhető aktuális hír. (Futott már le sweep vagy RSS gyűjtés?)');
       process.exit(1);
     }
 
-    const items = (liveData.newsFeed || liveData.news || []).slice(0, opts.limit);
+    items = items.slice(0, opts.limit);
     if (opts.json) {
       console.log(JSON.stringify(items, null, 2));
       return;
     }
 
-    console.log(`\n=== Crucix Élő Hírek (${items.length} db) ===\n`);
+    const serverLabel = opts.noServer ? ' [STANDALONE / NO-SERVER]' : '';
+    console.log(`\n=== Crucix Élő Hírek (${items.length} db)${serverLabel} ===\n`);
     items.forEach((item, idx) => {
       const src = item.source || 'Ismeretlen';
       const time = item.timestamp ? formatAge(item.timestamp) : '';
       const headline = item.headline || item.title || '';
+      const c = item.country ? `[${item.country}] ` : '';
       const url = item.url ? ` (${item.url})` : '';
-      console.log(`${idx + 1}. [${src}] ${headline}  ${time}${url}`);
+      console.log(`${idx + 1}. ${c}[${src}] ${headline}  ${time}${url}`);
     });
     console.log('');
     return;
   }
 
-  // 5. Fetch history records (HTTP if running, disk if offline)
+  // 5. Fetch history records (HTTP if running and permitted, disk if offline/no-server)
   let records = [];
   let isFromApi = false;
 
-  try {
-    const params = new URLSearchParams();
-    if (opts.category) params.set('kind', opts.category);
-    if (opts.search) params.set('q', opts.search);
-    if (opts.source) params.set('source', opts.source);
-    params.set('limit', String(opts.limit));
+  if (!opts.noServer) {
+    try {
+      const params = new URLSearchParams();
+      if (opts.category) params.set('kind', opts.category);
+      if (opts.search) params.set('q', opts.search);
+      if (opts.source) params.set('source', opts.source);
+      params.set('limit', String(opts.limit));
 
-    const apiRes = await fetchHttp(`/api/history?${params.toString()}`);
-    if (apiRes && Array.isArray(apiRes.items)) {
-      records = apiRes.items;
-      isFromApi = true;
-      if (opts.listCategories && apiRes.stats?.byKind) {
-        if (opts.json) {
-          console.log(JSON.stringify(apiRes.stats.byKind, null, 2));
+      const apiRes = await fetchHttp(`/api/history?${params.toString()}`);
+      if (apiRes && Array.isArray(apiRes.items)) {
+        records = apiRes.items;
+        isFromApi = true;
+        if (opts.listCategories && apiRes.stats?.byKind) {
+          if (opts.json) {
+            console.log(JSON.stringify(apiRes.stats.byKind, null, 2));
+            return;
+          }
+          console.log(`\n=== Crucix Elérhető Eseménykategóriák ===\n`);
+          const entries = Object.entries(apiRes.stats.byKind).sort((a, b) => b[1] - a[1]);
+          entries.forEach(([kind, count]) => {
+            console.log(`  • ${kind.padEnd(16)} : ${count} esemény`);
+          });
+          console.log(`\nÖsszesen: ${apiRes.stats.totalRecords} rögzített esemény.\n`);
           return;
         }
-        console.log(`\n=== Crucix Elérhető Eseménykategóriák ===\n`);
-        const entries = Object.entries(apiRes.stats.byKind).sort((a, b) => b[1] - a[1]);
-        entries.forEach(([kind, count]) => {
-          console.log(`  • ${kind.padEnd(16)} : ${count} esemény`);
-        });
-        console.log(`\nÖsszesen: ${apiRes.stats.totalRecords} rögzített esemény.\n`);
-        return;
       }
+    } catch {
+      records = loadFromDisk();
     }
-  } catch {
+  } else {
     records = loadFromDisk();
   }
 
@@ -353,7 +442,8 @@ async function main() {
       console.log(JSON.stringify(byKind, null, 2));
       return;
     }
-    console.log(`\n=== Crucix Elérhető Eseménykategóriák (Offline Archívum) ===\n`);
+    const modeDesc = opts.noServer ? 'Standalone lemez archívum' : 'Offline Archívum';
+    console.log(`\n=== Crucix Elérhető Eseménykategóriák (${modeDesc}) ===\n`);
     const entries = Object.entries(byKind).sort((a, b) => b[1] - a[1]);
     entries.forEach(([kind, count]) => {
       console.log(`  • ${kind.padEnd(16)} : ${count} esemény`);
@@ -394,7 +484,8 @@ async function main() {
 
   const titlePrefix = opts.category ? `Kategória: [${opts.category}]` : 'Minden kategória';
   const filterDesc = opts.search ? ` | Keresés: "${opts.search}"` : '';
-  console.log(`\n=== Crucix Események (${titlePrefix}${filterDesc}) — Találatok: ${records.length} ===\n`);
+  const serverLabel = opts.noServer ? ' [STANDALONE / NO-SERVER]' : (isFromApi ? ' [API]' : ' [OFFLINE]');
+  console.log(`\n=== Crucix Események (${titlePrefix}${filterDesc})${serverLabel} — Találatok: ${records.length} ===\n`);
 
   if (records.length === 0) {
     console.log(`Nincs találat a megadott feltételekre.`);
@@ -415,4 +506,9 @@ async function main() {
   });
 }
 
-main();
+const entryHref = process.argv[1] ? pathToFileURL(process.argv[1]).href : null;
+if (entryHref && import.meta.url === entryHref) {
+  main();
+}
+
+export { parseArgs, formatAge, loadFromDisk, loadLiveFromDisk, fetchCountryLive, main };
