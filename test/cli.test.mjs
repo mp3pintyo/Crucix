@@ -50,6 +50,12 @@ test('cli parseArgs: recognizes serve / headless server flags', () => {
   assert.equal(parseArgs(['--start-server']).serve, true);
 });
 
+test('cli parseArgs: recognizes history flags', () => {
+  assert.equal(parseArgs(['-H']).history, true);
+  assert.equal(parseArgs(['--history']).history, true);
+  assert.equal(parseArgs(['--history', '-l', '20']).limit, 20);
+});
+
 test('cli parseArgs: recognizes data flags', () => {
   assert.equal(parseArgs(['-b']).brief, true);
   assert.equal(parseArgs(['--brief']).brief, true);

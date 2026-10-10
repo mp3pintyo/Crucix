@@ -52,6 +52,7 @@ function parseArgs(argv = process.argv.slice(2)) {
     serve: false,
     collector: false,
     interval: 15,
+    history: false,
 
     // Data switches
     brief: false,
@@ -83,6 +84,8 @@ function parseArgs(argv = process.argv.slice(2)) {
     const arg = args[i];
     if (arg === '-h' || arg === '--help') {
       opts.help = true;
+    } else if (arg === '-H' || arg === '--history') {
+      opts.history = true;
     } else if (arg === '-c' || arg === '--category' || arg === '-k' || arg === '--kind') {
       opts.category = args[++i];
     } else if (arg === '--country' || arg === '--co') {
@@ -220,12 +223,14 @@ Kiberbiztonság & Hálózat:
   --cyber                          CISA KEV aktívan kihasznált sebezhetőségek és ThreatFox indikátorok
   --outages                        Globális internetkimaradások és hálózati anomáliák (IODA)
 
-Hírek és Eseményarchívum:
-  -c, --category <kategória>       Szűrés kategória szerint (pl. news, cyber, outage, conflict, earthquake...)
+Hírek és Eseményarchívum (History):
+  -H, --history                    Rögzített eseménytörténet listázása (Search/Filter kompatibilis)
+  -c, --category <kategória>       Szűrés eseménykategória szerint (pl. news, cyber, outage, conflict, earthquake...)
   --country <ISO kód>              Ország szerinti hírek (pl. HU, DE, FR, JP, US, UA, IL, BR...)
-  -q, --search <kifejezés>         Szöveges keresés az eseményekben
+  -q, --search <kifejezés>         Szöveges kulcsszavas keresés az események történetében
   --source <forrás>                Szűrés hírforrás szerint (pl. BBC, Telex, USGS, CISA)
   -l, --limit <szám>               Megjelenített elemek száma (alapértelmezett: 10)
+  --categories, --kinds            Minden elérhető eseménykategória és darabszámuk listázása
   --live                           Aktuális sweep élő hírszalagjának (news ticker) mutatása
   --json                           Nyers JSON kimenet (más scriptekhez vagy AI csővezetékhez)
 
@@ -1491,7 +1496,10 @@ async function main() {
     }
     if (opts.source) {
       const srcLow = opts.source.toLowerCase();
-      records = records.filter(r => (r.source || '').toLowerCase().includes(srcLow));
+      records = records.filter(r => {
+        const s = typeof r.source === 'string' ? r.source : (r.source?.name || r.source?.hostname || '');
+        return s.toLowerCase().includes(srcLow);
+      });
     }
     if (opts.search) {
       const qLow = opts.search.toLowerCase();
@@ -1520,13 +1528,17 @@ async function main() {
   }
 
   records.forEach((rec, idx) => {
-    const kind = `[${rec.kind}]`.padEnd(12);
-    const country = rec.country ? ` 📍 ${rec.country}` : '';
-    const age = rec.observedAt || rec.firstSeen ? ` (${formatAge(rec.observedAt || rec.firstSeen)})` : '';
-    const src = rec.source ? `[${rec.source}] ` : '';
+    const kind = `[${rec.kind || 'event'}]`.padEnd(12);
+    const countryCode = rec.country || rec.location?.label || '';
+    const country = countryCode ? ` 📍 ${countryCode}` : '';
+    const timeVal = rec.publishedAt || rec.observedAt || rec.collectedAt || rec.firstSeenAt || rec.firstSeen;
+    const age = timeVal ? ` (${formatAge(timeVal)})` : '';
+    const srcName = typeof rec.source === 'string' ? rec.source : (rec.source?.name || rec.source?.hostname || '');
+    const src = srcName ? `[${srcName}] ` : '';
+    const url = rec.url || rec.source?.url;
     console.log(`${idx + 1}. ${kind} ${src}${rec.title}${country}${age}`);
-    if (rec.url) {
-      console.log(`   🔗 ${rec.url}`);
+    if (url) {
+      console.log(`   🔗 ${url}`);
     }
     console.log('');
   });
